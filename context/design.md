@@ -86,13 +86,13 @@
 
 ---
 
-## Social / Contact Icons
+## Social / Contact Icons (LOCKED)
 - GitHub (belonsavon-sys)
 - LinkedIn (to create)
 - Phone: 360-660-2460
 - Email: belonsavon@gmail.com
 - Style: icon-only links, clean (reference: second screenshot provided)
-- Note: X/Twitter and Instagram excluded for now (not mentioned as active accounts)
+- **X/Twitter and Instagram: excluded — Pierre has no active accounts on these platforms**
 
 ---
 
