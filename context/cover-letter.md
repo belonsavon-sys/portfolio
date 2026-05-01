@@ -13,26 +13,24 @@
 
 [Hiring Manager Name / Team],
 
-I cut guest response times from 48 hours to 3 minutes by building and deploying an AI chatbot at my employer's hospitality business. It's been running in production for months. That's the kind of thing I do.
+I cut guest response times from 48 hours to under 3 minutes by building an AI chatbot that's been running in production at my employer for months. That's the kind of thing I do.
 
-I build AI that ships.
+**I build AI that ships.**
 
-Not prototypes. Not proofs of concept. Systems connected to real operations — trained on real company data, integrated with real tools, reviewed by real humans before anything executes. I've digitized 100-page operations manuals into auditable QA systems, automated hotel workflows across Zapier, Guesty, and Twilio, and co-architected Atlas, a multi-level autonomous agent harness at Blackdoor — the holding company I co-founded — that is currently shipping games, apps, and operating systems.
+Not prototypes. Not proofs of concept. Systems connected to real operations — trained on real company data, integrated with real tools, reviewed by real humans before anything executes. I've digitized a 100-page operations manual into an auditable QA system, automated hotel workflows across Zapier, Guesty, and Twilio, and co-architected Atlas — a multi-level autonomous agent harness at Blackdoor, the holding company I co-founded — currently shipping a game, a budget app, and a project management platform.
 
-I approach every problem the same way: research to mastery, then execute without errors. It's how I went from finance data entry to hotel operations supervisor to AI engineer across a single employer — and how I took Blackdoor from a conversation to a company with production technology.
+I approach every problem the same way: research to mastery, then execute without errors. It's how I went from finance data entry to hotel operations supervisor to AI engineer at one employer — and how I took Blackdoor from a conversation to a company with production technology.
 
-I'm trilingual (English, Spanish, Italian), remote-ready, and available now.
+**What I bring to an AI Engineer role:**
+- Full-stack delivery: Next.js, React, Flutter, Supabase, Vercel
+- AI systems: LLMs, MCP, agent harness design, prompt engineering, local + cloud deployment
+- Business instinct: I run the operations I automate — I know what actually needs to change
+- Trilingual: English, Spanish, Italian (all native)
 
-What I bring to an AI Engineer role:
-- Full-stack development: Next.js, React, Flutter, Supabase, Vercel
-- AI systems: LLMs, MCP, agent harness design, prompt engineering, RAG pipelines
-- Business instinct: I've run the operations I automate — I know what actually needs to change
-- Delivery: I finish what I start
-
-If you need someone who understands both the business problem and the AI solution — and ships the thing that connects them — I'm ready.
+I'm remote-ready and available now. If you need someone who understands the business problem and the AI solution — and ships what connects them — I'm ready when you are.
 
 Pierre Belon Savon
-belonsavon@gmail.com | 360-660-2460
+belonsavon@gmail.com · 360-660-2460
 github.com/belonsavon-sys
 
 ---

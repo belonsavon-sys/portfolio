@@ -42,6 +42,33 @@
 **Heading:** Built and Shipped
 
 ### Guest Communications Chatbot
+
+**Before vs After:**
+
+```mermaid
+flowchart LR
+    subgraph Before["❌ BEFORE"]
+        GM1[Guest message<br/>arrives]
+        Staff1[Staff manually<br/>composes reply]
+        Wait[Wait up to<br/>48 hours]
+        Send1[Reply sent]
+
+        GM1 --> Staff1 --> Wait --> Send1
+    end
+
+    subgraph After["✅ AFTER"]
+        GM2[Guest message<br/>arrives]
+        Bot[Chatbot drafts<br/>in Smarttask]
+        Review[Staff review<br/>and approve]
+        Send2[Reply sent<br/>under 3 min]
+
+        GM2 --> Bot --> Review --> Send2
+    end
+
+    style Before fill:#fee2e2,stroke:#ef4444
+    style After fill:#d1fae5,stroke:#10b981
+```
+
 **The problem:** Guest messages at ThePrivateHotels were taking up to 48 hours to receive a response. Missed notifications meant guests sometimes waited days.
 
 **What I built:** A chatbot trained on curated company data — approved message templates, brand voice, every guest scenario from check-in instructions to pet rules to TV troubleshooting. It drafts replies inside Smarttask. Staff review, approve, and send in seconds.
@@ -95,6 +122,49 @@
 
 **Intro copy:**
 > Atlas is the multi-agent system I co-architect at Blackdoor. Send a prompt. Watch the CEO agent route it. Sub-agents act. The database updates. Tasks appear, get assigned, get completed. This is what AI that ships looks like under the hood.
+
+**Visualization:**
+
+```mermaid
+flowchart LR
+    User((User<br/>prompt))
+    CEO[CEO Agent<br/>routes work]
+    CFO[CFO Agent]
+    CMO[CMO Agent]
+    Mgr[Manager Agents]
+    Field[Field Agents<br/>execute work]
+
+    User --> CEO
+    CEO --> CFO
+    CEO --> CMO
+    CFO --> Mgr
+    CMO --> Mgr
+    Mgr --> Field
+
+    Field -.writes.-> DB[(Database)]
+    Field -.updates.-> Tasks[Task Board]
+
+    style User fill:#fef3c7,stroke:#f59e0b
+    style CEO fill:#dbeafe,stroke:#3b82f6
+    style DB fill:#e0f7ff,stroke:#00d4ff
+    style Tasks fill:#d1fae5,stroke:#10b981
+```
+
+**3-pane layout shown to the visitor:**
+
+```
+┌──────────────────┬──────────────────┬──────────────────┐
+│  PANE 1          │  PANE 2          │  PANE 3          │
+│  Harness         │  Database        │  Task Board      │
+│  Terminal        │                  │                  │
+│                  │  ┌─────────────┐ │  ┌─────────────┐ │
+│  > prompt: ...   │  │ tasks       │ │  │ ◯ Build...  │ │
+│  > CEO routing   │  │  + new row  │ │  │ ◐ Deploy... │ │
+│  > Agent CFO ack │  │  ↻ updated  │ │  │ ● Done!     │ │
+│  > Field active  │  │             │ │  │             │ │
+│  $ █             │  └─────────────┘ │  └─────────────┘ │
+└──────────────────┴──────────────────┴──────────────────┘
+```
 
 **Pane labels:**
 - Pane 1: **Harness Terminal** — live routing and agent activity

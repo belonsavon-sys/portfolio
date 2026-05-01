@@ -18,6 +18,32 @@
 
 **Heading:** I turn chaos into auditable systems.
 
+**Before vs After:**
+
+```mermaid
+flowchart LR
+    subgraph Before["❌ BEFORE"]
+        Manual[100+ page<br/>operations manual]
+        Untrack[Static<br/>untrackable<br/>unenforceable]
+        Inconsistent[Inconsistent<br/>inspections]
+
+        Manual --> Untrack --> Inconsistent
+    end
+
+    subgraph After["✅ AFTER"]
+        Digital[Digital<br/>QA system]
+        Track[Trackable<br/>quantifiable<br/>auditable]
+        Consistent[Top 10% Airbnb<br/>5★ avg<br/>3 awards]
+
+        Digital --> Track --> Consistent
+    end
+
+    Before -.->|Pierre digitized| After
+
+    style Before fill:#fee2e2,stroke:#ef4444
+    style After fill:#d1fae5,stroke:#10b981
+```
+
 **Copy:**
 > When I arrived at ThePrivateHotels, operations ran on a 100+ page manual that no one could practically enforce. Inspections were inconsistent. Accountability was guesswork.
 >
@@ -73,6 +99,42 @@
 ## Section 4 — Blackdoor Operations
 
 **Heading:** Building the company that builds companies.
+
+**Atlas hierarchy (the engine inside Blackdoor):**
+
+```mermaid
+flowchart TD
+    Pierre[Pierre + Ryder<br/>Co-founders]
+    Atlas[ATLAS<br/>Multi-agent harness]
+
+    CEO[CEO Agent]
+    CFO[CFO Agent]
+    CMO[CMO Agent]
+
+    M1[Manager Agents]
+    F1[Field Agents]
+
+    Game[🎮 Game App]
+    Budget[💰 Budget App]
+    PM[📋 Agent-augmented<br/>Project Mgmt]
+
+    Pierre --> Atlas
+    Atlas --> CEO
+    CEO --> CFO
+    CEO --> CMO
+    CFO --> M1
+    CMO --> M1
+    M1 --> F1
+    F1 --> Game
+    F1 --> Budget
+    F1 --> PM
+
+    style Pierre fill:#fef3c7,stroke:#f59e0b
+    style Atlas fill:#e0f7ff,stroke:#00d4ff,stroke-width:3px
+    style Game fill:#d1fae5,stroke:#10b981
+    style Budget fill:#d1fae5,stroke:#10b981
+    style PM fill:#d1fae5,stroke:#10b981
+```
 
 **Copy:**
 > Blackdoor is the holding company I co-founded with Ryder in 2025. We develop and operate agentic companies across entertainment, SaaS, robotics, and AI.

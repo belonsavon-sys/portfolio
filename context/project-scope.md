@@ -15,13 +15,38 @@ All resume and page copy lives in `context/` and must be finalized before any UI
 
 ## Site Map
 
+```mermaid
+flowchart TD
+    Visitor((Visitor))
+    Welcome[" / Welcome<br/>Hero · Sticky Sidebar · About · Stack · Metrics · CTA"]
+    AI[" /ai AI<br/>Hero · 5 Services · 3 Case Studies · Demo 1 · Demo 2 · CTA"]
+    Business[" /business Business<br/>'I ship AI' · Process · Comms · Training · Blackdoor · Finance"]
+    Resume[" /resume Resume<br/>Full resume on-page · 'Download Resume' B&W PDF"]
+    Contact[" /contact Get in Touch<br/>'Ready when you are.' · 4 icon links · No form"]
+
+    Visitor --> Welcome
+    Welcome <-->|nav| AI
+    Welcome <-->|nav| Business
+    Welcome <-->|nav| Resume
+    Welcome <-->|nav| Contact
+    AI <-->|nav| Business
+    AI <-->|nav| Resume
+    AI <-->|nav| Contact
+
+    style Welcome fill:#fff,stroke:#333,stroke-width:2px
+    style AI fill:#e0f7ff,stroke:#00d4ff,stroke-width:2px
+    style Business fill:#fff,stroke:#333,stroke-width:2px
+    style Resume fill:#f5f5f5,stroke:#666
+    style Contact fill:#f5f5f5,stroke:#666
+```
+
 | Page | Route | Description |
 |------|-------|-------------|
-| Home | `/` | About Pierre — hero, sticky sidebar (homepage only), about, tech stack |
-| AI | `/ai` | **Merged AI + Technology page.** Process automation, agent systems, full-stack demos — all 3 demos live here |
+| Welcome | `/` | About Pierre — hero, sticky sidebar (homepage only), about, tech stack |
+| AI | `/ai` | **Merged AI + Technology page.** Process automation, agent systems, full-stack demos — all 2 demos live here |
 | Business | `/business` | Operations, process development, QA, hospitality leadership, Blackdoor |
-| Contact | `/contact` | Contact form + icon links |
-| Resume | `/resume` | Downloadable + viewable resume |
+| Resume | `/resume` | Viewable resume + B&W PDF download |
+| Get in Touch | `/contact` | Headline + 4 icon links — **no form** |
 
 > **Note:** Technology page removed. All technical content and demos consolidated into `/ai`.
 
@@ -97,6 +122,31 @@ All resume and page copy lives in `context/` and must be finalized before any UI
 
 ## Demos (all on `/ai` page — 2 demos total)
 
+### Demo flow overview
+
+```mermaid
+flowchart LR
+    Visitor((Visitor lands<br/>on /ai))
+    Demo1{Demo 1<br/>Local AI<br/>WebGPU}
+    Demo2{Demo 2<br/>Atlas<br/>Walkthrough}
+
+    Visitor --> Demo1
+    Visitor --> Demo2
+
+    Demo1 --> T1[LLM]
+    Demo1 --> T2[Vision]
+    Demo1 --> T3[Semantic<br/>Search]
+    Demo1 --> T4[Speech<br/>STT + TTS]
+    Demo1 --> T5[Image<br/>Generation]
+
+    Demo2 --> P1[Pane 1<br/>Terminal]
+    Demo2 --> P2[Pane 2<br/>Database]
+    Demo2 --> P3[Pane 3<br/>Task Board]
+
+    style Demo1 fill:#e0f7ff,stroke:#00d4ff
+    style Demo2 fill:#e0f7ff,stroke:#00d4ff
+```
+
 ### Demo 1 — Live AI in your browser (WebGPU)
 - Format: 5-tab interactive modal — models run locally in-browser via WebGPU (zero server cost, zero data leakage)
 - **Tabs (LOCKED): LLM | Vision | Semantic Search | Speech | Image Generation**
@@ -119,6 +169,30 @@ All resume and page copy lives in `context/` and must be finalized before any UI
 ---
 
 ## GitHub Workflow Rules
+
+### Workflow visualization
+
+```mermaid
+flowchart LR
+    Start((Issue<br/>opened))
+    Branch[Create branch<br/>feat/* or content/*]
+    Work[Local work<br/>Claude or Codex]
+    PR[Open Draft PR]
+    Review[Review<br/>+ CI]
+    Merge[Merge to main]
+    Deploy[Vercel deploys]
+
+    Start --> Branch
+    Branch --> Work
+    Work --> PR
+    PR --> Review
+    Review -->|approved| Merge
+    Review -.->|changes requested.-> Work
+    Merge --> Deploy
+
+    style Start fill:#fef3c7,stroke:#f59e0b
+    style Deploy fill:#d1fae5,stroke:#10b981
+```
 
 ### Branch Strategy
 - `main` — production, Vercel deploys from here
