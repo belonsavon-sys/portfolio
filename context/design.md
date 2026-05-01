@@ -53,6 +53,22 @@
 - Source: `next/font/google` (Vercel-native, zero layout shift)
 - No percentage-bar skill indicators anywhere on the site
 
+## Spacing Scale (LOCKED)
+
+Base unit: 8px. Aligned to Tailwind's default spacing scale — use Tailwind classes in implementation; tokens listed here for reference.
+
+| Token | Value | Tailwind | Usage |
+|-------|-------|----------|-------|
+| `--space-1` | `4px` | `p-1` / `gap-1` | Tight gaps — icon padding, tag spacing |
+| `--space-2` | `8px` | `p-2` / `gap-2` | Base unit |
+| `--space-3` | `12px` | `p-3` / `gap-3` | Small component padding |
+| `--space-4` | `16px` | `p-4` / `gap-4` | Default padding |
+| `--space-6` | `24px` | `p-6` / `gap-6` | Section sub-elements |
+| `--space-8` | `32px` | `p-8` / `gap-8` | Card padding, component gaps |
+| `--space-12` | `48px` | `p-12` / `gap-12` | Section spacing (mobile) |
+| `--space-16` | `64px` | `p-16` / `gap-16` | Section spacing (desktop) |
+| `--space-24` | `96px` | `p-24` / `gap-24` | Hero / large section padding |
+
 ## Effects & Animation
 - **Typing animation:** In dark-mode / terminal-look sections only (NOT in the hero)
 - **Terminal windows:** Appear as styled components in dark sections of the site
