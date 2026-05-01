@@ -33,7 +33,7 @@ Claude is currently conducting a structured interview with Pierre to populate al
 - Typing animation in terminal sections only (not hero)
 
 ## Current Blockers (assets needed)
-- Hero photo (Pierre to provide — phone photo, remove via remove.bg)
+- Photos selected (3 chosen — see design.md). Pierre to save to `public/` and run Photo 3 through remove.bg.
 - LinkedIn profile (not yet created)
 - University name + dates for civil engineering
 - Quantified metrics from hotel work

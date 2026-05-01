@@ -4,24 +4,189 @@
 - **Primary mode:** Light (dominant across most of the site)
 - **Light mode style:** Sans-serif, professional, clean — no ornamentation
 - **Dark mode:** Used selectively in specific sections (not site-wide toggle)
-- **Dark mode style:** Cool blue/cyan accent palette, terminal monospace font, glassmorphism
+- **Dark mode style:** Blue accent palette, terminal monospace font, glassmorphism
 
-## Color Palette (direction)
-- **Dark mode accents:** Cool blue (#00D4FF range) / cyan — "modern dev/AI feel"
-- **Light mode:** Clean whites, light grays, black text — professional and minimal
-- **Glassmorphism:** frosted glass cards with subtle blue/cyan glow in dark sections
-- Exact hex values: TBD during brandkit phase
+## Color Palette (LOCKED)
 
-## Typography
-- **Light mode:** Clean sans-serif (e.g., Inter, Geist, or similar)
-- **Dark/terminal mode:** Monospace terminal font (e.g., JetBrains Mono, Fira Code, Geist Mono)
+### Primary Accent — Blue
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--accent` | `#296ed6` | Primary accent — buttons, links, active nav, glow source |
+| `--accent-light` | `#5B9BF4` | Hover states, light-mode accent text, icon highlights |
+| `--accent-deep` | `#1A4E9C` | Active/pressed states, deep glow layers |
+
+### Dark Sections (terminal, glassmorphism, demo areas)
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--bg-dark` | `#0A0E1A` | Dark section background — near-black with blue undertone |
+| `--bg-dark-2` | `#111827` | Card/panel background in dark sections |
+| `--glass-bg` | `rgba(41, 110, 214, 0.10)` | Glassmorphism card fill |
+| `--glass-border` | `rgba(41, 110, 214, 0.25)` | Glassmorphism card border |
+| `--glass-glow` | `rgba(41, 110, 214, 0.35)` | Box shadow glow on glass cards |
+| `--text-dark` | `#F8FAFC` | Primary text on dark backgrounds |
+| `--text-dark-muted` | `#94A3B8` | Secondary/muted text on dark backgrounds |
+
+### Light Sections (all other pages/sections)
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--bg-light` | `#FFFFFF` | Page background |
+| `--bg-light-2` | `#F8FAFC` | Subtle section alternation |
+| `--border-light` | `#E2E8F0` | Card borders, dividers |
+| `--text-light` | `#0F172A` | Primary text on light backgrounds |
+| `--text-light-muted` | `#64748B` | Secondary/muted text on light backgrounds |
+
+### Semantic (used in case study before/after diagrams)
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--result-green` | `#10B981` | "After" / positive outcome indicators |
+| `--result-green-bg` | `#D1FAE5` | "After" block fills in Mermaid/diagrams |
+| `--problem-red` | `#EF4444` | "Before" / problem state indicators |
+| `--problem-red-bg` | `#FEE2E2` | "Before" block fills in Mermaid/diagrams |
+
+## Typography (LOCKED)
+
+| Token | Font | Usage |
+|-------|------|-------|
+| `--font-sans` | Geist | All body text, headings, nav, UI labels — light sections |
+| `--font-mono` | Geist Mono | Terminal windows, code, typing animations — dark sections |
+
+- Source: `next/font/google` (Vercel-native, zero layout shift)
 - No percentage-bar skill indicators anywhere on the site
+
+## Spacing Scale (LOCKED)
+
+Base unit: 8px. Aligned to Tailwind's default spacing scale — use Tailwind classes in implementation; tokens listed here for reference.
+
+| Token | Value | Tailwind | Usage |
+|-------|-------|----------|-------|
+| `--space-1` | `4px` | `p-1` / `gap-1` | Tight gaps — icon padding, tag spacing |
+| `--space-2` | `8px` | `p-2` / `gap-2` | Base unit |
+| `--space-3` | `12px` | `p-3` / `gap-3` | Small component padding |
+| `--space-4` | `16px` | `p-4` / `gap-4` | Default padding |
+| `--space-6` | `24px` | `p-6` / `gap-6` | Section sub-elements |
+| `--space-8` | `32px` | `p-8` / `gap-8` | Card padding, component gaps |
+| `--space-12` | `48px` | `p-12` / `gap-12` | Section spacing (mobile) |
+| `--space-16` | `64px` | `p-16` / `gap-16` | Section spacing (desktop) |
+| `--space-24` | `96px` | `p-24` / `gap-24` | Hero / large section padding |
 
 ## Effects & Animation
 - **Typing animation:** In dark-mode / terminal-look sections only (NOT in the hero)
 - **Terminal windows:** Appear as styled components in dark sections of the site
 - **Glassmorphism:** Frosted-glass card style throughout (especially dark sections)
 - **Floating icons:** Hero graphic — icons connected by thin lines (like the Gerald Dixon reference)
+
+## Glassmorphism Card Spec (LOCKED)
+
+Used in: demo section cards, Atlas panes, service cards in dark sections, terminal windows.
+
+```css
+/* Base state */
+background:        rgba(41, 110, 214, 0.10);   /* --glass-bg */
+border:            1px solid rgba(41, 110, 214, 0.25);  /* --glass-border */
+border-radius:     12px;
+backdrop-filter:   blur(12px);
+-webkit-backdrop-filter: blur(12px);
+box-shadow:        0 0 24px rgba(41, 110, 214, 0.35);  /* --glass-glow */
+
+/* Hover state (Framer Motion) */
+box-shadow:        0 0 36px rgba(41, 110, 214, 0.55);
+border-color:      rgba(41, 110, 214, 0.45);
+scale:             1.02;
+transition:        all 0.2s ease;
+```
+
+**Rule:** Glassmorphism only appears when the background is dark (`--bg-dark` or `--bg-dark-2`). Never on light section backgrounds.
+
+## Terminal Window Component Spec (LOCKED)
+
+Used in: Demo 2 Atlas panes, any terminal-style section in dark areas.
+
+```
+┌─────────────────────────────────────────────────────┐
+│  ● ● ●                                    atlas      │  ← title bar
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  > Initializing CEO agent...                        │
+│  > Routing to CFO and CMO...                        │
+│  > Field agents deployed                            │
+│  $ █                                                │  ← blinking cursor
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+```css
+/* Window container */
+background:     #111827;        /* --bg-dark-2 */
+border-radius:  12px;
+overflow:       hidden;
+
+/* Title bar */
+background:     #1E2433;
+height:         36px;
+padding:        0 12px;
+display:        flex;
+align-items:    center;
+gap:            6px;
+
+/* Dot buttons (decorative only) */
+width: 12px; height: 12px; border-radius: 50%;
+colors: #EF4444 (red) / #F59E0B (yellow) / #10B981 (green)
+
+/* Terminal body */
+font-family:    Geist Mono;
+font-size:      14px;
+padding:        16px;
+line-height:    1.6;
+
+/* Line states */
+--line-active:    #296ed6;    /* current typing line */
+--line-done:      #94A3B8;    /* completed lines */
+--line-text:      #F8FAFC;    /* standard output */
+
+/* Cursor */
+content: "█";
+animation: blink 1s step-end infinite;
+```
+
+**Typing animation:** Characters appear one at a time on the active line. On completion, line transitions to `--line-done` color and next line begins.
+
+## Button Variants (LOCKED)
+
+All buttons: `border-radius: 8px`, padding `px-6 py-3` (24px / 12px), Framer Motion transition 0.15s.
+Hover: brightness ±10%. Active: `scale: 0.97`.
+
+| Variant | Background | Border | Text | Used for |
+|---------|-----------|--------|------|----------|
+| **Primary** | `#296ed6` | none | `#FFFFFF` | Main CTAs — "Get in Touch", "Download Resume" |
+| **Ghost** | transparent | `1px #296ed6` | `#296ed6` | Secondary actions on light sections |
+| **Ghost Dark** | transparent | `1px #296ed6` | `#F8FAFC` | Secondary actions on dark sections |
+| **Nav Pill (active)** | `#296ed6` | none | `#FFFFFF` | Active nav item |
+| **Nav Pill (inactive)** | transparent | none | `--text-light` (`#0F172A`) | Inactive nav items |
+
+```css
+/* Primary */
+background: #296ed6;
+color: #ffffff;
+border-radius: 8px;
+padding: 12px 24px;
+
+/* Ghost */
+background: transparent;
+border: 1px solid #296ed6;
+color: #296ed6;
+
+/* Ghost Dark */
+background: transparent;
+border: 1px solid #296ed6;
+color: #F8FAFC;
+
+/* Hover (all variants) */
+filter: brightness(1.1);   /* light */
+filter: brightness(0.9);   /* dark/primary */
+
+/* Active press */
+transform: scale(0.97);
+```
 
 ---
 
@@ -136,10 +301,18 @@ flowchart TB
 
 ---
 
-## Photo Asset
-- No photo yet. Pierre to take phone photo → use remove.bg or Canva background remover.
-- Final asset needed: transparent PNG, portrait orientation, professional but approachable.
-- **Flag:** Photo asset is a blocker for hero implementation.
+## Photo Assets (LOCKED)
+
+| Slot | Photo | File | Treatment |
+|------|-------|------|-----------|
+| **Hero + Sticky Sidebar** | Photo 3 (gray collared shirt selfie) | `public/hero-photo.png` | Background removed via remove.bg → transparent PNG |
+| **About — Photo A** | Photo 1 (guitar, sunglasses, white shirt) | `public/about-guitar.jpg` | Full-frame, no removal. Rounded corners 12px. |
+| **About — Photo B** | Photo 2 (Hawaii / Buddha statue, leadership retreat) | `public/about-hawaii.jpg` | Full-frame, no removal. Rounded corners 12px. |
+
+**Pierre's action items (Phase 3 prerequisite):**
+1. Save the 3 source images at the paths above (`public/hero-photo.png`, `public/about-guitar.jpg`, `public/about-hawaii.jpg`).
+2. Run Photo 3 through [remove.bg](https://remove.bg) → export as transparent PNG → save as `hero-photo.png`.
+3. Photos 1 & 2 require no processing; just save them as JPGs at the paths above.
 
 ---
 
@@ -153,12 +326,35 @@ flowchart TB
 
 ---
 
-## Brand Kit Checklist (to build)
-- [ ] Color tokens (light + dark mode)
-- [ ] Typography scale
-- [ ] Spacing system
+## Section Divider — Light → Dark Transition (LOCKED)
+
+**Option A: Hard edge with gradient fade.**
+
+```
+█████████████████████████  ← white/light section (#FFFFFF)
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ← 80px gradient fade: #FFFFFF → #0A0E1A
+█████████████████████████  ← dark section (#0A0E1A)
+```
+
+```css
+/* Transition div placed between light and dark sections */
+height: 80px;
+background: linear-gradient(to bottom, #FFFFFF, #0A0E1A);
+```
+
+For dark → light (exiting a demo section back to light):
+```css
+background: linear-gradient(to bottom, #0A0E1A, #FFFFFF);
+```
+
+---
+
+## Brand Kit Checklist
+- [x] Color tokens (light + dark mode)
+- [x] Typography — Geist + Geist Mono
+- [x] Spacing scale — 8px base grid
+- [x] Glassmorphism card component spec
+- [x] Terminal window component spec
+- [x] Button variants
+- [x] Section divider / light→dark transition
 - [ ] Icon set (hero floating icons, nav icons, contact icons)
-- [ ] Glassmorphism card component spec
-- [ ] Terminal window component spec
-- [ ] Button variants
-- [ ] Section divider / transition style between light and dark zones

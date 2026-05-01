@@ -243,7 +243,8 @@ flowchart LR
 ---
 
 ## Assets Needed (blockers)
-- [ ] Hero photo (phone photo → remove.bg / Canva background remover → transparent PNG)
+- [x] Hero photo selected (Photo 3 — gray collared shirt selfie). Pierre to save to `public/hero-photo.png` and run through remove.bg.
+- [x] About section photos selected (Photo 1 guitar + Photo 2 Hawaii/Buddha). Pierre to save to `public/about-guitar.jpg` and `public/about-hawaii.jpg`.
 - [ ] LinkedIn profile created
 - [ ] University name + dates for civil engineering entry
 - [ ] Metrics from hotel work (response times, inspection coverage, etc.) — marked TBD

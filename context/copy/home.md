@@ -20,6 +20,12 @@
 **Floating tool icons (right, connected by lines around photo):**
 GitHub | Zapier | React | MySQL | Next.js | Express.js | JavaScript
 
+**Hero photo (LOCKED — Photo 3):**
+- Source: phone selfie, gray collared shirt, direct camera framing
+- Asset path: `public/hero-photo.png`
+- Treatment: background removed (remove.bg), transparent PNG
+- Position: right side of hero, floating icons connected by thin lines around it
+
 **Hero one-liner (LOCKED):**
 > "Engineering intelligent automation and full-stack applications that turn complex business processes into scalable, profitable systems."
 
@@ -27,7 +33,7 @@ GitHub | Zapier | React | MySQL | Next.js | Express.js | JavaScript
 
 ## Sticky Sidebar (homepage only — fixed left panel)
 
-**Photo:** Pierre Belon Savon (transparent PNG, TBD)
+**Photo:** Same as hero photo — `public/hero-photo.png` (Photo 3, transparent PNG)
 
 **Short bio:**
 > AI Engineer based in Ocean Shores, WA. I build systems that automate operations, eliminate inefficiency, and scale — whether that's a hotel running on AI, or a multi-agent company operating itself.
@@ -52,6 +58,12 @@ GitHub | Zapier | React | MySQL | Next.js | Express.js | JavaScript
 > When a problem enters my scope, I take it to mastery before I execute. Solo or paired with AI, I research relentlessly and finish what I start. My divergent thinking catches what specialists miss — and turns "we should automate that" into "it's already running."
 >
 > Trilingual. Hyperfocused. Built to ship.
+
+**About Section photos (LOCKED — Photos 1 & 2):**
+- **Photo 1 (Guitar):** `public/about-guitar.jpg` — kept full-frame (NOT background-removed). Caption-optional: "Off-shift."
+- **Photo 2 (Hawaii / Buddha):** `public/about-hawaii.jpg` — kept full-frame. Caption-optional: "Hawaii — leadership retreat, ThePrivateHotels."
+- Layout: 2-photo gallery beside or below the About text. Subtle rounded corners (12px), no glassmorphism (these are light-section photos).
+- Purpose: humanize the engineer — depth, range, real life behind the resume.
 
 ---
 
