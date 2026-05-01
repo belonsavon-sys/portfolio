@@ -393,17 +393,17 @@ function AboutSection() {
             alt="Pierre playing guitar off-shift"
             caption="Off-shift."
             className="h-64"
-            fallbackMeta="Save public/about-guitar.jpg to replace this automatic fallback."
+            fallbackMeta="Save public/about-guitar.png to replace this automatic fallback."
             fallbackTitle="Photo 1 selected"
-            src="/about-guitar.jpg"
+            src="/about-guitar.png"
           />
           <PhotoSlot
             alt="Pierre at the Hawaii leadership retreat"
             caption="Hawaii — leadership retreat, ThePrivateHotels."
             className="h-64"
-            fallbackMeta="Save public/about-hawaii.jpg to replace this automatic fallback."
+            fallbackMeta="Save public/about-hawaii.png to replace this automatic fallback."
             fallbackTitle="Photo 2 selected"
-            src="/about-hawaii.jpg"
+            src="/about-hawaii.png"
           />
         </div>
       </div>
