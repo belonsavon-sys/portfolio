@@ -97,6 +97,59 @@ transition:        all 0.2s ease;
 
 **Rule:** Glassmorphism only appears when the background is dark (`--bg-dark` or `--bg-dark-2`). Never on light section backgrounds.
 
+## Terminal Window Component Spec (LOCKED)
+
+Used in: Demo 2 Atlas panes, any terminal-style section in dark areas.
+
+```
+┌─────────────────────────────────────────────────────┐
+│  ● ● ●                                    atlas      │  ← title bar
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  > Initializing CEO agent...                        │
+│  > Routing to CFO and CMO...                        │
+│  > Field agents deployed                            │
+│  $ █                                                │  ← blinking cursor
+│                                                     │
+└─────────────────────────────────────────────────────┘
+```
+
+```css
+/* Window container */
+background:     #111827;        /* --bg-dark-2 */
+border-radius:  12px;
+overflow:       hidden;
+
+/* Title bar */
+background:     #1E2433;
+height:         36px;
+padding:        0 12px;
+display:        flex;
+align-items:    center;
+gap:            6px;
+
+/* Dot buttons (decorative only) */
+width: 12px; height: 12px; border-radius: 50%;
+colors: #EF4444 (red) / #F59E0B (yellow) / #10B981 (green)
+
+/* Terminal body */
+font-family:    Geist Mono;
+font-size:      14px;
+padding:        16px;
+line-height:    1.6;
+
+/* Line states */
+--line-active:    #296ed6;    /* current typing line */
+--line-done:      #94A3B8;    /* completed lines */
+--line-text:      #F8FAFC;    /* standard output */
+
+/* Cursor */
+content: "█";
+animation: blink 1s step-end infinite;
+```
+
+**Typing animation:** Characters appear one at a time on the active line. On completion, line transitions to `--line-done` color and next line begins.
+
 ---
 
 ## Layout Architecture
