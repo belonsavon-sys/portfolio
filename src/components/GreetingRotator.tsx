@@ -4,9 +4,9 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 const greetings = [
-  { lang: "en", text: "Hello," },
-  { lang: "es", text: "Hola," },
-  { lang: "it", text: "Ciao," },
+  { lang: "en", text: "Hello, I'm" },
+  { lang: "es", text: "Hola, soy" },
+  { lang: "it", text: "Ciao, sono" },
 ];
 
 export type GreetingRotatorProps = {
@@ -16,7 +16,7 @@ export type GreetingRotatorProps = {
 
 export function GreetingRotator({
   className = "",
-  intervalMs = 2400,
+  intervalMs = 2800,
 }: GreetingRotatorProps) {
   const [index, setIndex] = useState(0);
   const reduce = useReducedMotion();
@@ -31,7 +31,7 @@ export function GreetingRotator({
 
   return (
     <span
-      aria-label={`Hello in three languages: ${greetings.map((g) => g.text).join(" ")}`}
+      aria-label={`Hello, I'm Pierre Belon Savon (English, Spanish, Italian)`}
       className={`relative inline-block ${className}`}
     >
       <AnimatePresence initial={false} mode="wait">
@@ -39,11 +39,11 @@ export function GreetingRotator({
           animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
           aria-hidden="true"
           className="inline-block"
-          exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
-          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+          exit={reduce ? { opacity: 0 } : { opacity: 0, y: -10 }}
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
           key={greetings[index].lang}
           lang={greetings[index].lang}
-          transition={{ duration: 0.4, ease: [0.21, 0.47, 0.32, 0.98] }}
+          transition={{ duration: 0.45, ease: [0.21, 0.47, 0.32, 0.98] }}
         >
           {greetings[index].text}
         </motion.span>
