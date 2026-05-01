@@ -75,6 +75,28 @@ Base unit: 8px. Aligned to Tailwind's default spacing scale — use Tailwind cla
 - **Glassmorphism:** Frosted-glass card style throughout (especially dark sections)
 - **Floating icons:** Hero graphic — icons connected by thin lines (like the Gerald Dixon reference)
 
+## Glassmorphism Card Spec (LOCKED)
+
+Used in: demo section cards, Atlas panes, service cards in dark sections, terminal windows.
+
+```css
+/* Base state */
+background:        rgba(41, 110, 214, 0.10);   /* --glass-bg */
+border:            1px solid rgba(41, 110, 214, 0.25);  /* --glass-border */
+border-radius:     12px;
+backdrop-filter:   blur(12px);
+-webkit-backdrop-filter: blur(12px);
+box-shadow:        0 0 24px rgba(41, 110, 214, 0.35);  /* --glass-glow */
+
+/* Hover state (Framer Motion) */
+box-shadow:        0 0 36px rgba(41, 110, 214, 0.55);
+border-color:      rgba(41, 110, 214, 0.45);
+scale:             1.02;
+transition:        all 0.2s ease;
+```
+
+**Rule:** Glassmorphism only appears when the background is dark (`--bg-dark` or `--bg-dark-2`). Never on light section backgrounds.
+
 ---
 
 ## Layout Architecture
