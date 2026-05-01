@@ -18,11 +18,11 @@ All resume and page copy lives in `context/` and must be finalized before any UI
 ```mermaid
 flowchart TD
     Visitor((Visitor))
-    Welcome[" / Welcome<br/>Hero · Sticky Sidebar · About · Stack · Metrics · CTA"]
-    AI[" /ai AI<br/>Hero · 5 Services · 3 Case Studies · Demo 1 · Demo 2 · CTA"]
-    Business[" /business Business<br/>'I ship AI' · Process · Comms · Training · Blackdoor · Finance"]
-    Resume[" /resume Resume<br/>Full resume on-page · 'Download Resume' B&W PDF"]
-    Contact[" /contact Get in Touch<br/>'Ready when you are.' · 4 icon links · No form"]
+    Welcome["/ Welcome<br/>Hero, Sticky Sidebar, About, Stack, Metrics, CTA"]
+    AI["/ai AI<br/>Hero, 5 Services, 3 Case Studies, Demo 1, Demo 2, CTA"]
+    Business["/business Business<br/>I ship AI: Process, Comms, Training, Blackdoor, Finance"]
+    Resume["/resume Resume<br/>Full resume on-page + Download Resume PDF"]
+    Contact["/contact Get in Touch<br/>Ready when you are. 4 icon links. No form."]
 
     Visitor --> Welcome
     Welcome <-->|nav| AI
@@ -126,22 +126,22 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    Visitor((Visitor lands<br/>on /ai))
-    Demo1{Demo 1<br/>Local AI<br/>WebGPU}
-    Demo2{Demo 2<br/>Atlas<br/>Walkthrough}
+    Visitor(("Visitor lands on /ai"))
+    Demo1{"Demo 1<br/>Local AI<br/>WebGPU"}
+    Demo2{"Demo 2<br/>Atlas<br/>Walkthrough"}
 
     Visitor --> Demo1
     Visitor --> Demo2
 
     Demo1 --> T1[LLM]
     Demo1 --> T2[Vision]
-    Demo1 --> T3[Semantic<br/>Search]
-    Demo1 --> T4[Speech<br/>STT + TTS]
-    Demo1 --> T5[Image<br/>Generation]
+    Demo1 --> T3["Semantic<br/>Search"]
+    Demo1 --> T4["Speech<br/>STT + TTS"]
+    Demo1 --> T5["Image<br/>Generation"]
 
-    Demo2 --> P1[Pane 1<br/>Terminal]
-    Demo2 --> P2[Pane 2<br/>Database]
-    Demo2 --> P3[Pane 3<br/>Task Board]
+    Demo2 --> P1["Pane 1<br/>Terminal"]
+    Demo2 --> P2["Pane 2<br/>Database"]
+    Demo2 --> P3["Pane 3<br/>Task Board"]
 
     style Demo1 fill:#e0f7ff,stroke:#00d4ff
     style Demo2 fill:#e0f7ff,stroke:#00d4ff
@@ -175,10 +175,10 @@ flowchart LR
 ```mermaid
 flowchart LR
     Start((Issue<br/>opened))
-    Branch[Create branch<br/>feat/* or content/*]
-    Work[Local work<br/>Claude or Codex]
+    Branch["Create branch<br/>feat/ or content/"]
+    Work["Local work<br/>Claude or Codex"]
     PR[Open Draft PR]
-    Review[Review<br/>+ CI]
+    Review["Review + CI"]
     Merge[Merge to main]
     Deploy[Vercel deploys]
 
@@ -187,7 +187,7 @@ flowchart LR
     Work --> PR
     PR --> Review
     Review -->|approved| Merge
-    Review -.->|changes requested.-> Work
+    Review -.->|changes requested| Work
     Merge --> Deploy
 
     style Start fill:#fef3c7,stroke:#f59e0b

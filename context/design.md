@@ -62,15 +62,15 @@
 
 ```mermaid
 flowchart TB
-    Welcome[Welcome page<br/>LIGHT]
-    AI[AI page<br/>LIGHT base]
-    AIDark[Demo sections<br/>DARK + terminal + glassmorphism]
-    Business[Business page<br/>LIGHT]
-    Resume[Resume page<br/>LIGHT]
-    Contact[Contact page<br/>LIGHT]
+    Welcome["Welcome page<br/>LIGHT"]
+    AI["AI page<br/>LIGHT base"]
+    AIDark["Demo sections<br/>DARK + terminal + glassmorphism"]
+    Business["Business page<br/>LIGHT"]
+    Resume["Resume page<br/>LIGHT"]
+    Contact["Contact page<br/>LIGHT"]
 
     Welcome --> AI
-    AI -.->|on hover/click| AIDark
+    AI -.->|on hover or click| AIDark
     AIDark -.->|exit demo| AI
     AI --> Business
     Business --> Resume
