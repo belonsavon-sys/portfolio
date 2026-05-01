@@ -198,34 +198,89 @@ export function AtlasDemo() {
     setStatus("idle");
   }
 
+  const totalSteps = steps.length;
+  const stepProgress = Math.min(stepIndex + 1, totalSteps);
+  const statusLabel =
+    status === "running"
+      ? "Running"
+      : status === "complete"
+        ? "Complete"
+        : "Idle";
+  const statusTone =
+    status === "running"
+      ? "text-accent-light"
+      : status === "complete"
+        ? "text-result-green"
+        : "text-text-dark-muted";
+
   return (
     <div className="mt-10">
-      <div className="grid gap-3 rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 p-4 lg:grid-cols-[1fr_auto_auto]">
-        <label className="grid gap-2">
-          <span className="text-sm font-medium text-text-dark">
-            User prompt
+      <div className="rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/80 p-5 backdrop-blur-md">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+              Atlas runtime
+            </span>
+            <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
+            <span className={`flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] ${statusTone}`}>
+              <span
+                aria-hidden="true"
+                className={`h-2 w-2 rounded-full ${
+                  status === "running"
+                    ? "animate-pulse bg-accent-light"
+                    : status === "complete"
+                      ? "bg-result-green"
+                      : "bg-text-dark-muted"
+                }`}
+              />
+              {statusLabel}
+            </span>
+          </div>
+          <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
+            Step {stepProgress}/{totalSteps}
           </span>
-          <input
-            className="h-12 rounded-lg border border-[rgba(41,110,214,0.35)] bg-bg-dark px-4 text-text-dark outline-none transition focus:border-accent"
-            onChange={(event) => setPrompt(event.target.value)}
-            value={prompt}
-          />
-        </label>
-        <div className="flex items-end">
+        </div>
+
+        <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_auto_auto] lg:items-end">
+          <label className="grid gap-2">
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+              Prompt
+            </span>
+            <input
+              className="h-12 rounded-lg border border-[rgba(41,110,214,0.35)] bg-bg-dark px-4 font-mono text-sm text-text-dark outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+              onChange={(event) => setPrompt(event.target.value)}
+              value={prompt}
+            />
+          </label>
           <Button disabled={status === "running"} onClick={runSimulation}>
             {status === "complete" ? "Replay" : "Run Simulation"}
           </Button>
-        </div>
-        <div className="flex items-end">
           <Button onClick={resetSimulation} variant="ghostDark">
             Reset
           </Button>
         </div>
+
+        <div
+          aria-hidden="true"
+          className="mt-5 h-1 overflow-hidden rounded-full bg-[rgba(41,110,214,0.15)]"
+        >
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-accent to-accent-light transition-[width] duration-500"
+            style={{ width: `${(stepProgress / totalSteps) * 100}%` }}
+          />
+        </div>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <GlassCard>
-          <p className="text-sm font-semibold text-accent">Pane 1</p>
+      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+        <GlassCard className="flex flex-col">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+              Pane 1
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted">
+              Stream
+            </span>
+          </div>
           <h3 className="mt-3 text-xl font-semibold">Harness Terminal</h3>
           <TerminalWindow
             className="mt-5"
@@ -237,14 +292,29 @@ export function AtlasDemo() {
           />
         </GlassCard>
 
-        <GlassCard>
-          <p className="text-sm font-semibold text-accent">Pane 2</p>
+        <GlassCard className="flex flex-col">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+              Pane 2
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted">
+              {currentStep.dbRows.length} {currentStep.dbRows.length === 1 ? "row" : "rows"}
+            </span>
+          </div>
           <h3 className="mt-3 text-xl font-semibold">Database</h3>
           <DatabaseTable rows={currentStep.dbRows} />
         </GlassCard>
 
-        <GlassCard>
-          <p className="text-sm font-semibold text-accent">Pane 3</p>
+        <GlassCard className="flex flex-col">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+              Pane 3
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted">
+              {currentStep.tasks.filter((t) => t.status === "done").length}/
+              {currentStep.tasks.length || 0} done
+            </span>
+          </div>
           <h3 className="mt-3 text-xl font-semibold">Task Board</h3>
           <TaskBoard tasks={currentStep.tasks} />
         </GlassCard>
