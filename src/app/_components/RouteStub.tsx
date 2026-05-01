@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { NavPill } from "@/components";
 
 type RouteStubProps = {
   route: string;
@@ -30,23 +30,15 @@ export function RouteStub({
           aria-label="Primary"
           className="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-center gap-2 rounded-full border border-border-light bg-white p-2 shadow-sm"
         >
-          {navItems.map((item) => {
-            const isActive = item.href === route;
-
-            return (
-              <Link
-                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                  isActive
-                    ? "bg-accent text-white"
-                    : "text-text-light hover:bg-bg-light-2"
-                }`}
-                href={item.href}
-                key={item.href}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+          {navItems.map((item) => (
+            <NavPill
+              active={item.href === route}
+              href={item.href}
+              key={item.href}
+            >
+              {item.label}
+            </NavPill>
+          ))}
         </nav>
 
         <section className="flex flex-1 flex-col justify-center py-20 sm:py-24">
