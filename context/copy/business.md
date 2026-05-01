@@ -22,18 +22,18 @@
 
 ```mermaid
 flowchart LR
-    subgraph Before["❌ BEFORE"]
-        Manual[100+ page<br/>operations manual]
-        Untrack[Static<br/>untrackable<br/>unenforceable]
-        Inconsistent[Inconsistent<br/>inspections]
+    subgraph Before["BEFORE"]
+        Manual["100+ page<br/>operations manual"]
+        Untrack["Static<br/>untrackable<br/>unenforceable"]
+        Inconsistent["Inconsistent<br/>inspections"]
 
         Manual --> Untrack --> Inconsistent
     end
 
-    subgraph After["✅ AFTER"]
-        Digital[Digital<br/>QA system]
-        Track[Trackable<br/>quantifiable<br/>auditable]
-        Consistent[Top 10% Airbnb<br/>5★ avg<br/>3 awards]
+    subgraph After["AFTER"]
+        Digital["Digital<br/>QA system"]
+        Track["Trackable<br/>quantifiable<br/>auditable"]
+        Consistent["Top 10% Airbnb<br/>5-star average<br/>3 awards"]
 
         Digital --> Track --> Consistent
     end
@@ -104,8 +104,8 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    Pierre[Pierre + Ryder<br/>Co-founders]
-    Atlas[ATLAS<br/>Multi-agent harness]
+    Pierre["Pierre + Ryder<br/>Co-founders"]
+    Atlas["ATLAS<br/>Multi-agent harness"]
 
     CEO[CEO Agent]
     CFO[CFO Agent]
@@ -114,9 +114,9 @@ flowchart TD
     M1[Manager Agents]
     F1[Field Agents]
 
-    Game[🎮 Game App]
-    Budget[💰 Budget App]
-    PM[📋 Agent-augmented<br/>Project Mgmt]
+    Game[Game App]
+    Budget[Budget App]
+    PM["Agent-augmented<br/>Project Mgmt"]
 
     Pierre --> Atlas
     Atlas --> CEO

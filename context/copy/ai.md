@@ -47,20 +47,20 @@
 
 ```mermaid
 flowchart LR
-    subgraph Before["❌ BEFORE"]
-        GM1[Guest message<br/>arrives]
-        Staff1[Staff manually<br/>composes reply]
-        Wait[Wait up to<br/>48 hours]
-        Send1[Reply sent]
+    subgraph Before["BEFORE"]
+        GM1["Guest message<br/>arrives"]
+        Staff1["Staff manually<br/>composes reply"]
+        Wait["Wait up to<br/>48 hours"]
+        Send1["Reply sent"]
 
         GM1 --> Staff1 --> Wait --> Send1
     end
 
-    subgraph After["✅ AFTER"]
-        GM2[Guest message<br/>arrives]
-        Bot[Chatbot drafts<br/>in Smarttask]
-        Review[Staff review<br/>and approve]
-        Send2[Reply sent<br/>under 3 min]
+    subgraph After["AFTER"]
+        GM2["Guest message<br/>arrives"]
+        Bot["Chatbot drafts<br/>in Smarttask"]
+        Review["Staff review<br/>and approve"]
+        Send2["Reply sent<br/>under 3 min"]
 
         GM2 --> Bot --> Review --> Send2
     end
@@ -127,12 +127,14 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    User((User<br/>prompt))
-    CEO[CEO Agent<br/>routes work]
+    User(("User prompt"))
+    CEO["CEO Agent<br/>routes work"]
     CFO[CFO Agent]
     CMO[CMO Agent]
     Mgr[Manager Agents]
-    Field[Field Agents<br/>execute work]
+    Field["Field Agents<br/>execute work"]
+    DB[(Database)]
+    Tasks[Task Board]
 
     User --> CEO
     CEO --> CFO
@@ -140,9 +142,8 @@ flowchart LR
     CFO --> Mgr
     CMO --> Mgr
     Mgr --> Field
-
-    Field -.writes.-> DB[(Database)]
-    Field -.updates.-> Tasks[Task Board]
+    Field -.->|writes| DB
+    Field -.->|updates| Tasks
 
     style User fill:#fef3c7,stroke:#f59e0b
     style CEO fill:#dbeafe,stroke:#3b82f6

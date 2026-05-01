@@ -10,30 +10,30 @@ A Next.js (App Router) portfolio site for **Pierre Belon Savon**, AI Engineer. B
 
 ```mermaid
 flowchart TB
-    subgraph Content["📚 Content Layer (source of truth)"]
+    subgraph Content["Content Layer (source of truth)"]
         Resume[resume.md]
         Design[design.md]
         Scope[project-scope.md]
-        Copy[copy/*.md]
+        Copy["copy/*.md"]
         Cover[cover-letter.md]
     end
 
-    subgraph App["🖥️ App Layer (Next.js App Router)"]
+    subgraph App["App Layer (Next.js App Router)"]
         Layout[layout.tsx]
-        Welcome["/ — Welcome"]
-        AI["/ai — AI"]
-        Business["/business — Business"]
-        Resume2["/resume — Resume"]
-        Contact["/contact — Get in Touch"]
+        Welcome["/ Welcome"]
+        AI["/ai AI"]
+        Business["/business Business"]
+        Resume2["/resume Resume"]
+        Contact["/contact Get in Touch"]
     end
 
-    subgraph Infra["☁️ Infrastructure"]
+    subgraph Infra["Infrastructure"]
         GH[GitHub PRs]
         Vercel[Vercel Deploy]
         Domain[Production Domain]
     end
 
-    Content -.feeds copy.-> App
+    Content -.->|feeds copy| App
     App --> GH
     GH --> Vercel
     Vercel --> Domain
@@ -50,11 +50,11 @@ flowchart TB
 ```mermaid
 flowchart LR
     Nav((Pill Nav))
-    Welcome["/ Welcome<br/>Hero · Sidebar · About · Stack · Metrics"]
-    AI["/ai AI<br/>Services · Case Studies · Demo 1 · Demo 2"]
-    Business["/business Business<br/>'I ship AI' · 5 ordered sections"]
-    Resume["/resume Resume<br/>Full resume · PDF download"]
-    Contact["/contact Get in Touch<br/>'Ready when you are.'"]
+    Welcome["/ Welcome<br/>Hero, Sidebar, About, Stack, Metrics"]
+    AI["/ai AI<br/>Services, Case Studies, Demo 1, Demo 2"]
+    Business["/business Business<br/>I ship AI - 5 ordered sections"]
+    Resume["/resume Resume<br/>Full resume + PDF download"]
+    Contact["/contact Get in Touch<br/>Ready when you are"]
 
     Nav --> Welcome
     Nav --> AI
@@ -76,18 +76,18 @@ flowchart LR
 ```mermaid
 flowchart LR
     Pierre((Pierre))
-    Claude[🧠 Claude<br/>Thinking · Design · Copy · Docs]
-    Codex[⚙️ Codex<br/>Code Implementation Only]
+    Claude["Claude<br/>Thinking, Design, Copy, Docs"]
+    Codex["Codex<br/>Code Implementation Only"]
     PR[GitHub PR]
     Main[main branch]
     Vercel[Vercel]
-    Live[🌐 Live Site]
+    Live[Live Site]
 
     Pierre <--> Claude
     Pierre <--> Codex
     Claude --> PR
     Codex --> PR
-    PR -->|review + merge| Main
+    PR -->|review and merge| Main
     Main --> Vercel
     Vercel --> Live
 
