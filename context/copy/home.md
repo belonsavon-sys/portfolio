@@ -1,7 +1,7 @@
 # Homepage Copy — Pierre Belon Savon
 
-## Nav
-- Sections: AI | Business | Contact | Resume
+## Nav (LOCKED)
+- Sections: **Welcome | AI | Business | Resume | Get in Touch**
 - Right-side icons: GitHub, LinkedIn, phone, email (icon-only links)
 
 ---
