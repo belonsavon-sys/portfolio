@@ -2,11 +2,18 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import {
+  AnimatedCounter,
+  BentoStack,
   Button,
+  CursorHalo,
   GlassCard,
+  GreetingRotator,
+  LightGlassCard,
+  LiveStatusBadge,
   PhotoSlot,
   ScrollReveal,
   SectionDivider,
+  TrustStrip,
 } from "@/components";
 import type { ReactNode } from "react";
 
@@ -17,45 +24,33 @@ const aboutParagraphs = [
   "Trilingual. Hyperfocused. Built to ship.",
 ];
 
-const stackGroups = [
-  {
-    items: [
-      "Claude",
-      "Codex",
-      "ChatGPT",
-      "MCP",
-      "Zapier",
-      "n8n",
-      "Twilio",
-      "Guesty API",
-    ],
-    title: "AI & Automation",
-  },
-  {
-    items: ["JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS"],
-    title: "Frontend",
-  },
-  { items: ["Flutter", "Kotlin (KMP)"], title: "Mobile" },
-  { items: ["Node.js", "Express.js"], title: "Backend" },
-  { items: ["Supabase", "MySQL"], title: "Database" },
-  { items: ["Vercel", "GitHub"], title: "Infra" },
-  { items: ["Figma", "Framer"], title: "Design" },
-  { items: ["VS Code", "Antigravity", "Cursor"], title: "IDEs" },
-];
-
-const metrics = [
-  { label: "Guest response time", value: "48 hrs → < 3 min" },
-  { label: "Drafting time saved", value: "15-20 min / msg" },
-  { label: "Inventory managed", value: "100+ items" },
-  { label: "Staff trained", value: "6" },
-  { label: "Manual digitized", value: "100+ pages → QA" },
-  { label: "Awards", value: "Top 10% Airbnb · Travelers' Choice" },
-  { label: "Agent harness", value: "Atlas — 3 products shipping" },
-  { label: "Languages", value: "EN · ES · IT (native)" },
-];
-
 const sidebarBio =
   "AI Engineer based in Ocean Shores, WA. I build systems that automate operations, eliminate inefficiency, and scale — whether that's a hotel running on AI, or a multi-agent company operating itself.";
+
+const easeOut = [0.21, 0.47, 0.32, 0.98] as [number, number, number, number];
+
+type Counter = {
+  format?: (value: number) => string;
+  label: string;
+  prefix?: string;
+  suffix?: string;
+  to: number;
+};
+
+const headlineCounters: Counter[] = [
+  { label: "Response time cut to", suffix: " min", to: 3 },
+  { label: "Manual digitized", suffix: "+ pages", to: 100 },
+  { label: "Atlas products shipping", to: 3 },
+];
+
+const detailedMetrics: Counter[] = [
+  { label: "Hours of guest-reply lag eliminated", suffix: " hrs", to: 48 },
+  { label: "Minutes saved per drafted reply", suffix: "-20 min", to: 15 },
+  { label: "Inventory items under management", suffix: "+", to: 100 },
+  { label: "Staff trained on the new tooling", to: 6 },
+  { label: "Months of error-free QuickBooks", to: 6 },
+  { label: "Native languages", to: 3 },
+];
 
 export default function Home() {
   return (
@@ -66,7 +61,11 @@ export default function Home() {
       <MetricsBand />
       <SectionDivider direction="dark-to-light" />
 
-      <LightSection className="pb-20 pt-16 sm:pb-24 sm:pt-20">
+      <LightSection className="pb-12 pt-12 sm:pt-16">
+        <TrustStrip />
+      </LightSection>
+
+      <LightSection className="pb-20 pt-12 sm:pb-24 sm:pt-16">
         <div className="grid gap-10 xl:grid-cols-[300px_minmax(0,1fr)]">
           <Sidebar />
           <div className="min-w-0">
@@ -88,7 +87,6 @@ export default function Home() {
 function Hero() {
   const reduce = useReducedMotion();
 
-  const easeOut = [0.21, 0.47, 0.32, 0.98] as [number, number, number, number];
   const fadeUp = (delay: number) =>
     reduce
       ? { animate: { opacity: 1 }, initial: { opacity: 1 } }
@@ -100,30 +98,32 @@ function Hero() {
 
   return (
     <section className="relative overflow-hidden">
+      <CursorHalo />
+
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/12 blur-3xl" />
         <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
+        <div className="absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/8 blur-3xl" />
       </div>
 
-      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <motion.p
-          className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent"
-          {...fadeUp(0)}
-        >
-          Hello,
-        </motion.p>
+      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
+        <motion.div {...fadeUp(0)}>
+          <LiveStatusBadge label="Currently shipping · Atlas v3" />
+        </motion.div>
 
         <motion.h1
-          className="mt-4 text-5xl font-semibold leading-[0.95] tracking-tight text-text-light sm:text-7xl lg:text-[7.5rem]"
+          className="mt-8 text-5xl font-semibold leading-[0.95] tracking-tight text-text-light sm:text-7xl lg:text-[7.5rem]"
           {...fadeUp(0.08)}
         >
+          <GreetingRotator className="mr-2 align-baseline text-text-light/70" />
+          <br />
           Pierre Belon Savon
         </motion.h1>
 
         <motion.div
           aria-hidden="true"
           animate={{ scaleX: 1 }}
-          className="mt-6 h-[3px] w-24 origin-left rounded-full bg-accent"
+          className="mt-8 h-[3px] w-24 origin-center rounded-full bg-accent"
           initial={reduce ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ delay: 0.55, duration: 0.55, ease: "easeOut" }}
         />
@@ -137,7 +137,7 @@ function Hero() {
         </motion.p>
 
         <motion.div
-          className="mt-10 flex flex-wrap items-center gap-4"
+          className="mt-10 flex flex-wrap items-center justify-center gap-4"
           {...fadeUp(0.28)}
         >
           <Button href="/contact">Contact Me →</Button>
@@ -147,8 +147,33 @@ function Hero() {
         </motion.div>
 
         <motion.div
-          className="mt-16 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm uppercase tracking-[0.18em] text-text-light-muted"
-          {...fadeUp(0.38)}
+          className="mt-16 grid w-full max-w-4xl gap-3 sm:grid-cols-3"
+          {...fadeUp(0.4)}
+        >
+          {headlineCounters.map((counter, index) => (
+            <LightGlassCard
+              className="px-5 py-4 text-left"
+              hoverable={false}
+              key={counter.label}
+            >
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                {counter.label}
+              </p>
+              <p className="mt-2 text-3xl font-semibold tracking-tight text-text-light">
+                <AnimatedCounter
+                  delay={index * 0.1}
+                  prefix={counter.prefix}
+                  suffix={counter.suffix}
+                  to={counter.to}
+                />
+              </p>
+            </LightGlassCard>
+          ))}
+        </motion.div>
+
+        <motion.div
+          className="mt-16 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 font-mono text-sm uppercase tracking-[0.18em] text-text-light-muted"
+          {...fadeUp(0.5)}
         >
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
@@ -187,7 +212,7 @@ function MetricsBand() {
           </ScrollReveal>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            {metrics.map((metric, index) => (
+            {detailedMetrics.map((metric, index) => (
               <ScrollReveal
                 delay={0.05 + index * 0.04}
                 direction="fade"
@@ -197,8 +222,12 @@ function MetricsBand() {
                   <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-light">
                     {metric.label}
                   </p>
-                  <p className="mt-3 text-lg font-semibold leading-7 text-text-dark sm:text-xl">
-                    {metric.value}
+                  <p className="mt-3 text-3xl font-semibold tracking-tight text-text-dark sm:text-4xl">
+                    <AnimatedCounter
+                      prefix={metric.prefix}
+                      suffix={metric.suffix}
+                      to={metric.to}
+                    />
                   </p>
                 </GlassCard>
               </ScrollReveal>
@@ -213,7 +242,7 @@ function MetricsBand() {
 function Sidebar() {
   return (
     <aside className="hidden xl:block">
-      <div className="sticky top-24 rounded-2xl border border-border-light bg-white p-5 shadow-sm">
+      <div className="sticky top-28 rounded-2xl border border-border-light bg-white p-5 shadow-sm">
         <PhotoSlot
           alt="Pierre Belon Savon"
           className="h-72"
@@ -346,33 +375,14 @@ function Stack() {
         <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
           What I use to ship.
         </h2>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-text-light-muted">
+          Pragmatic mix of cloud AI, local AI, modern web frameworks, and the
+          orchestration layer that ties them together.
+        </p>
       </ScrollReveal>
 
-      <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {stackGroups.map((group, index) => (
-          <ScrollReveal
-            delay={index * 0.04}
-            direction="up"
-            key={group.title}
-          >
-            <article className="group h-full rounded-2xl border border-border-light bg-white p-5 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-md">
-              <h3 className="text-base font-semibold text-text-light">
-                <span className="mr-2 inline-block h-2 w-2 rounded-full bg-accent transition-transform duration-200 group-hover:scale-125" />
-                {group.title}
-              </h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <span
-                    className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2.5 py-1 text-xs font-medium text-text-light"
-                    key={item}
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </article>
-          </ScrollReveal>
-        ))}
+      <div className="mt-10">
+        <BentoStack />
       </div>
     </section>
   );
@@ -436,18 +446,13 @@ function LightSection({
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-    >
+    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
       <path
         d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.62-.2.62-.44v-1.65c-2.54.55-3.07-1.09-3.07-1.09a2.42 2.42 0 0 0-1.01-1.33c-.83-.56.06-.55.06-.55a1.92 1.92 0 0 1 1.4.94 1.95 1.95 0 0 0 2.66.76 1.94 1.94 0 0 1 .58-1.22c-2.03-.23-4.16-1.01-4.16-4.5a3.52 3.52 0 0 1 .94-2.44 3.27 3.27 0 0 1 .09-2.41s.77-.25 2.52.93a8.7 8.7 0 0 1 4.58 0c1.75-1.18 2.52-.93 2.52-.93a3.27 3.27 0 0 1 .09 2.41 3.52 3.52 0 0 1 .94 2.44c0 3.5-2.14 4.27-4.17 4.49a2.18 2.18 0 0 1 .62 1.69v2.44c0 .25.16.53.63.44A9.25 9.25 0 0 0 12 2.75Z"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.35"
+        strokeWidth="1.4"
       />
     </svg>
   );
@@ -455,18 +460,13 @@ function GitHubIcon({ className }: { className?: string }) {
 
 function PhoneIcon({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-    >
+    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
       <path
         d="M7.5 4.75 9.4 4a1.7 1.7 0 0 1 2.1.85l1 2.15a1.8 1.8 0 0 1-.42 2.05l-1.1 1.02a10 10 0 0 0 3.95 3.95l1.02-1.1A1.8 1.8 0 0 1 18 12.5l2.15 1a1.7 1.7 0 0 1 .85 2.1l-.75 1.9A3.1 3.1 0 0 1 17.1 19.5 12.6 12.6 0 0 1 4.5 6.9a3.1 3.1 0 0 1 3-2.15Z"
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.8"
+        strokeWidth="1.6"
       />
     </svg>
   );
@@ -474,17 +474,12 @@ function PhoneIcon({ className }: { className?: string }) {
 
 function MailIcon({ className }: { className?: string }) {
   return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-    >
+    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
       <rect
         height="14"
         rx="2.5"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="1.6"
         width="18"
         x="3"
         y="5"
@@ -494,7 +489,7 @@ function MailIcon({ className }: { className?: string }) {
         stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth="1.8"
+        strokeWidth="1.6"
       />
     </svg>
   );

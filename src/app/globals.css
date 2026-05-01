@@ -82,3 +82,85 @@ a {
     opacity: 0;
   }
 }
+
+/* CRT scanlines for dark glass demo sections */
+.scanlines {
+  position: relative;
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  border-radius: inherit;
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* Print styles — clean B&W resume when printed */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt;
+  }
+
+  header,
+  footer,
+  nav {
+    display: none !important;
+  }
+
+  main {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Strip dark sections in print */
+  .bg-bg-dark,
+  .bg-bg-dark-2,
+  [class*="bg-bg-dark"] {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Hide decorative blur orbs and gradients */
+  .pointer-events-none {
+    display: none !important;
+  }
+
+  /* Resume body printable */
+  article {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  .text-text-light-muted,
+  .text-text-dark-muted {
+    color: #333 !important;
+  }
+
+  .text-accent,
+  .text-accent-light {
+    color: #000 !important;
+  }
+}
