@@ -146,7 +146,8 @@ portfolio/
 | Phase 3 — Build (Next.js) | ⬜ Not started |
 | Phase 4 — Deploy | ⬜ Not started |
 
-**Open blockers:** Hero photo · LinkedIn profile · Domain name · Demo asset production
+**Open blockers:** LinkedIn profile · Domain name · Demo asset production
+**Pending Pierre actions:** Save 3 photos to `public/` and run Photo 3 through remove.bg (see `context/design.md` → Photo Assets)
 
 ---
 

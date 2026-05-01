@@ -301,10 +301,18 @@ flowchart TB
 
 ---
 
-## Photo Asset
-- No photo yet. Pierre to take phone photo → use remove.bg or Canva background remover.
-- Final asset needed: transparent PNG, portrait orientation, professional but approachable.
-- **Flag:** Photo asset is a blocker for hero implementation.
+## Photo Assets (LOCKED)
+
+| Slot | Photo | File | Treatment |
+|------|-------|------|-----------|
+| **Hero + Sticky Sidebar** | Photo 3 (gray collared shirt selfie) | `public/hero-photo.png` | Background removed via remove.bg → transparent PNG |
+| **About — Photo A** | Photo 1 (guitar, sunglasses, white shirt) | `public/about-guitar.jpg` | Full-frame, no removal. Rounded corners 12px. |
+| **About — Photo B** | Photo 2 (Hawaii / Buddha statue, leadership retreat) | `public/about-hawaii.jpg` | Full-frame, no removal. Rounded corners 12px. |
+
+**Pierre's action items (Phase 3 prerequisite):**
+1. Save the 3 source images at the paths above (`public/hero-photo.png`, `public/about-guitar.jpg`, `public/about-hawaii.jpg`).
+2. Run Photo 3 through [remove.bg](https://remove.bg) → export as transparent PNG → save as `hero-photo.png`.
+3. Photos 1 & 2 require no processing; just save them as JPGs at the paths above.
 
 ---
 
