@@ -1,7 +1,9 @@
 import {
   BeforeAfter,
   Button,
+  CursorHalo,
   GlassCard,
+  LightGlassCard,
   ScrollReveal,
   SectionDivider,
 } from "@/components";
@@ -86,28 +88,36 @@ export default function BusinessPage() {
 function BusinessHero() {
   return (
     <section className="relative overflow-hidden">
+      <CursorHalo />
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-[-10%] h-[440px] w-[440px] rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/12 blur-3xl" />
+        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
       </div>
-      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
+          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
             /business
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.05} direction="up">
-          <h1 className="mt-4 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7rem]">
+          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7rem]">
             I ship AI.
           </h1>
         </ScrollReveal>
-        <ScrollReveal delay={0.12} direction="up">
+        <ScrollReveal delay={0.1} direction="up">
+          <div
+            aria-hidden="true"
+            className="mt-8 h-[3px] w-24 rounded-full bg-accent"
+          />
+        </ScrollReveal>
+        <ScrollReveal delay={0.15} direction="up">
           <p className="mt-8 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
             Not plans. Not decks. Systems running in production, solving real
             problems, delivering measurable results — built from inside the
             operations I was hired to run.
           </p>
         </ScrollReveal>
-        <ScrollReveal delay={0.2} direction="up">
+        <ScrollReveal delay={0.22} direction="up">
           <div className="mt-10">
             <Button href="/contact">Get in Touch →</Button>
           </div>
@@ -338,7 +348,7 @@ function BlackdoorBand() {
 function FinanceSection() {
   return (
     <ScrollReveal direction="up">
-      <article className="grid gap-8 rounded-3xl border border-border-light bg-white p-6 shadow-sm sm:p-10 lg:grid-cols-[1fr_320px]">
+      <LightGlassCard className="grid gap-8 p-6 sm:p-10 lg:grid-cols-[1fr_320px]" hoverable={false}>
         <div>
           <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
             Finance & administration
@@ -377,7 +387,7 @@ function FinanceSection() {
             </div>
           ))}
         </div>
-      </article>
+      </LightGlassCard>
     </ScrollReveal>
   );
 }
@@ -385,7 +395,7 @@ function FinanceSection() {
 function Cta() {
   return (
     <ScrollReveal direction="up">
-      <section className="rounded-3xl border border-border-light bg-white p-8 text-center shadow-sm sm:p-14">
+      <LightGlassCard className="p-8 text-center sm:p-14" hoverable={false}>
         <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
           Ready when you are
         </p>
@@ -398,7 +408,7 @@ function Cta() {
         <div className="mt-8">
           <Button href="/contact">Get in Touch →</Button>
         </div>
-      </section>
+      </LightGlassCard>
     </ScrollReveal>
   );
 }
@@ -415,7 +425,7 @@ function SectionShell({
   outcomes: string[];
 }) {
   return (
-    <article className="grid gap-10 rounded-3xl border border-border-light bg-white p-6 shadow-sm sm:p-10 lg:grid-cols-[1fr_320px]">
+    <LightGlassCard className="grid gap-10 p-6 sm:p-10 lg:grid-cols-[1fr_320px]" hoverable={false}>
       <div>
         <ScrollReveal direction="up">
           <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
@@ -443,7 +453,7 @@ function SectionShell({
           ))}
         </div>
       </aside>
-    </article>
+    </LightGlassCard>
   );
 }
 

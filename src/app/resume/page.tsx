@@ -269,17 +269,17 @@ function ResumeHero() {
   return (
     <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/15 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
         <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
       </div>
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl px-4 text-center sm:px-6 lg:px-8">
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent-light">
+          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
             /resume
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.05} direction="up">
-          <h1 className="mt-4 text-5xl font-semibold leading-[0.95] tracking-tight text-text-dark sm:text-7xl">
+          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight text-text-dark sm:text-7xl">
             Pierre Belon Savon
           </h1>
         </ScrollReveal>
@@ -287,7 +287,7 @@ function ResumeHero() {
           <p className="mt-4 text-xl text-text-dark-muted">AI Engineer</p>
         </ScrollReveal>
         <ScrollReveal delay={0.15} direction="up">
-          <div className="mt-6 flex flex-wrap gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
+          <div className="mt-6 flex flex-wrap justify-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
             <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
               Ocean Shores, WA
             </span>

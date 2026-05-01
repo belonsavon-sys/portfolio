@@ -2,7 +2,10 @@ import {
   AtlasDemo,
   BeforeAfter,
   Button,
+  CursorHalo,
   GlassCard,
+  LightGlassCard,
+  LiveStatusBadge,
   LocalAiDemo,
   ScrollReveal,
   SectionDivider,
@@ -56,9 +59,13 @@ export default function AiPage() {
 
       <DarkSection className="pt-20 pb-10 sm:pt-24">
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent-light">
-            Demo 1
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
+              Demo 1
+            </p>
+            <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
+            <LiveStatusBadge label="WebGPU · Running" />
+          </div>
           <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-text-dark sm:text-5xl">
             Local AI. Real business. No cloud required.
           </h2>
@@ -70,14 +77,20 @@ export default function AiPage() {
             deployed.
           </p>
         </ScrollReveal>
-        <LocalAiDemo />
+        <div className="scanlines mt-10 rounded-3xl">
+          <LocalAiDemo />
+        </div>
       </DarkSection>
 
       <DarkSection className="pb-20 sm:pb-24">
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent-light">
-            Demo 2
-          </p>
+          <div className="flex items-center gap-3">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
+              Demo 2
+            </p>
+            <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
+            <LiveStatusBadge label="Atlas · Simulated runtime" />
+          </div>
           <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-text-dark sm:text-5xl">
             This is what an agent harness looks like in motion.
           </h2>
@@ -87,7 +100,9 @@ export default function AiPage() {
             updates. Tasks appear, get assigned, get completed.
           </p>
         </ScrollReveal>
-        <AtlasDemo />
+        <div className="scanlines mt-10 rounded-3xl">
+          <AtlasDemo />
+        </div>
       </DarkSection>
       <SectionDivider direction="dark-to-light" />
 
@@ -101,31 +116,38 @@ export default function AiPage() {
 function AiHero() {
   return (
     <section className="relative overflow-hidden">
+      <CursorHalo />
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 right-[-10%] h-[480px] w-[480px] rounded-full bg-accent/10 blur-3xl" />
-        <div className="absolute -bottom-24 left-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/12 blur-3xl" />
+        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
       </div>
 
-      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
+          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
             /ai
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.05} direction="up">
-          <h1 className="mt-4 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7rem]">
+          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7rem]">
             I build AI that ships.
           </h1>
         </ScrollReveal>
-        <ScrollReveal delay={0.12} direction="up">
+        <ScrollReveal delay={0.1} direction="up">
+          <div
+            aria-hidden="true"
+            className="mt-8 h-[3px] w-24 rounded-full bg-accent"
+          />
+        </ScrollReveal>
+        <ScrollReveal delay={0.15} direction="up">
           <p className="mt-8 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
             Agent harnesses, process automation, full-stack applications —
             built to change how your business operates, not just to impress in
             a demo.
           </p>
         </ScrollReveal>
-        <ScrollReveal delay={0.2} direction="up">
-          <div className="mt-10 flex flex-wrap items-center gap-4">
+        <ScrollReveal delay={0.22} direction="up">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Button href="/contact">Get in Touch →</Button>
             <Button href="#built-and-shipped" variant="ghost">
               Built and Shipped
@@ -307,7 +329,7 @@ function CaseStudiesBand() {
 function Cta() {
   return (
     <ScrollReveal direction="up">
-      <section className="rounded-3xl border border-border-light bg-white p-8 text-center shadow-sm sm:p-14">
+      <LightGlassCard className="p-8 text-center sm:p-14" hoverable={false}>
         <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
           Ready when you are
         </p>
@@ -320,7 +342,7 @@ function Cta() {
         <div className="mt-8">
           <Button href="/contact">Get in Touch →</Button>
         </div>
-      </section>
+      </LightGlassCard>
     </ScrollReveal>
   );
 }
