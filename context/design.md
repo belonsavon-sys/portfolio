@@ -43,9 +43,14 @@
 | `--problem-red` | `#EF4444` | "Before" / problem state indicators |
 | `--problem-red-bg` | `#FEE2E2` | "Before" block fills in Mermaid/diagrams |
 
-## Typography
-- **Light mode:** Clean sans-serif (e.g., Inter, Geist, or similar)
-- **Dark/terminal mode:** Monospace terminal font (e.g., JetBrains Mono, Fira Code, Geist Mono)
+## Typography (LOCKED)
+
+| Token | Font | Usage |
+|-------|------|-------|
+| `--font-sans` | Geist | All body text, headings, nav, UI labels — light sections |
+| `--font-mono` | Geist Mono | Terminal windows, code, typing animations — dark sections |
+
+- Source: `next/font/google` (Vercel-native, zero layout shift)
 - No percentage-bar skill indicators anywhere on the site
 
 ## Effects & Animation
