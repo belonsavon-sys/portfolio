@@ -318,12 +318,35 @@ flowchart TB
 
 ---
 
-## Brand Kit Checklist (to build)
-- [ ] Color tokens (light + dark mode)
-- [ ] Typography scale
-- [ ] Spacing system
+## Section Divider — Light → Dark Transition (LOCKED)
+
+**Option A: Hard edge with gradient fade.**
+
+```
+█████████████████████████  ← white/light section (#FFFFFF)
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓  ← 80px gradient fade: #FFFFFF → #0A0E1A
+█████████████████████████  ← dark section (#0A0E1A)
+```
+
+```css
+/* Transition div placed between light and dark sections */
+height: 80px;
+background: linear-gradient(to bottom, #FFFFFF, #0A0E1A);
+```
+
+For dark → light (exiting a demo section back to light):
+```css
+background: linear-gradient(to bottom, #0A0E1A, #FFFFFF);
+```
+
+---
+
+## Brand Kit Checklist
+- [x] Color tokens (light + dark mode)
+- [x] Typography — Geist + Geist Mono
+- [x] Spacing scale — 8px base grid
+- [x] Glassmorphism card component spec
+- [x] Terminal window component spec
+- [x] Button variants
+- [x] Section divider / light→dark transition
 - [ ] Icon set (hero floating icons, nav icons, contact icons)
-- [ ] Glassmorphism card component spec
-- [ ] Terminal window component spec
-- [ ] Button variants
-- [ ] Section divider / transition style between light and dark zones
