@@ -18,14 +18,10 @@ import {
 import type { ReactNode } from "react";
 
 const aboutParagraphs = [
-  "Two years ago, I supervised a hotel.",
   "Today, the AI systems running that hotel are systems I built — every guest message, every inspection, every automated workflow. In parallel, at Blackdoor (the company I co-founded), I co-architect Atlas: a multi-level autonomous agent harness shipping real games, apps, and operating systems.",
   'When a problem enters my scope, I take it to mastery before I execute. Solo or paired with AI, I research relentlessly and finish what I start. My divergent thinking catches what specialists miss — and turns "we should automate that" into "it\'s already running."',
   "Trilingual. Hyperfocused. Built to ship.",
 ];
-
-const sidebarBio =
-  "AI Engineer based in Ocean Shores, WA. I build systems that automate operations, eliminate inefficiency, and scale — whether that's a hotel running on AI, or a multi-agent company operating itself.";
 
 const easeOut = [0.21, 0.47, 0.32, 0.98] as [number, number, number, number];
 
@@ -65,21 +61,20 @@ export default function Home() {
         <TrustStrip />
       </LightSection>
 
-      <LightSection className="pb-20 pt-12 sm:pb-24 sm:pt-16">
-        <div className="grid gap-10 xl:grid-cols-[300px_minmax(0,1fr)]">
-          <Sidebar />
-          <div className="min-w-0">
-            <About />
-            <Stack />
-          </div>
-        </div>
+      <LightSection className="pb-16 pt-12 sm:pb-20 sm:pt-16">
+        <About />
       </LightSection>
 
-      <LightSection className="pb-24 pt-4 sm:pb-32">
-        <Cta />
+      <SectionDivider direction="light-to-dark" />
+      <BeyondTheCode />
+      <SectionDivider direction="dark-to-light" />
+
+      <LightSection className="py-20 sm:py-24">
+        <Stack />
       </LightSection>
 
-      <Footer />
+      <SectionDivider direction="light-to-dark" />
+      <Cta />
     </main>
   );
 }
@@ -112,12 +107,15 @@ function Hero() {
         </motion.div>
 
         <motion.h1
-          className="mt-8 text-5xl font-semibold leading-[0.95] tracking-tight text-text-light sm:text-7xl lg:text-[7.5rem]"
+          className="mt-8 flex flex-col items-center gap-2 text-text-light"
           {...fadeUp(0.08)}
         >
-          <GreetingRotator className="mr-2 align-baseline text-text-light/70" />
-          <br />
-          Pierre Belon Savon
+          <span className="font-mono text-2xl font-medium tracking-tight text-text-light/70 sm:text-3xl lg:text-4xl">
+            <GreetingRotator />
+          </span>
+          <span className="text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7.5rem]">
+            Pierre Belon Savon
+          </span>
         </motion.h1>
 
         <motion.div
@@ -239,74 +237,11 @@ function MetricsBand() {
   );
 }
 
-function Sidebar() {
-  return (
-    <aside className="hidden xl:block">
-      <div className="sticky top-28 rounded-2xl border border-border-light bg-white p-5 shadow-sm">
-        <PhotoSlot
-          alt="Pierre Belon Savon"
-          className="h-72"
-          fallbackMeta="Save public/hero-photo.png to replace this placeholder."
-          fallbackTitle="Hero photo pending"
-          fit="contain"
-          priority
-          src="/hero-photo.png"
-        />
-        <p className="mt-5 text-sm leading-6 text-text-light-muted">
-          {sidebarBio}
-        </p>
-        <div className="mt-5 flex items-center gap-2">
-          <SidebarIcon
-            href="https://github.com/belonsavon-sys"
-            label="GitHub"
-            target="_blank"
-          >
-            <GitHubIcon className="h-4 w-4" />
-          </SidebarIcon>
-          <span className="h-5 w-px bg-border-light" />
-          <SidebarIcon href="tel:+13606602460" label="Phone">
-            <PhoneIcon className="h-4 w-4" />
-          </SidebarIcon>
-          <span className="h-5 w-px bg-border-light" />
-          <SidebarIcon href="mailto:belonsavon@gmail.com" label="Email">
-            <MailIcon className="h-4 w-4" />
-          </SidebarIcon>
-        </div>
-      </div>
-    </aside>
-  );
-}
-
-function SidebarIcon({
-  children,
-  href,
-  label,
-  target,
-}: {
-  children: ReactNode;
-  href: string;
-  label: string;
-  target?: "_blank";
-}) {
-  return (
-    <a
-      aria-label={label}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border-light bg-white text-text-light transition-[border-color,color,transform] duration-150 hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-      href={href}
-      rel={target === "_blank" ? "noreferrer" : undefined}
-      target={target}
-      title={label}
-    >
-      {children}
-    </a>
-  );
-}
-
 function About() {
   return (
-    <section className="pb-16 sm:pb-20" id="about">
+    <section className="mx-auto max-w-4xl text-center" id="about">
       <ScrollReveal direction="up">
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
+        <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
           About me
         </p>
         <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
@@ -314,74 +249,171 @@ function About() {
         </h2>
       </ScrollReveal>
 
-      <div className="mt-8 grid gap-5 text-lg leading-8 text-text-light-muted">
-        {aboutParagraphs.slice(1).map((paragraph, index) => (
-          <ScrollReveal delay={index * 0.05} direction="up" key={paragraph}>
+      <div className="mx-auto mt-8 grid max-w-3xl gap-5 text-left text-lg leading-8 text-text-light-muted">
+        {aboutParagraphs.map((paragraph, index) => (
+          <ScrollReveal delay={index * 0.06} direction="up" key={paragraph}>
             <p>{paragraph}</p>
           </ScrollReveal>
         ))}
       </div>
-
-      <ScrollReveal direction="up">
-        <div className="mt-12 overflow-hidden rounded-3xl bg-bg-dark p-6 sm:p-8">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent-light">
-            Outside the work
-          </p>
-          <div className="mt-5 grid gap-5 md:grid-cols-2">
-            <ScrollReveal delay={0.05} direction="left">
-              <GlassCard className="h-full p-3">
-                <PhotoSlot
-                  alt="Pierre playing guitar off-shift"
-                  className="h-72"
-                  fallbackMeta="Save public/about-guitar.png to replace this placeholder."
-                  fallbackTitle="Photo 1 selected"
-                  fit="cover"
-                  src="/about-guitar.png"
-                />
-                <p className="mt-3 px-2 text-sm text-text-dark-muted">
-                  Off-shift.
-                </p>
-              </GlassCard>
-            </ScrollReveal>
-            <ScrollReveal delay={0.1} direction="right">
-              <GlassCard className="h-full p-3">
-                <PhotoSlot
-                  alt="Pierre at the Hawaii leadership retreat"
-                  className="h-72"
-                  fallbackMeta="Save public/about-hawaii.png to replace this placeholder."
-                  fallbackTitle="Photo 2 selected"
-                  fit="cover"
-                  src="/about-hawaii.png"
-                />
-                <p className="mt-3 px-2 text-sm text-text-dark-muted">
-                  Hawaii — leadership retreat, ThePrivateHotels.
-                </p>
-              </GlassCard>
-            </ScrollReveal>
-          </div>
-        </div>
-      </ScrollReveal>
     </section>
+  );
+}
+
+function BeyondTheCode() {
+  return (
+    <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
+      {/* layered mesh gradient */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-40 left-[10%] h-[460px] w-[460px] rounded-full bg-accent/16 blur-3xl" />
+        <div className="absolute -top-12 right-[8%] h-[380px] w-[380px] rounded-full bg-accent-light/12 blur-3xl" />
+        <div className="absolute bottom-[-12rem] left-[40%] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
+      </div>
+      {/* subtle radial vignette to layer depth */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "radial-gradient(ellipse at top, rgba(255,255,255,0.04) 0%, transparent 60%)",
+        }}
+      />
+
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ScrollReveal direction="up">
+          <div className="flex items-center justify-center gap-3">
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent-light">
+              Beyond the code
+            </p>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.05} direction="up">
+          <h2 className="mx-auto mt-6 max-w-3xl text-center text-4xl font-semibold tracking-tight text-text-dark sm:text-5xl">
+            More than engineering.
+          </h2>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.1} direction="up">
+          <p className="mx-auto mt-5 max-w-2xl text-center text-lg leading-8 text-text-dark-muted">
+            The habit of taking problems to mastery before executing runs
+            through everything I do — agent architecture, accounting, music.
+          </p>
+        </ScrollReveal>
+
+        <div className="mt-16 grid gap-6 md:grid-cols-2">
+          <ScrollReveal delay={0.05} direction="left">
+            <PortraitCard
+              caption="Music · Italy"
+              fallbackMeta="Save public/about-guitar.png to replace this placeholder."
+              fallbackTitle="Photo 1 selected"
+              imgAlt="Pierre playing guitar off-shift"
+              imgSrc="/about-guitar.png"
+              tag="Off-shift"
+              title="Guitar before deep work"
+            />
+          </ScrollReveal>
+          <ScrollReveal delay={0.12} direction="right">
+            <PortraitCard
+              caption="Leadership retreat · 2024"
+              fallbackMeta="Save public/about-hawaii.png to replace this placeholder."
+              fallbackTitle="Photo 2 selected"
+              imgAlt="Pierre at the Hawaii leadership retreat"
+              imgSrc="/about-hawaii.png"
+              tag="Hawaii"
+              title="The room where strategy gets made"
+            />
+          </ScrollReveal>
+        </div>
+
+        <ScrollReveal delay={0.2} direction="up">
+          <figure className="mx-auto mt-20 max-w-3xl text-center">
+            <span
+              aria-hidden="true"
+              className="font-mono text-5xl leading-none text-accent-light/60"
+            >
+              &ldquo;
+            </span>
+            <blockquote className="mt-2 text-2xl font-medium leading-relaxed text-text-dark sm:text-3xl">
+              Solo or paired with AI, I research relentlessly and finish what I
+              start.
+            </blockquote>
+            <figcaption className="mt-6 font-mono text-xs uppercase tracking-[0.22em] text-accent-light">
+              — How I work
+            </figcaption>
+          </figure>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
+function PortraitCard({
+  caption,
+  fallbackMeta,
+  fallbackTitle,
+  imgAlt,
+  imgSrc,
+  tag,
+  title,
+}: {
+  caption: string;
+  fallbackMeta: string;
+  fallbackTitle: string;
+  imgAlt: string;
+  imgSrc: string;
+  tag: string;
+  title: string;
+}) {
+  return (
+    <GlassCard className="flex h-full flex-col gap-5 p-5 sm:p-6">
+      <div className="overflow-hidden rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/60">
+        <PhotoSlot
+          alt={imgAlt}
+          className="h-72 sm:h-80"
+          fallbackMeta={fallbackMeta}
+          fallbackTitle={fallbackTitle}
+          fit="cover"
+          src={imgSrc}
+        />
+      </div>
+      <div className="flex items-center gap-3">
+        <span className="rounded-full border border-accent/40 bg-[rgba(41,110,214,0.12)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+          {tag}
+        </span>
+        <span className="h-px flex-1 bg-[rgba(41,110,214,0.25)]" />
+      </div>
+      <div>
+        <h3 className="text-lg font-semibold text-text-dark">{title}</h3>
+        <p className="mt-1 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
+          {caption}
+        </p>
+      </div>
+    </GlassCard>
   );
 }
 
 function Stack() {
   return (
-    <section className="pb-12 pt-8 sm:pb-16" id="stack">
-      <ScrollReveal direction="up">
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-          My stack
-        </p>
-        <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-          What I use to ship.
-        </h2>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-text-light-muted">
-          Pragmatic mix of cloud AI, local AI, modern web frameworks, and the
-          orchestration layer that ties them together.
-        </p>
-      </ScrollReveal>
+    <section id="stack">
+      <div className="text-center">
+        <ScrollReveal direction="up">
+          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
+            My stack
+          </p>
+          <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+            What I use to ship.
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-text-light-muted">
+            Pragmatic mix of cloud AI, local AI, modern web frameworks, and the
+            orchestration layer that ties them together.
+          </p>
+        </ScrollReveal>
+      </div>
 
-      <div className="mt-10">
+      <div className="mt-12">
         <BentoStack />
       </div>
     </section>
@@ -389,38 +421,83 @@ function Stack() {
 }
 
 function Cta() {
+  const reduce = useReducedMotion();
+
   return (
-    <ScrollReveal direction="up">
-      <section className="rounded-3xl border border-border-light bg-white p-8 text-center shadow-sm sm:p-14">
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-          Ready when you are
-        </p>
-        <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          Let&apos;s build something that actually works.
-        </h2>
-        <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-text-light-muted">
-          Whether you need AI automation, a full-stack product, or a system
-          that runs itself — I&apos;m available for remote roles and projects.
-        </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <Button href="/contact">Contact Me →</Button>
-          <Button href="/resume" variant="ghost">
-            View Resume
-          </Button>
-        </div>
-      </section>
-    </ScrollReveal>
+    <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/18 blur-3xl" />
+        <div className="absolute bottom-[-8rem] right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/14 blur-3xl" />
+        <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/12 blur-3xl" />
+      </div>
+
+      <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
+        <ScrollReveal direction="up">
+          <LiveStatusBadge label="Available now · 3 min reply average" />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.08} direction="up">
+          <h2 className="mt-8 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+            <span className="block">Let&apos;s build something</span>
+            <span
+              className="block bg-gradient-to-r from-text-dark via-accent-light to-accent-light bg-clip-text text-transparent"
+              style={{ WebkitBackgroundClip: "text" }}
+            >
+              that actually works.
+            </span>
+          </h2>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.15} direction="up">
+          <motion.div
+            aria-hidden="true"
+            animate={{ scaleX: 1 }}
+            className="mt-8 h-[3px] w-32 origin-center rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
+            initial={reduce ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ delay: 0.55, duration: 0.6, ease: "easeOut" }}
+          />
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.2} direction="up">
+          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-text-dark-muted sm:text-xl sm:leading-9">
+            Whether you need AI automation, a full-stack product, or a system
+            that runs itself — I&apos;m available for remote roles and projects.
+          </p>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.28} direction="up">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <Button href="/contact">Contact Me →</Button>
+            <Button href="/resume" variant="ghostDark">
+              View Resume
+            </Button>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.36} direction="up">
+          <p className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted">
+            <span>Remote</span>
+            <span aria-hidden="true" className="text-accent">·</span>
+            <span>Trilingual</span>
+            <span aria-hidden="true" className="text-accent">·</span>
+            <span>Replies in 24 hrs</span>
+          </p>
+        </ScrollReveal>
+      </div>
+
+      <Footer />
+    </section>
   );
 }
 
 function Footer() {
   return (
-    <footer className="border-t border-border-light bg-white py-8">
-      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
-        <p className="text-sm text-text-light-muted">
+    <footer className="mx-auto mt-24 w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col items-center justify-between gap-4 border-t border-[rgba(41,110,214,0.2)] pt-8 sm:flex-row">
+        <p className="text-sm text-text-dark-muted">
           © 2026 Pierre Belon Savon
         </p>
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
           Built business-first
         </p>
       </div>
@@ -441,56 +518,5 @@ function LightSection({
         {children}
       </div>
     </section>
-  );
-}
-
-function GitHubIcon({ className }: { className?: string }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
-      <path
-        d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.62-.2.62-.44v-1.65c-2.54.55-3.07-1.09-3.07-1.09a2.42 2.42 0 0 0-1.01-1.33c-.83-.56.06-.55.06-.55a1.92 1.92 0 0 1 1.4.94 1.95 1.95 0 0 0 2.66.76 1.94 1.94 0 0 1 .58-1.22c-2.03-.23-4.16-1.01-4.16-4.5a3.52 3.52 0 0 1 .94-2.44 3.27 3.27 0 0 1 .09-2.41s.77-.25 2.52.93a8.7 8.7 0 0 1 4.58 0c1.75-1.18 2.52-.93 2.52-.93a3.27 3.27 0 0 1 .09 2.41 3.52 3.52 0 0 1 .94 2.44c0 3.5-2.14 4.27-4.17 4.49a2.18 2.18 0 0 1 .62 1.69v2.44c0 .25.16.53.63.44A9.25 9.25 0 0 0 12 2.75Z"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.4"
-      />
-    </svg>
-  );
-}
-
-function PhoneIcon({ className }: { className?: string }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
-      <path
-        d="M7.5 4.75 9.4 4a1.7 1.7 0 0 1 2.1.85l1 2.15a1.8 1.8 0 0 1-.42 2.05l-1.1 1.02a10 10 0 0 0 3.95 3.95l1.02-1.1A1.8 1.8 0 0 1 18 12.5l2.15 1a1.7 1.7 0 0 1 .85 2.1l-.75 1.9A3.1 3.1 0 0 1 17.1 19.5 12.6 12.6 0 0 1 4.5 6.9a3.1 3.1 0 0 1 3-2.15Z"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.6"
-      />
-    </svg>
-  );
-}
-
-function MailIcon({ className }: { className?: string }) {
-  return (
-    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
-      <rect
-        height="14"
-        rx="2.5"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        width="18"
-        x="3"
-        y="5"
-      />
-      <path
-        d="m4.5 7 7.5 6 7.5-6"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.6"
-      />
-    </svg>
   );
 }

@@ -814,29 +814,60 @@ export function LocalAiDemo() {
     window.speechSynthesis.speak(new SpeechSynthesisUtterance(speechText));
   }
 
+  const activeIndex = Math.max(
+    localAiTabs.findIndex((tab) => tab.id === activeTabId),
+    0,
+  );
+
   return (
-    <div className="mt-10 grid gap-4 lg:grid-cols-[280px_1fr]">
-      <GlassCard className="p-4">
-        <div className="grid gap-2">
-          {localAiTabs.map((tab) => (
-            <button
-              aria-pressed={tab.id === activeTabId}
-              className={cx(
-                "rounded-lg px-4 py-3 text-left transition-[background,border-color,color,transform]",
-                tab.id === activeTabId
-                  ? "bg-accent text-white"
-                  : "border border-transparent text-text-dark hover:border-[rgba(41,110,214,0.35)] hover:bg-bg-dark-2",
-              )}
-              key={tab.id}
-              onClick={() => {
-                setActiveTabId(tab.id);
-                setError("");
-              }}
-              type="button"
-            >
-              <span className="font-mono text-sm">{tab.label}</span>
-            </button>
-          ))}
+    <div className="mt-10">
+      <div className="rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/80 p-5 backdrop-blur-md">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+              On-device runtime
+            </span>
+            <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
+            <span className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-result-green">
+              <span
+                aria-hidden="true"
+                className="h-2 w-2 animate-pulse rounded-full bg-result-green"
+              />
+              WebGPU · Local
+            </span>
+          </div>
+          <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
+            Tab {activeIndex + 1}/{localAiTabs.length}
+          </span>
+        </div>
+        <p className="mt-3 font-mono text-xs leading-relaxed text-text-dark-muted">
+          Models load on first run, then cache. Zero network calls during
+          inference. Try any tab.
+        </p>
+      </div>
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-[280px_1fr]">
+        <GlassCard className="p-4">
+          <div className="grid gap-2">
+            {localAiTabs.map((tab) => (
+              <button
+                aria-pressed={tab.id === activeTabId}
+                className={cx(
+                  "rounded-lg px-4 py-3 text-left transition-[background,border-color,color,transform]",
+                  tab.id === activeTabId
+                    ? "bg-accent text-white"
+                    : "border border-transparent text-text-dark hover:border-[rgba(41,110,214,0.35)] hover:bg-bg-dark-2",
+                )}
+                key={tab.id}
+                onClick={() => {
+                  setActiveTabId(tab.id);
+                  setError("");
+                }}
+                type="button"
+              >
+                <span className="font-mono text-sm">{tab.label}</span>
+              </button>
+            ))}
         </div>
 
         <div className="mt-5 rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 p-4">
@@ -945,6 +976,7 @@ export function LocalAiDemo() {
           device.
         </p>
       </GlassCard>
+      </div>
     </div>
   );
 }
