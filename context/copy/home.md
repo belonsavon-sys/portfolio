@@ -60,8 +60,8 @@ GitHub | Zapier | React | MySQL | Next.js | Express.js | JavaScript
 > Trilingual. Hyperfocused. Built to ship.
 
 **About Section photos (LOCKED — Photos 1 & 2):**
-- **Photo 1 (Guitar):** `public/about-guitar.jpg` — kept full-frame (NOT background-removed). Caption-optional: "Off-shift."
-- **Photo 2 (Hawaii / Buddha):** `public/about-hawaii.jpg` — kept full-frame. Caption-optional: "Hawaii — leadership retreat, ThePrivateHotels."
+- **Photo 1 (Guitar):** `public/about-guitar.png` — kept full-frame (NOT background-removed). Caption-optional: "Off-shift."
+- **Photo 2 (Hawaii / Buddha):** `public/about-hawaii.png` — kept full-frame. Caption-optional: "Hawaii — leadership retreat, ThePrivateHotels."
 - Layout: 2-photo gallery beside or below the About text. Subtle rounded corners (12px), no glassmorphism (these are light-section photos).
 - Purpose: humanize the engineer — depth, range, real life behind the resume.
 
