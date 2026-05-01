@@ -1,5 +1,6 @@
 export { Button, NavPill } from "./Button";
 export type { ButtonProps, NavPillProps } from "./Button";
+export { AtlasDemo } from "./AtlasDemo";
 export { GlassCard } from "./GlassCard";
 export type { GlassCardProps } from "./GlassCard";
 export { SectionDivider } from "./SectionDivider";
