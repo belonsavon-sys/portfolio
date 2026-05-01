@@ -4,13 +4,44 @@
 - **Primary mode:** Light (dominant across most of the site)
 - **Light mode style:** Sans-serif, professional, clean — no ornamentation
 - **Dark mode:** Used selectively in specific sections (not site-wide toggle)
-- **Dark mode style:** Cool blue/cyan accent palette, terminal monospace font, glassmorphism
+- **Dark mode style:** Blue accent palette, terminal monospace font, glassmorphism
 
-## Color Palette (direction)
-- **Dark mode accents:** Cool blue (#00D4FF range) / cyan — "modern dev/AI feel"
-- **Light mode:** Clean whites, light grays, black text — professional and minimal
-- **Glassmorphism:** frosted glass cards with subtle blue/cyan glow in dark sections
-- Exact hex values: TBD during brandkit phase
+## Color Palette (LOCKED)
+
+### Primary Accent — Blue
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--accent` | `#296ed6` | Primary accent — buttons, links, active nav, glow source |
+| `--accent-light` | `#5B9BF4` | Hover states, light-mode accent text, icon highlights |
+| `--accent-deep` | `#1A4E9C` | Active/pressed states, deep glow layers |
+
+### Dark Sections (terminal, glassmorphism, demo areas)
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--bg-dark` | `#0A0E1A` | Dark section background — near-black with blue undertone |
+| `--bg-dark-2` | `#111827` | Card/panel background in dark sections |
+| `--glass-bg` | `rgba(41, 110, 214, 0.10)` | Glassmorphism card fill |
+| `--glass-border` | `rgba(41, 110, 214, 0.25)` | Glassmorphism card border |
+| `--glass-glow` | `rgba(41, 110, 214, 0.35)` | Box shadow glow on glass cards |
+| `--text-dark` | `#F8FAFC` | Primary text on dark backgrounds |
+| `--text-dark-muted` | `#94A3B8` | Secondary/muted text on dark backgrounds |
+
+### Light Sections (all other pages/sections)
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--bg-light` | `#FFFFFF` | Page background |
+| `--bg-light-2` | `#F8FAFC` | Subtle section alternation |
+| `--border-light` | `#E2E8F0` | Card borders, dividers |
+| `--text-light` | `#0F172A` | Primary text on light backgrounds |
+| `--text-light-muted` | `#64748B` | Secondary/muted text on light backgrounds |
+
+### Semantic (used in case study before/after diagrams)
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--result-green` | `#10B981` | "After" / positive outcome indicators |
+| `--result-green-bg` | `#D1FAE5` | "After" block fills in Mermaid/diagrams |
+| `--problem-red` | `#EF4444` | "Before" / problem state indicators |
+| `--problem-red-bg` | `#FEE2E2` | "Before" block fills in Mermaid/diagrams |
 
 ## Typography
 - **Light mode:** Clean sans-serif (e.g., Inter, Geist, or similar)
