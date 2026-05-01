@@ -1,12 +1,18 @@
-import { Button, NavPill } from "@/components";
+import {
+  Button,
+  GlassCard,
+  ScrollReveal,
+  SectionDivider,
+} from "@/components";
 import type { ReactNode } from "react";
 
-const navItems = [
-  { href: "/", label: "Welcome" },
-  { href: "/ai", label: "AI" },
-  { href: "/business", label: "Business" },
-  { href: "/resume", label: "Resume" },
-  { href: "/contact", label: "Get in Touch" },
+const stats = [
+  { label: "Active product", value: "Atlas — multi-agent harness" },
+  { label: "Hotel ops", value: "48 hrs → < 3 min response" },
+  { label: "Inventory managed", value: "100+ items" },
+  { label: "Staff trained", value: "6" },
+  { label: "QuickBooks ledger", value: "6 months · error-free" },
+  { label: "Languages", value: "EN · ES · IT (native)" },
 ];
 
 const contactItems = [
@@ -15,11 +21,7 @@ const contactItems = [
     label: "Email",
     value: "belonsavon@gmail.com",
   },
-  {
-    href: "tel:+13606602460",
-    label: "Phone",
-    value: "360-660-2460",
-  },
+  { href: "tel:+13606602460", label: "Phone", value: "360-660-2460" },
   {
     href: "https://github.com/belonsavon-sys",
     label: "GitHub",
@@ -32,9 +34,6 @@ const professionalSummary =
 
 const experience = [
   {
-    company: "Blackdoor",
-    meta: "Sept 2025 - Present | Remote",
-    role: "Co-founder & President",
     bullets: [
       "Co-founded a holding company developing and operating agentic companies across entertainment, SaaS, robotics, and AI.",
       "Designed and built Atlas, a multi-level autonomous agent harness connecting subscription AI models, local models, API models, and any external tool via API, MCP, or OAuth.",
@@ -45,11 +44,11 @@ const experience = [
       "Technologies: Claude, Codex, Perplexity, Antigravity, Cursor, VS Code, GitHub.",
       "Underlying technology reworked and deployed at an active hospitality business.",
     ],
+    company: "Blackdoor",
+    meta: "Sept 2025 - Present | Remote",
+    role: "Co-founder & President",
   },
   {
-    company: "ThePrivateHotels (Soquinomere)",
-    meta: "Apr 2024 - Present | Ocean Shores, WA",
-    role: "Hotel Operations Supervisor",
     bullets: [
       "Progressed from Finance Data Entry Assistant and part-time Housekeeper to Housekeeping Supervisor and Hotel Operations Supervisor.",
       "Originally onboarded as a remote contractor from Italy, then recruited to relocate to Washington for full-time employment.",
@@ -65,78 +64,78 @@ const experience = [
       "Contributed to Airbnb Guest Favorites top 10%, Booking.com Travelers' Choice Award, VRBO Premier Partner, and a consistent 5-star average.",
       "Attended leadership and manager-level meetings, prepared operational reports, and participated in a company leadership retreat in Hawaii.",
     ],
+    company: "ThePrivateHotels (Soquinomere)",
+    meta: "Apr 2024 - Present | Ocean Shores, WA",
+    role: "Hotel Operations Supervisor",
   },
 ];
 
 const projects = [
   {
-    name: "Workout App",
-    scope: "End-to-end, personal",
     bullets: [
       "Built a fully functional personal workout tracking application from scratch, eliminating the need for paid subscription fitness apps.",
       "Stack: Next.js, React, Supabase, Vercel, built with Codex and Claude in VS Code and Antigravity.",
     ],
+    name: "Workout App",
+    scope: "End-to-end, personal",
   },
   {
-    name: "Personal Budgeting App",
-    scope: "End-to-end, personal",
     bullets: [
       "Developed a budgeting application with a built-in AI financial advisor that had full context of the user's financial data.",
       "Stack: Next.js, React, Supabase, Vercel, built with Codex and Claude.",
     ],
+    name: "Personal Budgeting App",
+    scope: "End-to-end, personal",
   },
   {
-    name: "Daily Market & News Automation",
-    scope: "Personal",
     bullets: [
       "Built an automated daily pipeline: ChatGPT-powered web searches for investment research and company news, synced to Google Calendar alongside bills and reminders.",
     ],
+    name: "Daily Market & News Automation",
+    scope: "Personal",
   },
 ];
 
 const skillGroups = [
   {
-    title: "AI & Automation",
     items: [
       "LLMs: Claude, ChatGPT, Codex, Perplexity",
-      "Agent frameworks: multi-agent harness design, MCP (Model Context Protocol)",
+      "Agent frameworks: multi-agent harness design, MCP",
       "Automation platforms: Zapier, n8n",
-      "APIs: Guesty, Twilio, OpenAI, Anthropic, REST API integration",
+      "APIs: Guesty, Twilio, OpenAI, Anthropic, REST",
     ],
+    title: "AI & Automation",
   },
   {
-    title: "Full-Stack Development",
     items: [
-      "Frontend: JavaScript, TypeScript, React, Next.js (App Router)",
-      "Mobile: Flutter (Dart), Kotlin Multiplatform (KMP) - research/experimental",
+      "Frontend: JavaScript, TypeScript, React, Next.js",
+      "Mobile: Flutter (Dart), Kotlin Multiplatform (KMP)",
       "Backend: Node.js, Express.js",
       "Database: Supabase (PostgreSQL), MySQL",
-      "Deployment: Vercel",
-      "Version control: Git, GitHub (PR-driven workflow)",
+      "Deployment: Vercel · Version control: Git, GitHub",
     ],
+    title: "Full-Stack Development",
   },
   {
-    title: "Design & Tooling",
     items: ["Figma, Framer", "VS Code, Antigravity, Cursor"],
+    title: "Design & Tooling",
   },
   {
-    title: "Business & Operations",
     items: [
       "Process design and digitization",
       "QA inspection systems",
       "Guest communications systems",
-      "Team supervision up to 6 direct/indirect reports",
-      "Contractor coordination",
-      "Finance data entry",
-      "Operational reporting",
+      "Team supervision · Contractor coordination",
+      "Finance data entry · Operational reporting",
     ],
+    title: "Business & Operations",
   },
 ];
 
 const education = [
   {
     meta: "Expected completion: June 2026",
-    program: "IBM Full Stack Software Engineer - Professional Certificate",
+    program: "IBM Full Stack Software Engineer — Professional Certificate",
     school: "In Progress",
   },
   {
@@ -151,101 +150,83 @@ const languages = ["English (native)", "Spanish (native)", "Italian (native)"];
 export default function ResumePage() {
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
-      <LightSection className="pb-20 pt-6 sm:pb-24">
-        <SiteNav />
+      <ResumeHero />
+      <SectionDivider direction="dark-to-light" />
 
-        <div className="mt-16 grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
-          <article className="rounded-lg border border-border-light bg-white p-6 shadow-sm sm:p-8 lg:p-10">
-            <header>
-              <p className="text-sm font-semibold text-accent">/resume</p>
-              <h1 className="mt-4 text-5xl font-semibold tracking-normal sm:text-6xl">
-                Pierre Belon Savon
-              </h1>
-              <p className="mt-4 text-xl font-medium text-text-light-muted">
-                AI Engineer
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3 text-sm text-text-light-muted">
-                <span className="rounded-full border border-border-light px-3 py-1">
-                  Ocean Shores, WA
-                </span>
-                <span className="rounded-full border border-border-light px-3 py-1">
-                  Remote roles
-                </span>
-                <span className="rounded-full border border-border-light px-3 py-1">
-                  Freelance projects
-                </span>
-              </div>
-            </header>
+      <LightSection className="pb-24 pt-12 sm:pb-32">
+        <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
+          <ScrollReveal direction="up">
+            <article className="rounded-3xl border border-border-light bg-white p-6 shadow-sm sm:p-10 lg:p-12">
+              <ResumeSection title="Professional Summary">
+                <p className="leading-8 text-text-light-muted">
+                  {professionalSummary}
+                </p>
+              </ResumeSection>
 
-            <ResumeSection title="Professional Summary">
-              <p className="leading-8 text-text-light-muted">
-                {professionalSummary}
-              </p>
-            </ResumeSection>
+              <ResumeSection title="Experience">
+                <div className="grid gap-10">
+                  {experience.map((item) => (
+                    <RoleEntry
+                      bullets={item.bullets}
+                      key={item.company}
+                      meta={item.meta}
+                      role={`${item.company} — ${item.role}`}
+                    />
+                  ))}
+                </div>
+              </ResumeSection>
 
-            <ResumeSection title="Experience">
-              <div className="grid gap-10">
-                {experience.map((item) => (
-                  <RoleEntry
-                    bullets={item.bullets}
-                    key={item.company}
-                    meta={item.meta}
-                    role={`${item.company} - ${item.role}`}
-                  />
-                ))}
-              </div>
-            </ResumeSection>
+              <ResumeSection title="Independent Projects">
+                <div className="grid gap-8">
+                  {projects.map((project) => (
+                    <RoleEntry
+                      bullets={project.bullets}
+                      key={project.name}
+                      meta={project.scope}
+                      role={project.name}
+                    />
+                  ))}
+                </div>
+              </ResumeSection>
 
-            <ResumeSection title="Independent Projects">
-              <div className="grid gap-8">
-                {projects.map((project) => (
-                  <RoleEntry
-                    bullets={project.bullets}
-                    key={project.name}
-                    meta={project.scope}
-                    role={project.name}
-                  />
-                ))}
-              </div>
-            </ResumeSection>
+              <ResumeSection title="Technical Skills">
+                <div className="grid gap-6 md:grid-cols-2">
+                  {skillGroups.map((group) => (
+                    <div key={group.title}>
+                      <h3 className="font-semibold">{group.title}</h3>
+                      <ul className="mt-3 grid gap-2 text-sm leading-6 text-text-light-muted">
+                        {group.items.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </ResumeSection>
 
-            <ResumeSection title="Technical Skills">
-              <div className="grid gap-6 md:grid-cols-2">
-                {skillGroups.map((group) => (
-                  <div key={group.title}>
-                    <h3 className="font-semibold">{group.title}</h3>
-                    <ul className="mt-3 grid gap-2 text-sm leading-6 text-text-light-muted">
-                      {group.items.map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </ResumeSection>
+              <ResumeSection title="Education">
+                <div className="grid gap-5">
+                  {education.map((item) => (
+                    <div key={item.program}>
+                      <h3 className="font-semibold">{item.program}</h3>
+                      <p className="mt-1 text-text-light-muted">{item.school}</p>
+                      <p className="mt-1 text-sm text-text-light-muted">
+                        {item.meta}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </ResumeSection>
+            </article>
+          </ScrollReveal>
 
-            <ResumeSection title="Education">
-              <div className="grid gap-5">
-                {education.map((item) => (
-                  <div key={item.program}>
-                    <h3 className="font-semibold">{item.program}</h3>
-                    <p className="mt-1 text-text-light-muted">{item.school}</p>
-                    <p className="mt-1 text-sm text-text-light-muted">
-                      {item.meta}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </ResumeSection>
-          </article>
-
-          <aside className="rounded-lg border border-border-light bg-bg-light-2 p-6 lg:sticky lg:top-8">
+          <aside className="rounded-3xl border border-border-light bg-bg-light-2 p-6 lg:sticky lg:top-24">
             <Button
-              className="w-full"
+              className="!bg-accent !text-white w-full !py-4 text-base"
               download
               href="/pierre-belon-savon-resume.pdf"
             >
-              Download Resume
+              Download Resume ↓
             </Button>
 
             <div className="mt-8 border-t border-border-light pt-6">
@@ -253,10 +234,12 @@ export default function ResumePage() {
               <dl className="mt-4 grid gap-4 text-sm">
                 {contactItems.map((item) => (
                   <div key={item.label}>
-                    <dt className="font-semibold">{item.label}</dt>
-                    <dd className="mt-1 text-text-light-muted">
+                    <dt className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
+                      {item.label}
+                    </dt>
+                    <dd className="mt-1">
                       <a
-                        className="break-words transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        className="break-words text-text-light transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                         href={item.href}
                       >
                         {item.value}
@@ -282,22 +265,57 @@ export default function ResumePage() {
   );
 }
 
-function SiteNav() {
+function ResumeHero() {
   return (
-    <nav
-      aria-label="Primary"
-      className="mx-auto flex w-full max-w-3xl flex-wrap items-center justify-center gap-2 rounded-full border border-border-light bg-white p-2 shadow-sm"
-    >
-      {navItems.map((item) => (
-        <NavPill
-          active={item.href === "/resume"}
-          href={item.href}
-          key={item.href}
-        >
-          {item.label}
-        </NavPill>
-      ))}
-    </nav>
+    <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/15 blur-3xl" />
+        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
+      </div>
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ScrollReveal direction="up">
+          <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent-light">
+            /resume
+          </p>
+        </ScrollReveal>
+        <ScrollReveal delay={0.05} direction="up">
+          <h1 className="mt-4 text-5xl font-semibold leading-[0.95] tracking-tight text-text-dark sm:text-7xl">
+            Pierre Belon Savon
+          </h1>
+        </ScrollReveal>
+        <ScrollReveal delay={0.1} direction="up">
+          <p className="mt-4 text-xl text-text-dark-muted">AI Engineer</p>
+        </ScrollReveal>
+        <ScrollReveal delay={0.15} direction="up">
+          <div className="mt-6 flex flex-wrap gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
+            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
+              Ocean Shores, WA
+            </span>
+            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
+              Remote roles
+            </span>
+            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
+              Freelance projects
+            </span>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.22} direction="up">
+          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {stats.map((stat) => (
+              <GlassCard className="p-5" key={stat.label}>
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-light">
+                  {stat.label}
+                </p>
+                <p className="mt-2 text-base font-semibold leading-7 text-text-dark sm:text-lg">
+                  {stat.value}
+                </p>
+              </GlassCard>
+            ))}
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
   );
 }
 
@@ -310,7 +328,7 @@ function LightSection({
 }) {
   return (
     <section className={className}>
-      <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 lg:px-12">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {children}
       </div>
     </section>
@@ -325,8 +343,8 @@ function ResumeSection({
   title: string;
 }) {
   return (
-    <section className="mt-10 border-t border-border-light pt-8">
-      <h2 className="mb-5 text-2xl font-semibold tracking-normal">{title}</h2>
+    <section className="mt-10 border-t border-border-light pt-8 first:mt-0 first:border-t-0 first:pt-0">
+      <h2 className="mb-5 text-2xl font-semibold tracking-tight">{title}</h2>
       {children}
     </section>
   );

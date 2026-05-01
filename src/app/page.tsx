@@ -1,93 +1,14 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Button,
   GlassCard,
-  NavPill,
   PhotoSlot,
+  ScrollReveal,
   SectionDivider,
 } from "@/components";
 import type { ReactNode } from "react";
-
-const navItems = [
-  { href: "/", label: "Welcome" },
-  { href: "/ai", label: "AI" },
-  { href: "/business", label: "Business" },
-  { href: "/resume", label: "Resume" },
-  { href: "/contact", label: "Get in Touch" },
-];
-
-const contactLinks = [
-  {
-    href: "https://github.com/belonsavon-sys",
-    Icon: GitHubIcon,
-    label: "GitHub",
-    rel: "noreferrer",
-    target: "_blank",
-  },
-  {
-    href: "tel:+13606602460",
-    Icon: PhoneIcon,
-    label: "Phone",
-  },
-  {
-    href: "mailto:belonsavon@gmail.com",
-    Icon: MailIcon,
-    label: "Email",
-  },
-];
-
-const roleTags = ["AI Engineer", "Full-Stack Builder", "Systems Architect"];
-
-const toolNodes = [
-  {
-    className: "left-3 top-6 sm:left-6 sm:top-8",
-    label: "GitHub",
-    shortLabel: "GH",
-    x: 18,
-    y: 15,
-  },
-  {
-    className: "right-5 top-4 sm:right-8 sm:top-9",
-    label: "Zapier",
-    shortLabel: "ZA",
-    x: 80,
-    y: 16,
-  },
-  {
-    className: "left-0 top-1/3 sm:left-4",
-    label: "React",
-    shortLabel: "R",
-    x: 12,
-    y: 36,
-  },
-  {
-    className: "right-0 top-[37%] sm:right-3",
-    label: "MySQL",
-    shortLabel: "SQL",
-    x: 88,
-    y: 39,
-  },
-  {
-    className: "left-4 bottom-[25%] sm:left-9",
-    label: "Next.js",
-    shortLabel: "N",
-    x: 20,
-    y: 68,
-  },
-  {
-    className: "right-3 bottom-[24%] sm:right-7",
-    label: "Express.js",
-    shortLabel: "EX",
-    x: 82,
-    y: 69,
-  },
-  {
-    className: "left-1/2 bottom-4 -translate-x-1/2",
-    label: "JavaScript",
-    shortLabel: "JS",
-    x: 50,
-    y: 86,
-  },
-];
 
 const aboutParagraphs = [
   "Two years ago, I supervised a hotel.",
@@ -114,65 +35,23 @@ const stackGroups = [
     items: ["JavaScript", "TypeScript", "React", "Next.js", "Tailwind CSS"],
     title: "Frontend",
   },
-  {
-    items: ["Flutter", "Kotlin (KMP)"],
-    title: "Mobile",
-  },
-  {
-    items: ["Node.js", "Express.js"],
-    title: "Backend",
-  },
-  {
-    items: ["Supabase", "MySQL"],
-    title: "Database",
-  },
-  {
-    items: ["Vercel", "GitHub"],
-    title: "Infra",
-  },
-  {
-    items: ["Figma", "Framer"],
-    title: "Design",
-  },
-  {
-    items: ["VS Code", "Antigravity", "Cursor"],
-    title: "IDEs",
-  },
+  { items: ["Flutter", "Kotlin (KMP)"], title: "Mobile" },
+  { items: ["Node.js", "Express.js"], title: "Backend" },
+  { items: ["Supabase", "MySQL"], title: "Database" },
+  { items: ["Vercel", "GitHub"], title: "Infra" },
+  { items: ["Figma", "Framer"], title: "Design" },
+  { items: ["VS Code", "Antigravity", "Cursor"], title: "IDEs" },
 ];
 
 const metrics = [
-  {
-    label: "Guest response time",
-    value: "48 hrs → under 3 min",
-  },
-  {
-    label: "Drafting time saved",
-    value: "15-20 min per message",
-  },
-  {
-    label: "Inventory managed",
-    value: "100+ items",
-  },
-  {
-    label: "Staff trained",
-    value: "6",
-  },
-  {
-    label: "Operations manual digitized",
-    value: "100+ pages → auditable QA",
-  },
-  {
-    label: "Awards",
-    value: "Airbnb Top 10% · Booking.com Travelers' Choice · VRBO Premier",
-  },
-  {
-    label: "Agent harness",
-    value: "Atlas shipping games, apps, and operating systems",
-  },
-  {
-    label: "Languages",
-    value: "English · Spanish · Italian",
-  },
+  { label: "Guest response time", value: "48 hrs → < 3 min" },
+  { label: "Drafting time saved", value: "15-20 min / msg" },
+  { label: "Inventory managed", value: "100+ items" },
+  { label: "Staff trained", value: "6" },
+  { label: "Manual digitized", value: "100+ pages → QA" },
+  { label: "Awards", value: "Top 10% Airbnb · Travelers' Choice" },
+  { label: "Agent harness", value: "Atlas — 3 products shipping" },
+  { label: "Languages", value: "EN · ES · IT (native)" },
 ];
 
 const sidebarBio =
@@ -181,27 +60,24 @@ const sidebarBio =
 export default function Home() {
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
-      <LightSection className="pb-20 pt-6 sm:pb-24">
-        <HomeHeader />
+      <Hero />
 
-        <div className="mt-12 grid gap-8 xl:grid-cols-[300px_minmax(0,1fr)]">
-          <StickySidebar />
+      <SectionDivider direction="light-to-dark" />
+      <MetricsBand />
+      <SectionDivider direction="dark-to-light" />
 
+      <LightSection className="pb-20 pt-16 sm:pb-24 sm:pt-20">
+        <div className="grid gap-10 xl:grid-cols-[300px_minmax(0,1fr)]">
+          <Sidebar />
           <div className="min-w-0">
-            <HeroSection />
-            <CompactBio />
-            <AboutSection />
-            <StackSection />
+            <About />
+            <Stack />
           </div>
         </div>
       </LightSection>
 
-      <SectionDivider direction="light-to-dark" />
-      <MetricsSection />
-      <SectionDivider direction="dark-to-light" />
-
-      <LightSection className="py-20 sm:py-24">
-        <CtaSection />
+      <LightSection className="pb-24 pt-4 sm:pb-32">
+        <Cta />
       </LightSection>
 
       <Footer />
@@ -209,35 +85,139 @@ export default function Home() {
   );
 }
 
-function HomeHeader() {
+function Hero() {
+  const reduce = useReducedMotion();
+
+  const easeOut = [0.21, 0.47, 0.32, 0.98] as [number, number, number, number];
+  const fadeUp = (delay: number) =>
+    reduce
+      ? { animate: { opacity: 1 }, initial: { opacity: 1 } }
+      : {
+          animate: { opacity: 1, y: 0 },
+          initial: { opacity: 0, y: 24 },
+          transition: { delay, duration: 0.7, ease: easeOut },
+        };
+
   return (
-    <header className="grid items-center gap-4 lg:grid-cols-[1fr_auto_1fr]">
-      <div aria-hidden="true" className="hidden lg:block" />
-      <nav
-        aria-label="Primary"
-        className="flex flex-wrap items-center justify-center gap-2 rounded-full border border-border-light bg-white p-2 shadow-sm"
-      >
-        {navItems.map((item) => (
-          <NavPill active={item.href === "/"} href={item.href} key={item.href}>
-            {item.label}
-          </NavPill>
-        ))}
-      </nav>
-      <div className="flex items-center justify-center gap-2 lg:justify-end">
-        <IconLinks size="sm" />
+    <section className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
+        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
       </div>
-    </header>
+
+      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
+        <motion.p
+          className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent"
+          {...fadeUp(0)}
+        >
+          Hello,
+        </motion.p>
+
+        <motion.h1
+          className="mt-4 text-5xl font-semibold leading-[0.95] tracking-tight text-text-light sm:text-7xl lg:text-[7.5rem]"
+          {...fadeUp(0.08)}
+        >
+          Pierre Belon Savon
+        </motion.h1>
+
+        <motion.div
+          aria-hidden="true"
+          animate={{ scaleX: 1 }}
+          className="mt-6 h-[3px] w-24 origin-left rounded-full bg-accent"
+          initial={reduce ? { scaleX: 1 } : { scaleX: 0 }}
+          transition={{ delay: 0.55, duration: 0.55, ease: "easeOut" }}
+        />
+
+        <motion.p
+          className="mt-8 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9"
+          {...fadeUp(0.18)}
+        >
+          Engineering intelligent automation and full-stack applications that
+          turn complex business processes into scalable, profitable systems.
+        </motion.p>
+
+        <motion.div
+          className="mt-10 flex flex-wrap items-center gap-4"
+          {...fadeUp(0.28)}
+        >
+          <Button href="/contact">Contact Me →</Button>
+          <Button href="/ai" variant="ghost">
+            See What I Build
+          </Button>
+        </motion.div>
+
+        <motion.div
+          className="mt-16 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm uppercase tracking-[0.18em] text-text-light-muted"
+          {...fadeUp(0.38)}
+        >
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            AI Engineer
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            Full-Stack Builder
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            Systems Architect
+          </span>
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
-function StickySidebar() {
+function MetricsBand() {
+  return (
+    <section className="bg-bg-dark py-20 text-text-dark sm:py-24">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-[360px_minmax(0,1fr)]">
+          <ScrollReveal direction="left">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent-light">
+              Outcomes
+            </p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-text-dark sm:text-4xl lg:text-5xl">
+              Shipped to production. Measured by what changed.
+            </h2>
+            <p className="mt-5 max-w-md text-lg leading-8 text-text-dark-muted">
+              Faster responses, clearer operations, systems people actually use
+              every day.
+            </p>
+          </ScrollReveal>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {metrics.map((metric, index) => (
+              <ScrollReveal
+                delay={0.05 + index * 0.04}
+                direction="fade"
+                key={metric.label}
+              >
+                <GlassCard className="h-full p-5">
+                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-light">
+                    {metric.label}
+                  </p>
+                  <p className="mt-3 text-lg font-semibold leading-7 text-text-dark sm:text-xl">
+                    {metric.value}
+                  </p>
+                </GlassCard>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Sidebar() {
   return (
     <aside className="hidden xl:block">
-      <div className="sticky top-6 rounded-lg border border-border-light bg-white p-5 shadow-sm">
+      <div className="sticky top-24 rounded-2xl border border-border-light bg-white p-5 shadow-sm">
         <PhotoSlot
           alt="Pierre Belon Savon"
           className="h-72"
-          fallbackMeta="Save public/hero-photo.png to replace this automatic fallback."
+          fallbackMeta="Save public/hero-photo.png to replace this placeholder."
           fallbackTitle="Hero photo pending"
           fit="contain"
           priority
@@ -246,293 +226,195 @@ function StickySidebar() {
         <p className="mt-5 text-sm leading-6 text-text-light-muted">
           {sidebarBio}
         </p>
-        <div className="mt-5">
-          <IconLinks size="md" />
+        <div className="mt-5 flex items-center gap-2">
+          <SidebarIcon
+            href="https://github.com/belonsavon-sys"
+            label="GitHub"
+            target="_blank"
+          >
+            <GitHubIcon className="h-4 w-4" />
+          </SidebarIcon>
+          <span className="h-5 w-px bg-border-light" />
+          <SidebarIcon href="tel:+13606602460" label="Phone">
+            <PhoneIcon className="h-4 w-4" />
+          </SidebarIcon>
+          <span className="h-5 w-px bg-border-light" />
+          <SidebarIcon href="mailto:belonsavon@gmail.com" label="Email">
+            <MailIcon className="h-4 w-4" />
+          </SidebarIcon>
         </div>
       </div>
     </aside>
   );
 }
 
-function HeroSection() {
+function SidebarIcon({
+  children,
+  href,
+  label,
+  target,
+}: {
+  children: ReactNode;
+  href: string;
+  label: string;
+  target?: "_blank";
+}) {
   return (
-    <section className="grid min-h-[calc(100vh-132px)] items-center gap-12 py-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,440px)]">
-      <div>
-        <RoleTags />
-        <h1 className="text-5xl font-semibold tracking-normal sm:text-7xl lg:text-8xl">
-          Hello,
-          <span className="mt-3 block">Pierre Belon Savon</span>
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
-          Engineering intelligent automation and full-stack applications that
-          turn complex business processes into scalable, profitable systems.
+    <a
+      aria-label={label}
+      className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border-light bg-white text-text-light transition-[border-color,color,transform] duration-150 hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      href={href}
+      rel={target === "_blank" ? "noreferrer" : undefined}
+      target={target}
+      title={label}
+    >
+      {children}
+    </a>
+  );
+}
+
+function About() {
+  return (
+    <section className="pb-16 sm:pb-20" id="about">
+      <ScrollReveal direction="up">
+        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
+          About me
         </p>
-        <div className="mt-10 flex flex-wrap gap-4">
+        <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+          Two years ago, I supervised a hotel.
+        </h2>
+      </ScrollReveal>
+
+      <div className="mt-8 grid gap-5 text-lg leading-8 text-text-light-muted">
+        {aboutParagraphs.slice(1).map((paragraph, index) => (
+          <ScrollReveal delay={index * 0.05} direction="up" key={paragraph}>
+            <p>{paragraph}</p>
+          </ScrollReveal>
+        ))}
+      </div>
+
+      <ScrollReveal direction="up">
+        <div className="mt-12 overflow-hidden rounded-3xl bg-bg-dark p-6 sm:p-8">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent-light">
+            Outside the work
+          </p>
+          <div className="mt-5 grid gap-5 md:grid-cols-2">
+            <ScrollReveal delay={0.05} direction="left">
+              <GlassCard className="h-full p-3">
+                <PhotoSlot
+                  alt="Pierre playing guitar off-shift"
+                  className="h-72"
+                  fallbackMeta="Save public/about-guitar.png to replace this placeholder."
+                  fallbackTitle="Photo 1 selected"
+                  fit="cover"
+                  src="/about-guitar.png"
+                />
+                <p className="mt-3 px-2 text-sm text-text-dark-muted">
+                  Off-shift.
+                </p>
+              </GlassCard>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1} direction="right">
+              <GlassCard className="h-full p-3">
+                <PhotoSlot
+                  alt="Pierre at the Hawaii leadership retreat"
+                  className="h-72"
+                  fallbackMeta="Save public/about-hawaii.png to replace this placeholder."
+                  fallbackTitle="Photo 2 selected"
+                  fit="cover"
+                  src="/about-hawaii.png"
+                />
+                <p className="mt-3 px-2 text-sm text-text-dark-muted">
+                  Hawaii — leadership retreat, ThePrivateHotels.
+                </p>
+              </GlassCard>
+            </ScrollReveal>
+          </div>
+        </div>
+      </ScrollReveal>
+    </section>
+  );
+}
+
+function Stack() {
+  return (
+    <section className="pb-12 pt-8 sm:pb-16" id="stack">
+      <ScrollReveal direction="up">
+        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
+          My stack
+        </p>
+        <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+          What I use to ship.
+        </h2>
+      </ScrollReveal>
+
+      <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {stackGroups.map((group, index) => (
+          <ScrollReveal
+            delay={index * 0.04}
+            direction="up"
+            key={group.title}
+          >
+            <article className="group h-full rounded-2xl border border-border-light bg-white p-5 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-md">
+              <h3 className="text-base font-semibold text-text-light">
+                <span className="mr-2 inline-block h-2 w-2 rounded-full bg-accent transition-transform duration-200 group-hover:scale-125" />
+                {group.title}
+              </h3>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span
+                    className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2.5 py-1 text-xs font-medium text-text-light"
+                    key={item}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </article>
+          </ScrollReveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Cta() {
+  return (
+    <ScrollReveal direction="up">
+      <section className="rounded-3xl border border-border-light bg-white p-8 text-center shadow-sm sm:p-14">
+        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
+          Ready when you are
+        </p>
+        <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
+          Let&apos;s build something that actually works.
+        </h2>
+        <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-text-light-muted">
+          Whether you need AI automation, a full-stack product, or a system
+          that runs itself — I&apos;m available for remote roles and projects.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Button href="/contact">Contact Me →</Button>
           <Button href="/resume" variant="ghost">
             View Resume
           </Button>
         </div>
-      </div>
-
-      <HeroConstellation />
-    </section>
-  );
-}
-
-function RoleTags() {
-  return (
-    <div className="mb-8 grid max-w-sm gap-3">
-      {roleTags.map((tag, index) => (
-        <div className="flex items-center gap-3" key={tag}>
-          <span
-            aria-hidden="true"
-            className={`h-px bg-accent ${
-              index === 1 ? "w-16" : "w-10"
-            }`}
-          />
-          <span className="rounded-lg border border-border-light bg-white px-4 py-2 text-sm font-semibold text-text-light shadow-sm">
-            {tag}
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function HeroConstellation() {
-  return (
-    <div className="relative mx-auto h-[500px] w-full max-w-[440px] overflow-hidden rounded-lg border border-border-light bg-bg-light-2">
-      <svg
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full"
-        viewBox="0 0 100 100"
-      >
-        {toolNodes.map((node) => (
-          <line
-            key={node.label}
-            stroke="rgba(41, 110, 214, 0.35)"
-            strokeWidth="0.35"
-            x1="50"
-            x2={node.x}
-            y1="48"
-            y2={node.y}
-          />
-        ))}
-      </svg>
-
-      <div className="absolute left-1/2 top-1/2 h-72 w-56 -translate-x-1/2 -translate-y-1/2 sm:h-80 sm:w-64">
-        <PhotoSlot
-          alt="Pierre Belon Savon"
-          className="h-full"
-          fallbackMeta="Transparent hero image will appear here when public/hero-photo.png is added."
-          fallbackTitle="Photo 3 selected"
-          fit="contain"
-          priority
-          src="/hero-photo.png"
-        />
-      </div>
-
-      {toolNodes.map((node) => (
-        <div
-          className={`absolute ${node.className} flex items-center rounded-lg border border-border-light bg-white px-2 py-2 text-sm font-semibold text-text-light shadow-sm sm:px-3`}
-          key={node.label}
-        >
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-bg-light-2 text-xs text-accent sm:mr-2">
-            {node.shortLabel}
-          </span>
-          <span className="hidden sm:inline">{node.label}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function CompactBio() {
-  return (
-    <section className="mb-16 rounded-lg border border-border-light bg-white p-5 shadow-sm xl:hidden">
-      <div className="grid gap-5 sm:grid-cols-[180px_1fr] sm:items-center">
-        <PhotoSlot
-          alt="Pierre Belon Savon"
-          className="h-56"
-          fallbackMeta="Save public/hero-photo.png to replace this automatic fallback."
-          fallbackTitle="Hero photo pending"
-          fit="contain"
-          src="/hero-photo.png"
-        />
-        <div>
-          <p className="text-sm leading-6 text-text-light-muted">
-            {sidebarBio}
-          </p>
-          <div className="mt-5">
-            <IconLinks size="md" />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function AboutSection() {
-  return (
-    <section className="py-20 sm:py-24">
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_380px]">
-        <div>
-          <h2 className="text-4xl font-semibold tracking-normal sm:text-5xl">
-            About Me
-          </h2>
-          <div className="mt-8 grid gap-5 text-lg leading-8 text-text-light-muted">
-            {aboutParagraphs.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid gap-5 self-start">
-          <PhotoSlot
-            alt="Pierre playing guitar off-shift"
-            caption="Off-shift."
-            className="h-64"
-            fallbackMeta="Save public/about-guitar.png to replace this automatic fallback."
-            fallbackTitle="Photo 1 selected"
-            src="/about-guitar.png"
-          />
-          <PhotoSlot
-            alt="Pierre at the Hawaii leadership retreat"
-            caption="Hawaii — leadership retreat, ThePrivateHotels."
-            className="h-64"
-            fallbackMeta="Save public/about-hawaii.png to replace this automatic fallback."
-            fallbackTitle="Photo 2 selected"
-            src="/about-hawaii.png"
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function StackSection() {
-  return (
-    <section className="py-20 sm:py-24">
-      <h2 className="text-4xl font-semibold tracking-normal sm:text-5xl">
-        My Stack
-      </h2>
-      <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {stackGroups.map((group) => (
-          <article
-            className="rounded-lg border border-border-light bg-white p-5"
-            key={group.title}
-          >
-            <h3 className="text-lg font-semibold">{group.title}</h3>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {group.items.map((item) => (
-                <span
-                  className="inline-flex items-center gap-2 rounded-lg border border-border-light bg-bg-light-2 px-3 py-2 text-sm font-medium text-text-light"
-                  key={item}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="h-2 w-2 rounded-full bg-accent"
-                  />
-                  {item}
-                </span>
-              ))}
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function MetricsSection() {
-  return (
-    <section className="bg-bg-dark py-20 text-text-dark sm:py-24">
-      <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 lg:px-12">
-        <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
-          <div>
-            <h2 className="text-4xl font-semibold tracking-normal sm:text-5xl">
-              Outcomes that made it into production.
-            </h2>
-            <p className="mt-5 text-lg leading-8 text-text-dark-muted">
-              The work is measured by faster responses, clearer operations, and
-              systems people actually use.
-            </p>
-          </div>
-
-          <GlassCard className="p-5">
-            <div className="grid gap-3 md:grid-cols-2">
-              {metrics.map((metric) => (
-                <div
-                  className="rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 p-4"
-                  key={metric.label}
-                >
-                  <p className="font-mono text-sm text-accent-light">
-                    {metric.label}
-                  </p>
-                  <p className="mt-2 font-semibold leading-7 text-text-dark">
-                    {metric.value}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function CtaSection() {
-  return (
-    <section className="rounded-lg border border-border-light bg-white p-8 text-center shadow-sm sm:p-12">
-      <h2 className="mx-auto max-w-3xl text-4xl font-semibold tracking-normal sm:text-5xl">
-        Let&apos;s build something that actually works.
-      </h2>
-      <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-text-light-muted">
-        Whether you need AI automation, a full-stack product, or a system that
-        runs itself — I&apos;m available for remote roles and projects.
-      </p>
-      <div className="mt-8">
-        <Button href="/contact">Contact Me →</Button>
-      </div>
-    </section>
+      </section>
+    </ScrollReveal>
   );
 }
 
 function Footer() {
   return (
     <footer className="border-t border-border-light bg-white py-8">
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-between gap-5 px-6 sm:px-8 md:flex-row lg:px-12">
-        <IconLinks size="sm" />
+      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
         <p className="text-sm text-text-light-muted">
           © 2026 Pierre Belon Savon
         </p>
+        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
+          Built business-first
+        </p>
       </div>
     </footer>
-  );
-}
-
-function IconLinks({ size }: { size: "md" | "sm" }) {
-  const sizeClasses = size === "md" ? "h-11 w-11" : "h-10 w-10";
-  const iconSize = size === "md" ? "h-5 w-5" : "h-4 w-4";
-
-  return (
-    <div className="flex items-center gap-2">
-      {contactLinks.map(({ Icon, href, label, rel, target }) => (
-        <a
-          aria-label={label}
-          className={`${sizeClasses} inline-flex items-center justify-center rounded-lg border border-border-light bg-white text-text-light transition-[border-color,color,transform] duration-150 hover:-translate-y-0.5 hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
-          href={href}
-          key={label}
-          rel={rel}
-          target={target}
-          title={label}
-        >
-          <Icon className={iconSize} />
-        </a>
-      ))}
-    </div>
   );
 }
 
@@ -545,7 +427,7 @@ function LightSection({
 }) {
   return (
     <section className={className}>
-      <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         {children}
       </div>
     </section>
