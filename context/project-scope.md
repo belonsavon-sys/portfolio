@@ -18,11 +18,12 @@ All resume and page copy lives in `context/` and must be finalized before any UI
 | Page | Route | Description |
 |------|-------|-------------|
 | Home | `/` | About Pierre — hero, sticky sidebar (homepage only), about, tech stack |
-| AI | `/ai` | Process automation, API integrations, agent systems — framed for business impact |
+| AI | `/ai` | **Merged AI + Technology page.** Process automation, agent systems, full-stack demos — all 3 demos live here |
 | Business | `/business` | Operations, process development, QA, hospitality leadership, Blackdoor |
-| Technology | `/technology` | Web, mobile, full-stack — demos live here |
 | Contact | `/contact` | Contact form + icon links |
 | Resume | `/resume` | Downloadable + viewable resume |
+
+> **Note:** Technology page removed. All technical content and demos consolidated into `/ai`.
 
 ## Sections Within Pages (high-level)
 
@@ -35,29 +36,29 @@ All resume and page copy lives in `context/` and must be finalized before any UI
 - Metrics / achievements strip
 - CTA → Contact
 
-### AI Page (`/ai`)
-- Process automation case studies (hotel chatbot, inspection digitization, Zapier/Twilio/Guesty flows)
-- Integration demos (showing different apps working together)
-- Agent harness overview (Blackdoor — framed for business value)
-- Vibe coding demo (3rd demo — TBD format)
+### AI Page (`/ai`) — merged with Technology
+- Page hero: business-framed intro to AI automation + full-stack capability
+- Process automation case studies:
+  - Guest chatbot: 48hrs → 3min response time, 15–20 min saved per message
+  - Inspection digitization: 100+ page manual → trackable QA system
+  - Zapier + Guesty + Twilio workflow automation
+- **Demo 1 — Live AI in your browser:** 5-tab interactive modal running models locally via WebGPU
+  - Tabs: LLM | Vision | Semantic Search | Image Classification | Text-to-Speech
+  - Each tab framed as a business use case (e.g., on-device LLM for private data, vision for quality inspection)
+- **Demo 2 — Atlas harness walkthrough:** Visualizes the agent pipeline — prompt in → CEO agent routes → sub-agents act → files open, tasks complete
+- **Demo 3 — Playground:** Interactive vibe-coding playground (live AI build)
+- Full-stack web + mobile capabilities (business-framed)
 - CTA
 
 ### Business Page (`/business`)
 - Process development: the inspection checklist / QA system
-- Customer service systems
-- Inventory management
-- Trainer experience
-- Hotel operations leadership (supervisor, manager meetings, reports)
+- Customer service systems (chatbot, guest communications)
+- Inventory management (100+ items)
+- Trainer experience (SOPs, checklists, 6 staff trained)
+- Hotel operations leadership (supervisor, manager meetings, reports, Hawaii leadership retreat)
 - Process improvement methodology
-- Finance / accounting data entry experience
-- Blackdoor: holding company overview (business framing)
-
-### Technology Page (`/technology`)
-- Web & mobile development services
-- Demo 1: YouTube-tutorial-style walkthrough (reference: youtube.com/watch?v=1mix7WnuEK0)
-- Demo 2: App integrations showcase
-- Demo 3: Vibe coding demo
-- Full-stack capabilities (framed as business outcomes)
+- Finance / accounting data entry (QuickBooks, 6 months, error-free)
+- Blackdoor: holding company overview (business framing across entertainment, SaaS, robotics, AI)
 
 ### Contact (`/contact`)
 - Contact form
@@ -91,20 +92,20 @@ All resume and page copy lives in `context/` and must be finalized before any UI
 
 ---
 
-## Demos Planned
+## Demos Planned (all on `/ai` page)
 
-### Demo 1 — Technology Page: Tutorial-style walkthrough
-- Format: Embedded video or interactive step-through
+### Demo 1 — Live AI in your browser (WebGPU)
+- Format: 5-tab interactive modal — models run locally in-browser via WebGPU (zero server cost, zero data leakage)
+- Tabs: **LLM | Vision | Semantic Search | Image Classification | Text-to-Speech**
+- Each tab framed as a business use case
 - Reference: youtube.com/watch?v=1mix7WnuEK0
-- Shows: A real build or workflow walkthrough
 
-### Demo 2 — AI Page: App integrations showcase
-- Shows: Multiple tools working together (e.g., Zapier → Guesty → Twilio flow, or similar)
-- Format: Animated diagram or live demo
+### Demo 2 — Atlas harness walkthrough
+- Shows: Full agent pipeline visualization — prompt in → CEO agent routes → sub-agents act → files open, tasks complete
+- Format: Animated/interactive diagram or step-through visualization
 
-### Demo 3 — Technology Page: Vibe coding
-- Shows: Live or recorded vibe-coding session (AI-assisted rapid prototyping)
-- Format: TBD
+### Demo 3 — Playground
+- Format: Interactive vibe-coding playground (live AI-assisted build experience)
 
 ---
 
@@ -130,7 +131,6 @@ All resume and page copy lives in `context/` and must be finalized before any UI
 - `design` — UI/UX, brandkit, visual direction
 - `ai-page` — AI page work
 - `business-page` — Business page work
-- `technology-page` — Technology page work
 - `home-page` — Homepage work
 - `contact-page` — Contact page work
 - `resume` — Resume/cover letter work

@@ -22,11 +22,12 @@ AI Engineer with a proven track record of designing and deploying intelligent au
 ### Blackdoor — Co-founder & President
 **Sept 2025 – Present | Remote**
 - Co-founded a holding company developing and operating agentic companies across entertainment, SaaS, robotics, and AI.
-- Architecting a multi-level agent harness (executive, functional, and field agents) designed to autonomously build, manage, and improve software products over time.
-- Directing AI research and development: agent harness design, backend AI systems, and cloud/local deployment strategies.
-- All development governed through GitHub PR workflows with full documentation and spec research completed before implementation.
+- Designed and built **Atlas** — a multi-level autonomous agent harness connecting subscription AI models, local models, API models, and any external tool via API, MCP, or OAuth. Atlas orchestrates a full company hierarchy: CEO agent → C-suite agents (CFO, CMO) → manager agents → field agents.
+- Atlas has shipped: a game app, a budget web app, and an agent-augmented project management system.
+- Directing AI R&D: agent harness architecture, backend AI systems, cloud and local deployment strategies.
+- All development governed through GitHub PR workflows; full documentation and spec research completed before every implementation sprint.
 - Technologies: Claude, Codex, Perplexity, Antigravity, Cursor, VS Code, GitHub
-- Company technology currently deployed in an active business operation.
+- Underlying technology reworked and deployed at an active hospitality business.
 
 ### ThePrivateHotels (Soquinomere) — Hotel Operations Supervisor
 **Apr 2024 – Present | Ocean Shores, WA (started remotely from Italy)**
@@ -35,8 +36,11 @@ AI Engineer with a proven track record of designing and deploying intelligent au
 - Supervised a team of 6 (3 hotel staff + 3 direct reports) and managed contractor relationships and scheduling.
 - Oversaw operations across 1 active property while simultaneously supporting the buildout of 3 additional properties and 2 event venues.
 - Digitized a 100+ page property operations manual into a trackable, quantifiable digital inspection process — converting static documentation into an auditable QA system.
-- Deployed a guest communications chatbot powered by curated company data (approved message templates, brand voice, guest scenarios) and connected it to operational tools, with all automated actions gated by explicit staff approval.
-- Automated key hotel workflows using Zapier, Guesty API, and Twilio API — reducing manual coordination and improving response times.
+- Built and deployed a guest communications chatbot trained on curated company data (approved templates, brand voice, scenarios: check-in, pet rules, TV troubleshooting, fireworks, etc.); drafts replies in Smarttask for human review and one-click send. **Cut response time from up to 48 hours → under 3 minutes. Saves 15–20 minutes of drafting per message.**
+- Automated hotel workflows using Zapier, Guesty API, and Twilio API, replacing multi-hour manual coordination loops.
+- Authored room-by-room SOPs, laundry procedures, and inspection checklists; trained 6 staff (1 veteran, 1 new hire, 4 property-side employees) on all systems, standards, and tools.
+- Managed 100+ inventory items across linens, amenities, F&B, laundry supplies, and property equipment.
+- Finance data entry: processed invoices, bills, and receipts in QuickBooks for ~6 months — zero errors on record.
 - Contributed to achieving: Airbnb Guest Favorites (top 10%), Booking.com Travelers' Choice Award, VRBO Premier Partner, consistent 5-star average.
 - Attended leadership and manager-level meetings; prepared operational reports.
 - Participated in a company leadership retreat in Hawaii.
@@ -94,16 +98,31 @@ AI Engineer with a proven track record of designing and deploying intelligent au
 ### IBM Full Stack Software Engineer — Professional Certificate _(In Progress)_
 **Expected completion: June 2026**
 
-### Civil Engineering — University Studies _(2 years completed, did not finish)_
-- University name: TBD
-- Years: TBD
+### Civil Engineering — Texas A&M University of Kingsville _(Coursework completed, did not finish)_
+**Kingsville, TX | 2019–2020**
+
+---
+
+## Job Search Parameters
+- **Target role:** AI Engineer
+- **Work type:** Remote only
+- **Target salary:** $100k+
+- **Target companies:** Open — any industry
+
+---
+
+## About / Bio (raw material for copy)
+- **Origin story:** Never owned a computer before Blackdoor. Co-founder Ryder saw Pierre's ability to take things to the finish line and recruited him. Through hyperfocus and investing all free time into learning, Pierre reached a tier of technical literacy that exceeds the vast majority of Americans. His divergent mindset has filled gaps Ryder never anticipated. Now the most valuable contributor in both companies.
+- **Drive:** Building things, automating, making life easier — and the financial upside that follows.
+- **Working style:** Solo or pair-programming with AI. Hyperfocused, deep researcher, comfortable running multiple parallel projects.
+- **Character:** Everything in his scope gets researched to mastery before execution. Error-free record in every role that required precision.
 
 ---
 
 ## Notable Differentiators
 - Trilingual: English, Spanish, Italian (all native fluency)
-- Relocated internationally (Italy → USA) for full-time role
+- Relocated internationally (Italy → WA, USA) for full-time role
+- Self-taught: went from no computer ownership → production AI systems in active business use
 - AI technology built for employer is actively in production
-- Co-founded a multi-agent AI company currently in active development
-- Self-taught AI engineer: all major projects built independently with AI-native tooling
-- Teaching and evangelizing AI adoption in the workplace (trained leadership on Antigravity, AI discussion in daily standups)
+- Co-founded Atlas (multi-agent harness) — shipping real products
+- Teaches and evangelizes AI adoption at work (trained leadership on Antigravity, leads AI discussion in daily standups)
