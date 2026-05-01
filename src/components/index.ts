@@ -3,6 +3,7 @@ export type { ButtonProps, NavPillProps } from "./Button";
 export { AtlasDemo } from "./AtlasDemo";
 export { GlassCard } from "./GlassCard";
 export type { GlassCardProps } from "./GlassCard";
+export { LocalAiDemo } from "./LocalAiDemo";
 export { PhotoSlot } from "./PhotoSlot";
 export type { PhotoSlotProps } from "./PhotoSlot";
 export { SectionDivider } from "./SectionDivider";
