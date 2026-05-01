@@ -15,7 +15,7 @@
 
 **Contact links (icon-only, no contact form):**
 - GitHub: github.com/belonsavon-sys
-- LinkedIn: TBD (to be created)
+- LinkedIn: _Not yet available — see Issue #5. **Implementation: omit this icon entirely until a real URL is set in this file. Do not render a broken or placeholder link.**_
 - Phone: 360-660-2460
 - Email: belonsavon@gmail.com
 

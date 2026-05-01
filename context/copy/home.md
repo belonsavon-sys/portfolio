@@ -34,7 +34,7 @@ GitHub | Zapier | React | MySQL | Next.js | Express.js | JavaScript
 
 **Contact icons:**
 - GitHub: github.com/belonsavon-sys
-- LinkedIn: TBD
+- LinkedIn: _Not yet available — see Issue #5. Implementation: omit this icon until a real URL is set in this file._
 - Phone: 360-660-2460
 - Email: belonsavon@gmail.com
 
