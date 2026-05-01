@@ -33,6 +33,7 @@ type ButtonAsButtonProps = ButtonBaseProps &
 
 type ButtonAsAnchorProps = ButtonBaseProps &
   SharedElementProps & {
+    download?: boolean | string;
     href: string;
     onClick?: MouseEventHandler<HTMLAnchorElement>;
     rel?: string;
@@ -98,10 +99,10 @@ export function Button(props: ButtonProps) {
   };
 
   if ("href" in rest && rest.href) {
-    const { href, onClick, target, rel } = rest;
+    const { download, href, onClick, target, rel } = rest;
     const safeRel = target === "_blank" ? (rel ?? "noreferrer") : rel;
 
-    if (isInternalHref(href)) {
+    if (isInternalHref(href) && !download) {
       return (
         <Link
           className="inline-flex rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
@@ -121,6 +122,7 @@ export function Button(props: ButtonProps) {
     return (
       <motion.a
         className={classes}
+        download={download}
         href={href}
         onClick={onClick}
         rel={safeRel}
