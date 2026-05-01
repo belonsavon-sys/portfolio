@@ -27,11 +27,68 @@
 
 ## Layout Architecture
 
+### Homepage layout (wireframe)
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  [PILL NAV: Welcome | AI | Business | Resume | Get in Touch]   [icons] │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                       │
+│  ┌──────────────┐    ┌──────────────────────────────────────────┐  │
+│  │              │    │                                            │  │
+│  │   STICKY     │    │   HERO                                     │  │
+│  │   SIDEBAR    │    │   "Hello,"  [photo + floating icons]      │  │
+│  │              │    │                Pierre Belon Savon         │  │
+│  │   [Photo]    │    │   Hero one-liner (Option B)               │  │
+│  │              │    │                                            │  │
+│  │   Bio text   │    ├──────────────────────────────────────────┤  │
+│  │              │    │   ABOUT ME                                │  │
+│  │  [GH] [Li]   │    │   "Two years ago I supervised a hotel..." │  │
+│  │  [📞] [✉]    │    ├──────────────────────────────────────────┤  │
+│  │              │    │   MY STACK (category grid, no % bars)     │  │
+│  │  (fixed)     │    │   AI · Frontend · Backend · DB · Tools    │  │
+│  │              │    ├──────────────────────────────────────────┤  │
+│  │              │    │   METRICS STRIP                           │  │
+│  │              │    │   48hrs→3min · 100+ items · 6 trained...  │  │
+│  │              │    ├──────────────────────────────────────────┤  │
+│  │              │    │   CTA → Get in Touch                      │  │
+│  └──────────────┘    └──────────────────────────────────────────┘  │
+│                                                                       │
+│  [FOOTER]                                                            │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Mode flow (light dominant, dark selective)
+
+```mermaid
+flowchart TB
+    Welcome[Welcome page<br/>LIGHT]
+    AI[AI page<br/>LIGHT base]
+    AIDark[Demo sections<br/>DARK + terminal + glassmorphism]
+    Business[Business page<br/>LIGHT]
+    Resume[Resume page<br/>LIGHT]
+    Contact[Contact page<br/>LIGHT]
+
+    Welcome --> AI
+    AI -.->|on hover/click| AIDark
+    AIDark -.->|exit demo| AI
+    AI --> Business
+    Business --> Resume
+    Resume --> Contact
+
+    style Welcome fill:#fff,stroke:#333
+    style AI fill:#fff,stroke:#333
+    style AIDark fill:#0a0e27,color:#00d4ff,stroke:#00d4ff
+    style Business fill:#fff,stroke:#333
+    style Resume fill:#fff,stroke:#333
+    style Contact fill:#fff,stroke:#333
+```
+
 ### Navigation
 - Clean pill/tab-style center nav (like Gerald Dixon reference)
 - No logo, no brand name, no personal name in nav
 - Right side of nav: icon links — GitHub, LinkedIn, phone, email
-- Sections in nav: TBD (About, Experience, Services/AI, Business, Technology, Contact — refine in later Q&A)
+- **Section labels (LOCKED):** Welcome | AI | Business | Resume | Get in Touch
 
 ### Homepage — Sticky Left Sidebar (homepage only)
 - Fixed left panel while right side scrolls
