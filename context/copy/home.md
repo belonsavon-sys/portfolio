@@ -44,23 +44,14 @@ GitHub | Zapier | React | MySQL | Next.js | Express.js | JavaScript
 
 **Heading:** About Me
 
-**Body (option 1 — storytelling):**
-> I never owned a computer before I started building AI systems.
+**Body (LOCKED):**
+> Two years ago, I supervised a hotel.
 >
-> My co-founder saw something others didn't — someone who takes things to the finish line. He recruited me into Blackdoor, and I took that seriously. Through hyperfocus and investing every hour of free time into learning, I reached a level of technical literacy that most people in this field never get to — not because I had a head start, but because I don't stop until I have mastery.
+> Today, the AI systems running that hotel are systems I built — every guest message, every inspection, every automated workflow. In parallel, at Blackdoor (the company I co-founded), I co-architect Atlas: a multi-level autonomous agent harness shipping real games, apps, and operating systems.
 >
-> Today I'm the most valuable contributor at two companies. I build the AI systems running at my employer's hospitality business. I co-architect Atlas, a multi-level autonomous agent harness at Blackdoor. And I approach every problem the same way: research thoroughly, establish mastery, then execute — without errors.
+> When a problem enters my scope, I take it to mastery before I execute. Solo or paired with AI, I research relentlessly and finish what I start. My divergent thinking catches what specialists miss — and turns "we should automate that" into "it's already running."
 >
-> My divergent thinking fills gaps that specialists miss. I connect business operations to AI possibility in ways that take things from "we should automate that" to "it's already running."
-
-**Body (option 2 — punchy/direct):**
-> Most people learn to code. I learned to make businesses work better with AI — then figured out the code to make it happen.
->
-> I'm Pierre: hotel operations supervisor turned AI engineer. I've automated guest communications, digitized QA systems, and built autonomous agent pipelines — all in active production. I'm trilingual, self-taught, and the kind of person who doesn't put something down until it's mastered.
->
-> I work best solo or paired with AI. I run parallel projects. And I care about one thing more than clean code: whether the system actually changes the business result.
-
-_Note to Pierre: Pick option 1 (narrative) or option 2 (punchy), or request a blend._
+> Trilingual. Hyperfocused. Built to ship.
 
 ---
 
