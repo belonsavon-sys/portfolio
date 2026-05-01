@@ -150,6 +150,44 @@ animation: blink 1s step-end infinite;
 
 **Typing animation:** Characters appear one at a time on the active line. On completion, line transitions to `--line-done` color and next line begins.
 
+## Button Variants (LOCKED)
+
+All buttons: `border-radius: 8px`, padding `px-6 py-3` (24px / 12px), Framer Motion transition 0.15s.
+Hover: brightness ±10%. Active: `scale: 0.97`.
+
+| Variant | Background | Border | Text | Used for |
+|---------|-----------|--------|------|----------|
+| **Primary** | `#296ed6` | none | `#FFFFFF` | Main CTAs — "Get in Touch", "Download Resume" |
+| **Ghost** | transparent | `1px #296ed6` | `#296ed6` | Secondary actions on light sections |
+| **Ghost Dark** | transparent | `1px #296ed6` | `#F8FAFC` | Secondary actions on dark sections |
+| **Nav Pill (active)** | `#296ed6` | none | `#FFFFFF` | Active nav item |
+| **Nav Pill (inactive)** | transparent | none | `--text-light` (`#0F172A`) | Inactive nav items |
+
+```css
+/* Primary */
+background: #296ed6;
+color: #ffffff;
+border-radius: 8px;
+padding: 12px 24px;
+
+/* Ghost */
+background: transparent;
+border: 1px solid #296ed6;
+color: #296ed6;
+
+/* Ghost Dark */
+background: transparent;
+border: 1px solid #296ed6;
+color: #F8FAFC;
+
+/* Hover (all variants) */
+filter: brightness(1.1);   /* light */
+filter: brightness(0.9);   /* dark/primary */
+
+/* Active press */
+transform: scale(0.97);
+```
+
 ---
 
 ## Layout Architecture
