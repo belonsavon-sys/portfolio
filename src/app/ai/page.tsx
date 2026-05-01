@@ -1,10 +1,9 @@
 import {
+  AtlasDemo,
   Button,
   GlassCard,
   NavPill,
   SectionDivider,
-  TerminalWindow,
-  type TerminalLine,
 } from "@/components";
 import type { ReactNode } from "react";
 
@@ -108,28 +107,6 @@ const localAiTabs = [
     framing:
       "Generate product mockups and business visuals on-device, on demand",
   },
-];
-
-const atlasPanes = [
-  {
-    title: "Harness Terminal",
-    description: "live routing and agent activity",
-  },
-  {
-    title: "Database",
-    description: "records being written in real time",
-  },
-  {
-    title: "Task Board",
-    description: "work appearing and completing",
-  },
-];
-
-const atlasLines: TerminalLine[] = [
-  { text: "> prompt: Build the launch plan" },
-  { text: "> CEO routing" },
-  { text: "> Agent CFO ack" },
-  { text: "> Field active" },
 ];
 
 export default function AiPage() {
@@ -269,64 +246,7 @@ export default function AiPage() {
           intro="Atlas is the multi-agent system I co-architect at Blackdoor. Send a prompt. Watch the CEO agent route it. Sub-agents act. The database updates. Tasks appear, get assigned, get completed. This is what AI that ships looks like under the hood."
         />
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-3">
-          <GlassCard>
-            <p className="font-mono text-sm text-accent">Pane 1</p>
-            <h3 className="mt-3 text-xl font-semibold">Harness Terminal</h3>
-            <TerminalWindow
-              className="mt-5"
-              lines={atlasLines}
-              title="atlas"
-            />
-          </GlassCard>
-
-          <GlassCard>
-            <p className="font-mono text-sm text-accent">Pane 2</p>
-            <h3 className="mt-3 text-xl font-semibold">Database</h3>
-            <div className="mt-5 overflow-hidden rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2">
-              {["tasks", "+ new row", "↻ updated"].map((row) => (
-                <div
-                  className="border-b border-[rgba(41,110,214,0.18)] px-4 py-3 font-mono text-sm text-text-dark-muted last:border-b-0"
-                  key={row}
-                >
-                  {row}
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-
-          <GlassCard>
-            <p className="font-mono text-sm text-accent">Pane 3</p>
-            <h3 className="mt-3 text-xl font-semibold">Task Board</h3>
-            <div className="mt-5 grid gap-3">
-              {["◯ Build...", "◐ Deploy...", "● Done!"].map((task) => (
-                <div
-                  className="rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 px-4 py-3 font-mono text-sm text-text-dark-muted"
-                  key={task}
-                >
-                  {task}
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {atlasPanes.map((pane, index) => (
-            <div
-              className="rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 p-4"
-              key={pane.title}
-            >
-              <p className="font-mono text-sm text-accent">Pane {index + 1}</p>
-              <h3 className="mt-3 font-semibold text-text-dark">
-                {pane.title}
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-text-dark-muted">
-                {pane.description}
-              </p>
-            </div>
-          ))}
-        </div>
+        <AtlasDemo />
 
         <AtlasHierarchy />
       </DarkSection>
