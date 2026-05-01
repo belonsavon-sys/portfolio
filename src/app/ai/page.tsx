@@ -1,7 +1,7 @@
 import {
   AtlasDemo,
   Button,
-  GlassCard,
+  LocalAiDemo,
   NavPill,
   SectionDivider,
 } from "@/components";
@@ -78,34 +78,6 @@ const caseStudies = [
     result:
       "Manual coordination significantly reduced. Team focuses on decisions, not data movement.",
     diagram: "workflow",
-  },
-];
-
-const localAiTabs = [
-  {
-    label: "LLM",
-    framing:
-      "Ground an AI agent in your business context — run it entirely on-device, zero data leakage",
-  },
-  {
-    label: "Vision",
-    framing:
-      "Classify images for inventory management, QA inspection, or ML dataset labeling",
-  },
-  {
-    label: "Semantic Search",
-    framing:
-      "Find meaning in your business data — not just keywords, but intent and relevance",
-  },
-  {
-    label: "Speech",
-    framing:
-      "Transcribe meeting audio to text and read documents back aloud — multi-speaker, with expression",
-  },
-  {
-    label: "Image Generation",
-    framing:
-      "Generate product mockups and business visuals on-device, on demand",
   },
 ];
 
@@ -202,42 +174,7 @@ export default function AiPage() {
           intro="Cloud AI is everywhere. But compute and energy costs are rising, and every modern computer already has the hardware to run capable AI models locally — they just aren't being used that way yet. These demos show what that looks like when it's actually deployed."
         />
 
-        <div className="mt-10 grid gap-4 lg:grid-cols-[260px_1fr]">
-          <GlassCard className="p-4">
-            <div className="grid gap-2">
-              {localAiTabs.map((tab, index) => (
-                <div
-                  className={`rounded-lg px-4 py-3 ${
-                    index === 0 ? "bg-accent text-white" : "text-text-dark"
-                  }`}
-                  key={tab.label}
-                >
-                  <p className="font-mono text-sm">{tab.label}</p>
-                </div>
-              ))}
-            </div>
-          </GlassCard>
-
-          <GlassCard>
-            <div className="grid gap-4 md:grid-cols-2">
-              {localAiTabs.map((tab) => (
-                <div
-                  className="rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 p-4"
-                  key={tab.label}
-                >
-                  <h3 className="font-semibold text-text-dark">{tab.label}</h3>
-                  <p className="mt-2 text-sm leading-6 text-text-dark-muted">
-                    {tab.framing}
-                  </p>
-                </div>
-              ))}
-            </div>
-            <p className="mt-6 border-t border-[rgba(41,110,214,0.25)] pt-5 font-mono text-sm text-text-dark-muted">
-              All models run locally in your browser via WebGPU. No data leaves
-              your device.
-            </p>
-          </GlassCard>
-        </div>
+        <LocalAiDemo />
       </DarkSection>
 
       <DarkSection className="pb-20 sm:pb-24">
