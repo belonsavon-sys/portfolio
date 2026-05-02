@@ -263,6 +263,21 @@ export default function ResumePage() {
   );
 }
 
+
+function LightSection({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <section className={className}>
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
+    </section>
+  );
+}
+
 function ResumeHero() {
   return (
     <section className="py-14 sm:py-16">

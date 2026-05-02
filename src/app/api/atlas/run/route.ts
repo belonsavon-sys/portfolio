@@ -1,10 +1,23 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const limiter = new Map<string, { count: number; resetAt: number }>();
 
-export async function POST(req: Request) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'local';
+function getTrustedClientIp(req: NextRequest) {
+  const realIp = req.headers.get('x-real-ip')?.trim();
+  if (realIp) return realIp;
+
+  const forwarded = req.headers.get('forwarded');
+  if (forwarded) {
+    const match = forwarded.match(/for=(?:\"?)(\[[^\]]+\]|[^;\",]+)(?:\"?)/i);
+    if (match?.[1]) return match[1];
+  }
+
+  return 'unknown';
+}
+
+export async function POST(req: NextRequest) {
+  const ip = getTrustedClientIp(req);
   const now = Date.now();
   const entry = limiter.get(ip);
   if (!entry || now > entry.resetAt) {
