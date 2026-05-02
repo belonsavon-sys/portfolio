@@ -50,3 +50,11 @@ Claude is currently conducting a structured interview with Pierre to populate al
 - Dev branch: claude/plan-portfolio-website-veieo
 - All work via PRs — never push directly to main
 - Create issues for all work items with appropriate labels and milestones
+
+
+## Locked Decisions (2026-05-02)
+- Local AI demo follows BrowserAI-style single-card tab UX
+- Atlas demo uses real Anthropic API when available with simulated fallback
+- Testimonial component renders only when real quote body exists
+- LinkedIn remains blocked until profile URL is provided
+- Hero/background-removed photo assets still pending cleanup

@@ -2,7 +2,6 @@ import {
   Button,
   GlassCard,
   ScrollReveal,
-  SectionDivider,
 } from "@/components";
 import type { ReactNode } from "react";
 
@@ -151,7 +150,6 @@ export default function ResumePage() {
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
       <ResumeHero />
-      <SectionDivider direction="dark-to-light" />
 
       <LightSection className="pb-24 pt-12 sm:pb-32">
         <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
@@ -170,7 +168,7 @@ export default function ResumePage() {
                       bullets={item.bullets}
                       key={item.company}
                       meta={item.meta}
-                      role={`${item.company} — ${item.role}`}
+                      role={`${item.company === "Blackdoor" ? "Featured · " : ""}${item.company} — ${item.role}`}
                     />
                   ))}
                 </div>
@@ -265,59 +263,6 @@ export default function ResumePage() {
   );
 }
 
-function ResumeHero() {
-  return (
-    <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
-        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
-      </div>
-      <div className="mx-auto w-full max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-        <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
-            /resume
-          </p>
-        </ScrollReveal>
-        <ScrollReveal delay={0.05} direction="up">
-          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight text-text-dark sm:text-7xl">
-            Pierre Belon Savon
-          </h1>
-        </ScrollReveal>
-        <ScrollReveal delay={0.1} direction="up">
-          <p className="mt-4 text-xl text-text-dark-muted">AI Engineer</p>
-        </ScrollReveal>
-        <ScrollReveal delay={0.15} direction="up">
-          <div className="mt-6 flex flex-wrap justify-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
-            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
-              Ocean Shores, WA
-            </span>
-            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
-              Remote roles
-            </span>
-            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
-              Freelance projects
-            </span>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.22} direction="up">
-          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {stats.map((stat) => (
-              <GlassCard className="p-5" key={stat.label}>
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-light">
-                  {stat.label}
-                </p>
-                <p className="mt-2 text-base font-semibold leading-7 text-text-dark sm:text-lg">
-                  {stat.value}
-                </p>
-              </GlassCard>
-            ))}
-          </div>
-        </ScrollReveal>
-      </div>
-    </section>
-  );
-}
 
 function LightSection({
   children,
@@ -328,8 +273,23 @@ function LightSection({
 }) {
   return (
     <section className={className}>
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
+    </section>
+  );
+}
+
+function ResumeHero() {
+  return (
+    <section className="py-14 sm:py-16">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        {children}
+        <div className="flex flex-col gap-6 rounded-3xl border border-border-light bg-white p-8 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">/resume</p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">Pierre Belon Savon</h1>
+            <p className="mt-2 text-lg text-text-light-muted">AI Engineer · Ocean Shores, WA</p>
+          </div>
+          <Button className="!bg-accent !text-white" download href="/pierre-belon-savon-resume.pdf">Download Resume ↓</Button>
+        </div>
       </div>
     </section>
   );

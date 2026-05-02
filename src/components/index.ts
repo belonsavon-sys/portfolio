@@ -35,3 +35,5 @@ export { TerminalWindow } from "./TerminalWindow";
 export type { TerminalLine, TerminalWindowProps } from "./TerminalWindow";
 export { TrustStrip } from "./TrustStrip";
 export type { TrustStripProps } from "./TrustStrip";
+export { Testimonial } from "./Testimonial";
+export { AtlasGallery } from "./AtlasGallery";
