@@ -1,5 +1,6 @@
 import {
   AtlasDemo,
+  AtlasGallery,
   BeforeAfter,
   Button,
   CursorHalo,
@@ -56,6 +57,15 @@ export default function AiPage() {
 
       <SectionDivider direction="light-to-dark" />
       <CaseStudiesBand />
+
+
+      <DarkSection className="pb-12">
+        <ScrollReveal direction="up">
+          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">Atlas products</p>
+          <h2 className="mt-3 text-3xl font-semibold text-text-dark sm:text-4xl">Three shipped products built via Atlas.</h2>
+        </ScrollReveal>
+        <div className="mt-8"><AtlasGallery /></div>
+      </DarkSection>
 
       <DarkSection className="pt-20 pb-10 sm:pt-24">
         <ScrollReveal direction="up">

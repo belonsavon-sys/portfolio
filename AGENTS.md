@@ -8,7 +8,7 @@ This file governs how AI agents (Claude, Codex, and others) must behave when wor
 
 ### Claude
 - **Responsibilities:** Thinking, architecture, design decisions, copy writing, documentation, planning, research, PR reviews, issue creation, context file management
-- **Must NOT:** Write implementation code directly to `src/` without a plan approved in a PR description
+- **Can implement code when explicitly directed by Pierre in a scoped plan**
 - **Branch prefix:** `claude/<description>`
 
 ### Codex

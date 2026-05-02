@@ -6,6 +6,7 @@ import {
   LightGlassCard,
   ScrollReveal,
   SectionDivider,
+  Testimonial,
 } from "@/components";
 import type { ReactNode } from "react";
 
@@ -58,6 +59,10 @@ export default function BusinessPage() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <BusinessHero />
 
+      <SectionDivider direction="light-to-dark" />
+      <BlackdoorBand />
+      <SectionDivider direction="dark-to-light" />
+
       <LightSection className="py-20 sm:py-24">
         <ProcessSection />
       </LightSection>
@@ -66,13 +71,13 @@ export default function BusinessPage() {
         <CommunicationsSection />
       </LightSection>
 
-      <LightSection className="pb-20 pt-4 sm:pb-24">
+      <LightSection className="pb-12 pt-4 sm:pb-16">
         <TrainingSection />
       </LightSection>
 
-      <SectionDivider direction="light-to-dark" />
-      <BlackdoorBand />
-      <SectionDivider direction="dark-to-light" />
+      <LightSection className="pb-8 pt-0">
+        <Testimonial quote={{ body: "Pierre rebuilt how we run guest comms. The thing that took us 48 hours now takes him 3 minutes. He doesn't ask permission to fix things — he ships.", author: "Operations lead", role: "ThePrivateHotels" }} />
+      </LightSection>
 
       <LightSection className="py-20 sm:py-24">
         <FinanceSection />

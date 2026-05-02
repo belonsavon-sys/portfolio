@@ -18,7 +18,7 @@ import {
 import type { ReactNode } from "react";
 
 const aboutParagraphs = [
-  "Today, the AI systems running that hotel are systems I built — every guest message, every inspection, every automated workflow. In parallel, at Blackdoor (the company I co-founded), I co-architect Atlas: a multi-level autonomous agent harness shipping real games, apps, and operating systems.",
+  "Two years ago I supervised a hotel. Today, the AI systems running it are systems I built — every guest message, every inspection, every automated workflow. In parallel, at Blackdoor (the company I co-founded), I co-architect Atlas: a multi-level autonomous agent harness shipping real games, apps, and operating systems.",
   'When a problem enters my scope, I take it to mastery before I execute. Solo or paired with AI, I research relentlessly and finish what I start. My divergent thinking catches what specialists miss — and turns "we should automate that" into "it\'s already running."',
   "Trilingual. Hyperfocused. Built to ship.",
 ];
@@ -40,11 +40,14 @@ const headlineCounters: Counter[] = [
 ];
 
 const detailedMetrics: Counter[] = [
-  { label: "Hours of guest-reply lag eliminated", suffix: " hrs", to: 48 },
-  { label: "Minutes saved per drafted reply", suffix: "-20 min", to: 15 },
-  { label: "Inventory items under management", suffix: "+", to: 100 },
-  { label: "Staff trained on the new tooling", to: 6 },
-  { label: "Months of error-free QuickBooks", to: 6 },
+  { label: "Guest reply latency at ThePrivateHotels", suffix: " hrs → 3 min", to: 48 },
+  { label: "Operations manual digitized", suffix: "+ pages", to: 100 },
+  { label: "Products shipped via Atlas", to: 3 },
+];
+
+const alsoMetrics: Counter[] = [
+    { label: "Staff trained", to: 6 },
+  { label: "QuickBooks months error-free", to: 6 },
   { label: "Native languages", to: 3 },
 ];
 
@@ -209,7 +212,7 @@ function MetricsBand() {
             </p>
           </ScrollReveal>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-3">
             {detailedMetrics.map((metric, index) => (
               <ScrollReveal
                 delay={0.05 + index * 0.04}
@@ -231,6 +234,7 @@ function MetricsBand() {
               </ScrollReveal>
             ))}
           </div>
+          <div className="mt-6 flex flex-wrap gap-4 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">{alsoMetrics.map((m)=><span key={m.label}>{m.label}</span>)}</div>
         </div>
       </div>
     </section>
@@ -245,7 +249,7 @@ function About() {
           About me
         </p>
         <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-          Two years ago, I supervised a hotel.
+          I'm an engineer who learned to ship by automating the business I was hired to run.
         </h2>
       </ScrollReveal>
 
