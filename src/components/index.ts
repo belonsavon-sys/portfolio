@@ -3,13 +3,30 @@ export type { ButtonProps, NavPillProps } from "./Button";
 export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps } from "./AnimatedCounter";
 export { AtlasDemo } from "./AtlasDemo";
+export { AtlasGallery } from "./AtlasGallery";
 export { BeforeAfter } from "./BeforeAfter";
 export type { BeforeAfterProps, BeforeAfterSide } from "./BeforeAfter";
 export { BentoStack } from "./BentoStack";
 export { BrandLogo } from "./BrandLogo";
 export type { BrandLogoProps } from "./BrandLogo";
+export {
+  EMAIL_DISPLAY,
+  EMAIL_MAILTO,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  PHONE_DISPLAY,
+  PHONE_TEL,
+  getContactLinks,
+} from "./contact-config";
+export type { ContactLink } from "./contact-config";
 export { CursorHalo } from "./CursorHalo";
 export type { CursorHaloProps } from "./CursorHalo";
+export { DemoTabCard } from "./DemoTabCard";
+export type {
+  DemoLoadStatus,
+  DemoRunStatus,
+  DemoTabCardProps,
+} from "./DemoTabCard";
 export { GlassCard } from "./GlassCard";
 export type { GlassCardProps } from "./GlassCard";
 export { GreetingRotator } from "./GreetingRotator";
@@ -33,5 +50,7 @@ export type {
 export { SiteHeader } from "./SiteHeader";
 export { TerminalWindow } from "./TerminalWindow";
 export type { TerminalLine, TerminalWindowProps } from "./TerminalWindow";
+export { Testimonial } from "./Testimonial";
+export type { TestimonialProps } from "./Testimonial";
 export { TrustStrip } from "./TrustStrip";
 export type { TrustStripProps } from "./TrustStrip";
