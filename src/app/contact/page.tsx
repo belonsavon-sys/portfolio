@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { GlassCard } from "@/components";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -13,7 +12,6 @@ import {
 
 type ContactCardConfig = {
   Icon: (props: { className?: string }) => React.ReactNode;
-  description: string;
   href: string;
   label: string;
   rel?: string;
@@ -23,8 +21,19 @@ type ContactCardConfig = {
 
 const contactLinks: ContactCardConfig[] = [
   {
+    Icon: MailIcon,
+    href: EMAIL_MAILTO,
+    label: "Email",
+    value: EMAIL_DISPLAY,
+  },
+  {
+    Icon: PhoneIcon,
+    href: PHONE_TEL,
+    label: "Phone",
+    value: PHONE_DISPLAY,
+  },
+  {
     Icon: GitHubIcon,
-    description: "Code and projects",
     href: GITHUB_URL,
     label: "GitHub",
     rel: "noreferrer",
@@ -35,7 +44,6 @@ const contactLinks: ContactCardConfig[] = [
     ? [
         {
           Icon: LinkedInIcon,
-          description: "Professional network",
           href: LINKEDIN_URL,
           label: "LinkedIn",
           rel: "noreferrer",
@@ -44,20 +52,6 @@ const contactLinks: ContactCardConfig[] = [
         },
       ]
     : []),
-  {
-    Icon: MailIcon,
-    description: "Best for new opportunities",
-    href: EMAIL_MAILTO,
-    label: "Email",
-    value: EMAIL_DISPLAY,
-  },
-  {
-    Icon: PhoneIcon,
-    description: "PST · text first",
-    href: PHONE_TEL,
-    label: "Phone",
-    value: PHONE_DISPLAY,
-  },
 ];
 
 export default function ContactPage() {
@@ -125,40 +119,37 @@ export default function ContactPage() {
           </motion.p>
 
           <motion.div className="mt-16 w-full" {...fadeUp(0.3)}>
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {contactLinks.map(
-                ({ Icon, description, href, label, rel, target, value }, index) => (
+                ({ Icon, href, label, rel, target, value }, index) => (
                   <motion.a
                     aria-label={label}
-                    className="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
+                    className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-[rgba(41,110,214,0.25)] bg-[rgba(255,255,255,0.04)] p-5 text-left transition-colors duration-200 hover:border-accent-light/60 hover:bg-[rgba(41,110,214,0.10)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
                     href={href}
                     initial={reduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
                     key={label}
                     rel={rel}
                     target={target}
                     transition={{
-                      delay: 0.4 + index * 0.06,
+                      delay: 0.4 + index * 0.05,
                       duration: 0.5,
                       ease: easeOut,
                     }}
                     viewport={{ amount: 0.4, once: true }}
-                    whileHover={{ y: -4 }}
+                    whileHover={{ y: -3 }}
                     whileInView={{ opacity: 1, y: 0 }}
                   >
-                    <GlassCard className="h-full p-6 text-left">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[rgba(41,110,214,0.35)] bg-[rgba(41,110,214,0.10)] text-accent-light">
-                        <Icon className="h-6 w-6" />
-                      </div>
-                      <p className="mt-5 font-mono text-xs uppercase tracking-[0.2em] text-accent-light">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[rgba(41,110,214,0.35)] bg-[rgba(41,110,214,0.10)] text-accent-light">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent-light">
                         {label}
                       </p>
-                      <p className="mt-2 text-lg font-semibold text-text-dark">
+                      <p className="mt-1.5 break-all text-base font-semibold text-text-dark">
                         {value}
                       </p>
-                      <p className="mt-2 text-sm text-text-dark-muted">
-                        {description}
-                      </p>
-                    </GlassCard>
+                    </div>
                   </motion.a>
                 ),
               )}

@@ -1,4 +1,4 @@
-import { Button, ScrollReveal } from "@/components";
+import { Button } from "@/components";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -149,8 +149,7 @@ export default function ResumePage() {
 
       <LightSection className="pb-24 pt-8 sm:pb-32">
         <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
-          <ScrollReveal direction="up">
-            <article className="rounded-3xl border border-border-light bg-white p-6 shadow-sm sm:p-10 lg:p-12">
+          <article className="rounded-3xl border border-border-light bg-white p-6 shadow-sm sm:p-10 lg:p-12">
               <ResumeSection title="Professional Summary">
                 <p className="leading-8 text-text-light-muted">
                   {professionalSummary}
@@ -212,8 +211,7 @@ export default function ResumePage() {
                   ))}
                 </div>
               </ResumeSection>
-            </article>
-          </ScrollReveal>
+          </article>
 
           <aside className="rounded-3xl border border-border-light bg-bg-light-2 p-6 lg:sticky lg:top-24">
             <Button
@@ -267,43 +265,33 @@ function ResumeHero() {
         <div className="absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
       </div>
       <div className="mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
-        <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
-            /resume
-          </p>
-        </ScrollReveal>
-        <ScrollReveal delay={0.05} direction="up">
-          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl">
-            Pierre Belon Savon
-          </h1>
-        </ScrollReveal>
-        <ScrollReveal delay={0.1} direction="up">
-          <p className="mt-4 text-xl text-text-light-muted">AI Engineer</p>
-        </ScrollReveal>
-        <ScrollReveal delay={0.15} direction="up">
-          <div className="mt-6 flex flex-wrap justify-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
-            <span className="rounded-full border border-border-light px-3 py-1.5">
-              Ocean Shores, WA
-            </span>
-            <span className="rounded-full border border-border-light px-3 py-1.5">
-              Remote roles
-            </span>
-            <span className="rounded-full border border-border-light px-3 py-1.5">
-              Freelance projects
-            </span>
-          </div>
-        </ScrollReveal>
-        <ScrollReveal delay={0.22} direction="up">
-          <div className="mt-8">
-            <Button
-              className="!bg-accent !text-white"
-              download
-              href="/pierre-belon-savon-resume.pdf"
-            >
-              Download Resume ↓
-            </Button>
-          </div>
-        </ScrollReveal>
+        <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
+          /resume
+        </p>
+        <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl">
+          Pierre Belon Savon
+        </h1>
+        <p className="mt-4 text-xl text-text-light-muted">AI Engineer</p>
+        <div className="mt-6 flex flex-wrap justify-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
+          <span className="rounded-full border border-border-light px-3 py-1.5">
+            Ocean Shores, WA
+          </span>
+          <span className="rounded-full border border-border-light px-3 py-1.5">
+            Remote roles
+          </span>
+          <span className="rounded-full border border-border-light px-3 py-1.5">
+            Freelance projects
+          </span>
+        </div>
+        <div className="mt-8">
+          <Button
+            className="!bg-accent !text-white"
+            download
+            href="/pierre-belon-savon-resume.pdf"
+          >
+            Download Resume ↓
+          </Button>
+        </div>
       </div>
     </section>
   );
