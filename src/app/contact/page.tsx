@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { ParallaxBackdrop } from "@/components";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -70,11 +71,11 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-bg-dark text-text-dark">
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 -z-10">
+        <ParallaxBackdrop>
           <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
           <div className="absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/10 blur-3xl" />
           <div className="absolute -bottom-24 right-[-10%] h-[420px] w-[420px] rounded-full bg-accent/10 blur-3xl" />
-        </div>
+        </ParallaxBackdrop>
 
         <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:px-8">
           <motion.p

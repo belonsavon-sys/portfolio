@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "./Button";
 import { LiveStatusBadge } from "./LiveStatusBadge";
+import { ParallaxBackdrop } from "./ParallaxBackdrop";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -33,11 +34,11 @@ export function SiteFooter() {
 
   return (
     <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      <ParallaxBackdrop>
         <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/18 blur-3xl" />
         <div className="absolute bottom-[-8rem] right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/14 blur-3xl" />
         <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/12 blur-3xl" />
-      </div>
+      </ParallaxBackdrop>
 
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
         <LiveStatusBadge label="Available now · 3 min reply average" />
