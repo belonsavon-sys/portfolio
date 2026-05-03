@@ -23,6 +23,10 @@ type PipelineTask =
 type TabConfig = {
   badge: string;
   description: string;
+  // Optional per-tab override. Some model + task combos (notably CLIP zero-shot)
+  // are unstable on WebGPU at fp32 in transformers.js v4.2 — pin them to WASM.
+  forceDevice?: RuntimeDevice;
+  forceDtype?: string;
   howItWorks: string[];
   icon: (props: { className?: string }) => React.ReactNode;
   id: LocalAiTabId;
@@ -63,13 +67,15 @@ const tabs: TabConfig[] = [
     task: "text-generation",
   },
   {
-    badge: "CLIP ViT · ~96 MB",
+    badge: "CLIP ViT · ~24 MB",
     description:
-      "Allow your camera. Hold up your hand. The model classifies the gesture against editable labels in real time. Frames processed locally — nothing uploaded.",
+      "Allow your camera, hold up your hand, and the recognized gesture appears on the side in real time. Frames processed locally — nothing uploaded.",
+    forceDevice: "wasm",
+    forceDtype: "q8",
     howItWorks: [
-      "Uses zero-shot image classification: CLIP encodes the live webcam frame and each text label into the same vector space, then ranks by cosine similarity.",
-      "Sampling at ~5 FPS via requestAnimationFrame to balance responsiveness and battery.",
-      "You can edit the label set on the fly. Works for hand gestures, but you can swap to anything: 'cat in frame', 'whiteboard visible', etc.",
+      "Uses zero-shot image classification: CLIP encodes the live webcam frame and each gesture phrase into the same vector space, then ranks by cosine similarity.",
+      "Sampling at ~2 FPS via requestAnimationFrame to balance responsiveness and battery.",
+      "Runs on quantized WASM for stability — same architecture pattern can drive any vision QA pipeline.",
     ],
     icon: EyeIcon,
     id: "computer-vision",
@@ -144,8 +150,9 @@ async function loadPipeline(
   model: string,
   device: RuntimeDevice,
   onProgress: (percent: number, detail: string) => void,
+  dtypeOverride?: string,
 ): Promise<TransformersPipeline> {
-  const key = `${task}::${model}::${device}`;
+  const key = `${task}::${model}::${device}::${dtypeOverride ?? "auto"}`;
   const cached = pipelineCache.get(key);
   if (cached) {
     onProgress(100, "Cached — ready");
@@ -153,13 +160,14 @@ async function loadPipeline(
   }
   const mod = await getTransformers();
   const dtype =
-    task === "text-generation"
+    dtypeOverride ??
+    (task === "text-generation"
       ? device === "webgpu"
         ? "q4f16"
         : "q4"
       : device === "webgpu"
         ? "fp32"
-        : "q8";
+        : "q8");
   const pipe = await mod.pipeline(task, model, {
     device,
     dtype,
@@ -245,7 +253,10 @@ export function LocalAiDemo() {
         })}
       </div>
 
-      <TabSurface tab={activeTab} device={device ?? "wasm"} />
+      <TabSurface
+        tab={activeTab}
+        device={activeTab.forceDevice ?? device ?? "wasm"}
+      />
     </div>
   );
 }
@@ -272,9 +283,13 @@ function TabSurface({
     setLoadStatus("loading");
     setLoadProgress(0);
     try {
-      const next = await loadPipeline(tab.task, tab.model, device, (percent) => {
-        setLoadProgress(percent);
-      });
+      const next = await loadPipeline(
+        tab.task,
+        tab.model,
+        device,
+        (percent) => setLoadProgress(percent),
+        tab.forceDtype,
+      );
       setPipe(next);
       setLoadStatus("ready");
     } catch (error) {
@@ -485,7 +500,9 @@ function extractGeneratedText(result: unknown): string {
 
 // ---------------- Computer Vision (live webcam) ----------------
 
-const DEFAULT_LABELS = [
+// Internal candidate set for zero-shot CLIP. The user just sees the winning
+// gesture as a single word — they don't manage the label list.
+const GESTURE_CANDIDATES = [
   "peace sign",
   "open palm",
   "fist",
@@ -499,15 +516,11 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [active, setActive] = useState(false);
-  const [labels, setLabels] = useState(DEFAULT_LABELS);
-  const [labelDraft, setLabelDraft] = useState("");
   const [topMatch, setTopMatch] = useState<{ label: string; score: number } | null>(
     null,
   );
   const [error, setError] = useState<string | null>(null);
   const inflightRef = useRef(false);
-  const fpsRef = useRef<{ frames: number; lastReset: number }>({ frames: 0, lastReset: 0 });
-  const [fps, setFps] = useState(0);
 
   async function start() {
     setError(null);
@@ -546,26 +559,30 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
   useEffect(() => {
     if (!active) return;
     let cancelled = false;
-    const target = 1000 / 2; // 2 FPS — gives CLIP enough headroom per frame
+    const target = 1000 / 2; // ~2 FPS keeps CLIP responsive without burning CPU
     let lastSample = 0;
 
     async function loop(time: number) {
       if (cancelled) return;
-      if (time - lastSample >= target && !inflightRef.current && videoRef.current && canvasRef.current) {
+      if (
+        time - lastSample >= target &&
+        !inflightRef.current &&
+        videoRef.current &&
+        canvasRef.current
+      ) {
         lastSample = time;
         const video = videoRef.current;
         const canvas = canvasRef.current;
         canvas.width = 224;
         canvas.height = 224;
         const ctx = canvas.getContext("2d");
-        if (ctx && video.readyState >= 2 && labels.length > 0) {
+        if (ctx && video.readyState >= 2) {
           ctx.drawImage(video, 0, 0, 224, 224);
           inflightRef.current = true;
           try {
-            // toDataURL is sync — avoids the toBlob race on some browsers
-            const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-            // candidate_labels is a *positional* arg in Transformers.js v4.x
-            const result = (await pipe(dataUrl, labels)) as {
+            // Pass canvas directly — RawImage.fromCanvas avoids data-URL fetch
+            // roundtrip and quirks in some browsers.
+            const result = (await pipe(canvas, GESTURE_CANDIDATES)) as {
               label: string;
               score: number;
             }[];
@@ -573,20 +590,13 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
               setTopMatch({ label: result[0].label, score: result[0].score });
               setError(null);
             }
-            const stamp = performance.now();
-            fpsRef.current.frames += 1;
-            if (stamp - fpsRef.current.lastReset > 1000) {
-              setFps(fpsRef.current.frames);
-              fpsRef.current.frames = 0;
-              fpsRef.current.lastReset = stamp;
-            }
           } catch (err) {
             console.error("[ComputerVision] inference error", err);
             if (!cancelled) {
               setError(
                 err instanceof Error
                   ? err.message
-                  : "Inference failed. Check browser console for details.",
+                  : "Inference failed. Check the browser console.",
               );
             }
           } finally {
@@ -601,18 +611,7 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
     return () => {
       cancelled = true;
     };
-  }, [active, labels, pipe]);
-
-  function addLabel() {
-    const next = labelDraft.trim();
-    if (!next || labels.includes(next)) return;
-    setLabels([...labels, next]);
-    setLabelDraft("");
-  }
-
-  function removeLabel(label: string) {
-    setLabels(labels.filter((l) => l !== label));
-  }
+  }, [active, pipe]);
 
   return (
     <div className="grid gap-6">
@@ -621,8 +620,8 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
           {error}
         </p>
       ) : null}
-      <div className="grid gap-4 md:grid-cols-[1fr_280px]">
-        <div className="relative overflow-hidden rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 aspect-video">
+      <div className="grid gap-4 md:grid-cols-[1fr_240px]">
+        <div className="relative aspect-video overflow-hidden rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2">
           <video
             className="absolute inset-0 h-full w-full -scale-x-100 object-cover"
             muted
@@ -635,71 +634,36 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
               <Button onClick={start}>Start Camera</Button>
             </div>
           ) : null}
-          {active && topMatch ? (
-            <div className="absolute right-3 top-3 rounded-lg border border-[rgba(41,110,214,0.4)] bg-bg-dark/80 px-3 py-2 backdrop-blur-md">
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
-                Top match
-              </p>
-              <p className="mt-1 text-sm font-semibold text-text-dark">
-                {topMatch.label}{" "}
-                <span className="text-accent-light">
-                  {Math.round(topMatch.score * 100)}%
-                </span>
-              </p>
-            </div>
-          ) : null}
           {active ? (
-            <div className="absolute bottom-3 right-3 flex items-center gap-2">
-              <span className="rounded-md bg-bg-dark/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted">
-                {fps} FPS
-              </span>
-              <button
-                className="rounded-md border border-[rgba(255,255,255,0.2)] bg-bg-dark/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark hover:border-problem-red/50"
-                onClick={stop}
-                type="button"
-              >
-                Stop
-              </button>
-            </div>
+            <button
+              className="absolute bottom-3 right-3 rounded-md border border-[rgba(255,255,255,0.2)] bg-bg-dark/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark hover:border-problem-red/50"
+              onClick={stop}
+              type="button"
+            >
+              Stop
+            </button>
           ) : null}
         </div>
 
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent-light">
-            Labels
+        <div className="flex flex-col justify-center rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 p-5">
+          <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+            Recognized
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {labels.map((label) => (
-              <span
-                className="inline-flex items-center gap-2 rounded-full border border-[rgba(41,110,214,0.3)] bg-bg-dark-2 px-3 py-1 text-xs text-text-dark"
-                key={label}
-              >
-                {label}
-                <button
-                  aria-label={`Remove ${label}`}
-                  className="text-text-dark-muted hover:text-problem-red"
-                  onClick={() => removeLabel(label)}
-                  type="button"
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-          </div>
-          <div className="mt-3 flex gap-2">
-            <input
-              className="flex-1 rounded-lg border border-[rgba(41,110,214,0.35)] bg-bg-dark px-3 py-2 text-sm text-text-dark outline-none focus:border-accent"
-              onChange={(e) => setLabelDraft(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addLabel())}
-              placeholder="Add label…"
-              value={labelDraft}
-            />
-            <Button onClick={addLabel} variant="ghostDark">
-              Add
-            </Button>
-          </div>
-          <p className="mt-4 text-xs leading-5 text-text-dark-muted">
-            Frames processed locally. Camera access never leaves your device.
+          <p className="mt-3 text-3xl font-semibold leading-tight text-text-dark">
+            {active && topMatch ? topMatch.label : "—"}
+          </p>
+          {active && topMatch ? (
+            <p className="mt-2 font-mono text-xs uppercase tracking-[0.18em] text-accent-light">
+              {Math.round(topMatch.score * 100)}% confidence
+            </p>
+          ) : (
+            <p className="mt-2 text-xs leading-5 text-text-dark-muted">
+              Start the camera and hold up a gesture. The recognized word
+              updates in real time.
+            </p>
+          )}
+          <p className="mt-6 text-[11px] leading-5 text-text-dark-muted">
+            Frames processed locally. Nothing uploaded.
           </p>
         </div>
       </div>
