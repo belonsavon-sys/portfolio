@@ -119,7 +119,10 @@ function BusinessHero() {
         </ScrollReveal>
         <ScrollReveal delay={0.05} direction="up">
           <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7rem]">
-            I ship AI.
+            I ship{" "}
+            <span className="bg-gradient-to-r from-accent-deep via-accent to-accent-light bg-clip-text text-transparent">
+              AI.
+            </span>
           </h1>
         </ScrollReveal>
         <ScrollReveal delay={0.1} direction="up">
