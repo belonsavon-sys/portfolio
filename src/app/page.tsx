@@ -84,7 +84,7 @@ export default function Home() {
         className="relative py-20 sm:py-24"
         style={{
           background:
-            "linear-gradient(180deg, #FAF8F1 0%, #F6F3EA 50%, #F4F8FE 100%)",
+            "linear-gradient(180deg, #F5F1E8 0%, #EEE9DA 40%, #E8F0FD 100%)",
         }}
       >
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">

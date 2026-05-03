@@ -89,25 +89,34 @@ export function BentoStack() {
       {categories.map((category, index) => (
         <motion.article
           animate={{ opacity: 1, y: 0 }}
-          className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border p-6 transition-[border-color,box-shadow,transform] duration-200 ${
-            category.accent
-              ? "border-accent/40"
-              : "border-[rgba(41,110,214,0.18)]"
-          }`}
+          className="group relative flex h-full flex-col overflow-hidden rounded-2xl p-6 transition-[box-shadow,transform] duration-200"
           initial={reduce ? false : { opacity: 0, y: 20 }}
           key={category.title}
           style={{
             background: category.accent
-              ? "linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.7) 60%, rgba(41,110,214,0.14) 100%)"
-              : "rgba(255, 255, 255, 0.62)",
-            backdropFilter: "blur(14px) saturate(140%)",
-            WebkitBackdropFilter: "blur(14px) saturate(140%)",
+              ? "linear-gradient(135deg, rgba(255,255,255,0.52) 0%, rgba(255,255,255,0.42) 60%, rgba(41,110,214,0.18) 100%)"
+              : "rgba(255,255,255,0.45)",
+            borderTop: "1px solid rgba(255,255,255,0.90)",
+            borderLeft: "1px solid rgba(255,255,255,0.65)",
+            borderRight: "1px solid rgba(41,110,214,0.14)",
+            borderBottom: "1px solid rgba(41,110,214,0.14)",
+            backdropFilter: "blur(22px) saturate(180%)",
+            WebkitBackdropFilter: "blur(22px) saturate(180%)",
             boxShadow:
-              "0 1px 0 0 rgba(255,255,255,0.85) inset, 0 12px 32px -16px rgba(15,23,42,0.18)",
+              "0 1px 0 0 rgba(255,255,255,0.9) inset, " +
+              "0 1px 3px rgba(0,0,0,0.06), " +
+              "0 8px 24px rgba(15,23,42,0.10), " +
+              "0 24px 48px -8px rgba(15,23,42,0.14)",
           }}
           transition={{ delay: index * 0.04, duration: 0.5, ease: easeOut }}
           viewport={{ amount: 0.2, once: true }}
-          whileHover={{ y: -3 }}
+          whileHover={{ y: -3, boxShadow:
+            "0 1px 0 0 rgba(255,255,255,0.95) inset, " +
+            "0 1px 3px rgba(0,0,0,0.07), " +
+            "0 8px 24px rgba(15,23,42,0.12), " +
+            "0 24px 48px -8px rgba(15,23,42,0.18), " +
+            "0 0 0 1px rgba(41,110,214,0.28), " +
+            "0 8px 24px rgba(41,110,214,0.10)" }}
           whileInView={{ opacity: 1, y: 0 }}
         >
           {category.accent ? (
