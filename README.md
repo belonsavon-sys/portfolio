@@ -1,4 +1,4 @@
-# Pierre Belon Savon — Portfolio v3
+# Pierre Belon Savon — Portfolio 
 
 AI engineer portfolio focused on measurable business outcomes.
 
