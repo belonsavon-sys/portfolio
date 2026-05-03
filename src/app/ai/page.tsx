@@ -164,7 +164,7 @@ function AiHero() {
         <ScrollReveal delay={0.1} direction="up">
           <div
             aria-hidden="true"
-            className="mt-8 h-[3px] w-24 rounded-full bg-accent"
+            className="mt-8 h-[3px] w-32 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
           />
         </ScrollReveal>
         <ScrollReveal delay={0.15} direction="up">
