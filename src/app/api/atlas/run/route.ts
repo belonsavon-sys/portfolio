@@ -1,8 +1,12 @@
-import Anthropic from "@anthropic-ai/sdk";
+import OpenAI from "openai";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+function getApiKey() {
+  return process.env.OPENAI_API_KEY ?? "";
+}
 
 // Simple in-memory rate limiter. 3 calls per IP per hour.
 // Resets per cold-start; for production you would back this with KV.
@@ -52,7 +56,8 @@ Rules:
 - Output JSON only. No prose, no markdown fences.`;
 
 export async function POST(request: Request) {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
     return NextResponse.json(
       { error: "live_unavailable", message: "Live runtime is not configured." },
       { status: 503 },
@@ -97,18 +102,21 @@ export async function POST(request: Request) {
     );
   }
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const client = new OpenAI({ apiKey });
 
   try {
-    const result = await client.messages.create({
+    const completion = await client.chat.completions.create({
       max_tokens: 800,
-      messages: [{ content: prompt, role: "user" }],
-      model: "claude-haiku-4-5-20251001",
-      system: SYSTEM_PROMPT,
+      messages: [
+        { content: SYSTEM_PROMPT, role: "system" },
+        { content: prompt, role: "user" },
+      ],
+      model: "gpt-4o-mini",
+      response_format: { type: "json_object" },
+      temperature: 0.7,
     });
 
-    const textPart = result.content.find((p) => p.type === "text");
-    const text = textPart && textPart.type === "text" ? textPart.text : "";
+    const text = completion.choices[0]?.message?.content ?? "";
 
     let parsed: unknown;
     try {
@@ -127,9 +135,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ atlas: parsed }, { status: 200 });
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Unknown Anthropic error.";
+      error instanceof Error ? error.message : "Unknown OpenAI error.";
     return NextResponse.json(
-      { error: "anthropic_error", message },
+      { error: "openai_error", message },
       { status: 502 },
     );
   }
