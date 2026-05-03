@@ -292,7 +292,7 @@ function BeyondTheCode() {
         </p>
       </div>
 
-      <div className="mt-16 grid gap-10 md:grid-cols-2">
+      <div className="mx-auto mt-16 grid max-w-3xl gap-8 sm:grid-cols-2 sm:gap-10">
         <Portrait
           caption="Music · Italy"
           fallbackMeta="Save public/about-guitar.png to replace this placeholder."
@@ -353,7 +353,7 @@ function Portrait({
     <figure className="flex flex-col gap-4">
       <PhotoSlot
         alt={imgAlt}
-        className="aspect-[4/5] overflow-hidden rounded-2xl"
+        className="aspect-[3/4] overflow-hidden rounded-2xl"
         fallbackMeta={fallbackMeta}
         fallbackTitle={fallbackTitle}
         fit="cover"
