@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   PageTransition,
   ScrollProgress,
@@ -86,6 +87,7 @@ export default function RootLayout({
         <SiteHeader />
         <PageTransition>{children}</PageTransition>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
