@@ -47,6 +47,7 @@ export type {
   SectionDividerDirection,
   SectionDividerProps,
 } from "./SectionDivider";
+export { SiteFooter } from "./SiteFooter";
 export { SiteHeader } from "./SiteHeader";
 export { TerminalWindow } from "./TerminalWindow";
 export type { TerminalLine, TerminalWindowProps } from "./TerminalWindow";

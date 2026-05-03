@@ -2,10 +2,8 @@ import {
   BeforeAfter,
   Button,
   CursorHalo,
-  GlassCard,
-  LightGlassCard,
   ScrollReveal,
-  SectionDivider,
+  SiteFooter,
   Testimonial,
 } from "@/components";
 import type { ReactNode } from "react";
@@ -54,8 +52,6 @@ const atlasLayers = [
   },
 ];
 
-// Real testimonial — placeholder body until Pierre sources a quote.
-// When body is null/empty, the Testimonial component returns null silently.
 const TESTIMONIAL_BODY: string | null = null;
 const TESTIMONIAL_AUTHOR = "";
 const TESTIMONIAL_ROLE = "";
@@ -65,19 +61,25 @@ export default function BusinessPage() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <BusinessHero />
 
-      <SectionDivider direction="light-to-dark" />
-      <BlackdoorBand />
-      <SectionDivider direction="dark-to-light" />
+      <LightSection className="py-20 sm:py-24">
+        <BlackdoorSection />
+      </LightSection>
+
+      <SectionRule />
 
       <LightSection className="py-20 sm:py-24">
         <ProcessSection />
       </LightSection>
 
-      <LightSection className="pb-20 pt-4 sm:pb-24">
+      <SectionRule />
+
+      <LightSection className="py-20 sm:py-24">
         <CommunicationsSection />
       </LightSection>
 
-      <LightSection className="pb-20 pt-4 sm:pb-24">
+      <SectionRule />
+
+      <LightSection className="py-20 sm:py-24">
         <TrainingSection />
       </LightSection>
 
@@ -90,13 +92,13 @@ export default function BusinessPage() {
         />
       </LightSection>
 
+      <SectionRule />
+
       <LightSection className="py-20 sm:py-24">
         <FinanceSection />
       </LightSection>
 
-      <LightSection className="pb-24 pt-4 sm:pb-32">
-        <Cta />
-      </LightSection>
+      <SiteFooter />
     </main>
   );
 }
@@ -143,100 +145,87 @@ function BusinessHero() {
   );
 }
 
-function BlackdoorBand() {
+function BlackdoorSection() {
   return (
-    <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/15 blur-3xl" />
-        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
+    <div className="grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
+      <div>
+        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
+          Blackdoor operations
+        </p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+          Building the company that builds companies.
+        </h2>
+        <p className="mt-5 max-w-md text-lg leading-8 text-text-light-muted">
+          Blackdoor is the holding company I co-founded with Ryder in 2025.
+          We develop and operate agentic companies across entertainment,
+          SaaS, robotics, and AI.
+        </p>
+
+        <ul className="mt-8 grid gap-3">
+          {blackdoorOutcomes.map((outcome) => (
+            <li
+              className="flex items-start gap-3 text-sm leading-7 text-text-light-muted"
+              key={outcome}
+            >
+              <span
+                aria-hidden="true"
+                className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+              />
+              <span>{outcome}</span>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
-          <ScrollReveal direction="left">
-            <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent-light">
-              Blackdoor operations
-            </p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-text-dark sm:text-4xl lg:text-5xl">
-              Building the company that builds companies.
-            </h2>
-            <p className="mt-5 max-w-md text-lg leading-8 text-text-dark-muted">
-              Blackdoor is the holding company I co-founded with Ryder in 2025.
-              We develop and operate agentic companies across entertainment,
-              SaaS, robotics, and AI.
-            </p>
+      <div>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-light-muted">
+          Atlas — the engine
+        </p>
+        <ul className="mt-4 grid gap-3">
+          {atlasLayers.map((layer) => (
+            <li
+              className="rounded-xl border border-border-light bg-bg-light-2 p-5"
+              key={layer.title}
+            >
+              <div className="flex items-baseline gap-3">
+                <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+                  {layer.badge}
+                </span>
+                <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
+                  {layer.title}
+                </span>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {layer.items.map((item) => (
+                  <span
+                    className="inline-flex items-center rounded-md border border-accent/30 bg-[rgba(41,110,214,0.08)] px-2.5 py-1 text-sm font-medium text-text-light"
+                    key={item}
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
 
-            <div className="mt-8 grid gap-3">
-              {blackdoorOutcomes.map((outcome) => (
-                <ScrollReveal direction="left" key={outcome}>
-                  <div className="flex items-start gap-3 text-sm leading-7 text-text-dark-muted">
-                    <span
-                      aria-hidden="true"
-                      className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-                    />
-                    <span>{outcome}</span>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={0.1} direction="right">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-dark-muted">
-              Atlas — the engine
-            </p>
-            <div className="mt-4 grid gap-3">
-              {atlasLayers.map((layer, index) => (
-                <ScrollReveal
-                  delay={0.1 + index * 0.06}
-                  direction="up"
-                  key={layer.title}
-                >
-                  <GlassCard className="p-5">
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent-light">
-                        {layer.badge}
-                      </span>
-                      <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
-                        {layer.title}
-                      </span>
-                    </div>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {layer.items.map((item) => (
-                        <span
-                          className="inline-flex items-center rounded-md border border-[rgba(41,110,214,0.35)] bg-[rgba(41,110,214,0.10)] px-2.5 py-1 text-sm font-medium text-text-dark"
-                          key={item}
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </GlassCard>
-                </ScrollReveal>
-              ))}
-            </div>
-          </ScrollReveal>
+        <div className="mt-10 grid gap-6 text-base leading-7 text-text-light-muted lg:grid-cols-2">
+          <p>
+            At Blackdoor, I lead AI R&amp;D and implementation. Atlas is a
+            multi-level autonomous agent harness — a CEO agent routes work to
+            C-suite agents (CFO, CMO), who delegate to manager and field
+            agents. Designed to build, operate, and improve software products
+            autonomously.
+          </p>
+          <p>
+            Atlas has already shipped a game app, a budget web app, and an
+            agent-augmented project management system. The same underlying
+            technology is deployed at ThePrivateHotels. We run everything
+            through GitHub PRs. Every decision is governed.
+          </p>
         </div>
-
-        <ScrollReveal delay={0.15} direction="up">
-          <div className="mt-12 grid gap-6 text-lg leading-8 text-text-dark-muted lg:grid-cols-2">
-            <p>
-              At Blackdoor, I lead AI R&amp;D and implementation. Atlas is a
-              multi-level autonomous agent harness — a CEO agent routes work to
-              C-suite agents (CFO, CMO), who delegate to manager and field
-              agents. Designed to build, operate, and improve software products
-              autonomously.
-            </p>
-            <p>
-              Atlas has already shipped a game app, a budget web app, and an
-              agent-augmented project management system. The same underlying
-              technology is deployed at ThePrivateHotels. We run everything
-              through GitHub PRs. Every decision is governed.
-            </p>
-          </div>
-        </ScrollReveal>
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -268,21 +257,17 @@ function ProcessSection() {
         }}
         className="mb-10"
       />
-      <ScrollReveal direction="up">
-        <p className="text-lg leading-8 text-text-light-muted">
-          When I arrived at ThePrivateHotels, operations ran on a 100+ page
-          manual that no one could practically enforce. I digitized the entire
-          manual — room by room, process by process — into a trackable,
-          quantifiable inspection system. Every standard became a measurable
-          checkpoint.
-        </p>
-      </ScrollReveal>
-      <ScrollReveal delay={0.05} direction="up">
-        <p className="mt-5 text-lg leading-8 text-text-light-muted">
-          I build these systems for businesses. If you&apos;re running on
-          guesswork, I&apos;ll give you a system that knows.
-        </p>
-      </ScrollReveal>
+      <p className="text-lg leading-8 text-text-light-muted">
+        When I arrived at ThePrivateHotels, operations ran on a 100+ page
+        manual that no one could practically enforce. I digitized the entire
+        manual — room by room, process by process — into a trackable,
+        quantifiable inspection system. Every standard became a measurable
+        checkpoint.
+      </p>
+      <p className="mt-5 text-lg leading-8 text-text-light-muted">
+        I build these systems for businesses. If you&apos;re running on
+        guesswork, I&apos;ll give you a system that knows.
+      </p>
     </SectionShell>
   );
 }
@@ -315,13 +300,11 @@ function CommunicationsSection() {
         }}
         className="mb-10"
       />
-      <ScrollReveal direction="up">
-        <p className="text-lg leading-8 text-text-light-muted">
-          I built a chatbot trained on curated company data — brand voice,
-          approved templates, every scenario a guest might raise. It drafts
-          replies inside our operating system. We review, approve, send.
-        </p>
-      </ScrollReveal>
+      <p className="text-lg leading-8 text-text-light-muted">
+        I built a chatbot trained on curated company data — brand voice,
+        approved templates, every scenario a guest might raise. It drafts
+        replies inside our operating system. We review, approve, send.
+      </p>
     </SectionShell>
   );
 }
@@ -333,84 +316,56 @@ function TrainingSection() {
       heading="I build teams that can run systems I build."
       outcomes={trainingOutcomes}
     >
-      <ScrollReveal direction="up">
-        <p className="text-lg leading-8 text-text-light-muted">
-          Building a system is half the job. The other half is making sure
-          your team can use it. I supervised 6 staff across two teams,
-          authored room-by-room SOPs and inspection checklists, and trained
-          everyone on the tools — so standards held even when I wasn&apos;t in
-          the room.
-        </p>
-      </ScrollReveal>
+      <p className="text-lg leading-8 text-text-light-muted">
+        Building a system is half the job. The other half is making sure
+        your team can use it. I supervised 6 staff across two teams,
+        authored room-by-room SOPs and inspection checklists, and trained
+        everyone on the tools — so standards held even when I wasn&apos;t in
+        the room.
+      </p>
     </SectionShell>
   );
 }
 
 function FinanceSection() {
   return (
-    <ScrollReveal direction="up">
-      <LightGlassCard className="grid gap-8 p-6 sm:p-10 lg:grid-cols-[1fr_320px]" hoverable={false}>
-        <div>
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-            Finance & administration
-          </p>
-          <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-            Precision behind the scenes.
-          </h2>
-          <p className="mt-6 text-lg leading-8 text-text-light-muted">
-            Before I was building AI systems, I was keeping the books. As a
-            Finance Data Entry Assistant at ThePrivateHotels, I processed
-            customer invoices, bills, and expenses in QuickBooks for six
-            months — error-free record, first time doing it.
-          </p>
-          <p className="mt-5 text-lg leading-8 text-text-light-muted">
-            I research until I have mastery. Then I execute without errors.
-            That habit runs through everything I do — whether it&apos;s
-            accounting or agent architecture.
-          </p>
-        </div>
-        <div className="grid content-start gap-3 self-start rounded-2xl bg-bg-light-2 p-5">
-          {[
-            { label: "Tool", value: "QuickBooks" },
-            { label: "Duration", value: "6 months" },
-            { label: "Record", value: "Error-free" },
-          ].map((item) => (
-            <div
-              className="rounded-lg border border-border-light bg-white px-4 py-3"
-              key={item.label}
-            >
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
-                {item.label}
-              </p>
-              <p className="mt-1 text-base font-semibold text-text-light">
-                {item.value}
-              </p>
-            </div>
-          ))}
-        </div>
-      </LightGlassCard>
-    </ScrollReveal>
-  );
-}
-
-function Cta() {
-  return (
-    <ScrollReveal direction="up">
-      <LightGlassCard className="p-8 text-center sm:p-14" hoverable={false}>
+    <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:items-start">
+      <div>
         <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-          Ready when you are
+          Finance & administration
         </p>
-        <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          If you have a business problem, I probably know how to automate it.
+        <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+          Precision behind the scenes.
         </h2>
-        <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-text-light-muted">
-          Remote. Open to the right opportunity. I reply within 24 hours.
+        <p className="mt-6 text-lg leading-8 text-text-light-muted">
+          Before I was building AI systems, I was keeping the books. As a
+          Finance Data Entry Assistant at ThePrivateHotels, I processed
+          customer invoices, bills, and expenses in QuickBooks for six
+          months — error-free record, first time doing it.
         </p>
-        <div className="mt-8">
-          <Button href="/contact">Get in Touch →</Button>
-        </div>
-      </LightGlassCard>
-    </ScrollReveal>
+        <p className="mt-5 text-lg leading-8 text-text-light-muted">
+          I research until I have mastery. Then I execute without errors.
+          That habit runs through everything I do — whether it&apos;s
+          accounting or agent architecture.
+        </p>
+      </div>
+      <dl className="grid content-start gap-4 self-start">
+        {[
+          { label: "Tool", value: "QuickBooks" },
+          { label: "Duration", value: "6 months" },
+          { label: "Record", value: "Error-free" },
+        ].map((item) => (
+          <div className="border-l border-border-light pl-4" key={item.label}>
+            <dt className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
+              {item.label}
+            </dt>
+            <dd className="mt-1 text-base font-semibold text-text-light">
+              {item.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
   );
 }
 
@@ -426,35 +381,44 @@ function SectionShell({
   outcomes: string[];
 }) {
   return (
-    <LightGlassCard className="grid gap-10 p-6 sm:p-10 lg:grid-cols-[1fr_320px]" hoverable={false}>
+    <div className="grid gap-12 lg:grid-cols-[1fr_320px] lg:items-start">
       <div>
-        <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-            {eyebrow}
-          </p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-            {heading}
-          </h2>
-        </ScrollReveal>
+        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
+          {eyebrow}
+        </p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+          {heading}
+        </h2>
         <div className="mt-8">{children}</div>
       </div>
 
-      <aside className="self-start rounded-2xl bg-bg-light-2 p-5">
+      <aside className="self-start">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
           What this looks like
         </p>
-        <div className="mt-4 grid gap-3">
+        <ul className="mt-4 grid gap-3">
           {outcomes.map((outcome) => (
-            <div
-              className="rounded-lg border border-border-light bg-white px-4 py-3 text-sm font-medium leading-6"
+            <li
+              className="border-l border-border-light pl-4 text-sm font-medium leading-6"
               key={outcome}
             >
               {outcome}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </aside>
-    </LightGlassCard>
+    </div>
+  );
+}
+
+function SectionRule() {
+  return (
+    <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div
+        aria-hidden="true"
+        className="h-px w-full bg-gradient-to-r from-transparent via-border-light to-transparent"
+      />
+    </div>
   );
 }
 
