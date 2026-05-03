@@ -1,37 +1,33 @@
+import { Button, ScrollReveal } from "@/components";
 import {
-  Button,
-  GlassCard,
-  ScrollReveal,
-  SectionDivider,
-} from "@/components";
+  EMAIL_DISPLAY,
+  EMAIL_MAILTO,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  PHONE_DISPLAY,
+  PHONE_TEL,
+} from "@/components/contact-config";
 import type { ReactNode } from "react";
 
-const stats = [
-  { label: "Active product", value: "Atlas — multi-agent harness" },
-  { label: "Hotel ops", value: "48 hrs → < 3 min response" },
-  { label: "Inventory managed", value: "100+ items" },
-  { label: "Staff trained", value: "6" },
-  { label: "QuickBooks ledger", value: "6 months · error-free" },
-  { label: "Languages", value: "EN · ES · IT (native)" },
-];
-
 const contactItems = [
-  {
-    href: "mailto:belonsavon@gmail.com",
-    label: "Email",
-    value: "belonsavon@gmail.com",
-  },
-  { href: "tel:+13606602460", label: "Phone", value: "360-660-2460" },
-  {
-    href: "https://github.com/belonsavon-sys",
-    label: "GitHub",
-    value: "github.com/belonsavon-sys",
-  },
+  { href: EMAIL_MAILTO, label: "Email", value: EMAIL_DISPLAY },
+  { href: PHONE_TEL, label: "Phone", value: PHONE_DISPLAY },
+  { href: GITHUB_URL, label: "GitHub", value: "github.com/belonsavon-sys" },
+  ...(LINKEDIN_URL
+    ? [
+        {
+          href: LINKEDIN_URL,
+          label: "LinkedIn",
+          value: LINKEDIN_URL.replace(/^https?:\/\//, ""),
+        },
+      ]
+    : []),
 ];
 
 const professionalSummary =
   "AI Engineer with a proven track record of designing and deploying intelligent automation systems that eliminate operational inefficiency and produce measurable business outcomes. Experienced building full-stack applications, multi-agent AI harnesses, and process digitization tools, and putting them to work inside live business operations. Trilingual communicator with a background bridging hospitality operations, finance, and AI-driven product development.";
 
+// Blackdoor leads now (most novel asset).
 const experience = [
   {
     bullets: [
@@ -45,24 +41,23 @@ const experience = [
       "Underlying technology reworked and deployed at an active hospitality business.",
     ],
     company: "Blackdoor",
+    featured: true,
     meta: "Sept 2025 - Present | Remote",
     role: "Co-founder & President",
   },
   {
+    // Trimmed: removed pure-ops bullets (laundry SOPs detail, F&B inventory specifics,
+    // multi-line Hawaii breakdown). Kept the AI/engineering work.
     bullets: [
-      "Progressed from Finance Data Entry Assistant and part-time Housekeeper to Housekeeping Supervisor and Hotel Operations Supervisor.",
-      "Originally onboarded as a remote contractor from Italy, then recruited to relocate to Washington for full-time employment.",
-      "Supervised a team of 6 and managed contractor relationships and scheduling.",
-      "Oversaw operations across 1 active property while supporting the buildout of 3 additional properties and 2 event venues.",
-      "Digitized a 100+ page property operations manual into a trackable, quantifiable digital inspection process.",
-      "Built and deployed a guest communications chatbot trained on curated company data for human-reviewed replies in Smarttask.",
+      "Progressed from Finance Data Entry Assistant and part-time Housekeeper to Hotel Operations Supervisor.",
+      "Built and deployed a guest communications chatbot trained on curated company data — drafts replies in Smarttask, human-reviewed before send.",
       "Cut response time from up to 48 hours to under 3 minutes, saving 15-20 minutes of drafting per message.",
+      "Digitized a 100+ page property operations manual into a trackable, quantifiable digital inspection system.",
       "Automated hotel workflows using Zapier, Guesty API, and Twilio API, replacing multi-hour manual coordination loops.",
-      "Authored room-by-room SOPs, laundry procedures, and inspection checklists; trained 6 staff on systems, standards, and tools.",
-      "Managed 100+ inventory items across linens, amenities, F&B, laundry supplies, and property equipment.",
-      "Processed invoices, bills, and receipts in QuickBooks for roughly 6 months with zero errors on record.",
-      "Contributed to Airbnb Guest Favorites top 10%, Booking.com Travelers' Choice Award, VRBO Premier Partner, and a consistent 5-star average.",
-      "Attended leadership and manager-level meetings, prepared operational reports, and participated in a company leadership retreat in Hawaii.",
+      "Supervised a team of 6, authored room-by-room SOPs and inspection checklists, trained staff on every tool I deployed.",
+      "Processed customer invoices, bills, and expenses in QuickBooks for 6 months — error-free record.",
+      "Contributed to Airbnb Guest Favorites top 10%, Booking.com Travelers' Choice Award, VRBO Premier Partner status.",
+      "Attended leadership meetings and a company leadership retreat in Hawaii.",
     ],
     company: "ThePrivateHotels (Soquinomere)",
     meta: "Apr 2024 - Present | Ocean Shores, WA",
@@ -151,9 +146,8 @@ export default function ResumePage() {
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
       <ResumeHero />
-      <SectionDivider direction="dark-to-light" />
 
-      <LightSection className="pb-24 pt-12 sm:pb-32">
+      <LightSection className="pb-24 pt-8 sm:pb-32">
         <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
           <ScrollReveal direction="up">
             <article className="rounded-3xl border border-border-light bg-white p-6 shadow-sm sm:p-10 lg:p-12">
@@ -168,6 +162,7 @@ export default function ResumePage() {
                   {experience.map((item) => (
                     <RoleEntry
                       bullets={item.bullets}
+                      featured={item.featured}
                       key={item.company}
                       meta={item.meta}
                       role={`${item.company} — ${item.role}`}
@@ -267,51 +262,46 @@ export default function ResumePage() {
 
 function ResumeHero() {
   return (
-    <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
+    <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
-        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
       </div>
-      <div className="mx-auto w-full max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
+          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
             /resume
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.05} direction="up">
-          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight text-text-dark sm:text-7xl">
+          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl">
             Pierre Belon Savon
           </h1>
         </ScrollReveal>
         <ScrollReveal delay={0.1} direction="up">
-          <p className="mt-4 text-xl text-text-dark-muted">AI Engineer</p>
+          <p className="mt-4 text-xl text-text-light-muted">AI Engineer</p>
         </ScrollReveal>
         <ScrollReveal delay={0.15} direction="up">
-          <div className="mt-6 flex flex-wrap justify-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
-            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
+          <div className="mt-6 flex flex-wrap justify-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
+            <span className="rounded-full border border-border-light px-3 py-1.5">
               Ocean Shores, WA
             </span>
-            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
+            <span className="rounded-full border border-border-light px-3 py-1.5">
               Remote roles
             </span>
-            <span className="rounded-full border border-[rgba(41,110,214,0.35)] px-3 py-1.5">
+            <span className="rounded-full border border-border-light px-3 py-1.5">
               Freelance projects
             </span>
           </div>
         </ScrollReveal>
-
         <ScrollReveal delay={0.22} direction="up">
-          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {stats.map((stat) => (
-              <GlassCard className="p-5" key={stat.label}>
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent-light">
-                  {stat.label}
-                </p>
-                <p className="mt-2 text-base font-semibold leading-7 text-text-dark sm:text-lg">
-                  {stat.value}
-                </p>
-              </GlassCard>
-            ))}
+          <div className="mt-8">
+            <Button
+              className="!bg-accent !text-white"
+              download
+              href="/pierre-belon-savon-resume.pdf"
+            >
+              Download Resume ↓
+            </Button>
           </div>
         </ScrollReveal>
       </div>
@@ -352,17 +342,26 @@ function ResumeSection({
 
 function RoleEntry({
   bullets,
+  featured,
   meta,
   role,
 }: {
   bullets: string[];
+  featured?: boolean;
   meta: string;
   role: string;
 }) {
   return (
     <div>
       <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
-        <h3 className="text-lg font-semibold">{role}</h3>
+        <div className="flex flex-wrap items-center gap-3">
+          <h3 className="text-lg font-semibold">{role}</h3>
+          {featured ? (
+            <span className="rounded-full border border-accent/40 bg-[rgba(41,110,214,0.1)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+              Featured
+            </span>
+          ) : null}
+        </div>
         <p className="shrink-0 text-sm text-text-light-muted sm:text-right">
           {meta}
         </p>

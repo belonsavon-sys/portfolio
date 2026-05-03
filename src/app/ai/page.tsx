@@ -1,5 +1,6 @@
 import {
   AtlasDemo,
+  AtlasGallery,
   BeforeAfter,
   Button,
   CursorHalo,
@@ -57,7 +58,30 @@ export default function AiPage() {
       <SectionDivider direction="light-to-dark" />
       <CaseStudiesBand />
 
-      <DarkSection className="pt-20 pb-10 sm:pt-24">
+      <DarkSection className="py-20 sm:py-24">
+        <ScrollReveal direction="up">
+          <div className="flex items-center gap-3">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
+              Atlas portfolio
+            </p>
+            <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
+            <LiveStatusBadge label="3 products · in motion" />
+          </div>
+          <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-text-dark sm:text-5xl">
+            What Atlas has shipped.
+          </h2>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-text-dark-muted">
+            Three products built end-to-end via the Atlas multi-agent harness.
+            Real agents wrote the code, opened the PRs, and shipped the
+            features under human review.
+          </p>
+        </ScrollReveal>
+        <div className="mt-12">
+          <AtlasGallery />
+        </div>
+      </DarkSection>
+
+      <DarkSection className="pt-10 pb-10 sm:pt-12">
         <ScrollReveal direction="up">
           <div className="flex items-center gap-3">
             <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
@@ -70,11 +94,9 @@ export default function AiPage() {
             Local AI. Real business. No cloud required.
           </h2>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-text-dark-muted">
-            Cloud AI is everywhere. But compute and energy costs are rising,
-            and every modern computer already has the hardware to run capable
-            AI models locally — they just aren&apos;t being used that way yet.
-            These demos show what that looks like when it&apos;s actually
-            deployed.
+            Five tasks running on your machine. Pick a tab, load the model,
+            run it. Models cache after first download. No API key, no server,
+            no data leaving your browser.
           </p>
         </ScrollReveal>
         <div className="scanlines mt-10 rounded-3xl">
@@ -89,15 +111,17 @@ export default function AiPage() {
               Demo 2
             </p>
             <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
-            <LiveStatusBadge label="Atlas · Simulated runtime" />
+            <LiveStatusBadge label="Atlas · Live runtime" />
           </div>
           <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-text-dark sm:text-5xl">
             This is what an agent harness looks like in motion.
           </h2>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-text-dark-muted">
-            Atlas is the multi-agent system I co-architect at Blackdoor. Send a
-            prompt. Watch the CEO agent route it. Sub-agents act. The database
-            updates. Tasks appear, get assigned, get completed.
+            Atlas is the multi-agent system I co-architect at Blackdoor. Send
+            a prompt. The CEO agent routes it through C-suite to manager to
+            field agents. Click <span className="font-semibold text-text-dark">Run Live</span>
+            {" "}to call Anthropic in real time, or <span className="font-semibold text-text-dark">Run Simulation</span>
+            {" "}to see the choreography.
           </p>
         </ScrollReveal>
         <div className="scanlines mt-10 rounded-3xl">
