@@ -44,19 +44,13 @@ const categories: StackCategory[] = [
     items: [
       { label: "Node.js", name: "node" },
       { label: "Express.js", name: "express" },
-    ],
-    title: "Backend",
-  },
-  {
-    eyebrow: "04",
-    items: [
       { label: "Supabase", name: "supabase" },
       { label: "MySQL", name: "mysql" },
     ],
-    title: "Database",
+    title: "Backend & DB",
   },
   {
-    eyebrow: "05",
+    eyebrow: "04",
     items: [
       { label: "Flutter", name: "flutter" },
       { label: "Kotlin", name: "kotlin" },
@@ -65,29 +59,23 @@ const categories: StackCategory[] = [
     title: "Mobile",
   },
   {
-    eyebrow: "06",
+    eyebrow: "05",
     items: [
       { label: "Vercel", name: "vercel" },
       { label: "GitHub", name: "github" },
+      { label: "VS Code", name: "vscode" },
+      { label: "Cursor", name: "cursor" },
+      { label: "Antigravity", name: "antigravity" },
     ],
-    title: "Infra",
+    title: "Infra & Tooling",
   },
   {
-    eyebrow: "07",
+    eyebrow: "06",
     items: [
       { label: "Figma", name: "figma" },
       { label: "Framer", name: "framer" },
     ],
     title: "Design",
-  },
-  {
-    eyebrow: "08",
-    items: [
-      { label: "VS Code", name: "vscode" },
-      { label: "Antigravity", name: "antigravity" },
-      { label: "Cursor", name: "cursor" },
-    ],
-    title: "IDEs",
   },
 ];
 
@@ -97,7 +85,7 @@ export function BentoStack() {
   const reduce = useReducedMotion();
 
   return (
-    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-3">
       {categories.map((category, index) => (
         <motion.article
           animate={reduce ? { opacity: 1 } : undefined}

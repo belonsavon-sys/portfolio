@@ -32,6 +32,67 @@ type TaskItem = {
 
 const seededPrompt = "Build a guest-message QA launch plan";
 
+type AtlasApiPayload = {
+  rows?: { id: string; operation: string; owner: string; state: string }[];
+  summary?: string;
+  tasks?: { agent: string; id: string; status: TaskStatus; title: string }[];
+  terminal?: string[];
+};
+
+function stepsFromLive(prompt: string, atlas: AtlasApiPayload): DemoStep[] {
+  const lines = (atlas.terminal ?? []).slice(0, 10);
+  const rows = (atlas.rows ?? []).slice(0, 6);
+  const tasks = (atlas.tasks ?? []).slice(0, 5);
+  const out: DemoStep[] = [
+    {
+      dbRows: [],
+      duration: 700,
+      tasks: [],
+      terminal: [{ text: `> prompt: ${prompt}` }],
+    },
+  ];
+  for (let i = 0; i < lines.length; i += 1) {
+    out.push({
+      dbRows: rows.slice(0, Math.min(rows.length, i + 1)),
+      duration: 800,
+      tasks: tasks.slice(0, Math.min(tasks.length, i + 1)),
+      terminal: [
+        { text: `> prompt: ${prompt}` },
+        ...lines.slice(0, i + 1).map((t) => ({ text: t })),
+      ],
+    });
+  }
+  if (out.length === 1) {
+    out.push({
+      dbRows: rows,
+      duration: 1000,
+      tasks,
+      terminal: [
+        { text: `> prompt: ${prompt}` },
+        { text: "> Atlas live runtime", kind: "output" },
+      ],
+    });
+  }
+  // Append a final step where any "progress" tasks are settled.
+  const settled = tasks.map((t) =>
+    t.status === "todo" ? { ...t, status: "progress" as TaskStatus } : t,
+  );
+  out.push({
+    dbRows: rows,
+    duration: 900,
+    tasks: settled,
+    terminal: [
+      { text: `> prompt: ${prompt}` },
+      ...lines.map((t) => ({ text: t })),
+      {
+        kind: "output",
+        text: atlas.summary ?? "Atlas run complete.",
+      },
+    ],
+  });
+  return out;
+}
+
 const statusMeta: Record<TaskStatus, { label: string; marker: string }> = {
   done: { label: "done", marker: "●" },
   progress: { label: "in progress", marker: "◐" },
@@ -164,7 +225,12 @@ export function AtlasDemo() {
   const [runId, setRunId] = useState(0);
   const [status, setStatus] = useState<DemoStatus>("idle");
   const [stepIndex, setStepIndex] = useState(0);
-  const steps = useMemo(() => createSteps(runPrompt), [runPrompt]);
+  const [mode, setMode] = useState<"sim" | "live">("sim");
+  const [liveError, setLiveError] = useState<string | null>(null);
+  const [liveSteps, setLiveSteps] = useState<DemoStep[] | null>(null);
+  const [liveSummary, setLiveSummary] = useState<string | null>(null);
+  const simulatedSteps = useMemo(() => createSteps(runPrompt), [runPrompt]);
+  const steps = mode === "live" && liveSteps ? liveSteps : simulatedSteps;
   const currentStep = steps[stepIndex];
 
   useEffect(() => {
@@ -186,16 +252,64 @@ export function AtlasDemo() {
 
   function runSimulation() {
     const nextPrompt = prompt.trim() || seededPrompt;
+    setMode("sim");
+    setLiveError(null);
+    setLiveSteps(null);
+    setLiveSummary(null);
     setRunPrompt(nextPrompt);
     setStepIndex(0);
     setRunId((id) => id + 1);
     setStatus("running");
   }
 
+  async function runLive() {
+    const nextPrompt = prompt.trim() || seededPrompt;
+    setLiveError(null);
+    setRunPrompt(nextPrompt);
+    setStepIndex(0);
+    setRunId((id) => id + 1);
+    setMode("live");
+    setStatus("running");
+    setLiveSteps(null);
+    setLiveSummary(null);
+
+    try {
+      const response = await fetch("/api/atlas/run", {
+        body: JSON.stringify({ prompt: nextPrompt }),
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      });
+      const data = (await response.json()) as
+        | { atlas: AtlasApiPayload }
+        | { error: string; message: string };
+      if (!response.ok || "error" in data) {
+        const message = "message" in data ? data.message : "Live runtime error.";
+        setLiveError(message);
+        setMode("sim");
+        // continue simulation flow with the existing scripted steps
+        return;
+      }
+      const next = stepsFromLive(nextPrompt, data.atlas);
+      setLiveSteps(next);
+      setLiveSummary(data.atlas.summary ?? null);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Network error reaching live runtime.";
+      setLiveError(message);
+      setMode("sim");
+    }
+  }
+
   function resetSimulation() {
     setStepIndex(0);
     setRunId((id) => id + 1);
     setStatus("idle");
+    setMode("sim");
+    setLiveError(null);
+    setLiveSteps(null);
+    setLiveSummary(null);
   }
 
   const totalSteps = steps.length;
@@ -241,7 +355,7 @@ export function AtlasDemo() {
           </span>
         </div>
 
-        <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_auto_auto] lg:items-end">
+        <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_auto_auto_auto] lg:items-end">
           <label className="grid gap-2">
             <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
               Prompt
@@ -252,13 +366,31 @@ export function AtlasDemo() {
               value={prompt}
             />
           </label>
-          <Button disabled={status === "running"} onClick={runSimulation}>
+          <Button disabled={status === "running"} onClick={runLive}>
+            Run Live
+          </Button>
+          <Button
+            disabled={status === "running"}
+            onClick={runSimulation}
+            variant="ghostDark"
+          >
             {status === "complete" ? "Replay" : "Run Simulation"}
           </Button>
           <Button onClick={resetSimulation} variant="ghostDark">
             Reset
           </Button>
         </div>
+        {liveError ? (
+          <p className="mt-3 rounded-lg border border-problem-red/40 bg-[rgba(239,68,68,0.08)] px-3 py-2 text-xs text-text-dark">
+            Live runtime unavailable — showing simulation. <span className="text-text-dark-muted">{liveError}</span>
+          </p>
+        ) : null}
+        {liveSummary ? (
+          <p className="mt-3 rounded-lg border border-accent/30 bg-[rgba(41,110,214,0.08)] px-3 py-2 text-xs text-text-dark">
+            <span className="font-mono uppercase tracking-[0.18em] text-accent-light">Live · </span>
+            {liveSummary}
+          </p>
+        ) : null}
 
         <div
           aria-hidden="true"
