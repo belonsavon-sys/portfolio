@@ -312,13 +312,13 @@ function BeyondTheCode() {
 
       <div className="mx-auto mt-16 grid max-w-3xl gap-8 sm:grid-cols-2 sm:gap-10">
         <Portrait
-          caption="Music · Italy"
+          caption="Hotel ops · hands-on"
           fallbackMeta="Save public/about-guitar.png to replace this placeholder."
           fallbackTitle="Photo 1"
-          imgAlt="Pierre playing guitar off-shift"
+          imgAlt="Pierre smiling on the job at the hotel"
           imgSrc="/about-guitar.png"
-          tag="Off-shift"
-          title="Guitar before deep work"
+          tag="On-shift"
+          title="Enjoying every part of the job"
         />
         <Portrait
           caption="Leadership retreat · 2024"
