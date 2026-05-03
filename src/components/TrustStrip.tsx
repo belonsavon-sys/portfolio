@@ -1,6 +1,5 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
 import { BrandLogo } from "./BrandLogo";
 
 const integratedWith = [
@@ -25,32 +24,29 @@ export function TrustStrip({
   className = "",
   label = "Tools I've integrated with in production",
 }: TrustStripProps) {
-  const reduce = useReducedMotion();
+  const loop = [...integratedWith, ...integratedWith];
 
   return (
     <div className={className}>
       <p className="text-center font-mono text-xs uppercase tracking-[0.22em] text-text-light-muted">
         {label}
       </p>
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-6 text-text-light/70">
-        {integratedWith.map((item, index) => (
-          <motion.div
-            animate={reduce ? { opacity: 0.7 } : undefined}
-            className="flex items-center gap-2 transition-colors duration-200 hover:text-accent"
-            initial={reduce ? { opacity: 0.7 } : { opacity: 0, y: 8 }}
-            key={item.label}
-            transition={{
-              delay: index * 0.04,
-              duration: 0.4,
-              ease: [0.21, 0.47, 0.32, 0.98] as [number, number, number, number],
-            }}
-            viewport={{ amount: 0.4, once: true }}
-            whileInView={{ opacity: 0.7, y: 0 }}
-          >
-            <BrandLogo name={item.name} size={20} />
-            <span className="text-sm font-medium">{item.label}</span>
-          </motion.div>
-        ))}
+
+      <div className="mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_5rem,black_calc(100%-5rem),transparent)]">
+        <ul className="marquee-track flex w-max items-center gap-x-12 text-text-light/70">
+          {loop.map((item, index) => (
+            <li
+              aria-hidden={index >= integratedWith.length}
+              className="flex shrink-0 items-center gap-2 transition-colors duration-200 hover:text-accent"
+              key={`${item.label}-${index}`}
+            >
+              <BrandLogo name={item.name} size={20} />
+              <span className="whitespace-nowrap text-sm font-medium">
+                {item.label}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
