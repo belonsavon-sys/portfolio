@@ -12,7 +12,7 @@ export type ParallaxBackdropProps = {
 export function ParallaxBackdrop({
   children,
   className = "pointer-events-none absolute inset-0 -z-10",
-  speed = 0.3,
+  speed = 1,
 }: ParallaxBackdropProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -20,8 +20,8 @@ export function ParallaxBackdrop({
     offset: ["start end", "end start"],
     target: ref,
   });
-  const range = reduce ? 0 : 80 * speed;
-  const y = useTransform(scrollYProgress, [0, 1], [range, -range]);
+  const range = reduce ? 0 : 140 * speed;
+  const y = useTransform(scrollYProgress, [0, 1], [-range, range]);
 
   return (
     <div className={className} ref={ref}>
