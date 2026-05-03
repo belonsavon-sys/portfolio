@@ -51,9 +51,17 @@ export default function AiPage() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <AiHero />
 
-      <LightSection className="py-20 sm:py-24">
-        <ServicesSection />
-      </LightSection>
+      <section
+        className="relative py-20 sm:py-24"
+        style={{
+          background:
+            "linear-gradient(180deg, #FAF8F1 0%, #F6F3EA 50%, #F4F8FE 100%)",
+        }}
+      >
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ServicesSection />
+        </div>
+      </section>
 
       <SectionDivider direction="light-to-dark" />
       <CaseStudiesBand />

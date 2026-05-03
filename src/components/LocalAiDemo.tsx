@@ -546,7 +546,7 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
   useEffect(() => {
     if (!active) return;
     let cancelled = false;
-    const target = 1000 / 5; // 5 FPS
+    const target = 1000 / 2; // 2 FPS — gives CLIP enough headroom per frame
     let lastSample = 0;
 
     async function loop(time: number) {
@@ -558,33 +558,37 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
         canvas.width = 224;
         canvas.height = 224;
         const ctx = canvas.getContext("2d");
-        if (ctx && video.readyState >= 2) {
+        if (ctx && video.readyState >= 2 && labels.length > 0) {
           ctx.drawImage(video, 0, 0, 224, 224);
           inflightRef.current = true;
           try {
-            const blob: Blob | null = await new Promise((resolve) =>
-              canvas.toBlob((b) => resolve(b), "image/png"),
-            );
-            if (blob) {
-              const url = URL.createObjectURL(blob);
-              const result = (await pipe(url, { candidate_labels: labels })) as {
-                label: string;
-                score: number;
-              }[];
-              URL.revokeObjectURL(url);
-              if (!cancelled && Array.isArray(result) && result[0]) {
-                setTopMatch({ label: result[0].label, score: result[0].score });
-              }
-              const stamp = performance.now();
-              fpsRef.current.frames += 1;
-              if (stamp - fpsRef.current.lastReset > 1000) {
-                setFps(fpsRef.current.frames);
-                fpsRef.current.frames = 0;
-                fpsRef.current.lastReset = stamp;
-              }
+            // toDataURL is sync — avoids the toBlob race on some browsers
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+            // candidate_labels is a *positional* arg in Transformers.js v4.x
+            const result = (await pipe(dataUrl, labels)) as {
+              label: string;
+              score: number;
+            }[];
+            if (!cancelled && Array.isArray(result) && result[0]) {
+              setTopMatch({ label: result[0].label, score: result[0].score });
+              setError(null);
+            }
+            const stamp = performance.now();
+            fpsRef.current.frames += 1;
+            if (stamp - fpsRef.current.lastReset > 1000) {
+              setFps(fpsRef.current.frames);
+              fpsRef.current.frames = 0;
+              fpsRef.current.lastReset = stamp;
             }
           } catch (err) {
-            console.error(err);
+            console.error("[ComputerVision] inference error", err);
+            if (!cancelled) {
+              setError(
+                err instanceof Error
+                  ? err.message
+                  : "Inference failed. Check browser console for details.",
+              );
+            }
           } finally {
             inflightRef.current = false;
           }
