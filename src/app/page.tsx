@@ -9,6 +9,7 @@ import {
   GreetingRotator,
   LightGlassCard,
   LiveStatusBadge,
+  ParallaxBackdrop,
   PhotoSlot,
   ScrollReveal,
   SiteFooter,
@@ -75,16 +76,7 @@ export default function Home() {
         <About />
       </LightSection>
 
-      <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-28">
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/18 blur-3xl" />
-          <div className="absolute bottom-[-8rem] right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/14 blur-3xl" />
-          <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/12 blur-3xl" />
-        </div>
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <BeyondTheCode />
-        </div>
-      </section>
+      <BeyondTheCodeBand />
 
       <LightSection className="py-20 sm:py-24" id="stack">
         <Stack />
@@ -111,11 +103,11 @@ function Hero() {
     <section className="relative overflow-hidden">
       <CursorHalo />
 
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      <ParallaxBackdrop>
         <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/12 blur-3xl" />
         <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
         <div className="absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/8 blur-3xl" />
-      </div>
+      </ParallaxBackdrop>
 
       <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
         <motion.div
@@ -291,6 +283,44 @@ function About() {
           </ScrollReveal>
         ))}
       </div>
+    </section>
+  );
+}
+
+function BeyondTheCodeBand() {
+  const reduce = useReducedMotion();
+
+  return (
+    <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-28">
+      <ParallaxBackdrop>
+        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/18 blur-3xl" />
+        <div className="absolute bottom-[-8rem] right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/14 blur-3xl" />
+        <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/12 blur-3xl" />
+      </ParallaxBackdrop>
+
+      {!reduce ? (
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-full"
+          initial={{ x: "0%" }}
+          transition={{ duration: 0.8, ease: [0.65, 0, 0.35, 1] }}
+          viewport={{ amount: 0.25, once: true }}
+          whileInView={{ x: "100%" }}
+        >
+          <div className="absolute inset-0 bg-bg-light" />
+          <div className="absolute inset-y-0 left-0 w-1 bg-accent shadow-[0_0_28px_rgba(41,110,214,0.55)]" />
+        </motion.div>
+      ) : null}
+
+      <motion.div
+        className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8"
+        initial={reduce ? false : { opacity: 0, y: 24 }}
+        transition={{ delay: 0.45, duration: 0.6, ease: easeOut }}
+        viewport={{ amount: 0.25, once: true }}
+        whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+      >
+        <BeyondTheCode />
+      </motion.div>
     </section>
   );
 }

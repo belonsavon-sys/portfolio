@@ -37,6 +37,8 @@ export { LiveStatusBadge } from "./LiveStatusBadge";
 export type { LiveStatusBadgeProps } from "./LiveStatusBadge";
 export { LocalAiDemo } from "./LocalAiDemo";
 export { PageTransition } from "./PageTransition";
+export { ParallaxBackdrop } from "./ParallaxBackdrop";
+export type { ParallaxBackdropProps } from "./ParallaxBackdrop";
 export { PhotoSlot } from "./PhotoSlot";
 export type { PhotoSlotProps } from "./PhotoSlot";
 export { ScrollProgress } from "./ScrollProgress";

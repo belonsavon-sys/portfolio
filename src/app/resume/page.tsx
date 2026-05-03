@@ -1,4 +1,4 @@
-import { Button } from "@/components";
+import { Button, ParallaxBackdrop } from "@/components";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -261,9 +261,9 @@ export default function ResumePage() {
 function ResumeHero() {
   return (
     <section className="relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      <ParallaxBackdrop>
         <div className="absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
-      </div>
+      </ParallaxBackdrop>
       <div className="mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
         <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
           /resume
