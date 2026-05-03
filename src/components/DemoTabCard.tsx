@@ -41,9 +41,9 @@ export function DemoTabCard({
 
   return (
     <motion.div
-      animate={reduce ? { opacity: 1 } : undefined}
+      animate={{ opacity: 1, y: 0 }}
       className="rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/85 backdrop-blur-md"
-      initial={reduce ? { opacity: 1 } : { opacity: 0, y: 12 }}
+      initial={reduce ? false : { opacity: 0, y: 12 }}
       transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
     >
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[rgba(41,110,214,0.18)] p-6 sm:p-8">

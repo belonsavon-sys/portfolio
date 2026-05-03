@@ -472,6 +472,8 @@ function DatabaseTable({ rows }: { rows: DatabaseRow[] }) {
                   index === rows.length - 1
                     ? "rgba(41, 110, 214, 0.18)"
                     : "rgba(17, 24, 39, 0)",
+                opacity: 1,
+                y: 0,
               }}
               className="grid grid-cols-[1fr_90px_90px] border-b border-[rgba(41,110,214,0.18)] px-4 py-3 text-sm text-text-dark-muted last:border-b-0"
               exit={{ opacity: 0, y: -8 }}
@@ -508,6 +510,7 @@ function TaskBoard({ tasks }: { tasks: TaskItem[] }) {
 
             return (
               <motion.div
+                animate={{ opacity: 1, y: 0 }}
                 className="rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 px-4 py-3"
                 initial={{ opacity: 0, y: 8 }}
                 key={task.id}
