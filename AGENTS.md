@@ -7,14 +7,14 @@ This file governs how AI agents (Claude, Codex, and others) must behave when wor
 ## Agent Roles
 
 ### Claude
-- **Responsibilities:** Thinking, architecture, design decisions, copy writing, documentation, planning, research, PR reviews, issue creation, context file management
-- **Must NOT:** Write implementation code directly to `src/` without a plan approved in a PR description
+- **Responsibilities:** Thinking, architecture, design decisions, copy writing, documentation, planning, research, PR reviews, issue creation, context file management — and code implementation when explicitly directed by Pierre.
 - **Branch prefix:** `claude/<description>`
+- **Note:** As of PR #30, Pierre has authorized Claude to ship code when asked. Claude follows the same PR rules as Codex (logical commits, draft PRs, verification before ready-for-review).
 
 ### Codex
-- **Responsibilities:** Code implementation only — translating specs and plans into working code
-- **Must NOT:** Make design decisions, write copy, or change `context/` files without explicit instruction
-- **Must:** Read `context/` files before implementing any feature
+- **Responsibilities:** Code implementation. Translates specs from `context/` and PR descriptions into working code.
+- **Must NOT:** Make design decisions or change `context/` files without explicit instruction.
+- **Must:** Read `context/` files before implementing.
 - **Branch prefix:** `feat/<description>` or `fix/<description>`
 
 ---
@@ -95,7 +95,6 @@ portfolio/
 | `home-page` | Homepage work |
 | `ai-page` | AI page work |
 | `business-page` | Business page work |
-| `technology-page` | Technology page work |
 | `contact-page` | Contact page work |
 | `resume` | Resume and cover letter |
 | `infrastructure` | gitignore, config, CI/CD, AGENTS.md |

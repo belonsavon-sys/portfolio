@@ -227,10 +227,10 @@ flowchart LR
 - `needs-info` — waiting for user input
 
 ### Milestones
-1. **Phase 1 — Content & Resume** — All context files populated; resume finalized
-2. **Phase 2 — Design & Brandkit** — Color tokens, typography, component specs finalized
-3. **Phase 3 — Build** — All pages implemented
-4. **Phase 4 — Deploy** — Vercel deployment, domain, QA
+1. ✅ **Phase 1 — Content & Resume** — All context files populated; resume finalized
+2. ✅ **Phase 2 — Design & Brandkit** — Color tokens, typography, component specs finalized
+3. ✅ **Phase 3 — Build** — All pages implemented; live AI demos via WebGPU; Atlas demo via Anthropic API
+4. 🟡 **Phase 4 — Deploy** — Live on Vercel; `ANTHROPIC_API_KEY` env var to be set in Vercel; custom domain TBD
 
 ---
 
