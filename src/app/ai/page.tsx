@@ -51,23 +51,45 @@ export default function AiPage() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <AiHero />
 
-      <LightSection className="py-20 sm:py-24">
-        <ServicesSection />
-      </LightSection>
+      <section
+        className="relative py-20 sm:py-24"
+        style={{
+          background:
+            "linear-gradient(180deg, #FAF8F1 0%, #F6F3EA 50%, #F4F8FE 100%)",
+        }}
+      >
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ServicesSection />
+        </div>
+      </section>
 
       <SectionDivider direction="light-to-dark" />
       <CaseStudiesBand />
 
-
-      <DarkSection className="pb-12">
+      <DarkSection className="py-20 sm:py-24">
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">Atlas products</p>
-          <h2 className="mt-3 text-3xl font-semibold text-text-dark sm:text-4xl">Three shipped products built via Atlas.</h2>
+          <div className="flex items-center gap-3">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
+              Atlas portfolio
+            </p>
+            <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
+            <LiveStatusBadge label="3 products · in motion" />
+          </div>
+          <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-text-dark sm:text-5xl">
+            What Atlas has shipped.
+          </h2>
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-text-dark-muted">
+            Three products built end-to-end via the Atlas multi-agent harness.
+            Real agents wrote the code, opened the PRs, and shipped the
+            features under human review.
+          </p>
         </ScrollReveal>
-        <div className="mt-8"><AtlasGallery /></div>
+        <div className="mt-12">
+          <AtlasGallery />
+        </div>
       </DarkSection>
 
-      <DarkSection className="pt-20 pb-10 sm:pt-24">
+      <DarkSection className="pt-10 pb-10 sm:pt-12">
         <ScrollReveal direction="up">
           <div className="flex items-center gap-3">
             <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
@@ -80,11 +102,9 @@ export default function AiPage() {
             Local AI. Real business. No cloud required.
           </h2>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-text-dark-muted">
-            Cloud AI is everywhere. But compute and energy costs are rising,
-            and every modern computer already has the hardware to run capable
-            AI models locally — they just aren&apos;t being used that way yet.
-            These demos show what that looks like when it&apos;s actually
-            deployed.
+            Five tasks running on your machine. Pick a tab, load the model,
+            run it. Models cache after first download. No API key, no server,
+            no data leaving your browser.
           </p>
         </ScrollReveal>
         <div className="scanlines mt-10 rounded-3xl">
@@ -99,15 +119,17 @@ export default function AiPage() {
               Demo 2
             </p>
             <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
-            <LiveStatusBadge label="Atlas · Simulated runtime" />
+            <LiveStatusBadge label="Atlas · Live runtime" />
           </div>
           <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-text-dark sm:text-5xl">
             This is what an agent harness looks like in motion.
           </h2>
           <p className="mt-5 max-w-3xl text-lg leading-8 text-text-dark-muted">
-            Atlas is the multi-agent system I co-architect at Blackdoor. Send a
-            prompt. Watch the CEO agent route it. Sub-agents act. The database
-            updates. Tasks appear, get assigned, get completed.
+            Atlas is the multi-agent system I co-architect at Blackdoor. Send
+            a prompt. The CEO agent routes it through C-suite to manager to
+            field agents. Click <span className="font-semibold text-text-dark">Run Live</span>
+            {" "}to call Anthropic in real time, or <span className="font-semibold text-text-dark">Run Simulation</span>
+            {" "}to see the choreography.
           </p>
         </ScrollReveal>
         <div className="scanlines mt-10 rounded-3xl">
@@ -187,8 +209,8 @@ function ServicesSection() {
             direction="up"
             key={service.name}
           >
-            <article className="group h-full rounded-2xl border border-border-light bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-md">
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            <LightGlassCard className="group h-full p-6">
+              <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
                 {service.icon}
               </p>
               <h3 className="mt-4 text-xl font-semibold text-text-light">
@@ -197,7 +219,7 @@ function ServicesSection() {
               <p className="mt-3 text-sm leading-6 text-text-light-muted">
                 {service.description}
               </p>
-            </article>
+            </LightGlassCard>
           </ScrollReveal>
         ))}
       </div>

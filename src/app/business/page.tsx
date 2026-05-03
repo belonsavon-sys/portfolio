@@ -54,6 +54,12 @@ const atlasLayers = [
   },
 ];
 
+// Real testimonial — placeholder body until Pierre sources a quote.
+// When body is null/empty, the Testimonial component returns null silently.
+const TESTIMONIAL_BODY: string | null = null;
+const TESTIMONIAL_AUTHOR = "";
+const TESTIMONIAL_ROLE = "";
+
 export default function BusinessPage() {
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
@@ -71,12 +77,17 @@ export default function BusinessPage() {
         <CommunicationsSection />
       </LightSection>
 
-      <LightSection className="pb-12 pt-4 sm:pb-16">
+      <LightSection className="pb-20 pt-4 sm:pb-24">
         <TrainingSection />
       </LightSection>
 
-      <LightSection className="pb-8 pt-0">
-        <Testimonial quote={{ body: "Pierre rebuilt how we run guest comms. The thing that took us 48 hours now takes him 3 minutes. He doesn't ask permission to fix things — he ships.", author: "Operations lead", role: "ThePrivateHotels" }} />
+      <LightSection className="pb-20 pt-4 sm:pb-24">
+        <Testimonial
+          author={TESTIMONIAL_AUTHOR}
+          body={TESTIMONIAL_BODY}
+          className="mx-auto max-w-3xl"
+          role={TESTIMONIAL_ROLE}
+        />
       </LightSection>
 
       <LightSection className="py-20 sm:py-24">
@@ -125,6 +136,103 @@ function BusinessHero() {
         <ScrollReveal delay={0.22} direction="up">
           <div className="mt-10">
             <Button href="/contact">Get in Touch →</Button>
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+  );
+}
+
+function BlackdoorBand() {
+  return (
+    <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute -top-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/15 blur-3xl" />
+        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
+      </div>
+
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
+          <ScrollReveal direction="left">
+            <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent-light">
+              Blackdoor operations
+            </p>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-text-dark sm:text-4xl lg:text-5xl">
+              Building the company that builds companies.
+            </h2>
+            <p className="mt-5 max-w-md text-lg leading-8 text-text-dark-muted">
+              Blackdoor is the holding company I co-founded with Ryder in 2025.
+              We develop and operate agentic companies across entertainment,
+              SaaS, robotics, and AI.
+            </p>
+
+            <div className="mt-8 grid gap-3">
+              {blackdoorOutcomes.map((outcome) => (
+                <ScrollReveal direction="left" key={outcome}>
+                  <div className="flex items-start gap-3 text-sm leading-7 text-text-dark-muted">
+                    <span
+                      aria-hidden="true"
+                      className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                    />
+                    <span>{outcome}</span>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.1} direction="right">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-dark-muted">
+              Atlas — the engine
+            </p>
+            <div className="mt-4 grid gap-3">
+              {atlasLayers.map((layer, index) => (
+                <ScrollReveal
+                  delay={0.1 + index * 0.06}
+                  direction="up"
+                  key={layer.title}
+                >
+                  <GlassCard className="p-5">
+                    <div className="flex items-baseline gap-3">
+                      <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent-light">
+                        {layer.badge}
+                      </span>
+                      <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
+                        {layer.title}
+                      </span>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {layer.items.map((item) => (
+                        <span
+                          className="inline-flex items-center rounded-md border border-[rgba(41,110,214,0.35)] bg-[rgba(41,110,214,0.10)] px-2.5 py-1 text-sm font-medium text-text-dark"
+                          key={item}
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  </GlassCard>
+                </ScrollReveal>
+              ))}
+            </div>
+          </ScrollReveal>
+        </div>
+
+        <ScrollReveal delay={0.15} direction="up">
+          <div className="mt-12 grid gap-6 text-lg leading-8 text-text-dark-muted lg:grid-cols-2">
+            <p>
+              At Blackdoor, I lead AI R&amp;D and implementation. Atlas is a
+              multi-level autonomous agent harness — a CEO agent routes work to
+              C-suite agents (CFO, CMO), who delegate to manager and field
+              agents. Designed to build, operate, and improve software products
+              autonomously.
+            </p>
+            <p>
+              Atlas has already shipped a game app, a budget web app, and an
+              agent-augmented project management system. The same underlying
+              technology is deployed at ThePrivateHotels. We run everything
+              through GitHub PRs. Every decision is governed.
+            </p>
           </div>
         </ScrollReveal>
       </div>
@@ -228,125 +336,13 @@ function TrainingSection() {
       <ScrollReveal direction="up">
         <p className="text-lg leading-8 text-text-light-muted">
           Building a system is half the job. The other half is making sure
-          your team can use it — and maintain the standard when you&apos;re
-          not watching.
-        </p>
-      </ScrollReveal>
-      <ScrollReveal delay={0.05} direction="up">
-        <p className="mt-5 text-lg leading-8 text-text-light-muted">
-          At ThePrivateHotels I supervised 6 people across two teams and
-          managed contractor relationships for ongoing construction. I
-          authored room-by-room SOPs, laundry procedures, inspection
-          checklists — documentation clear enough that a new hire could
-          onboard without confusion.
-        </p>
-      </ScrollReveal>
-      <ScrollReveal delay={0.1} direction="up">
-        <p className="mt-5 text-lg leading-8 text-text-light-muted">
-          I also trained staff on all tools and systems I deployed: the
-          inspection platform, communication tools, and pet protocols.
-          Standards didn&apos;t slip because the team understood why they
-          existed.
+          your team can use it. I supervised 6 staff across two teams,
+          authored room-by-room SOPs and inspection checklists, and trained
+          everyone on the tools — so standards held even when I wasn&apos;t in
+          the room.
         </p>
       </ScrollReveal>
     </SectionShell>
-  );
-}
-
-function BlackdoorBand() {
-  return (
-    <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/15 blur-3xl" />
-        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/10 blur-3xl" />
-      </div>
-
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
-          <ScrollReveal direction="left">
-            <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent-light">
-              Blackdoor operations
-            </p>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-text-dark sm:text-4xl lg:text-5xl">
-              Building the company that builds companies.
-            </h2>
-            <p className="mt-5 max-w-md text-lg leading-8 text-text-dark-muted">
-              Blackdoor is the holding company I co-founded with Ryder in 2025.
-              We develop and operate agentic companies across entertainment,
-              SaaS, robotics, and AI.
-            </p>
-
-            <div className="mt-8 grid gap-3">
-              {blackdoorOutcomes.map((outcome) => (
-                <ScrollReveal direction="left" key={outcome}>
-                  <div className="flex items-start gap-3 text-sm leading-7 text-text-dark-muted">
-                    <span
-                      aria-hidden="true"
-                      className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-                    />
-                    <span>{outcome}</span>
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal delay={0.1} direction="right">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-dark-muted">
-              Atlas — the engine
-            </p>
-            <div className="mt-4 grid gap-3">
-              {atlasLayers.map((layer, index) => (
-                <ScrollReveal
-                  delay={0.1 + index * 0.06}
-                  direction="up"
-                  key={layer.title}
-                >
-                  <GlassCard className="p-5">
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent-light">
-                        {layer.badge}
-                      </span>
-                      <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
-                        {layer.title}
-                      </span>
-                    </div>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {layer.items.map((item) => (
-                        <span
-                          className="inline-flex items-center rounded-md border border-[rgba(41,110,214,0.35)] bg-[rgba(41,110,214,0.10)] px-2.5 py-1 text-sm font-medium text-text-dark"
-                          key={item}
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </GlassCard>
-                </ScrollReveal>
-              ))}
-            </div>
-          </ScrollReveal>
-        </div>
-
-        <ScrollReveal delay={0.15} direction="up">
-          <div className="mt-12 grid gap-6 text-lg leading-8 text-text-dark-muted lg:grid-cols-2">
-            <p>
-              At Blackdoor, I lead AI R&amp;D and implementation. Atlas is a
-              multi-level autonomous agent harness — a CEO agent routes work to
-              C-suite agents (CFO, CMO), who delegate to manager and field
-              agents. Designed to build, operate, and improve software products
-              autonomously.
-            </p>
-            <p>
-              Atlas has already shipped a game app, a budget web app, and an
-              agent-augmented project management system. The same underlying
-              technology is deployed at ThePrivateHotels. We run everything
-              through GitHub PRs. Every decision is governed.
-            </p>
-          </div>
-        </ScrollReveal>
-      </div>
-    </section>
   );
 }
 

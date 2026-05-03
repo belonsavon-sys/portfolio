@@ -2,30 +2,61 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { GlassCard } from "@/components";
+import {
+  EMAIL_DISPLAY,
+  EMAIL_MAILTO,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  PHONE_DISPLAY,
+  PHONE_TEL,
+} from "@/components/contact-config";
 
-const contactLinks = [
+type ContactCardConfig = {
+  Icon: (props: { className?: string }) => React.ReactNode;
+  description: string;
+  href: string;
+  label: string;
+  rel?: string;
+  target?: "_blank";
+  value: string;
+};
+
+const contactLinks: ContactCardConfig[] = [
   {
     Icon: GitHubIcon,
     description: "Code and projects",
-    href: "https://github.com/belonsavon-sys",
+    href: GITHUB_URL,
     label: "GitHub",
     rel: "noreferrer",
     target: "_blank",
     value: "github.com/belonsavon-sys",
   },
-  {
-    Icon: PhoneIcon,
-    description: "PST · text first",
-    href: "tel:+13606602460",
-    label: "Phone",
-    value: "360-660-2460",
-  },
+  ...(LINKEDIN_URL
+    ? [
+        {
+          Icon: LinkedInIcon,
+          description: "Professional network",
+          href: LINKEDIN_URL,
+          label: "LinkedIn",
+          rel: "noreferrer",
+          target: "_blank" as const,
+          value: LINKEDIN_URL.replace(/^https?:\/\//, ""),
+        },
+      ]
+    : []),
   {
     Icon: MailIcon,
     description: "Best for new opportunities",
-    href: "mailto:belonsavon@gmail.com",
+    href: EMAIL_MAILTO,
     label: "Email",
-    value: "belonsavon@gmail.com",
+    value: EMAIL_DISPLAY,
+  },
+  {
+    Icon: PhoneIcon,
+    description: "PST · text first",
+    href: PHONE_TEL,
+    label: "Phone",
+    value: PHONE_DISPLAY,
   },
 ];
 
@@ -208,6 +239,19 @@ function MailIcon({ className }: { className?: string }) {
         strokeLinejoin="round"
         strokeWidth="1.8"
       />
+    </svg>
+  );
+}
+
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14ZM8.34 18.34V9.99H5.67v8.35h2.67Zm-1.34-9.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1Zm11.34 9.5v-4.57c0-2.45-1.31-3.59-3.06-3.59-1.41 0-2.04.78-2.39 1.32V9.99h-2.67c.04.75 0 8.35 0 8.35h2.67v-4.66c0-.24.02-.48.09-.65.19-.48.63-.97 1.36-.97.96 0 1.34.73 1.34 1.79v4.49h2.66Z" />
     </svg>
   );
 }

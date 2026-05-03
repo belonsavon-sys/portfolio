@@ -18,6 +18,7 @@ import {
 import type { ReactNode } from "react";
 
 const aboutParagraphs = [
+  "I'm an engineer who learned to ship by automating the business I was hired to run.",
   "Two years ago I supervised a hotel. Today, the AI systems running it are systems I built — every guest message, every inspection, every automated workflow. In parallel, at Blackdoor (the company I co-founded), I co-architect Atlas: a multi-level autonomous agent harness shipping real games, apps, and operating systems.",
   'When a problem enters my scope, I take it to mastery before I execute. Solo or paired with AI, I research relentlessly and finish what I start. My divergent thinking catches what specialists miss — and turns "we should automate that" into "it\'s already running."',
   "Trilingual. Hyperfocused. Built to ship.",
@@ -25,30 +26,37 @@ const aboutParagraphs = [
 
 const easeOut = [0.21, 0.47, 0.32, 0.98] as [number, number, number, number];
 
-type Counter = {
-  format?: (value: number) => string;
-  label: string;
-  prefix?: string;
-  suffix?: string;
-  to: number;
-};
-
-const headlineCounters: Counter[] = [
-  { label: "Response time cut to", suffix: " min", to: 3 },
-  { label: "Manual digitized", suffix: "+ pages", to: 100 },
-  { label: "Atlas products shipping", to: 3 },
+const heroMetrics = [
+  {
+    context: "Guest reply latency at ThePrivateHotels",
+    label: "Response time",
+    suffix: " min",
+    to: 3,
+    valuePrefix: "from 48 hrs to ",
+  },
+  {
+    context: "Operations manual digitized into trackable QA",
+    label: "Pages digitized",
+    suffix: "+ pages",
+    to: 100,
+    valuePrefix: "",
+  },
+  {
+    context: "Game · Budget · Project Mgmt — built end-to-end via Atlas",
+    label: "Atlas products",
+    suffix: " shipping",
+    to: 3,
+    valuePrefix: "",
+  },
 ];
 
-const detailedMetrics: Counter[] = [
-  { label: "Guest reply latency at ThePrivateHotels", suffix: " hrs → 3 min", to: 48 },
-  { label: "Operations manual digitized", suffix: "+ pages", to: 100 },
-  { label: "Products shipped via Atlas", to: 3 },
-];
-
-const alsoMetrics: Counter[] = [
-    { label: "Staff trained", to: 6 },
-  { label: "QuickBooks months error-free", to: 6 },
-  { label: "Native languages", to: 3 },
+const detailedMetrics = [
+  { label: "Hours of guest-reply lag eliminated", suffix: " hrs", to: 48 },
+  { label: "Minutes saved per drafted reply", suffix: "-20 min", to: 15 },
+  { label: "Inventory items under management", suffix: "+", to: 100 },
+  { label: "Staff trained on the new tooling", suffix: "", to: 6 },
+  { label: "Months of error-free QuickBooks", suffix: "", to: 6 },
+  { label: "Native languages", suffix: "", to: 3 },
 ];
 
 export default function Home() {
@@ -72,9 +80,17 @@ export default function Home() {
       <BeyondTheCode />
       <SectionDivider direction="dark-to-light" />
 
-      <LightSection className="py-20 sm:py-24">
-        <Stack />
-      </LightSection>
+      <section
+        className="relative py-20 sm:py-24"
+        style={{
+          background:
+            "linear-gradient(180deg, #FAF8F1 0%, #F6F3EA 50%, #F4F8FE 100%)",
+        }}
+      >
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Stack />
+        </div>
+      </section>
 
       <SectionDivider direction="light-to-dark" />
       <Cta />
@@ -130,8 +146,15 @@ function Hero() {
         />
 
         <motion.p
-          className="mt-8 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9"
-          {...fadeUp(0.18)}
+          className="mt-6 font-mono text-xs uppercase tracking-[0.28em] text-accent"
+          {...fadeUp(0.16)}
+        >
+          AI for operations-heavy businesses
+        </motion.p>
+
+        <motion.p
+          className="mt-6 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9"
+          {...fadeUp(0.22)}
         >
           Engineering intelligent automation and full-stack applications that
           turn complex business processes into scalable, profitable systems.
@@ -139,7 +162,7 @@ function Hero() {
 
         <motion.div
           className="mt-10 flex flex-wrap items-center justify-center gap-4"
-          {...fadeUp(0.28)}
+          {...fadeUp(0.32)}
         >
           <Button href="/contact">Contact Me →</Button>
           <Button href="/ai" variant="ghost">
@@ -148,25 +171,30 @@ function Hero() {
         </motion.div>
 
         <motion.div
-          className="mt-16 grid w-full max-w-4xl gap-3 sm:grid-cols-3"
-          {...fadeUp(0.4)}
+          className="mt-16 grid w-full max-w-4xl gap-4 sm:grid-cols-3"
+          {...fadeUp(0.44)}
         >
-          {headlineCounters.map((counter, index) => (
+          {heroMetrics.map((m, index) => (
             <LightGlassCard
-              className="px-5 py-4 text-left"
+              className="px-5 py-5 text-left"
               hoverable={false}
-              key={counter.label}
+              key={m.label}
             >
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-                {counter.label}
+                {m.label}
               </p>
-              <p className="mt-2 text-3xl font-semibold tracking-tight text-text-light">
+              <p className="mt-3 text-2xl font-semibold tracking-tight text-text-light sm:text-3xl">
+                {m.valuePrefix ? (
+                  <span className="text-text-light/40 text-base sm:text-lg font-mono">{m.valuePrefix}</span>
+                ) : null}
                 <AnimatedCounter
                   delay={index * 0.1}
-                  prefix={counter.prefix}
-                  suffix={counter.suffix}
-                  to={counter.to}
+                  suffix={m.suffix}
+                  to={m.to}
                 />
+              </p>
+              <p className="mt-2 text-xs leading-5 text-text-light-muted">
+                {m.context}
               </p>
             </LightGlassCard>
           ))}
@@ -174,7 +202,7 @@ function Hero() {
 
         <motion.div
           className="mt-16 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 font-mono text-sm uppercase tracking-[0.18em] text-text-light-muted"
-          {...fadeUp(0.5)}
+          {...fadeUp(0.55)}
         >
           <span className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
@@ -212,7 +240,7 @@ function MetricsBand() {
             </p>
           </ScrollReveal>
 
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2">
             {detailedMetrics.map((metric, index) => (
               <ScrollReveal
                 delay={0.05 + index * 0.04}
@@ -224,17 +252,12 @@ function MetricsBand() {
                     {metric.label}
                   </p>
                   <p className="mt-3 text-3xl font-semibold tracking-tight text-text-dark sm:text-4xl">
-                    <AnimatedCounter
-                      prefix={metric.prefix}
-                      suffix={metric.suffix}
-                      to={metric.to}
-                    />
+                    <AnimatedCounter suffix={metric.suffix} to={metric.to} />
                   </p>
                 </GlassCard>
               </ScrollReveal>
             ))}
           </div>
-          <div className="mt-6 flex flex-wrap gap-4 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">{alsoMetrics.map((m)=><span key={m.label}>{m.label}</span>)}</div>
         </div>
       </div>
     </section>
@@ -249,12 +272,12 @@ function About() {
           About me
         </p>
         <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-          I'm an engineer who learned to ship by automating the business I was hired to run.
+          {aboutParagraphs[0]}
         </h2>
       </ScrollReveal>
 
       <div className="mx-auto mt-8 grid max-w-3xl gap-5 text-left text-lg leading-8 text-text-light-muted">
-        {aboutParagraphs.map((paragraph, index) => (
+        {aboutParagraphs.slice(1).map((paragraph, index) => (
           <ScrollReveal delay={index * 0.06} direction="up" key={paragraph}>
             <p>{paragraph}</p>
           </ScrollReveal>
@@ -267,13 +290,11 @@ function About() {
 function BeyondTheCode() {
   return (
     <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
-      {/* layered mesh gradient */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute -top-40 left-[10%] h-[460px] w-[460px] rounded-full bg-accent/16 blur-3xl" />
         <div className="absolute -top-12 right-[8%] h-[380px] w-[380px] rounded-full bg-accent-light/12 blur-3xl" />
         <div className="absolute bottom-[-12rem] left-[40%] h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl" />
       </div>
-      {/* subtle radial vignette to layer depth */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-10"
@@ -340,7 +361,7 @@ function BeyondTheCode() {
             >
               &ldquo;
             </span>
-            <blockquote className="mt-2 text-2xl font-medium leading-relaxed text-text-dark sm:text-3xl">
+            <blockquote className="mt-2 text-2xl font-medium leading-relaxed text-text-dark sm:text-4xl">
               Solo or paired with AI, I research relentlessly and finish what I
               start.
             </blockquote>

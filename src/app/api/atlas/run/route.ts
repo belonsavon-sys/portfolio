@@ -1,47 +1,144 @@
-import Anthropic from '@anthropic-ai/sdk';
-import { NextRequest, NextResponse } from 'next/server';
+import OpenAI from "openai";
+import { NextResponse } from "next/server";
 
-const limiter = new Map<string, { count: number; resetAt: number }>();
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-function getTrustedClientIp(req: NextRequest) {
-  const realIp = req.headers.get('x-real-ip')?.trim();
-  if (realIp) return realIp;
-
-  const forwarded = req.headers.get('forwarded');
-  if (forwarded) {
-    const match = forwarded.match(/for=(?:\"?)(\[[^\]]+\]|[^;\",]+)(?:\"?)/i);
-    if (match?.[1]) return match[1];
-  }
-
-  return 'unknown';
+function getApiKey() {
+  return process.env.OPENAI_API_KEY ?? "";
 }
 
-export async function POST(req: NextRequest) {
-  const ip = getTrustedClientIp(req);
+// Simple in-memory rate limiter. 3 calls per IP per hour.
+// Resets per cold-start; for production you would back this with KV.
+const RATE_LIMIT_MAX = 3;
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+const rateLimit = new Map<string, { count: number; resetAt: number }>();
+
+function getClientIp(request: Request): string {
+  const forwarded = request.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0]?.trim() ?? "anonymous";
+  const realIp = request.headers.get("x-real-ip");
+  if (realIp) return realIp;
+  return "anonymous";
+}
+
+function checkRateLimit(ip: string): { ok: true } | { ok: false; retryAt: number } {
   const now = Date.now();
-  const entry = limiter.get(ip);
-  if (!entry || now > entry.resetAt) {
-    limiter.set(ip, { count: 1, resetAt: now + 60 * 60 * 1000 });
-  } else if (entry.count >= 3) {
-    return NextResponse.json({ error: 'Rate limited' }, { status: 429 });
-  } else {
-    entry.count += 1;
+  const record = rateLimit.get(ip);
+  if (!record || record.resetAt < now) {
+    rateLimit.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return { ok: true };
+  }
+  if (record.count >= RATE_LIMIT_MAX) {
+    return { ok: false, retryAt: record.resetAt };
+  }
+  record.count += 1;
+  return { ok: true };
+}
+
+const SYSTEM_PROMPT = `You are Atlas, a multi-agent orchestration harness.
+A visitor of Pierre Belon Savon's portfolio has sent you a business prompt.
+Respond strictly as a JSON object that simulates routing the prompt through
+your agent hierarchy. Keep it tight, plausible, and business-focused.
+
+Schema:
+{
+  "terminal": [string, ...],   // 5-7 terse log lines, e.g. "> CEO routing"
+  "rows": [{ "id": string, "owner": "CEO"|"CFO"|"CMO"|"Manager"|"Field", "operation": "insert"|"update", "state": string }, ...],   // 3-5 rows
+  "tasks": [{ "id": string, "title": string, "agent": string, "status": "todo"|"progress"|"done" }, ...],   // 2-4 tasks; at least one must be "done"
+  "summary": string   // one short sentence summarizing what was orchestrated
+}
+
+Rules:
+- All field values are short (max 6 words).
+- "tasks" must mostly be "done" or "progress" by the end (you simulate the final state).
+- The whole JSON must be under 500 tokens.
+- Output JSON only. No prose, no markdown fences.`;
+
+export async function POST(request: Request) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: "live_unavailable", message: "Live runtime is not configured." },
+      { status: 503 },
+    );
   }
 
-  const body = await req.json().catch(() => ({}));
-  const prompt = body?.prompt ?? 'Build a guest-message QA launch plan';
-
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json({ fallback: true, error: 'missing_api_key' }, { status: 503 });
+  const ip = getClientIp(request);
+  const limit = checkRateLimit(ip);
+  if (!limit.ok) {
+    const retrySeconds = Math.max(
+      1,
+      Math.round((limit.retryAt - Date.now()) / 1000),
+    );
+    return NextResponse.json(
+      {
+        error: "rate_limited",
+        message: `Rate limit reached. Try again in ${retrySeconds}s.`,
+        retryAfterSeconds: retrySeconds,
+      },
+      {
+        headers: { "Retry-After": String(retrySeconds) },
+        status: 429,
+      },
+    );
   }
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-  const msg = await client.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 800,
-    system: 'Return compact JSON with terminalLines, dbRows, tasks arrays only.',
-    messages: [{ role: 'user', content: String(prompt) }],
-  });
+  let body: { prompt?: string };
+  try {
+    body = (await request.json()) as { prompt?: string };
+  } catch {
+    return NextResponse.json(
+      { error: "bad_request", message: "Invalid JSON body." },
+      { status: 400 },
+    );
+  }
 
-  return NextResponse.json({ text: msg.content });
+  const prompt = (body.prompt ?? "").trim().slice(0, 280);
+  if (!prompt) {
+    return NextResponse.json(
+      { error: "bad_request", message: "prompt is required." },
+      { status: 400 },
+    );
+  }
+
+  const client = new OpenAI({ apiKey });
+
+  try {
+    const completion = await client.chat.completions.create({
+      max_tokens: 800,
+      messages: [
+        { content: SYSTEM_PROMPT, role: "system" },
+        { content: prompt, role: "user" },
+      ],
+      model: "gpt-4o-mini",
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+    });
+
+    const text = completion.choices[0]?.message?.content ?? "";
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      return NextResponse.json(
+        {
+          error: "parse_failed",
+          message: "Atlas returned malformed output. Falling back to simulation.",
+          raw: text,
+        },
+        { status: 502 },
+      );
+    }
+
+    return NextResponse.json({ atlas: parsed }, { status: 200 });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Unknown OpenAI error.";
+    return NextResponse.json(
+      { error: "openai_error", message },
+      { status: 502 },
+    );
+  }
 }
