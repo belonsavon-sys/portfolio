@@ -75,9 +75,16 @@ export default function Home() {
         <About />
       </LightSection>
 
-      <LightSection className="py-20 sm:py-24">
-        <BeyondTheCode />
-      </LightSection>
+      <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-28">
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/18 blur-3xl" />
+          <div className="absolute bottom-[-8rem] right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/14 blur-3xl" />
+          <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/12 blur-3xl" />
+        </div>
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <BeyondTheCode />
+        </div>
+      </section>
 
       <LightSection className="py-20 sm:py-24" id="stack">
         <Stack />
@@ -293,18 +300,18 @@ function BeyondTheCode() {
     <div>
       <div className="text-center">
         <div className="flex items-center justify-center gap-3">
-          <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
-          <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+          <span aria-hidden="true" className="h-px w-10 bg-accent-light/50" />
+          <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent-light">
             Beyond the code
           </p>
-          <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
+          <span aria-hidden="true" className="h-px w-10 bg-accent-light/50" />
         </div>
 
         <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
           More than engineering.
         </h2>
 
-        <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-text-light-muted">
+        <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-text-dark-muted">
           The habit of taking problems to mastery before executing runs through
           everything I do — agent architecture, accounting, music.
         </p>
@@ -334,15 +341,15 @@ function BeyondTheCode() {
       <figure className="mx-auto mt-20 max-w-3xl text-center">
         <span
           aria-hidden="true"
-          className="font-mono text-5xl leading-none text-accent/60"
+          className="font-mono text-5xl leading-none text-accent-light/70"
         >
           &ldquo;
         </span>
-        <blockquote className="mt-2 text-2xl font-medium leading-relaxed text-text-light sm:text-4xl">
+        <blockquote className="mt-2 text-2xl font-medium leading-relaxed text-text-dark sm:text-4xl">
           Solo or paired with AI, I research relentlessly and finish what I
           start.
         </blockquote>
-        <figcaption className="mt-6 font-mono text-xs uppercase tracking-[0.22em] text-accent">
+        <figcaption className="mt-6 font-mono text-xs uppercase tracking-[0.22em] text-accent-light">
           — How I work
         </figcaption>
       </figure>
@@ -378,11 +385,11 @@ function Portrait({
         src={imgSrc}
       />
       <figcaption>
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
           {tag}
         </p>
-        <h3 className="mt-2 text-lg font-semibold text-text-light">{title}</h3>
-        <p className="mt-1 text-sm text-text-light-muted">{caption}</p>
+        <h3 className="mt-2 text-lg font-semibold text-text-dark">{title}</h3>
+        <p className="mt-1 text-sm text-text-dark-muted">{caption}</p>
       </figcaption>
     </figure>
   );

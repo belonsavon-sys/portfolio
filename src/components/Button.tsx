@@ -1,9 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from "framer-motion";
+import { useCallback, useRef } from "react";
 import type {
   HTMLAttributeAnchorTarget,
+  MouseEvent as ReactMouseEvent,
   MouseEventHandler,
   ReactNode,
 } from "react";
@@ -78,6 +85,45 @@ function sharedProps(props: SharedElementProps) {
   };
 }
 
+function useMagneticProps(active: boolean) {
+  const nodeRef = useRef<HTMLElement | null>(null);
+  const rectRef = useRef<DOMRect | null>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { damping: 18, mass: 0.4, stiffness: 220 });
+  const springY = useSpring(y, { damping: 18, mass: 0.4, stiffness: 220 });
+  const reduce = useReducedMotion();
+
+  const setNode = useCallback((node: HTMLElement | null) => {
+    nodeRef.current = node;
+  }, []);
+
+  if (!active || reduce) {
+    return {};
+  }
+
+  return {
+    onMouseEnter: () => {
+      const node = nodeRef.current;
+      if (node) rectRef.current = node.getBoundingClientRect();
+    },
+    onMouseLeave: () => {
+      x.set(0);
+      y.set(0);
+    },
+    onMouseMove: (event: ReactMouseEvent) => {
+      const rect = rectRef.current;
+      if (!rect) return;
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      x.set((event.clientX - cx) * 0.22);
+      y.set((event.clientY - cy) * 0.4);
+    },
+    ref: setNode,
+    style: { x: springX, y: springY },
+  };
+}
+
 export function Button(props: ButtonProps) {
   const {
     children,
@@ -85,6 +131,8 @@ export function Button(props: ButtonProps) {
     variant = "primary",
     ...rest
   } = props;
+
+  const magneticProps = useMagneticProps(variant === "primary");
 
   const classes = cx(
     "inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-semibold transition-[filter,background,border-color,color] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-60",
@@ -112,7 +160,11 @@ export function Button(props: ButtonProps) {
           target={target}
           {...sharedProps(rest)}
         >
-          <motion.span className={classes} {...motionProps}>
+          <motion.span
+            className={classes}
+            {...magneticProps}
+            {...motionProps}
+          >
             {children}
           </motion.span>
         </Link>
@@ -128,6 +180,7 @@ export function Button(props: ButtonProps) {
         rel={safeRel}
         target={target}
         {...sharedProps(rest)}
+        {...magneticProps}
         {...motionProps}
       >
         {children}
@@ -145,6 +198,7 @@ export function Button(props: ButtonProps) {
       onClick={onClick}
       type={type}
       {...sharedProps(buttonProps)}
+      {...magneticProps}
       {...motionProps}
     >
       {children}

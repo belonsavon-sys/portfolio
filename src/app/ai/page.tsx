@@ -158,7 +158,10 @@ function AiHero() {
         </ScrollReveal>
         <ScrollReveal delay={0.05} direction="up">
           <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7rem]">
-            I build AI that ships.
+            I build AI that{" "}
+            <span className="bg-gradient-to-r from-accent-deep via-accent to-accent-light bg-clip-text text-transparent">
+              ships.
+            </span>
           </h1>
         </ScrollReveal>
         <ScrollReveal delay={0.1} direction="up">

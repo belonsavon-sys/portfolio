@@ -90,7 +90,9 @@ export default function ContactPage() {
           >
             Ready when
             <br />
-            you are.
+            <span className="bg-gradient-to-r from-text-dark via-accent-light to-accent-light bg-clip-text text-transparent">
+              you are.
+            </span>
           </motion.h1>
 
           <motion.div
