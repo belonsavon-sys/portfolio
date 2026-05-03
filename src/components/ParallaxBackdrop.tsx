@@ -20,7 +20,7 @@ export function ParallaxBackdrop({
     offset: ["start end", "end start"],
     target: ref,
   });
-  const range = reduce ? 0 : 140 * speed;
+  const range = reduce ? 0 : 320 * speed;
   const y = useTransform(scrollYProgress, [0, 1], [-range, range]);
 
   return (
