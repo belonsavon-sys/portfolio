@@ -148,7 +148,7 @@ function Hero() {
         <motion.div
           aria-hidden="true"
           animate={{ scaleX: 1 }}
-          className="mt-8 h-[3px] w-24 origin-center rounded-full bg-accent"
+          className="mt-8 h-[3px] w-32 origin-center rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
           initial={reduce ? { scaleX: 1 } : { scaleX: 0 }}
           transition={{ delay: 0.55, duration: 0.55, ease: "easeOut" }}
         />
