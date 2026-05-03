@@ -111,7 +111,25 @@ function Hero() {
       </div>
 
       <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
-        <motion.div {...fadeUp(0)}>
+        <motion.div
+          className="relative mb-8 h-28 w-28 sm:h-36 sm:w-36"
+          {...fadeUp(0)}
+        >
+          <div
+            aria-hidden="true"
+            className="absolute -inset-3 rounded-full bg-accent/15 blur-xl"
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            alt="Pierre Belon Savon"
+            className="relative h-full w-full rounded-full object-cover object-[50%_20%] shadow-lg ring-2 ring-accent/40"
+            fetchPriority="high"
+            loading="eager"
+            src="/avatar-photo.png"
+          />
+        </motion.div>
+
+        <motion.div {...fadeUp(0.06)}>
           <LiveStatusBadge label="Currently shipping · Atlas v3" />
         </motion.div>
 
