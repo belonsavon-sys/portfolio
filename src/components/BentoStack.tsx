@@ -88,14 +88,23 @@ export function BentoStack() {
     <div className="grid auto-rows-fr gap-4 md:grid-cols-2 xl:grid-cols-3">
       {categories.map((category, index) => (
         <motion.article
-          animate={reduce ? { opacity: 1 } : undefined}
-          className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 ${
+          animate={{ opacity: 1, y: 0 }}
+          className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border p-6 transition-[border-color,box-shadow,transform] duration-200 ${
             category.accent
-              ? "border-accent/40 bg-gradient-to-br from-white via-white to-[rgba(41,110,214,0.08)]"
-              : "border-border-light"
+              ? "border-accent/40"
+              : "border-[rgba(41,110,214,0.18)]"
           }`}
-          initial={reduce ? { opacity: 1 } : { opacity: 0, y: 20 }}
+          initial={reduce ? false : { opacity: 0, y: 20 }}
           key={category.title}
+          style={{
+            background: category.accent
+              ? "linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.7) 60%, rgba(41,110,214,0.14) 100%)"
+              : "rgba(255, 255, 255, 0.62)",
+            backdropFilter: "blur(14px) saturate(140%)",
+            WebkitBackdropFilter: "blur(14px) saturate(140%)",
+            boxShadow:
+              "0 1px 0 0 rgba(255,255,255,0.85) inset, 0 12px 32px -16px rgba(15,23,42,0.18)",
+          }}
           transition={{ delay: index * 0.04, duration: 0.5, ease: easeOut }}
           viewport={{ amount: 0.2, once: true }}
           whileHover={{ y: -3 }}

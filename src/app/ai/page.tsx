@@ -201,8 +201,8 @@ function ServicesSection() {
             direction="up"
             key={service.name}
           >
-            <article className="group h-full rounded-2xl border border-border-light bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-accent/50 hover:shadow-md">
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            <LightGlassCard className="group h-full p-6">
+              <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
                 {service.icon}
               </p>
               <h3 className="mt-4 text-xl font-semibold text-text-light">
@@ -211,7 +211,7 @@ function ServicesSection() {
               <p className="mt-3 text-sm leading-6 text-text-light-muted">
                 {service.description}
               </p>
-            </article>
+            </LightGlassCard>
           </ScrollReveal>
         ))}
       </div>
