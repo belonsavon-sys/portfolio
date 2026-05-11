@@ -308,9 +308,9 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           className="mt-6 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9"
           {...fadeUp(0.22)}
         >
-          Multi-agent harnesses, full-stack systems, and automation pipelines —
-          engineered from inside live operations, designed to ship, measured by
-          what they change.
+          The hotel I was hired to supervise now runs on AI systems I built.
+          At Blackdoor, I co-architect Atlas — a multi-level agent harness
+          shipping real products end-to-end.
         </motion.p>
 
         <motion.div
