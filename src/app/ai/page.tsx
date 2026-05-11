@@ -19,25 +19,25 @@ import type { ReactNode } from "react";
 const services = [
   {
     description:
-      "Turn your manual workflows into automated systems. API integrations, Zapier flows, and custom pipelines that run without you.",
+      "Manual workflows automated through Zapier, n8n, and custom APIs. Built with you in the review loop, not around you.",
     icon: "01",
     name: "Process Automation",
   },
   {
     description:
-      "AI-powered communication tools trained on your data, tuned to your brand voice, and connected to your existing tools — with every action reviewed before it executes.",
+      "Chatbots trained on your data, tuned to your voice, drafting inside your existing tools. Every reply stays human-reviewed before send.",
     icon: "02",
-    name: "Custom Chatbot Development",
+    name: "Custom Chatbots",
   },
   {
     description:
-      "End-to-end applications built to solve a specific business problem. From idea to deployed product, built with the right stack for the outcome.",
+      "Next.js + Supabase web apps, Flutter / Kotlin mobile builds. Idea to deployed product, end-to-end.",
     icon: "03",
-    name: "Full-Stack Web & Mobile Apps",
+    name: "Full-Stack Web & Mobile",
   },
   {
     description:
-      "Multi-level autonomous agent systems that route work, spin up sub-agents, and take action — modeled on the same architecture powering Blackdoor.",
+      "Multi-level autonomous agent systems modeled on Atlas — the harness I co-architect at Blackdoor.",
     icon: "04",
     name: "Agent Harness Design",
   },
@@ -45,7 +45,7 @@ const services = [
     description:
       "If you have a problem and need AI to solve it, I'll figure out how.",
     icon: "05",
-    name: "Anything a Business Pays For",
+    name: "Whatever the brief calls for",
   },
 ];
 
