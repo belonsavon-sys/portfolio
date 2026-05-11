@@ -1,4 +1,5 @@
 import {
+  AtlasHierarchy,
   BeforeAfter,
   Button,
   CursorHalo,
@@ -200,53 +201,7 @@ function BlackdoorSection() {
       </div>
 
       <div>
-        <div className="flex items-center gap-3">
-          <span
-            aria-hidden="true"
-            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-accent/30 bg-[rgba(41,110,214,0.10)]"
-          >
-            <span className="h-2 w-2 rounded-sm bg-accent" />
-          </span>
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-            Atlas · the engine
-          </p>
-          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-        </div>
-        <ul className="relative mt-5 grid gap-3">
-          {/* Subtle vertical thread connecting the hierarchy levels */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute left-8 top-4 bottom-4 w-px bg-gradient-to-b from-accent/60 via-accent/25 to-transparent"
-          />
-          {atlasLayers.map((layer, index) => (
-            <ScrollReveal
-              delay={index * 0.06}
-              direction="left"
-              key={layer.title}
-            >
-              <li className="group relative rounded-xl border border-border-light bg-bg-light-2 p-5 transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-[0_8px_24px_-12px_rgba(41,110,214,0.25)]">
-                <div className="flex items-baseline gap-3">
-                  <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-full border border-accent/40 bg-bg-light font-mono text-[10px] font-semibold tracking-tight text-accent">
-                    {layer.badge}
-                  </span>
-                  <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted transition-colors duration-200 group-hover:text-text-light">
-                    {layer.title}
-                  </span>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {layer.items.map((item) => (
-                    <span
-                      className="inline-flex items-center rounded-md border border-accent/30 bg-[rgba(41,110,214,0.08)] px-2.5 py-1 text-sm font-medium text-text-light"
-                      key={item}
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </li>
-            </ScrollReveal>
-          ))}
-        </ul>
+        <AtlasHierarchy layers={atlasLayers} />
 
         <div className="mt-10 grid gap-6 text-base leading-7 text-text-light-muted lg:grid-cols-2">
           <p>

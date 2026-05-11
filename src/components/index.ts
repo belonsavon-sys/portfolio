@@ -4,6 +4,8 @@ export { AboutModal } from "./AboutModal";
 export type { AboutModalProps } from "./AboutModal";
 export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps } from "./AnimatedCounter";
+export { AtlasHierarchy } from "./AtlasHierarchy";
+export type { AtlasHierarchyLayer, AtlasHierarchyProps } from "./AtlasHierarchy";
 export { BackToTop } from "./BackToTop";
 export { ConsoleSignature } from "./ConsoleSignature";
 export { AtlasDemo } from "./AtlasDemo";
