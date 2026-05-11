@@ -17,6 +17,7 @@ import {
   SectionHeader,
   SelectedWork,
   SiteFooter,
+  SplitText,
   TrustStrip,
 } from "@/components";
 import type { ReactNode } from "react";
@@ -239,7 +240,9 @@ function Hero() {
             <GreetingRotator />
           </span>
           <span className="hero-display gradient-shift font-semibold">
-            Pierre Belon Savon
+            <SplitText charDelay={0.035} delay={0.15} duration={0.85}>
+              Pierre Belon Savon
+            </SplitText>
           </span>
         </motion.h1>
 
