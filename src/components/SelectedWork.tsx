@@ -7,6 +7,10 @@ type Work = {
   index: string;
   metric: string;
   metricLabel: string;
+  /** Where / when the metric was measured. Renders as a small mono
+   *  attribution line beneath the metric label so the number reads
+   *  as a verifiable claim, not a marketing figure. */
+  source: string;
   status: "shipped" | "live" | "internal";
   tag: string;
   tech: string[];
@@ -20,6 +24,7 @@ const works: Work[] = [
     index: "01",
     metric: "<3 min",
     metricLabel: "reply time",
+    source: "ThePrivateHotels · live since 2024",
     status: "live",
     tag: "Hospitality AI",
     tech: ["Claude", "Smarttask", "Custom data"],
@@ -31,6 +36,7 @@ const works: Work[] = [
     index: "02",
     metric: "Top 10%",
     metricLabel: "Airbnb rating",
+    source: "ThePrivateHotels · Guest Favorites + Travelers' Choice",
     status: "shipped",
     tag: "Ops · QA",
     tech: ["Process design", "QA tooling", "Inspections"],
@@ -42,6 +48,7 @@ const works: Work[] = [
     index: "03",
     metric: "3 products",
     metricLabel: "shipping",
+    source: "Blackdoor · co-founded 2025",
     status: "live",
     tag: "Multi-agent harness",
     tech: ["MCP", "Claude", "Codex", "GitHub"],
@@ -53,6 +60,7 @@ const works: Work[] = [
     index: "04",
     metric: "−hours",
     metricLabel: "of coordination",
+    source: "ThePrivateHotels · ops automation, 2024",
     status: "shipped",
     tag: "Workflow Automation",
     tech: ["Zapier", "Guesty API", "Twilio API"],
@@ -128,7 +136,9 @@ export function SelectedWork() {
               </span>
             </div>
 
-            {/* METRIC — editorial display, accent color, the visual anchor. */}
+            {/* METRIC — editorial display, accent color, the visual anchor.
+                Attribution line below grounds the number in a place + time
+                so it reads as a verifiable claim. */}
             <div className="relative">
               <p
                 className="select-none font-bold leading-[0.95] tracking-tight text-accent"
@@ -141,6 +151,9 @@ export function SelectedWork() {
               </p>
               <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.24em] text-text-light-muted">
                 {work.metricLabel}
+              </p>
+              <p className="mt-1.5 font-mono text-[10px] tracking-[0.04em] text-text-light/55">
+                <span className="text-accent/70">↳</span> {work.source}
               </p>
             </div>
 
