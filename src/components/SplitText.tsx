@@ -80,11 +80,16 @@ export function SplitText({
       >
         {words.map((token, tokenIndex) => {
           if (token.kind === "space") {
-            // Preserve a real space character (browser may break here).
+            // Explicit-width spacer (0.28em). A bare " " collapses under
+            // tight letter-spacing on display titles (hero-display uses
+            // letter-spacing: -0.06em which shrinks the space). Fixed
+            // width survives the parent's letter-spacing/font axes.
             return (
               <span
                 aria-hidden="true"
+                className="inline-block"
                 key={`${id}-sp-${tokenIndex}`}
+                style={{ width: "0.28em" }}
               >
                 {" "}
               </span>
