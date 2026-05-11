@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 
 type Work = {
   context: string;
-  gradient: string;
+  index: string;
   metric: string;
   metricLabel: string;
   status: "shipped" | "live" | "internal";
@@ -17,7 +17,7 @@ const works: Work[] = [
   {
     context:
       "AI chatbot trained on company data — drafts guest replies in Smarttask, human-reviewed before send.",
-    gradient: "linear-gradient(135deg, #1A4E9C 0%, #296ED6 50%, #5B9BF4 100%)",
+    index: "01",
     metric: "<3 min",
     metricLabel: "reply time",
     status: "live",
@@ -28,7 +28,7 @@ const works: Work[] = [
   {
     context:
       "100+ page operations manual digitized room-by-room into a trackable QA inspection system.",
-    gradient: "linear-gradient(135deg, #0F172A 0%, #1A4E9C 60%, #296ED6 100%)",
+    index: "02",
     metric: "Top 10%",
     metricLabel: "Airbnb rating",
     status: "shipped",
@@ -39,7 +39,7 @@ const works: Work[] = [
   {
     context:
       "Multi-level autonomous agent harness shipping real games, apps, and operating systems end-to-end.",
-    gradient: "linear-gradient(135deg, #1A4E9C 0%, #5B9BF4 100%)",
+    index: "03",
     metric: "3 products",
     metricLabel: "shipping",
     status: "live",
@@ -50,7 +50,7 @@ const works: Work[] = [
   {
     context:
       "Zapier + Guesty API + Twilio orchestration replacing multi-hour manual coordination loops.",
-    gradient: "linear-gradient(135deg, #111827 0%, #296ED6 50%, #5B9BF4 100%)",
+    index: "04",
     metric: "−hours",
     metricLabel: "of coordination",
     status: "shipped",
@@ -64,25 +64,19 @@ const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const statusMeta: Record<
   Work["status"],
-  { bg: string; border: string; dot: string; label: string; text: string }
+  { dot: string; label: string; text: string }
 > = {
   live: {
-    bg: "bg-[rgba(16,185,129,0.10)]",
-    border: "border-result-green/40",
     dot: "bg-result-green",
     label: "Live",
     text: "text-result-green",
   },
   shipped: {
-    bg: "bg-[rgba(41,110,214,0.10)]",
-    border: "border-accent/40",
     dot: "bg-accent",
     label: "Shipped",
     text: "text-accent",
   },
   internal: {
-    bg: "bg-[rgba(255,255,255,0.04)]",
-    border: "border-border-light",
     dot: "bg-text-light-muted",
     label: "Internal",
     text: "text-text-light-muted",
@@ -98,7 +92,7 @@ export function SelectedWork() {
         const meta = statusMeta[work.status];
         return (
           <motion.article
-            className="group relative flex flex-col overflow-hidden rounded-3xl border border-border-light bg-white/70 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/45 hover:shadow-[0_24px_48px_-20px_rgba(41,110,214,0.25)]"
+            className="group relative flex flex-col gap-6 overflow-hidden rounded-3xl border border-border-light bg-white/75 p-7 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_28px_56px_-22px_rgba(41,110,214,0.22)] sm:p-8"
             initial={reduce ? false : { opacity: 0, y: 18 }}
             key={work.title}
             transition={{
@@ -109,103 +103,76 @@ export function SelectedWork() {
             viewport={{ amount: 0.25, once: true }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
           >
-            {/* GRADIENT THUMB */}
-            <div className="relative aspect-[16/9] w-full overflow-hidden">
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 transition-transform duration-[700ms] ease-out group-hover:scale-[1.06]"
-                style={{ background: work.gradient }}
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 opacity-30 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-60"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), transparent 60%)",
-                }}
-              />
-              {/* CURTAIN — solid accent block that wipes off the thumb on
-                  scroll-in, anchored to the right so the LEFT edge sweeps
-                  rightward as scaleX collapses 1→0. The bright stripe on the
-                  curtain's left edge becomes the visible wipe-front. */}
-              <motion.div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 z-20 origin-right"
-                initial={reduce ? { scaleX: 0 } : { scaleX: 1 }}
-                style={{
-                  background:
-                    "linear-gradient(95deg, var(--accent-light) 0%, var(--accent) 8%, var(--accent-deep) 100%)",
-                  boxShadow:
-                    "inset 2px 0 0 0 var(--accent-light), 0 0 24px 2px rgba(91,155,244,0.35)",
-                }}
-                transition={{
-                  delay: index * 0.12 + 0.05,
-                  duration: 0.95,
-                  ease: easeOut,
-                }}
-                viewport={{ amount: 0.35, once: true }}
-                whileInView={{ scaleX: 0 }}
-              />
-              {/* Sheen */}
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
-              />
-              {/* Big metric on the thumb */}
-              <div className="absolute inset-0 flex flex-col justify-end p-5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-white/80">
-                  {work.metricLabel}
-                </p>
-                <p
-                  className="mt-1 select-none font-bold leading-none tracking-tight text-white"
-                  style={{ fontSize: "clamp(2rem, 5vw, 3.25rem)" }}
-                >
-                  {work.metric}
-                </p>
-              </div>
-              {/* Top-right status pill */}
-              <div className="absolute right-3 top-3 z-10">
+            {/* TOP META — index, tag, status — all in one row */}
+            <div className="relative flex items-center gap-3">
+              <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+                {work.index}
+              </span>
+              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                {work.tag}
+              </span>
+              <span
+                className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] ${meta.text}`}
+              >
                 <span
-                  className={`inline-flex items-center gap-1.5 rounded-full border ${meta.border} ${meta.bg} px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.22em] backdrop-blur-md ${meta.text}`}
+                  className={`relative inline-flex h-1.5 w-1.5 rounded-full ${meta.dot}`}
                 >
-                  <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
-                  {meta.label}
+                  {work.status === "live" ? (
+                    <span
+                      className={`absolute inset-0 animate-ping rounded-full ${meta.dot} opacity-60`}
+                    />
+                  ) : null}
                 </span>
-              </div>
-              {/* Top-left tag */}
-              <div className="absolute left-3 top-3 z-10">
-                <span className="inline-flex items-center rounded-full border border-white/20 bg-black/40 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-white backdrop-blur-md">
-                  {work.tag}
-                </span>
-              </div>
+                {meta.label}
+              </span>
             </div>
 
-            {/* BODY */}
-            <div className="flex flex-1 flex-col gap-3 p-6">
-              <h3 className="flex items-center gap-2 text-xl font-semibold tracking-tight text-text-light sm:text-2xl">
+            {/* METRIC — editorial display, accent color, the visual anchor */}
+            <div className="relative">
+              <p
+                className="select-none font-bold leading-[0.95] tracking-tight text-accent"
+                style={{
+                  fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                  letterSpacing: "-0.04em",
+                }}
+              >
+                {work.metric}
+              </p>
+              <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.24em] text-text-light-muted">
+                {work.metricLabel}
+              </p>
+            </div>
+
+            {/* TITLE — moved below the metric, smaller than the metric so the
+                metric does the heavy visual lifting. Title is reading-rank. */}
+            <div className="relative">
+              <h3 className="flex items-baseline gap-2 text-2xl font-semibold tracking-tight text-text-light sm:text-3xl">
                 <span className="transition-colors duration-200 group-hover:text-accent-deep">
                   {work.title}
                 </span>
                 <span
                   aria-hidden="true"
-                  className="inline-block translate-x-0 opacity-0 transition-[transform,opacity] duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100"
+                  className="inline-block translate-x-0 text-base text-accent opacity-0 transition-[transform,opacity] duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100"
                 >
-                  →
+                  ↗
                 </span>
               </h3>
-              <p className="text-sm leading-6 text-text-light-muted">
+              <p className="mt-3 text-sm leading-6 text-text-light-muted">
                 {work.context}
               </p>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {work.tech.map((t) => (
-                  <span
-                    className="inline-flex items-center rounded-md border border-accent/25 bg-[rgba(41,110,214,0.06)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-accent"
-                    key={t}
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
+            </div>
+
+            {/* TECH FOOTER */}
+            <div className="relative mt-auto flex flex-wrap items-center gap-1.5">
+              {work.tech.map((t) => (
+                <span
+                  className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted transition-colors duration-200 group-hover:border-accent/30 group-hover:text-text-light"
+                  key={t}
+                >
+                  {t}
+                </span>
+              ))}
             </div>
           </motion.article>
         );
