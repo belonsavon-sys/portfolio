@@ -215,7 +215,7 @@ export default function ResumePage() {
 
           <aside className="rounded-3xl border border-border-light bg-bg-light-2 p-6 lg:sticky lg:top-24">
             <Button
-              className="!bg-accent !text-white w-full !py-4 text-base"
+              className="w-full !py-4 !text-base"
               download
               href="/pierre-belon-savon-resume.pdf"
             >
@@ -299,7 +299,7 @@ function ResumeHero() {
           </SplitText>
         </h1>
         <p className="mt-4 font-mono text-sm uppercase tracking-[0.28em] text-text-light-muted">
-          AI Engineer · Ocean Shores, WA
+          AI Engineer
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-2">
@@ -318,7 +318,7 @@ function ResumeHero() {
 
         <div className="mt-10">
           <Button
-            className="!bg-accent !text-white"
+            className="!px-8 !py-4 !text-base"
             download
             href="/pierre-belon-savon-resume.pdf"
           >
