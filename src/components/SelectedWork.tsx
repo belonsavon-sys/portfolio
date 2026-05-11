@@ -106,7 +106,7 @@ export function SelectedWork() {
   const metricScaleY = useTransform(smoothVelocity, [-3000, 0, 3000], [0.93, 1, 0.93]);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:gap-5">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 lg:gap-5">
       {works.map((work, index) => {
         const meta = statusMeta[work.status];
         return (
