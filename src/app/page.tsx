@@ -9,9 +9,13 @@ import {
   GreetingRotator,
   LightGlassCard,
   LiveStatusBadge,
+  MarqueeBand,
   ParallaxBackdrop,
   PhotoSlot,
   ScrollReveal,
+  SectionDivider,
+  SectionHeader,
+  SelectedWork,
   SiteFooter,
   TrustStrip,
 } from "@/components";
@@ -24,7 +28,7 @@ const aboutParagraphs = [
   "Trilingual. Hyperfocused. Built to ship.",
 ];
 
-const easeOut = [0.21, 0.47, 0.32, 0.98] as [number, number, number, number];
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const heroMetrics = [
   {
@@ -64,15 +68,40 @@ export default function Home() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <Hero />
 
-      <LightSection className="py-20 sm:py-24">
+      <LightSection className="pt-14 sm:pt-20">
+        <NowBanner />
+      </LightSection>
+
+      <LightSection className="py-16 sm:py-20">
         <MetricsBand />
       </LightSection>
 
-      <LightSection className="pb-12">
+      <LightSection className="pb-12 pt-4 sm:pt-8" id="work">
+        <SectionHeader
+          align="center"
+          description="Real systems in production. Pick a thread, follow it."
+          eyebrow="Selected work"
+          title="Built. Shipping. Compounding."
+        />
+        <div className="mt-12">
+          <SelectedWork />
+        </div>
+      </LightSection>
+
+      <LightSection className="pb-12 pt-12 sm:pt-16">
         <TrustStrip />
       </LightSection>
 
-      <LightSection className="pb-16 pt-12 sm:pb-20 sm:pt-16">
+      <MarqueeBand
+        items={[
+          "Ship intelligent automation",
+          "Build full-stack systems",
+          "Architect multi-agent harnesses",
+          "Trilingual · Hyperfocused · Built to ship",
+        ]}
+      />
+
+      <LightSection className="pb-16 pt-16 sm:pb-20 sm:pt-24">
         <About />
       </LightSection>
 
@@ -82,8 +111,79 @@ export default function Home() {
         <Stack />
       </LightSection>
 
+      <SectionDivider direction="light-to-dark" />
+
       <SiteFooter />
     </main>
+  );
+}
+
+function FloatingHeroLabels() {
+  const reduce = useReducedMotion();
+  const labels = [
+    {
+      className:
+        "left-[6%] top-[18%] -rotate-2 sm:left-[8%] sm:top-[22%] lg:left-[10%] lg:top-[26%]",
+      delay: 0.6,
+      direction: -1,
+      text: "AI Engineer",
+    },
+    {
+      className:
+        "right-[5%] top-[14%] rotate-3 sm:right-[8%] sm:top-[18%] lg:right-[9%] lg:top-[24%]",
+      delay: 0.85,
+      direction: 1,
+      text: "Atlas · Multi-agent harness",
+    },
+    {
+      className:
+        "left-[4%] bottom-[16%] -rotate-3 sm:left-[7%] sm:bottom-[20%] lg:left-[8%] lg:bottom-[28%]",
+      delay: 1.0,
+      direction: -1,
+      text: "Trilingual · EN · ES · IT",
+    },
+    {
+      className:
+        "right-[5%] bottom-[14%] rotate-2 sm:right-[8%] sm:bottom-[18%] lg:right-[8%] lg:bottom-[24%]",
+      delay: 1.15,
+      direction: 1,
+      text: "Co-founder · Blackdoor",
+    },
+  ];
+
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 z-[1] hidden md:block"
+    >
+      {labels.map((label) => (
+        <motion.span
+          animate={
+            reduce
+              ? { opacity: 0.85, y: 0 }
+              : {
+                  opacity: [0, 0.85],
+                  y: [12, 0],
+                }
+          }
+          className={`absolute inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/65 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent backdrop-blur-md ${label.className}`}
+          initial={false}
+          key={label.text}
+          style={{
+            boxShadow:
+              "0 8px 24px -10px rgba(41,110,214,0.25), 0 1px 0 0 rgba(255,255,255,0.9) inset",
+          }}
+          transition={{
+            delay: label.delay,
+            duration: 0.7,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          <span className="h-1 w-1 rounded-full bg-accent" />
+          {label.text}
+        </motion.span>
+      ))}
+    </div>
   );
 }
 
@@ -104,24 +204,23 @@ function Hero() {
       <CursorHalo />
 
       <ParallaxBackdrop>
-        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
-        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
-        <div className="absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/22 blur-3xl" />
+        <div className="orb-drift-a absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
+        <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
+        <div className="orb-drift-c absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/22 blur-3xl" />
       </ParallaxBackdrop>
 
-      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
+      {/* Floating accent labels — desktop-only decoration */}
+      <FloatingHeroLabels />
+
+      <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
         <motion.div
-          className="relative mb-8 h-28 w-28 sm:h-36 sm:w-36"
+          className="avatar-float avatar-ring relative mb-8 h-32 w-32 sm:h-40 sm:w-40 lg:h-44 lg:w-44"
           {...fadeUp(0)}
         >
-          <div
-            aria-hidden="true"
-            className="absolute -inset-3 rounded-full bg-accent/15 blur-xl"
-          />
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt="Pierre Belon Savon"
-            className="relative h-full w-full rounded-full object-cover object-[50%_20%] shadow-lg ring-2 ring-accent/40"
+            className="relative h-full w-full rounded-full object-cover object-[50%_20%] shadow-lg ring-2 ring-accent/40 transition-transform duration-300 ease-out hover:scale-[1.04]"
             fetchPriority="high"
             loading="eager"
             src="/avatar-photo.png"
@@ -139,7 +238,7 @@ function Hero() {
           <span className="font-mono text-2xl font-medium tracking-tight text-text-light/70 sm:text-3xl lg:text-4xl">
             <GreetingRotator />
           </span>
-          <span className="text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7.5rem]">
+          <span className="hero-display gradient-shift font-semibold">
             Pierre Belon Savon
           </span>
         </motion.h1>
@@ -163,17 +262,24 @@ function Hero() {
           className="mt-6 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9"
           {...fadeUp(0.22)}
         >
-          Engineering intelligent automation and full-stack applications that
-          turn complex business processes into scalable, profitable systems.
+          Multi-agent harnesses, full-stack systems, and automation pipelines —
+          engineered from inside live operations, designed to ship, measured by
+          what they change.
         </motion.p>
 
         <motion.div
-          className="mt-10 flex flex-wrap items-center justify-center gap-4"
+          className="mt-12 flex flex-wrap items-center justify-center gap-4"
           {...fadeUp(0.32)}
         >
-          <Button href="/contact">Contact Me →</Button>
-          <Button href="/ai" variant="ghost">
-            See What I Build
+          <Button className="!px-8 !py-4 !text-base" href="/contact">
+            Get in Touch →
+          </Button>
+          <Button
+            className="!px-8 !py-4 !text-base"
+            href="/ai"
+            variant="ghost"
+          >
+            See the Work
           </Button>
         </motion.div>
 
@@ -183,22 +289,61 @@ function Hero() {
         >
           {heroMetrics.map((m, index) => (
             <LightGlassCard
-              className="px-5 py-5 text-left"
+              className="group relative px-5 py-5 text-left"
               hoverable={false}
               key={m.label}
             >
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-                {m.label}
-              </p>
+              <div className="flex items-start justify-between gap-3">
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                  {m.label}
+                </p>
+                {/* Sparkline-style activity bars */}
+                <div className="flex items-end gap-[3px]" aria-hidden="true">
+                  {[3, 5, 4, 6, 5, 7, 8].map((h, i) => (
+                    <motion.span
+                      animate={
+                        reduce
+                          ? { scaleY: 1 }
+                          : {
+                              scaleY: [1, h / 4, 1],
+                            }
+                      }
+                      className="block w-[3px] rounded-sm bg-accent/45"
+                      key={i}
+                      style={{ height: `${h * 2}px`, originY: 1 }}
+                      transition={
+                        reduce
+                          ? undefined
+                          : {
+                              delay: i * 0.12 + index * 0.05,
+                              duration: 2.2,
+                              ease: "easeInOut",
+                              repeat: Infinity,
+                              repeatType: "reverse",
+                            }
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
               <p className="mt-3 text-2xl font-semibold tracking-tight text-text-light sm:text-3xl">
                 {m.valuePrefix ? (
-                  <span className="text-text-light/40 text-base sm:text-lg font-mono">{m.valuePrefix}</span>
+                  <span className="text-text-light/40 text-base sm:text-lg font-mono">
+                    {m.valuePrefix}
+                  </span>
                 ) : null}
                 <AnimatedCounter
                   delay={index * 0.1}
                   suffix={m.suffix}
                   to={m.to}
                 />
+                {/* Trend arrow */}
+                <span
+                  aria-hidden="true"
+                  className="ml-2 inline-block align-baseline font-mono text-sm text-result-green"
+                >
+                  ↗
+                </span>
               </p>
               <p className="mt-2 text-xs leading-5 text-text-light-muted">
                 {m.context}
@@ -208,56 +353,131 @@ function Hero() {
         </motion.div>
 
         <motion.div
-          className="mt-16 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 font-mono text-sm uppercase tracking-[0.18em] text-text-light-muted"
+          className="mt-16 flex flex-wrap items-center justify-center gap-2.5"
           {...fadeUp(0.55)}
         >
-          <span className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            AI Engineer
-          </span>
-          <span className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            Full-Stack Builder
-          </span>
-          <span className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-            Systems Architect
-          </span>
+          {[
+            "AI Engineer",
+            "Full-Stack Builder",
+            "Systems Architect",
+          ].map((role) => (
+            <span
+              className="group inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/65 px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.22em] text-text-light backdrop-blur-md transition-[border-color,background] duration-200 hover:border-accent hover:bg-white/85"
+              key={role}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+              {role}
+            </span>
+          ))}
         </motion.div>
+
+        <motion.a
+          aria-label="Scroll to live status"
+          className="group/cue mt-20 hidden flex-col items-center gap-3 sm:flex"
+          href="#work"
+          {...fadeUp(0.7)}
+        >
+          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-text-light-muted/60 transition-colors duration-200 group-hover/cue:text-accent">
+            Scroll
+          </span>
+          <span className="relative h-10 w-px overflow-hidden bg-gradient-to-b from-transparent via-border-light to-transparent transition-colors duration-200 group-hover/cue:via-accent">
+            <span className="scroll-cue-dot absolute left-1/2 top-0 h-2 w-px -translate-x-1/2 bg-accent" />
+          </span>
+        </motion.a>
       </div>
     </section>
   );
 }
 
+function NowBanner() {
+  const items = [
+    { label: "Shipping", value: "Atlas v3 multi-agent harness" },
+    { label: "Operating", value: "ThePrivateHotels AI ops stack" },
+    { label: "Available", value: "Remote roles · freelance projects" },
+  ];
+
+  return (
+    <div className="mx-auto max-w-5xl">
+      <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-white/75 p-6 backdrop-blur-md sm:p-8">
+        {/* Ambient corner glow */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-accent/15 blur-3xl"
+        />
+        <div className="relative flex flex-wrap items-center gap-3">
+          <span className="relative inline-flex h-2 w-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+            <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+          </span>
+          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-result-green">
+            Now · live status
+          </p>
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+          <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-light-muted">
+            Updated continuously
+          </p>
+        </div>
+        <ul className="relative mt-5 grid gap-x-8 gap-y-4 sm:grid-cols-3">
+          {items.map((item, index) => (
+            <ScrollReveal
+              delay={index * 0.05}
+              direction="up"
+              key={item.label}
+            >
+              <li className="border-l-2 border-accent/40 pl-4">
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  {item.label}
+                </p>
+                <p className="mt-1.5 text-base font-semibold text-text-light sm:text-lg">
+                  {item.value}
+                </p>
+              </li>
+            </ScrollReveal>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 function MetricsBand() {
   return (
-    <div className="grid gap-10 lg:grid-cols-[360px_minmax(0,1fr)]">
-      <div>
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-          Outcomes
-        </p>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-          Shipped to production. Measured by what changed.
-        </h2>
-        <p className="mt-5 max-w-md text-lg leading-8 text-text-light-muted">
-          Faster responses, clearer operations, systems people actually use
-          every day.
-        </p>
-      </div>
+    <div className="relative grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
+      {/* Ambient corner glow on the left side */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 -top-24 -z-10 h-72 w-72 rounded-full bg-accent/15 blur-3xl"
+      />
+      <SectionHeader
+        description="Faster responses, clearer operations, systems people actually use every day."
+        eyebrow="Outcomes"
+        size="md"
+        title="Shipped to production. Measured by what changed."
+      />
 
-      <div className="grid gap-x-10 gap-y-7 sm:grid-cols-2">
-        {detailedMetrics.map((metric) => (
-          <div
-            className="border-l border-border-light pl-5"
-            key={metric.label}
-          >
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-accent">
-              {metric.label}
-            </p>
-            <p className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-              <AnimatedCounter suffix={metric.suffix} to={metric.to} />
-            </p>
-          </div>
+      <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        {detailedMetrics.map((metric, index) => (
+          <ScrollReveal delay={index * 0.05} direction="up" key={metric.label}>
+            <div className="group relative border-l-2 border-border-light pl-5 transition-[border-color] duration-300 hover:border-accent">
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                {metric.label}
+              </p>
+              <p
+                className="mt-3 font-bold tracking-tight text-text-light"
+                style={{
+                  fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1,
+                }}
+              >
+                <AnimatedCounter suffix={metric.suffix} to={metric.to} />
+              </p>
+              <span
+                aria-hidden="true"
+                className="mt-4 block h-px w-12 origin-left bg-accent/40 transition-transform duration-500 group-hover:scale-x-[2]"
+              />
+            </div>
+          </ScrollReveal>
         ))}
       </div>
     </div>
@@ -266,22 +486,23 @@ function MetricsBand() {
 
 function About() {
   return (
-    <section className="mx-auto max-w-4xl text-center" id="about">
-      <ScrollReveal direction="up">
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
-          About me
-        </p>
-        <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-          {aboutParagraphs[0]}
-        </h2>
-      </ScrollReveal>
+    <section className="relative" id="about">
+      {/* Asymmetric grid: title takes the full left/center span, content
+          aligns to a narrower column on the right for editorial cadence. */}
+      <div className="grid gap-x-8 gap-y-10 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <SectionHeader eyebrow="About me" title={aboutParagraphs[0]} />
+        </div>
 
-      <div className="mx-auto mt-8 grid max-w-3xl gap-5 text-left text-lg leading-8 text-text-light-muted">
-        {aboutParagraphs.slice(1).map((paragraph, index) => (
-          <ScrollReveal delay={index * 0.06} direction="up" key={paragraph}>
-            <p>{paragraph}</p>
-          </ScrollReveal>
-        ))}
+        <div className="lg:col-span-5 lg:pt-8">
+          <div className="grid gap-5 text-left text-lg leading-8 text-text-light-muted">
+            {aboutParagraphs.slice(1).map((paragraph, index) => (
+              <ScrollReveal delay={index * 0.06} direction="up" key={paragraph}>
+                <p>{paragraph}</p>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -328,24 +549,13 @@ function BeyondTheCodeBand() {
 function BeyondTheCode() {
   return (
     <div>
-      <div className="text-center">
-        <div className="flex items-center justify-center gap-3">
-          <span aria-hidden="true" className="h-px w-10 bg-accent-light/50" />
-          <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent-light">
-            Beyond the code
-          </p>
-          <span aria-hidden="true" className="h-px w-10 bg-accent-light/50" />
-        </div>
-
-        <h2 className="mx-auto mt-6 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          More than engineering.
-        </h2>
-
-        <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-text-dark-muted">
-          The habit of taking problems to mastery before executing runs through
-          everything I do — agent architecture, accounting, music.
-        </p>
-      </div>
+      <SectionHeader
+        align="center"
+        description="The habit of taking problems to mastery before executing runs through everything I do — agent architecture, accounting, music."
+        eyebrow="Beyond the code"
+        title="More than engineering."
+        tone="dark"
+      />
 
       <div className="mx-auto mt-16 grid max-w-3xl gap-8 sm:grid-cols-2 sm:gap-10">
         <Portrait
@@ -368,19 +578,27 @@ function BeyondTheCode() {
         />
       </div>
 
-      <figure className="mx-auto mt-20 max-w-3xl text-center">
+      <figure className="relative mx-auto mt-24 max-w-4xl text-center">
         <span
           aria-hidden="true"
-          className="font-mono text-5xl leading-none text-accent-light/70"
+          className="select-none font-bold leading-none text-accent-light/20"
+          style={{
+            fontSize: "clamp(6rem, 14vw, 12rem)",
+            letterSpacing: "-0.08em",
+          }}
         >
           &ldquo;
         </span>
-        <blockquote className="mt-2 text-2xl font-medium leading-relaxed text-text-dark sm:text-4xl">
-          Solo or paired with AI, I research relentlessly and finish what I
-          start.
+        <blockquote className="-mt-6 text-2xl font-medium leading-[1.2] text-text-dark sm:text-4xl lg:text-5xl">
+          <span className="bg-gradient-to-r from-text-dark via-accent-light to-text-dark bg-clip-text text-transparent">
+            Solo or paired with AI, I research relentlessly and finish what I
+            start.
+          </span>
         </blockquote>
-        <figcaption className="mt-6 font-mono text-xs uppercase tracking-[0.22em] text-accent-light">
+        <figcaption className="mt-8 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.28em] text-accent-light">
+          <span aria-hidden="true" className="h-px w-8 bg-accent-light/50" />
           — How I work
+          <span aria-hidden="true" className="h-px w-8 bg-accent-light/50" />
         </figcaption>
       </figure>
     </div>
@@ -428,18 +646,12 @@ function Portrait({
 function Stack() {
   return (
     <div>
-      <div className="text-center">
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
-          My stack
-        </p>
-        <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-          What I use to ship.
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-text-light-muted">
-          Cloud AI, local AI, the web stack to ship them, and the
-          orchestration glue that ties everything together.
-        </p>
-      </div>
+      <SectionHeader
+        align="center"
+        description="Cloud AI, local AI, the web stack to ship them, and the orchestration glue that ties everything together."
+        eyebrow="My stack"
+        title="What I use to ship."
+      />
 
       <div className="mt-12">
         <BentoStack />

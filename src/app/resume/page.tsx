@@ -262,28 +262,59 @@ function ResumeHero() {
   return (
     <section className="relative overflow-hidden">
       <ParallaxBackdrop>
-        <div className="absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-accent/25 blur-3xl" />
+        <div className="orb-drift-a absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/25 blur-3xl" />
       </ParallaxBackdrop>
-      <div className="mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
-          /resume
-        </p>
-        <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl">
+
+      {/* Ghost watermark */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
+      >
+        <span
+          className="select-none font-bold leading-[0.85] tracking-tighter"
+          style={{
+            fontSize: "clamp(6rem, 20vw, 20rem)",
+            WebkitTextStroke: "1px rgba(41,110,214,0.10)",
+            color: "transparent",
+          }}
+        >
+          RÉSUMÉ
+        </span>
+      </div>
+
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8">
+        <div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
+          <span className="relative inline-flex h-2 w-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+            <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+          </span>
+          <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+            /resume · curriculum
+          </p>
+        </div>
+
+        <h1 className="hero-display-md mt-8 font-semibold">
           Pierre Belon Savon
         </h1>
-        <p className="mt-4 text-xl text-text-light-muted">AI Engineer</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
-          <span className="rounded-full border border-border-light px-3 py-1.5">
-            Ocean Shores, WA
-          </span>
-          <span className="rounded-full border border-border-light px-3 py-1.5">
-            Remote roles
-          </span>
-          <span className="rounded-full border border-border-light px-3 py-1.5">
-            Freelance projects
-          </span>
+        <p className="mt-4 font-mono text-sm uppercase tracking-[0.28em] text-text-light-muted">
+          AI Engineer · Trilingual · Built to ship
+        </p>
+
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
+          {["Ocean Shores, WA", "Remote roles", "Freelance projects"].map(
+            (chip) => (
+              <span
+                className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/60 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light backdrop-blur-md"
+                key={chip}
+              >
+                <span className="h-1 w-1 rounded-full bg-accent" />
+                {chip}
+              </span>
+            ),
+          )}
         </div>
-        <div className="mt-8">
+
+        <div className="mt-10">
           <Button
             className="!bg-accent !text-white"
             download
@@ -322,7 +353,13 @@ function ResumeSection({
 }) {
   return (
     <section className="mt-10 border-t border-border-light pt-8 first:mt-0 first:border-t-0 first:pt-0">
-      <h2 className="mb-5 text-2xl font-semibold tracking-tight">{title}</h2>
+      <div className="mb-6 flex items-center gap-3">
+        <span
+          aria-hidden="true"
+          className="h-px w-6 bg-accent"
+        />
+        <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+      </div>
       {children}
     </section>
   );
@@ -340,24 +377,40 @@ function RoleEntry({
   role: string;
 }) {
   return (
-    <div>
+    <div className="group relative border-l-2 border-border-light pl-6 transition-[border-color] duration-300 hover:border-accent">
+      {/* Timeline dot */}
+      <span
+        aria-hidden="true"
+        className={`absolute -left-[7px] top-1.5 h-3 w-3 rounded-full border-2 transition-colors duration-300 ${
+          featured
+            ? "border-accent bg-accent shadow-[0_0_0_4px_rgba(41,110,214,0.15)]"
+            : "border-border-light bg-bg-light group-hover:border-accent group-hover:bg-accent"
+        }`}
+      />
       <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
         <div className="flex flex-wrap items-center gap-3">
-          <h3 className="text-lg font-semibold">{role}</h3>
+          <h3 className="text-lg font-semibold tracking-tight transition-colors duration-200 group-hover:text-accent-deep">
+            {role}
+          </h3>
           {featured ? (
-            <span className="rounded-full border border-accent/40 bg-[rgba(41,110,214,0.1)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-[rgba(41,110,214,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+              <span className="h-1 w-1 rounded-full bg-accent" />
               Featured
             </span>
           ) : null}
         </div>
-        <p className="shrink-0 text-sm text-text-light-muted sm:text-right">
+        <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-text-light-muted sm:text-right">
           {meta}
         </p>
       </div>
-      <ul className="mt-4 grid gap-2 pl-5 text-sm leading-6 text-text-light-muted">
+      <ul className="mt-4 grid gap-2.5 text-sm leading-6 text-text-light-muted">
         {bullets.map((bullet) => (
-          <li className="list-disc" key={bullet}>
-            {bullet}
+          <li className="flex items-start gap-2.5" key={bullet}>
+            <span
+              aria-hidden="true"
+              className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent/60"
+            />
+            <span>{bullet}</span>
           </li>
         ))}
       </ul>
