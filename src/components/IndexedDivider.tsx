@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 export type IndexedDividerProps = {
   className?: string;
@@ -24,6 +25,17 @@ export function IndexedDivider({
   const reduce = useReducedMotion();
   const dark = tone === "dark";
 
+  // Appearing/disappearing scroll cycle: the divider holds full opacity
+  // while in the viewport, then fades out + drifts up as it exits the top.
+  // The inner stagger reveal handles the first-paint entrance.
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    offset: ["start end", "end start"],
+    target: ref,
+  });
+  const exitOpacity = useTransform(scrollYProgress, [0.45, 0.9], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.45, 0.9], [0, -14]);
+
   return (
     <div
       aria-hidden="true"
@@ -31,10 +43,12 @@ export function IndexedDivider({
         "mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8",
         className,
       )}
+      ref={ref}
     >
       <motion.div
         className="flex items-center gap-4"
         initial={reduce ? false : "hidden"}
+        style={reduce ? undefined : { opacity: exitOpacity, y: exitY }}
         viewport={{ amount: 0.5, once: true }}
         whileInView={reduce ? undefined : "show"}
         variants={{
