@@ -35,6 +35,8 @@ export { GlassCard } from "./GlassCard";
 export type { GlassCardProps } from "./GlassCard";
 export { GreetingRotator } from "./GreetingRotator";
 export type { GreetingRotatorProps } from "./GreetingRotator";
+export { HeroAvatarFrame } from "./HeroAvatarFrame";
+export type { HeroAvatarFrameProps } from "./HeroAvatarFrame";
 export { IndexedDivider } from "./IndexedDivider";
 export { KeyboardNav } from "./KeyboardNav";
 export type { IndexedDividerProps } from "./IndexedDivider";
