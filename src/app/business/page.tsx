@@ -9,6 +9,7 @@ import {
   SectionDivider,
   SectionHeader,
   SiteFooter,
+  SplitText,
   Testimonial,
 } from "@/components";
 import type { ReactNode } from "react";
@@ -146,18 +147,22 @@ function BusinessHero() {
             </p>
           </div>
         </ScrollReveal>
-        <ScrollReveal delay={0.05} direction="up">
-          <h1 className="hero-display-md mt-6 font-semibold">
-            I ship{" "}
-            <span className="relative inline-block">
-              <span className="gradient-shift">AI.</span>
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
-              />
+        <h1 className="hero-display-md mt-6 font-semibold">
+          <SplitText charDelay={0.04} delay={0.1} duration={0.8}>
+            {"I ship "}
+          </SplitText>
+          <span className="relative inline-block">
+            <span className="gradient-shift">
+              <SplitText charDelay={0.06} delay={0.45} duration={0.85}>
+                AI.
+              </SplitText>
             </span>
-          </h1>
-        </ScrollReveal>
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
+            />
+          </span>
+        </h1>
         <ScrollReveal delay={0.1} direction="up">
           <div
             aria-hidden="true"
