@@ -10,18 +10,25 @@ export type HeroAvatarFrameProps = {
 };
 
 /**
- * Hero avatar frame — concentric, animated, distinctive.
+ * Hero avatar frame — solid border + a single bright "comet" arc that
+ * travels around a faint dashed orbital ring. No blur, no halo.
  *
- * Layers (outer -> inner):
- *  1. Soft conic-gradient halo (via .avatar-ring + .avatar-float CSS).
- *  2. SVG curved-text orbit ring — small uppercase mono text traveling
- *     clockwise around the avatar (decoration, not literal copy).
- *  3. SVG dashed accent stroke ring rotating counter-clockwise.
- *  4. The avatar image itself with a thin accent ring.
- *  5. A green pulsing "available" status dot in the bottom-right.
+ * Layers (outer → inner):
+ *  1. Faint dashed SVG circle (the orbital "rail").
+ *  2. A bright accent arc (stroke-dasharray short visible / long
+ *     invisible) sharing the same circle path; animated via continuous
+ *     rotation so the bright segment travels around the rail like a
+ *     comet.
+ *  3. Four corner bracket marks at 12 / 3 / 6 / 9 o'clock positions
+ *     just outside the photo — fixed registration ticks (like a camera
+ *     viewfinder).
+ *  4. The avatar image with a solid 2px accent border + soft inset
+ *     vignette (shadow, not blur).
+ *  5. A small status node at 4 o'clock with a pulsing "available" dot.
  *
- * Click opens the About modal. Hover scales the image gently.
- * Reduced-motion users get the static composition with no rotations.
+ * Click opens the About modal. Hover scales the image gently and
+ * accelerates the comet rotation.
+ * Reduced-motion users get the static composition.
  */
 export function HeroAvatarFrame({ onClick, src }: HeroAvatarFrameProps) {
   const reduce = useReducedMotion();
@@ -29,86 +36,81 @@ export function HeroAvatarFrame({ onClick, src }: HeroAvatarFrameProps) {
   return (
     <motion.button
       aria-label="Open About — Pierre Belon Savon"
-      className="avatar-float avatar-ring group/avatar relative mb-8 inline-flex h-36 w-36 cursor-pointer items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-44 sm:w-44 lg:h-48 lg:w-48"
+      className="group/avatar relative mb-8 inline-flex h-36 w-36 cursor-pointer items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-44 sm:w-44 lg:h-48 lg:w-48"
       onClick={onClick}
       type="button"
       initial={reduce ? { opacity: 1 } : { opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* RING 1 — curved orbit text (decorative copy circling the avatar) */}
-      <svg
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        viewBox="0 0 200 200"
-      >
-        <defs>
-          <path
-            d="M 100,100 m -90,0 a 90,90 0 1,1 180,0 a 90,90 0 1,1 -180,0"
-            id="hero-avatar-orbit"
-          />
-        </defs>
-        <motion.g
-          animate={reduce ? undefined : { rotate: 360 }}
-          style={{ originX: "100px", originY: "100px" }}
-          transition={
-            reduce
-              ? undefined
-              : { duration: 24, ease: "linear", repeat: Infinity }
-          }
-        >
-          <text
-            className="fill-accent/70"
-            style={{
-              fontFamily:
-                "var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace",
-              fontSize: "9px",
-              fontWeight: 500,
-              letterSpacing: "0.32em",
-              textTransform: "uppercase",
-            }}
-          >
-            <textPath href="#hero-avatar-orbit" startOffset="0">
-              Pierre Belon Savon · AI Engineer · Atlas · Pierre Belon Savon · AI
-              Engineer · Atlas ·{" "}
-            </textPath>
-          </text>
-        </motion.g>
-      </svg>
-
-      {/* RING 2 — dashed accent stroke rotating the other direction */}
+      {/* ORBITAL RAIL — faint dashed ring + bright comet arc that rotates */}
       <motion.svg
         aria-hidden="true"
-        animate={reduce ? undefined : { rotate: -360 }}
-        className="pointer-events-none absolute inset-3"
+        animate={reduce ? undefined : { rotate: 360 }}
+        className="pointer-events-none absolute inset-0 transition-[animation-duration] duration-300"
         transition={
           reduce
             ? undefined
-            : { duration: 38, ease: "linear", repeat: Infinity }
+            : { duration: 22, ease: "linear", repeat: Infinity }
         }
         viewBox="0 0 200 200"
       >
+        {/* The static dashed rail */}
         <circle
           cx="100"
           cy="100"
           fill="none"
-          r="92"
-          stroke="rgba(41,110,214,0.4)"
-          strokeDasharray="2 8"
+          r="94"
+          stroke="rgba(41,110,214,0.28)"
+          strokeDasharray="1 7"
           strokeLinecap="round"
-          strokeWidth="1"
+          strokeWidth="2"
         />
-        {/* Anchor dot riding the dashed ring */}
+        {/* The bright comet segment — sits on the same circle but its
+            dasharray makes only a short arc visible. Because the parent
+            <svg> is rotating, the visible arc travels around the rail. */}
         <circle
           cx="100"
-          cy="8"
-          fill="var(--accent)"
-          r="2.5"
+          cy="100"
+          fill="none"
+          pathLength="100"
+          r="94"
+          stroke="url(#hero-avatar-comet-gradient)"
+          strokeDasharray="14 86"
+          strokeDashoffset="0"
+          strokeLinecap="round"
+          strokeWidth="2.5"
         />
+        <defs>
+          <linearGradient id="hero-avatar-comet-gradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="var(--accent-deep)" stopOpacity="0" />
+            <stop offset="40%" stopColor="var(--accent)" />
+            <stop offset="100%" stopColor="var(--accent-light)" />
+          </linearGradient>
+        </defs>
       </motion.svg>
 
-      {/* AVATAR — sits inside an inner well */}
-      <span className="relative block h-[78%] w-[78%] overflow-hidden rounded-full ring-2 ring-accent/40 shadow-[0_18px_36px_-16px_rgba(15,23,42,0.35)]">
+      {/* CORNER REGISTRATION TICKS — 12/3/6/9 o'clock around the photo.
+          Solid 1px ticks, no blur, signal "this is a deliberate crop". */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1 h-2 w-px -translate-x-1/2 bg-accent/55"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-1 left-1/2 h-2 w-px -translate-x-1/2 bg-accent/55"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1 top-1/2 h-px w-2 -translate-y-1/2 bg-accent/55"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute right-1 top-1/2 h-px w-2 -translate-y-1/2 bg-accent/55"
+      />
+
+      {/* AVATAR — solid border, inset vignette via shadow (not blur) */}
+      <span className="relative block h-[82%] w-[82%] overflow-hidden rounded-full shadow-[0_0_0_2px_var(--accent),0_18px_36px_-18px_rgba(15,23,42,0.4)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           alt="Pierre Belon Savon"
@@ -117,28 +119,28 @@ export function HeroAvatarFrame({ onClick, src }: HeroAvatarFrameProps) {
           loading="eager"
           src={src}
         />
-        {/* Subtle inner vignette so the image edge meets the ring cleanly */}
+        {/* Soft inset vignette — shadow only, no blur filter */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.4),inset_0_-30px_30px_-30px_rgba(15,23,42,0.5)]"
+          className="pointer-events-none absolute inset-0 rounded-full shadow-[inset_0_0_0_1px_rgba(255,255,255,0.35),inset_0_-26px_30px_-28px_rgba(15,23,42,0.5)]"
         />
       </span>
 
-      {/* STATUS — pulsing green "available" dot bottom-right */}
+      {/* STATUS — bottom-right "available" dot */}
       <span
         aria-hidden="true"
-        className="absolute bottom-[6%] right-[6%] inline-flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-bg-light shadow-sm sm:h-5 sm:w-5"
+        className="absolute bottom-[8%] right-[8%] inline-flex h-4 w-4 items-center justify-center rounded-full border-2 border-bg-light bg-bg-light sm:h-5 sm:w-5"
       >
         <span className="relative inline-flex h-2 w-2 sm:h-2.5 sm:w-2.5">
           <span className="absolute inset-0 animate-ping rounded-full bg-result-green/70" />
-          <span className="relative inline-block h-full w-full rounded-full bg-result-green shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
+          <span className="relative inline-block h-full w-full rounded-full bg-result-green" />
         </span>
       </span>
 
       {/* TOOLTIP — about-me discoverability */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2 translate-y-2 rounded-full border border-accent/30 bg-white/95 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-accent opacity-0 shadow-[0_6px_16px_-8px_rgba(41,110,214,0.45)] backdrop-blur-md transition-[transform,opacity] duration-300 group-hover/avatar:translate-y-3 group-hover/avatar:opacity-100"
+        className="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2 translate-y-2 rounded-full border border-accent/30 bg-bg-light px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-accent opacity-0 shadow-[0_6px_16px_-8px_rgba(41,110,214,0.45)] transition-[transform,opacity] duration-300 group-hover/avatar:translate-y-3 group-hover/avatar:opacity-100"
       >
         About me ↗
       </span>

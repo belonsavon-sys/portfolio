@@ -322,16 +322,6 @@ a {
   }
 }
 
-@keyframes float-slow {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
 @keyframes scroll-cue {
   0% {
     transform: translateY(0);
@@ -355,41 +345,6 @@ a {
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-cue-dot {
-    animation: none;
-  }
-}
-
-.avatar-ring {
-  position: relative;
-}
-
-.avatar-ring::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 9999px;
-  background: conic-gradient(
-    from var(--ring-angle),
-    rgba(41, 110, 214, 0.55),
-    rgba(91, 155, 244, 0.25) 25%,
-    transparent 50%,
-    rgba(41, 110, 214, 0.45) 75%,
-    rgba(41, 110, 214, 0.55) 100%
-  );
-  filter: blur(10px);
-  opacity: 0.85;
-  animation: ring-rotate 14s linear infinite;
-  z-index: -1;
-}
-
-.avatar-float {
-  animation: float-slow 6s ease-in-out infinite;
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .avatar-ring::before,
-  .avatar-float {
     animation: none;
   }
 }
