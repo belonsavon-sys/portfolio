@@ -299,7 +299,7 @@ function ResumeHero() {
           </SplitText>
         </h1>
         <p className="mt-4 font-mono text-sm uppercase tracking-[0.28em] text-text-light-muted">
-          AI Engineer · Trilingual · Built to ship
+          AI Engineer · Ocean Shores, WA
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-2">

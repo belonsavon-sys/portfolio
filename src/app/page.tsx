@@ -17,7 +17,6 @@ import {
   HeroAvatarFrame,
   LightGlassCard,
   LiveStatusBadge,
-  MarqueeBand,
   ParallaxBackdrop,
   PhotoSlot,
   ScrollReveal,
@@ -79,56 +78,31 @@ export default function Home() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <Hero onOpenAbout={() => setAboutOpen(true)} />
 
-      <LightSection className="pt-14 sm:pt-20">
-        <NowBanner />
-      </LightSection>
-
-      <LightSection className="py-16 sm:py-20">
+      <LightSection className="pt-16 sm:pt-24">
         <MetricsBand />
       </LightSection>
 
-      <LightSection className="pb-16 pt-8 sm:pb-20 sm:pt-12" id="work">
+      <LightSection className="pb-16 pt-10 sm:pb-20 sm:pt-16" id="work">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
-          {/* STICKY TITLE COLUMN — stays pinned while the cards scroll past */}
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-28">
               <SectionHeader
-                description="Real systems in production. Pick a thread, follow it."
+                description="Four systems running in production right now. Each one started as somebody's manual workflow."
                 eyebrow="Selected work"
-                title="Built. Shipping. Compounding."
+                title="What I've built."
               />
-              {/* Small live counter — tactile detail */}
-              <div className="mt-8 hidden items-center gap-3 lg:flex">
-                <span className="relative inline-flex h-2 w-2">
-                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-                  <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-result-green">
-                  4 projects · scroll to explore
-                </span>
-              </div>
             </div>
           </div>
 
-          {/* WORKS COLUMN */}
           <div className="lg:col-span-7">
             <SelectedWork />
           </div>
         </div>
       </LightSection>
 
-      <LightSection className="pb-12 pt-12 sm:pt-16">
+      <LightSection className="pb-16 pt-8 sm:pb-20 sm:pt-12">
         <TrustStrip />
       </LightSection>
-
-      <MarqueeBand
-        items={[
-          "Ship intelligent automation",
-          "Build full-stack systems",
-          "Architect multi-agent harnesses",
-          "Trilingual · Hyperfocused · Built to ship",
-        ]}
-      />
 
       <BeyondTheCodeBand />
 
@@ -365,39 +339,9 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               hoverable={false}
               key={m.label}
             >
-              <div className="flex items-start justify-between gap-3">
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-                  {m.label}
-                </p>
-                {/* Sparkline-style activity bars */}
-                <div className="flex items-end gap-[3px]" aria-hidden="true">
-                  {[3, 5, 4, 6, 5, 7, 8].map((h, i) => (
-                    <motion.span
-                      animate={
-                        reduce
-                          ? { scaleY: 1 }
-                          : {
-                              scaleY: [1, h / 4, 1],
-                            }
-                      }
-                      className="block w-[3px] rounded-sm bg-accent/45"
-                      key={i}
-                      style={{ height: `${h * 2}px`, originY: 1 }}
-                      transition={
-                        reduce
-                          ? undefined
-                          : {
-                              delay: i * 0.12 + index * 0.05,
-                              duration: 2.2,
-                              ease: "easeInOut",
-                              repeat: Infinity,
-                              repeatType: "reverse",
-                            }
-                      }
-                    />
-                  ))}
-                </div>
-              </div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                {m.label}
+              </p>
               <p className="mt-3 text-2xl font-semibold tracking-tight text-text-light sm:text-3xl">
                 {m.valuePrefix ? (
                   <span className="text-text-light/40 text-base sm:text-lg font-mono">
@@ -409,13 +353,6 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
                   suffix={m.suffix}
                   to={m.to}
                 />
-                {/* Trend arrow */}
-                <span
-                  aria-hidden="true"
-                  className="ml-2 inline-block align-baseline font-mono text-sm text-result-green"
-                >
-                  ↗
-                </span>
               </p>
               <p className="mt-2 text-xs leading-5 text-text-light-muted">
                 {m.context}
@@ -458,57 +395,6 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
         </motion.a>
       </motion.div>
     </section>
-  );
-}
-
-function NowBanner() {
-  const items = [
-    { label: "Shipping", value: "Atlas v3 multi-agent harness" },
-    { label: "Operating", value: "ThePrivateHotels AI ops stack" },
-    { label: "Available", value: "Remote roles · freelance projects" },
-  ];
-
-  return (
-    <div className="mx-auto max-w-5xl">
-      <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-white/75 p-6 backdrop-blur-md sm:p-8">
-        {/* Ambient corner glow */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full bg-accent/15 blur-3xl"
-        />
-        <div className="relative flex flex-wrap items-center gap-3">
-          <span className="relative inline-flex h-2 w-2">
-            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-            <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
-          </span>
-          <p className="font-mono text-[10px] font-medium uppercase tracking-[0.28em] text-result-green">
-            Now · live status
-          </p>
-          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-          <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-light-muted">
-            Updated continuously
-          </p>
-        </div>
-        <ul className="relative mt-5 grid gap-x-8 gap-y-4 sm:grid-cols-3">
-          {items.map((item, index) => (
-            <ScrollReveal
-              delay={index * 0.05}
-              direction="up"
-              key={item.label}
-            >
-              <li className="border-l-2 border-accent/40 pl-4">
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
-                  {item.label}
-                </p>
-                <p className="mt-1.5 text-base font-semibold text-text-light sm:text-lg">
-                  {item.value}
-                </p>
-              </li>
-            </ScrollReveal>
-          ))}
-        </ul>
-      </div>
-    </div>
   );
 }
 
