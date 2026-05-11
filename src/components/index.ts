@@ -73,5 +73,3 @@ export { TerminalWindow } from "./TerminalWindow";
 export type { TerminalLine, TerminalWindowProps } from "./TerminalWindow";
 export { Testimonial } from "./Testimonial";
 export type { TestimonialProps } from "./Testimonial";
-export { TrustStrip } from "./TrustStrip";
-export type { TrustStripProps } from "./TrustStrip";
