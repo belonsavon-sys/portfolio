@@ -124,6 +124,28 @@ export function SelectedWork() {
                     "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), transparent 60%)",
                 }}
               />
+              {/* CURTAIN — solid accent block that wipes off the thumb on
+                  scroll-in, anchored to the right so the LEFT edge sweeps
+                  rightward as scaleX collapses 1→0. The bright stripe on the
+                  curtain's left edge becomes the visible wipe-front. */}
+              <motion.div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-20 origin-right"
+                initial={reduce ? { scaleX: 0 } : { scaleX: 1 }}
+                style={{
+                  background:
+                    "linear-gradient(95deg, var(--accent-light) 0%, var(--accent) 8%, var(--accent-deep) 100%)",
+                  boxShadow:
+                    "inset 2px 0 0 0 var(--accent-light), 0 0 24px 2px rgba(91,155,244,0.35)",
+                }}
+                transition={{
+                  delay: index * 0.12 + 0.05,
+                  duration: 0.95,
+                  ease: easeOut,
+                }}
+                viewport={{ amount: 0.35, once: true }}
+                whileInView={{ scaleX: 0 }}
+              />
               {/* Sheen */}
               <div
                 aria-hidden="true"
