@@ -7,7 +7,6 @@ import {
   IndexedDivider,
   LiveStatusBadge,
   LocalAiDemo,
-  MarqueeBand,
   ParallaxBackdrop,
   ScrollReveal,
   SectionDivider,
@@ -123,15 +122,6 @@ export default function AiPage() {
       <LightSection className="py-20 sm:py-24">
         <AtlasGallerySection />
       </LightSection>
-
-      <MarqueeBand
-        items={[
-          "48 hrs → 3 min response time",
-          "100+ page ops manual digitized",
-          "3 Atlas products shipping",
-          "Top 10% Airbnb · Travelers' Choice",
-        ]}
-      />
 
       <SectionDivider direction="light-to-dark" />
 

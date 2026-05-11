@@ -161,26 +161,12 @@ export function SiteFooter() {
         </div>
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[rgba(41,110,214,0.12)] pt-6 sm:flex-row">
           <p className="text-xs text-text-dark-muted">© 2026 Pierre Belon Savon</p>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
-            <span>Built with</span>
-            <span className="text-accent-light">Next.js</span>
-            <span aria-hidden="true">·</span>
-            <span className="text-accent-light">Tailwind</span>
-            <span aria-hidden="true">·</span>
-            <span className="text-accent-light">Framer Motion</span>
-            <span aria-hidden="true">·</span>
-            <span className="text-accent-light">Vercel</span>
-          </div>
-          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-dark-muted">
-            <span>Built business-first</span>
-            <span aria-hidden="true">·</span>
-            <span className="inline-flex items-center gap-1">
-              Press{" "}
-              <kbd className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-md border border-accent/40 bg-[rgba(41,110,214,0.15)] px-1 text-[10px] font-semibold text-accent-light">
-                ?
-              </kbd>{" "}
-              for shortcuts
-            </span>
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dark-muted">
+            Press{" "}
+            <kbd className="mx-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-md border border-accent/40 bg-[rgba(41,110,214,0.15)] px-1 text-[10px] font-semibold text-accent-light">
+              ?
+            </kbd>{" "}
+            for shortcuts
           </p>
         </div>
       </footer>

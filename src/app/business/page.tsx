@@ -3,7 +3,6 @@ import {
   Button,
   CursorHalo,
   IndexedDivider,
-  MarqueeBand,
   ParallaxBackdrop,
   ScrollReveal,
   SectionDivider,
@@ -70,16 +69,6 @@ export default function BusinessPage() {
       <LightSection className="py-20 sm:py-24">
         <BlackdoorSection />
       </LightSection>
-
-      <MarqueeBand
-        items={[
-          "Process design",
-          "Guest communications",
-          "Team leadership",
-          "Finance & admin",
-          "Agentic systems",
-        ]}
-      />
 
       <IndexedDivider index="01" label="Process design" />
 
