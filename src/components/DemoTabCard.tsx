@@ -18,12 +18,35 @@ export type DemoTabCardProps = {
   title: string;
 };
 
-const statusDot: Record<DemoLoadStatus, { color: string; label: string }> = {
-  error: { color: "bg-problem-red", label: "Error" },
-  idle: { color: "bg-text-dark-muted", label: "Not loaded" },
-  loading: { color: "animate-pulse bg-accent-light", label: "Loading" },
-  ready: { color: "bg-result-green", label: "Loaded" },
+const statusMeta: Record<
+  DemoLoadStatus,
+  { color: string; dotPulse?: boolean; label: string; ring: string }
+> = {
+  error: {
+    color: "bg-problem-red",
+    label: "Error",
+    ring: "ring-problem-red/30",
+  },
+  idle: {
+    color: "bg-text-dark-muted",
+    label: "Idle · awaiting load",
+    ring: "ring-text-dark-muted/20",
+  },
+  loading: {
+    color: "bg-accent-light",
+    dotPulse: true,
+    label: "Loading model",
+    ring: "ring-accent-light/30",
+  },
+  ready: {
+    color: "bg-result-green",
+    dotPulse: true,
+    label: "Ready · running locally",
+    ring: "ring-result-green/30",
+  },
 };
+
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 export function DemoTabCard({
   badge,
@@ -37,69 +60,134 @@ export function DemoTabCard({
 }: DemoTabCardProps) {
   const reduce = useReducedMotion();
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
-  const dot = statusDot[loadStatus];
+  const meta = statusMeta[loadStatus];
 
   return (
     <motion.div
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/85 backdrop-blur-md"
-      initial={reduce ? false : { opacity: 0, y: 12 }}
-      transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
+      className="relative overflow-hidden rounded-3xl border border-[rgba(41,110,214,0.22)] bg-bg-dark-2/85 backdrop-blur-md"
+      initial={reduce ? false : { opacity: 0, y: 16 }}
+      transition={{ duration: 0.45, ease: easeOut }}
     >
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[rgba(41,110,214,0.18)] p-6 sm:p-8">
+      {/* Ambient accent glow in the top-right corner */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 -top-32 h-72 w-72 rounded-full bg-accent/20 blur-3xl"
+      />
+
+      {/* HEADER — title on left, meta strip on right */}
+      <div className="relative grid gap-6 border-b border-[rgba(41,110,214,0.18)] p-6 sm:grid-cols-[1fr_auto] sm:p-9">
         <div className="min-w-0">
-          <h3 className="text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl">
+          <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light">
+            Local AI · running on {badge.split(" · ").pop()?.toLowerCase()}
+          </p>
+          <h3 className="display-text mt-3 max-w-3xl text-text-dark">
             {title}
           </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-text-dark-muted">
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-text-dark-muted sm:text-base">
             {description}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="rounded-lg border border-[rgba(41,110,214,0.35)] bg-bg-dark px-3 py-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-dark">
-            {badge}
-          </span>
-          <span className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
-            <span aria-hidden="true" className={`h-2 w-2 rounded-full ${dot.color}`} />
-            {dot.label}
-          </span>
+
+        {/* META RAIL */}
+        <div className="grid gap-3 sm:min-w-[240px] sm:border-l sm:border-[rgba(41,110,214,0.2)] sm:pl-6">
+          {(() => {
+            const parts = badge.split(" · ");
+            // Expect: [model, size?, runtime]
+            const model = parts[0] ?? "—";
+            const runtime = parts[parts.length - 1] ?? "—";
+            const size = parts.length >= 3 ? parts[parts.length - 2] : null;
+            return (
+              <>
+                <MetaRow label="Model" value={model} />
+                {size ? <MetaRow label="Size" value={size} /> : null}
+                <MetaRow label="Runtime" value={runtime} />
+              </>
+            );
+          })()}
+          <div className="mt-1 flex items-center gap-2.5 rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark/50 px-3 py-2.5">
+            <span className="relative inline-flex h-2.5 w-2.5">
+              {meta.dotPulse ? (
+                <span
+                  className={`absolute inset-0 animate-ping rounded-full ${meta.color} opacity-60`}
+                />
+              ) : null}
+              <span
+                className={`relative inline-block h-2.5 w-2.5 rounded-full ${meta.color} ring-4 ${meta.ring}`}
+              />
+            </span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-dark">
+              {meta.label}
+            </span>
+          </div>
         </div>
       </div>
 
-      <div className="p-6 sm:p-8">
+      {/* BODY */}
+      <div className="relative p-6 sm:p-9">
         {loadStatus === "idle" ? (
-          <div className="flex min-h-[180px] flex-col items-center justify-center gap-4">
-            <button
-              className="group inline-flex items-center gap-2 rounded-lg border border-[rgba(41,110,214,0.4)] bg-bg-dark/60 px-6 py-3 text-sm font-semibold text-text-dark transition-[border-color,background,transform] duration-150 hover:-translate-y-0.5 hover:border-accent hover:bg-bg-dark"
+          <div className="flex min-h-[220px] flex-col items-center justify-center gap-5">
+            <motion.button
+              animate={
+                reduce
+                  ? undefined
+                  : { boxShadow: [
+                      "0 0 0 0 rgba(41,110,214,0.0)",
+                      "0 0 0 14px rgba(41,110,214,0.0)",
+                    ] }
+              }
+              className="group relative inline-flex items-center gap-3 overflow-hidden rounded-xl border border-accent/40 bg-gradient-to-br from-accent to-accent-deep px-7 py-4 text-base font-semibold text-white shadow-[0_18px_40px_-18px_rgba(41,110,214,0.6)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_22px_50px_-18px_rgba(41,110,214,0.8)]"
               onClick={onLoad}
+              transition={{ duration: 2, ease: "easeOut", repeat: Infinity }}
               type="button"
             >
-              <DownloadIcon className="h-4 w-4 text-accent-light transition-transform duration-150 group-hover:translate-y-0.5" />
-              Load Model
-            </button>
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted">
-              Model downloads on first run, then cached
+              {/* Sheen */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+              />
+              <DownloadIcon className="h-5 w-5 transition-transform duration-200 group-hover:translate-y-0.5" />
+              <span className="relative">Load Model</span>
+              <span
+                aria-hidden="true"
+                className="relative font-mono text-xs font-normal uppercase tracking-[0.22em] text-white/70"
+              >
+                ↩
+              </span>
+            </motion.button>
+            <p className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted">
+              First download is cached · subsequent runs are instant
             </p>
           </div>
         ) : null}
 
         {loadStatus === "loading" ? (
-          <div className="flex min-h-[180px] flex-col items-center justify-center gap-4">
-            <div className="w-full max-w-md">
+          <div className="flex min-h-[220px] flex-col items-center justify-center gap-5">
+            <div className="w-full max-w-lg">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs uppercase tracking-[0.18em] text-accent-light">
+                <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent-light">
                   Downloading model
                 </span>
-                <span className="font-mono text-xs text-text-dark">
-                  {Math.round((loadProgress ?? 0))}%
+                <span className="font-mono text-sm font-semibold text-text-dark">
+                  {Math.round(loadProgress ?? 0)}%
                 </span>
               </div>
-              <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[rgba(41,110,214,0.15)]">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-accent to-accent-light transition-[width] duration-300"
-                  style={{ width: `${loadProgress ?? 0}%` }}
+              <div className="relative mt-3 h-2 overflow-hidden rounded-full bg-[rgba(41,110,214,0.15)]">
+                <motion.div
+                  animate={{ width: `${loadProgress ?? 0}%` }}
+                  className="h-full rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light"
+                  initial={false}
+                  transition={{ duration: 0.4, ease: easeOut }}
+                />
+                {/* Indeterminate sheen on top of the determinate bar */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-full animate-[marquee_1.4s_linear_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"
                 />
               </div>
+              <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+                Streaming directly from the model registry to your browser cache
+              </p>
             </div>
           </div>
         ) : null}
@@ -113,27 +201,45 @@ export function DemoTabCard({
         <div className="border-t border-[rgba(41,110,214,0.18)]">
           <button
             aria-expanded={howItWorksOpen}
-            className="flex w-full items-center justify-between p-4 px-6 text-left text-sm text-text-dark-muted transition-colors hover:text-text-dark sm:px-8"
+            className="group flex w-full items-center justify-between gap-4 p-5 px-6 text-left transition-colors hover:bg-[rgba(41,110,214,0.06)] sm:px-9"
             onClick={() => setHowItWorksOpen((v) => !v)}
             type="button"
           >
-            <span className="flex items-center gap-2">
+            <span className="flex items-center gap-3">
               <ChevronIcon
-                className={`h-4 w-4 transition-transform ${
+                className={`h-4 w-4 text-accent-light transition-transform duration-300 ${
                   howItWorksOpen ? "rotate-180" : ""
                 }`}
               />
-              How it works
+              <span className="font-mono text-xs uppercase tracking-[0.28em] text-text-dark-muted group-hover:text-text-dark">
+                How it works
+              </span>
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+              {howItWorksOpen ? "Hide" : "Expand"}
             </span>
           </button>
           {howItWorksOpen ? (
-            <div className="border-t border-[rgba(41,110,214,0.12)] p-6 text-sm leading-6 text-text-dark-muted sm:px-8">
+            <div className="border-t border-[rgba(41,110,214,0.12)] p-6 text-sm leading-7 text-text-dark-muted sm:px-9">
               {howItWorks}
             </div>
           ) : null}
         </div>
       ) : null}
     </motion.div>
+  );
+}
+
+function MetaRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted">
+        {label}
+      </p>
+      <p className="mt-1 font-mono text-sm font-semibold text-text-dark">
+        {value}
+      </p>
+    </div>
   );
 }
 
