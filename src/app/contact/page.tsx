@@ -72,9 +72,9 @@ export default function ContactPage() {
     <main className="min-h-screen bg-bg-dark text-text-dark">
       <section className="relative overflow-hidden">
         <ParallaxBackdrop>
-          <div className="orb-drift-a absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-accent/22 blur-3xl" />
-          <div className="orb-drift-c absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/12 blur-3xl" />
-          <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[420px] w-[420px] rounded-full bg-accent/12 blur-3xl" />
+          <div className="absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-accent/22 blur-3xl" />
+          <div className="absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/12 blur-3xl" />
+          <div className="absolute -bottom-24 right-[-10%] h-[420px] w-[420px] rounded-full bg-accent/12 blur-3xl" />
         </ParallaxBackdrop>
 
         {/* Giant ghost watermark */}

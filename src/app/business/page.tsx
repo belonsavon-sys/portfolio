@@ -115,8 +115,8 @@ function BusinessHero() {
     <section className="relative overflow-hidden">
       <CursorHalo />
       <ParallaxBackdrop>
-        <div className="orb-drift-a absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
-        <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
+        <div className="absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
+        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
       </ParallaxBackdrop>
       <div
         aria-hidden="true"

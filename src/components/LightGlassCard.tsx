@@ -25,7 +25,10 @@ export function LightGlassCard({
   className,
   hoverable = true,
   id,
-  spotlight = true,
+  // spotlight is opt-in now (default off). Cursor-tracked spotlight on
+  // every content card was flagged as a v0-template signal in iter 93's
+  // anti-slop research, so callers must explicitly request it.
+  spotlight = false,
   style,
   title,
   ...props

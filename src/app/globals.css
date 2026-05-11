@@ -349,67 +349,6 @@ a {
   }
 }
 
-/* Slow ambient drift for hero blur orbs.
-   Different keyframes per orb make the field feel alive without looking choreographed. */
-@keyframes orb-drift-a {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  33% {
-    transform: translate3d(40px, -30px, 0) scale(1.08);
-  }
-  66% {
-    transform: translate3d(-25px, 25px, 0) scale(0.95);
-  }
-}
-
-@keyframes orb-drift-b {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(-50px, 30px, 0) scale(1.12);
-  }
-}
-
-@keyframes orb-drift-c {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  40% {
-    transform: translate3d(35px, 20px, 0) scale(0.92);
-  }
-  80% {
-    transform: translate3d(-20px, -25px, 0) scale(1.05);
-  }
-}
-
-.orb-drift-a {
-  animation: orb-drift-a 28s ease-in-out infinite;
-  will-change: transform;
-}
-
-.orb-drift-b {
-  animation: orb-drift-b 36s ease-in-out infinite;
-  will-change: transform;
-}
-
-.orb-drift-c {
-  animation: orb-drift-c 32s ease-in-out infinite;
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .orb-drift-a,
-  .orb-drift-b,
-  .orb-drift-c {
-    animation: none;
-  }
-}
-
 .scroll-cue-dot {
   animation: scroll-cue 2.4s ease-in-out infinite;
 }

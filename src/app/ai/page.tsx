@@ -153,8 +153,8 @@ function AiHero() {
     <section className="relative overflow-hidden">
       <CursorHalo />
       <ParallaxBackdrop>
-        <div className="orb-drift-a absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
-        <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
+        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
       </ParallaxBackdrop>
 
       {/* Giant ghost AI watermark — sits behind the hero content */}
