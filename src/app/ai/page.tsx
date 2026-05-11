@@ -52,7 +52,7 @@ const services = [
 const caseStudies = [
   {
     body: "Trained on curated company data — approved templates, brand voice, every guest scenario from check-in instructions to pet rules to TV troubleshooting. Drafts replies inside Smarttask. Staff review, approve, and send in seconds.",
-    eyebrow: "Case study 01",
+    eyebrow: "01 · ThePrivateHotels · 2024",
     title: "Guest Communications Chatbot",
     comparison: {
       after: {
@@ -77,7 +77,7 @@ const caseStudies = [
   },
   {
     body: "A 100+ page property operations manual digitized, room by room, into a trackable, quantifiable inspection system. Static documentation became an auditable QA tool.",
-    eyebrow: "Case study 02",
+    eyebrow: "02 · ThePrivateHotels · 2024",
     title: "Operations Manual → QA System",
     comparison: {
       after: {
@@ -278,7 +278,7 @@ function CaseStudiesSection() {
     <div>
       <SectionHeader
         eyebrow="Built and shipped"
-        title="Case studies. Real systems. Real outcomes."
+        title="Three case studies, with receipts."
       />
 
       <div className="mt-12 grid gap-16">
@@ -304,7 +304,7 @@ function CaseStudiesSection() {
 
         <article>
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            Case study 03
+            03 · ThePrivateHotels · 2024
           </p>
           <h3 className="mt-3 text-2xl font-semibold sm:text-3xl">
             Workflow Automation — Zapier + Guesty + Twilio
