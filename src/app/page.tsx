@@ -1,6 +1,12 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import {
   AboutModal,
   AnimatedCounter,
@@ -21,7 +27,7 @@ import {
   SplitText,
   TrustStrip,
 } from "@/components";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 
 const aboutParagraphs = [
   "I'm an engineer who learned to ship by automating the business I was hired to run.",
@@ -199,6 +205,27 @@ function FloatingHeroLabels() {
 
 function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
   const reduce = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+
+  // Scroll-progress driven fade-out + drift: as the hero scrolls out
+  // of view, its inner content fades and lifts slightly. Creates a
+  // depth-of-field "you're descending past it" sensation.
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end start"],
+    target: heroRef,
+  });
+  const rawOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
+  const rawY = useTransform(scrollYProgress, [0, 0.55], [0, -64]);
+  const heroOpacity = useSpring(rawOpacity, {
+    damping: 30,
+    mass: 0.5,
+    stiffness: 160,
+  });
+  const heroY = useSpring(rawY, {
+    damping: 30,
+    mass: 0.5,
+    stiffness: 160,
+  });
 
   const fadeUp = (delay: number) =>
     reduce
@@ -210,7 +237,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
         };
 
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative overflow-hidden" ref={heroRef}>
       <CursorHalo />
 
       <ParallaxBackdrop>
@@ -222,7 +249,10 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
       {/* Floating accent labels — desktop-only decoration */}
       <FloatingHeroLabels />
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
+      <motion.div
+        className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8"
+        style={reduce ? undefined : { opacity: heroOpacity, y: heroY }}
+      >
         <motion.button
           aria-label="Open About — Pierre Belon Savon"
           className="avatar-float avatar-ring group/avatar relative mb-8 h-32 w-32 cursor-pointer rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-40 sm:w-40 lg:h-44 lg:w-44"
@@ -406,7 +436,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
             <span className="scroll-cue-dot absolute left-1/2 top-0 h-2 w-px -translate-x-1/2 bg-accent" />
           </span>
         </motion.a>
-      </div>
+      </motion.div>
     </section>
   );
 }
