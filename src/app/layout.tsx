@@ -5,7 +5,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   BackToTop,
   ConsoleSignature,
-  CustomCursor,
   KeyboardNav,
   PageTransition,
   ScrollProgress,
@@ -107,7 +106,6 @@ export default function RootLayout({
         <div id="main-content">
           <PageTransition>{children}</PageTransition>
         </div>
-        <CustomCursor />
         <BackToTop />
         <ConsoleSignature />
         <KeyboardNav />

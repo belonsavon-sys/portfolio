@@ -25,7 +25,6 @@ export {
 export type { ContactLink } from "./contact-config";
 export { CursorHalo } from "./CursorHalo";
 export type { CursorHaloProps } from "./CursorHalo";
-export { CustomCursor } from "./CustomCursor";
 export { DemoTabCard } from "./DemoTabCard";
 export type {
   DemoLoadStatus,
