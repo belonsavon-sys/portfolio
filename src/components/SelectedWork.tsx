@@ -1,6 +1,13 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useVelocity,
+} from "framer-motion";
 
 type Work = {
   context: string;
@@ -86,6 +93,18 @@ const statusMeta: Record<
 export function SelectedWork() {
   const reduce = useReducedMotion();
 
+  // Scroll-velocity → subtle scaleY squish on the big metric numbers.
+  // Fast scrolls compress them vertically by up to ~7%; they ease back
+  // to 1 at rest via a stiff spring.
+  const { scrollY } = useScroll();
+  const velocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(velocity, {
+    damping: 50,
+    mass: 0.3,
+    stiffness: 300,
+  });
+  const metricScaleY = useTransform(smoothVelocity, [-3000, 0, 3000], [0.93, 1, 0.93]);
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:gap-5">
       {works.map((work, index) => {
@@ -128,17 +147,28 @@ export function SelectedWork() {
               </span>
             </div>
 
-            {/* METRIC — editorial display, accent color, the visual anchor */}
+            {/* METRIC — editorial display, accent color, the visual anchor.
+                Inherits a velocity-driven scaleY squish (origin: bottom) so it
+                deforms slightly when the user scrolls fast, eases back at rest. */}
             <div className="relative">
-              <p
+              <motion.p
                 className="select-none font-bold leading-[0.95] tracking-tight text-accent"
-                style={{
-                  fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                  letterSpacing: "-0.04em",
-                }}
+                style={
+                  reduce
+                    ? {
+                        fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                        letterSpacing: "-0.04em",
+                      }
+                    : {
+                        fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                        letterSpacing: "-0.04em",
+                        originY: 1,
+                        scaleY: metricScaleY,
+                      }
+                }
               >
                 {work.metric}
-              </p>
+              </motion.p>
               <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.24em] text-text-light-muted">
                 {work.metricLabel}
               </p>
