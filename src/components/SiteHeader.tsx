@@ -1,9 +1,14 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+} from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   EMAIL_MAILTO,
   GITHUB_URL,
@@ -61,6 +66,20 @@ export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
+  const navRef = useRef<HTMLElement>(null);
+
+  // Scroll-driven backdrop saturation + blur ramp on the nav pill.
+  // Maps scrollY [0, 600] -> blur [4px, 14px] and saturate [1, 1.5].
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const node = navRef.current;
+    if (!node || reduce) return;
+    const clamped = Math.max(0, Math.min(1, latest / 600));
+    const blur = 4 + clamped * 10;
+    const sat = 1 + clamped * 0.5;
+    node.style.setProperty("--nav-blur", `${blur}px`);
+    node.style.setProperty("--nav-sat", `${sat}`);
+  });
 
   useEffect(() => {
     function onScroll() {
@@ -81,14 +100,27 @@ export function SiteHeader() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* CENTERED NAV PILL */}
+        {/* CENTERED NAV PILL — backdrop blur + saturation ramp tied to scrollY */}
         <motion.nav
           aria-label="Primary"
-          className={`pointer-events-auto flex flex-wrap items-center gap-1 rounded-full border bg-white/95 p-1.5 transition-shadow duration-300 ${
+          className={`pointer-events-auto flex flex-wrap items-center gap-1 rounded-full border bg-white/85 p-1.5 transition-shadow duration-300 ${
             scrolled
               ? "border-border-light shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]"
               : "border-border-light/70 shadow-sm"
           }`}
+          ref={navRef}
+          style={
+            reduce
+              ? undefined
+              : {
+                  ["--nav-blur" as string]: "4px",
+                  ["--nav-sat" as string]: "1",
+                  backdropFilter:
+                    "blur(var(--nav-blur)) saturate(var(--nav-sat))",
+                  WebkitBackdropFilter:
+                    "blur(var(--nav-blur)) saturate(var(--nav-sat))",
+                }
+          }
         >
           {navItems.map((item) => (
             <NavPillItem
