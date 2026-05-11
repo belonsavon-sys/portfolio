@@ -63,11 +63,11 @@ const heroMetrics = [
 ];
 
 const detailedMetrics = [
-  { label: "Hours of guest-reply lag eliminated", suffix: " hrs", to: 48 },
-  { label: "Minutes saved per drafted reply", suffix: "-20 min", to: 15 },
-  { label: "Inventory items under management", suffix: "+", to: 100 },
-  { label: "Staff trained on the new tooling", suffix: "", to: 6 },
-  { label: "Months of error-free QuickBooks", suffix: "", to: 6 },
+  { label: "Guest-reply lag eliminated", suffix: " hrs", to: 48 },
+  { label: "Saved per drafted reply", suffix: "–20 min", to: 15 },
+  { label: "Inventory items managed", suffix: "+", to: 100 },
+  { label: "Staff trained on the stack", suffix: "", to: 6 },
+  { label: "Error-free months in QuickBooks", suffix: "", to: 6 },
   { label: "Native languages", suffix: "", to: 3 },
 ];
 
