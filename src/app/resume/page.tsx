@@ -1,4 +1,4 @@
-import { Button, ParallaxBackdrop } from "@/components";
+import { Button, ParallaxBackdrop, SplitText } from "@/components";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -294,7 +294,9 @@ function ResumeHero() {
         </div>
 
         <h1 className="hero-display-md mt-8 font-semibold">
-          Pierre Belon Savon
+          <SplitText charDelay={0.035} delay={0.15} duration={0.85}>
+            Pierre Belon Savon
+          </SplitText>
         </h1>
         <p className="mt-4 font-mono text-sm uppercase tracking-[0.28em] text-text-light-muted">
           AI Engineer · Trilingual · Built to ship

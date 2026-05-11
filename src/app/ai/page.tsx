@@ -13,6 +13,7 @@ import {
   SectionDivider,
   SectionHeader,
   SiteFooter,
+  SplitText,
 } from "@/components";
 import type { ReactNode } from "react";
 
@@ -188,18 +189,22 @@ function AiHero() {
           </div>
         </ScrollReveal>
 
-        <ScrollReveal delay={0.05} direction="up">
-          <h1 className="hero-display-md mt-8 font-semibold">
-            I build AI that{" "}
-            <span className="relative inline-block">
-              <span className="gradient-shift">ships.</span>
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
-              />
+        <h1 className="hero-display-md mt-8 font-semibold">
+          <SplitText charDelay={0.03} delay={0.1} duration={0.8}>
+            {"I build AI that "}
+          </SplitText>
+          <span className="relative inline-block">
+            <span className="gradient-shift">
+              <SplitText charDelay={0.04} delay={0.55} duration={0.85}>
+                ships.
+              </SplitText>
             </span>
-          </h1>
-        </ScrollReveal>
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
+            />
+          </span>
+        </h1>
 
         <ScrollReveal delay={0.15} direction="up">
           <p className="mt-10 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">

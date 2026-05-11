@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
+import { SplitText } from "./SplitText";
 
 export type SectionHeaderProps = {
   align?: "left" | "center";
@@ -9,6 +10,8 @@ export type SectionHeaderProps = {
   className?: string;
   description?: string;
   eyebrow: string;
+  /** "word" (default, every section gets word-stagger) or "char" for char mask reveal. */
+  reveal?: "word" | "char";
   size?: "md" | "lg";
   title: string;
   tone?: "light" | "dark";
@@ -27,6 +30,7 @@ export function SectionHeader({
   className,
   description,
   eyebrow,
+  reveal = "word",
   size = "lg",
   title,
   tone = "light",
@@ -116,29 +120,41 @@ export function SectionHeader({
           titleColor,
         )}
       >
-        {reduce
-          ? title
-          : words.map((word, index) => (
-              <span
-                className="inline-block overflow-hidden align-top"
-                key={`${word}-${index}`}
+        {reduce ? (
+          title
+        ) : reveal === "char" ? (
+          <SplitText
+            charDelay={0.018}
+            delay={0.1}
+            duration={0.75}
+            trigger="scroll"
+            viewportAmount={0.35}
+          >
+            {title}
+          </SplitText>
+        ) : (
+          words.map((word, index) => (
+            <span
+              className="inline-block overflow-hidden align-top"
+              key={`${word}-${index}`}
+            >
+              <motion.span
+                className="inline-block"
+                initial={{ y: "110%" }}
+                transition={{
+                  delay: 0.08 + index * 0.035,
+                  duration: 0.7,
+                  ease: easeOut,
+                }}
+                viewport={viewport}
+                whileInView={{ y: 0 }}
               >
-                <motion.span
-                  className="inline-block"
-                  initial={{ y: "110%" }}
-                  transition={{
-                    delay: 0.08 + index * 0.035,
-                    duration: 0.7,
-                    ease: easeOut,
-                  }}
-                  viewport={viewport}
-                  whileInView={{ y: 0 }}
-                >
-                  {word}
-                  {index < words.length - 1 ? " " : ""}
-                </motion.span>
-              </span>
-            ))}
+                {word}
+                {index < words.length - 1 ? " " : ""}
+              </motion.span>
+            </span>
+          ))
+        )}
       </h2>
 
       {description ? (
