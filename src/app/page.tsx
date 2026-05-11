@@ -571,6 +571,7 @@ function BeyondTheCode() {
           fallbackTitle="Photo 1"
           imgAlt="Pierre smiling on the job at the hotel"
           imgSrc="/about-guitar.png"
+          revealDelay={0}
           tag="On-shift"
           title="Enjoying every part of the job"
         />
@@ -580,6 +581,7 @@ function BeyondTheCode() {
           fallbackTitle="Photo 2"
           imgAlt="Pierre at the Hawaii leadership retreat"
           imgSrc="/about-hawaii.png"
+          revealDelay={0.18}
           tag="Hawaii"
           title="The room where strategy gets made"
         />
@@ -618,6 +620,7 @@ function Portrait({
   fallbackTitle,
   imgAlt,
   imgSrc,
+  revealDelay = 0,
   tag,
   title,
 }: {
@@ -626,26 +629,53 @@ function Portrait({
   fallbackTitle: string;
   imgAlt: string;
   imgSrc: string;
+  revealDelay?: number;
   tag: string;
   title: string;
 }) {
+  const reduce = useReducedMotion();
   return (
     <figure className="flex flex-col gap-4">
-      <PhotoSlot
-        alt={imgAlt}
+      {/* clip-path scrubbed reveal: photo opens from a thin horizontal slit
+          (40% top + 40% bottom) to fully visible as the section enters view */}
+      <motion.div
         className="aspect-[3/4] overflow-hidden rounded-2xl"
-        fallbackMeta={fallbackMeta}
-        fallbackTitle={fallbackTitle}
-        fit="cover"
-        src={imgSrc}
-      />
-      <figcaption>
+        initial={reduce ? false : { clipPath: "inset(45% 0% 45% 0% round 16px)" }}
+        transition={{
+          delay: revealDelay,
+          duration: 1.1,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+        viewport={{ amount: 0.3, once: true }}
+        whileInView={
+          reduce ? undefined : { clipPath: "inset(0% 0% 0% 0% round 16px)" }
+        }
+      >
+        <PhotoSlot
+          alt={imgAlt}
+          className="h-full w-full"
+          fallbackMeta={fallbackMeta}
+          fallbackTitle={fallbackTitle}
+          fit="cover"
+          src={imgSrc}
+        />
+      </motion.div>
+      <motion.figcaption
+        initial={reduce ? false : { opacity: 0, y: 8 }}
+        transition={{
+          delay: revealDelay + 0.45,
+          duration: 0.6,
+          ease: [0.16, 1, 0.3, 1],
+        }}
+        viewport={{ amount: 0.3, once: true }}
+        whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+      >
         <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
           {tag}
         </p>
         <h3 className="mt-2 text-lg font-semibold text-text-dark">{title}</h3>
         <p className="mt-1 text-sm text-text-dark-muted">{caption}</p>
-      </figcaption>
+      </motion.figcaption>
     </figure>
   );
 }
