@@ -14,6 +14,7 @@ import {
   Button,
   CursorHalo,
   GreetingRotator,
+  HeroAvatarFrame,
   LightGlassCard,
   LiveStatusBadge,
   MarqueeBand,
@@ -253,29 +254,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
         className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8"
         style={reduce ? undefined : { opacity: heroOpacity, y: heroY }}
       >
-        <motion.button
-          aria-label="Open About — Pierre Belon Savon"
-          className="avatar-float avatar-ring group/avatar relative mb-8 h-32 w-32 cursor-pointer rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-40 sm:w-40 lg:h-44 lg:w-44"
-          onClick={onOpenAbout}
-          type="button"
-          {...fadeUp(0)}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            alt="Pierre Belon Savon"
-            className="relative h-full w-full rounded-full object-cover object-[50%_20%] shadow-lg ring-2 ring-accent/40 transition-transform duration-300 ease-out group-hover/avatar:scale-[1.06]"
-            fetchPriority="high"
-            loading="eager"
-            src="/avatar-photo.png"
-          />
-          {/* "About me →" tooltip that appears on avatar hover */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2 translate-y-2 rounded-full border border-accent/30 bg-white/95 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-accent opacity-0 shadow-[0_6px_16px_-8px_rgba(41,110,214,0.45)] backdrop-blur-md transition-[transform,opacity] duration-300 group-hover/avatar:translate-y-3 group-hover/avatar:opacity-100"
-          >
-            About me ↗
-          </span>
-        </motion.button>
+        <HeroAvatarFrame onClick={onOpenAbout} src="/avatar-photo.png" />
 
         <motion.div {...fadeUp(0.06)}>
           <LiveStatusBadge label="Currently shipping · Atlas v3" />
