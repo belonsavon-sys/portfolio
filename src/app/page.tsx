@@ -40,23 +40,23 @@ const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const heroMetrics = [
   {
-    context: "Guest reply latency at ThePrivateHotels",
-    label: "Response time",
+    context: "ThePrivateHotels · live since Apr 2024",
+    label: "Guest reply time",
     suffix: " min",
     to: 3,
-    valuePrefix: "from 48 hrs to ",
+    valuePrefix: "from 48 hrs → ",
   },
   {
-    context: "Operations manual digitized into trackable QA",
+    context: "Ops manual → QA system, ThePrivateHotels",
     label: "Pages digitized",
-    suffix: "+ pages",
+    suffix: "+",
     to: 100,
     valuePrefix: "",
   },
   {
-    context: "Game · Budget · Project Mgmt — built end-to-end via Atlas",
+    context: "Game · Budget · Project mgmt — Blackdoor",
     label: "Atlas products",
-    suffix: " shipping",
+    suffix: " live",
     to: 3,
     valuePrefix: "",
   },
