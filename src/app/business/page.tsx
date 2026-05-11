@@ -152,11 +152,7 @@ function BusinessHero() {
             {"I ship "}
           </SplitText>
           <span className="relative inline-block">
-            <span className="gradient-shift">
-              <SplitText charDelay={0.06} delay={0.45} duration={0.85}>
-                AI.
-              </SplitText>
-            </span>
+            <span className="gradient-shift">AI.</span>
             <span
               aria-hidden="true"
               className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
