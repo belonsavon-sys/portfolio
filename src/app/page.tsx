@@ -25,7 +25,6 @@ import {
   SelectedWork,
   SiteFooter,
   SplitText,
-  TrustStrip,
 } from "@/components";
 import { useRef, useState, type ReactNode } from "react";
 
@@ -98,10 +97,6 @@ export default function Home() {
             <SelectedWork />
           </div>
         </div>
-      </LightSection>
-
-      <LightSection className="pb-16 pt-8 sm:pb-20 sm:pt-12">
-        <TrustStrip />
       </LightSection>
 
       <BeyondTheCodeBand />
