@@ -113,30 +113,32 @@ export function BentoStack() {
           viewport={{ amount: 0.3, once: true }}
           whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
         >
-          {/* Giant ghost category number — sits as a watermark */}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-4 -top-12 select-none font-mono text-[10rem] font-bold leading-none tracking-tighter text-accent/[0.07] transition-[color,transform] duration-500 group-hover/cat:scale-105 group-hover/cat:text-accent/[0.12]"
-          >
-            {category.eyebrow}
-          </span>
-
-          <div className="relative flex items-center gap-3">
-            <span
-              className={`inline-block h-4 w-4 rounded-sm bg-gradient-to-br ${category.accent}`}
-            />
+          {/* Numbered eyebrow row */}
+          <div className="relative flex items-baseline justify-between gap-4">
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-              Category {category.eyebrow}
+              {category.eyebrow} /  stack
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-light-muted">
+              {category.items.length}{" "}
+              {category.items.length === 1 ? "tool" : "tools"}
             </span>
           </div>
 
-          <h3 className="relative mt-3 text-3xl font-semibold tracking-tight text-text-light sm:text-4xl">
+          {/* Display title */}
+          <h3
+            className="relative mt-3 font-semibold tracking-tight text-text-light"
+            style={{
+              fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
+              letterSpacing: "-0.03em",
+              lineHeight: 1.05,
+            }}
+          >
             {category.title}
           </h3>
 
           <motion.span
             aria-hidden="true"
-            className={`relative mt-4 block h-px origin-left bg-gradient-to-r ${category.accent}`}
+            className={`relative mt-5 block h-px origin-left bg-gradient-to-r ${category.accent}`}
             initial={reduce ? false : { scaleX: 0 }}
             transition={{
               delay: categoryIndex * 0.06 + 0.25,
