@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import {
+  AboutModal,
   AnimatedCounter,
   BentoStack,
   Button,
@@ -20,7 +21,7 @@ import {
   SplitText,
   TrustStrip,
 } from "@/components";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 const aboutParagraphs = [
   "I'm an engineer who learned to ship by automating the business I was hired to run.",
@@ -65,9 +66,11 @@ const detailedMetrics = [
 ];
 
 export default function Home() {
+  const [aboutOpen, setAboutOpen] = useState(false);
+
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
-      <Hero />
+      <Hero onOpenAbout={() => setAboutOpen(true)} />
 
       <LightSection className="pt-14 sm:pt-20">
         <NowBanner />
@@ -102,10 +105,6 @@ export default function Home() {
         ]}
       />
 
-      <LightSection className="pb-16 pt-16 sm:pb-20 sm:pt-24">
-        <About />
-      </LightSection>
-
       <BeyondTheCodeBand />
 
       <LightSection className="py-20 sm:py-24" id="stack">
@@ -115,6 +114,16 @@ export default function Home() {
       <SectionDivider direction="light-to-dark" />
 
       <SiteFooter />
+
+      <AboutModal
+        onClose={() => setAboutOpen(false)}
+        open={aboutOpen}
+        title={aboutParagraphs[0]}
+      >
+        {aboutParagraphs.slice(1).map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </AboutModal>
     </main>
   );
 }
@@ -188,7 +197,7 @@ function FloatingHeroLabels() {
   );
 }
 
-function Hero() {
+function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
   const reduce = useReducedMotion();
 
   const fadeUp = (delay: number) =>
@@ -214,19 +223,29 @@ function Hero() {
       <FloatingHeroLabels />
 
       <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
-        <motion.div
-          className="avatar-float avatar-ring relative mb-8 h-32 w-32 sm:h-40 sm:w-40 lg:h-44 lg:w-44"
+        <motion.button
+          aria-label="Open About — Pierre Belon Savon"
+          className="avatar-float avatar-ring group/avatar relative mb-8 h-32 w-32 cursor-pointer rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-40 sm:w-40 lg:h-44 lg:w-44"
+          onClick={onOpenAbout}
+          type="button"
           {...fadeUp(0)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             alt="Pierre Belon Savon"
-            className="relative h-full w-full rounded-full object-cover object-[50%_20%] shadow-lg ring-2 ring-accent/40 transition-transform duration-300 ease-out hover:scale-[1.04]"
+            className="relative h-full w-full rounded-full object-cover object-[50%_20%] shadow-lg ring-2 ring-accent/40 transition-transform duration-300 ease-out group-hover/avatar:scale-[1.06]"
             fetchPriority="high"
             loading="eager"
             src="/avatar-photo.png"
           />
-        </motion.div>
+          {/* "About me →" tooltip that appears on avatar hover */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-3 left-1/2 -translate-x-1/2 translate-y-2 rounded-full border border-accent/30 bg-white/95 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-accent opacity-0 shadow-[0_6px_16px_-8px_rgba(41,110,214,0.45)] backdrop-blur-md transition-[transform,opacity] duration-300 group-hover/avatar:translate-y-3 group-hover/avatar:opacity-100"
+          >
+            About me ↗
+          </span>
+        </motion.button>
 
         <motion.div {...fadeUp(0.06)}>
           <LiveStatusBadge label="Currently shipping · Atlas v3" />
@@ -484,30 +503,6 @@ function MetricsBand() {
         ))}
       </div>
     </div>
-  );
-}
-
-function About() {
-  return (
-    <section className="relative" id="about">
-      {/* Asymmetric grid: title takes the full left/center span, content
-          aligns to a narrower column on the right for editorial cadence. */}
-      <div className="grid gap-x-8 gap-y-10 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <SectionHeader eyebrow="About me" title={aboutParagraphs[0]} />
-        </div>
-
-        <div className="lg:col-span-5 lg:pt-8">
-          <div className="grid gap-5 text-left text-lg leading-8 text-text-light-muted">
-            {aboutParagraphs.slice(1).map((paragraph, index) => (
-              <ScrollReveal delay={index * 0.06} direction="up" key={paragraph}>
-                <p>{paragraph}</p>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 

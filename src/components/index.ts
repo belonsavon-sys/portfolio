@@ -1,5 +1,7 @@
 export { Button, NavPill } from "./Button";
 export type { ButtonProps, NavPillProps } from "./Button";
+export { AboutModal } from "./AboutModal";
+export type { AboutModalProps } from "./AboutModal";
 export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps } from "./AnimatedCounter";
 export { BackToTop } from "./BackToTop";
@@ -23,6 +25,7 @@ export {
 export type { ContactLink } from "./contact-config";
 export { CursorHalo } from "./CursorHalo";
 export type { CursorHaloProps } from "./CursorHalo";
+export { CustomCursor } from "./CustomCursor";
 export { DemoTabCard } from "./DemoTabCard";
 export type {
   DemoLoadStatus,
