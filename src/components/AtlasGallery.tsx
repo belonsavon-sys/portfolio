@@ -102,7 +102,7 @@ function TiltCard({
   return (
     <motion.article
       animate={reduce ? { opacity: 1 } : undefined}
-      className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/80 backdrop-blur-md transition-colors duration-300 hover:border-accent-light/70"
+      className="group relative flex h-full flex-col gap-6 overflow-hidden rounded-2xl border border-[rgba(41,110,214,0.25)] bg-gradient-to-br from-bg-dark-2 to-bg-dark p-6 backdrop-blur-md transition-colors duration-300 hover:border-accent-light/70 sm:p-7"
       initial={reduce ? { opacity: 1 } : { opacity: 0, y: 20 }}
       onMouseLeave={onLeave}
       onMouseMove={onMove}
@@ -116,64 +116,65 @@ function TiltCard({
       viewport={{ amount: 0.3, once: true }}
       whileInView={{ opacity: 1, y: 0 }}
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 transition-transform duration-[600ms] ease-out group-hover:scale-[1.06]"
-          style={{ background: product.gradient }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 opacity-30 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-60"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), transparent 60%)",
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
-        />
-        <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-          <span className="rounded-full border border-[rgba(255,255,255,0.3)] bg-[rgba(0,0,0,0.4)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark backdrop-blur-md">
-            {product.tag}
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark/80">
-            Pending screenshot
-          </span>
-        </div>
-      </div>
+      {/* Ambient corner glow */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent/15 blur-3xl transition-opacity duration-500 group-hover:opacity-60"
+      />
 
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex items-center gap-2">
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
-            Built via Atlas
-          </span>
-          <span aria-hidden="true" className="h-px flex-1 bg-[rgba(41,110,214,0.25)]" />
+      {/* META — tag, divider, status */}
+      <div className="relative flex items-center gap-2.5">
+        <span className="rounded-md border border-[rgba(91,155,244,0.3)] bg-[rgba(91,155,244,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+          {product.tag}
+        </span>
+        <span aria-hidden="true" className="h-px flex-1 bg-[rgba(41,110,214,0.25)]" />
+        <span
+          className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] ${
+            product.status === "shipped"
+              ? "text-result-green"
+              : "text-text-dark-muted"
+          }`}
+        >
           <span
-            className={`font-mono text-[10px] uppercase tracking-[0.18em] ${
+            className={`relative inline-flex h-1.5 w-1.5 rounded-full ${
               product.status === "shipped"
-                ? "text-result-green"
-                : "text-text-dark-muted"
+                ? "bg-result-green"
+                : "bg-text-dark-muted"
             }`}
           >
-            {product.status === "shipped" ? "● Shipped" : "● Internal"}
+            {product.status === "shipped" ? (
+              <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+            ) : null}
           </span>
-        </div>
-        <h3 className="flex items-center gap-2 text-lg font-semibold text-text-dark">
+          {product.status === "shipped" ? "Shipped" : "Internal"}
+        </span>
+      </div>
+
+      {/* TITLE — display-class with arrow that slides in on hover */}
+      <div className="relative">
+        <h3 className="flex items-baseline gap-2 text-2xl font-semibold tracking-tight text-text-dark sm:text-3xl">
           <span className="transition-colors duration-200 group-hover:text-accent-light">
             {product.title}
           </span>
           <span
             aria-hidden="true"
-            className="inline-block translate-x-0 opacity-0 transition-[transform,opacity] duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100"
+            className="inline-block translate-x-0 text-base text-accent-light opacity-0 transition-[transform,opacity] duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100"
           >
-            →
+            ↗
           </span>
         </h3>
-        <p className="text-sm leading-6 text-text-dark-muted">
+        <p className="mt-3 text-sm leading-6 text-text-dark-muted">
           {product.description}
         </p>
+      </div>
+
+      {/* FOOTER — Built via Atlas tag (kept as small attribution chip) */}
+      <div className="relative mt-auto flex items-center gap-2">
+        <span aria-hidden="true" className="h-px flex-1 bg-[rgba(41,110,214,0.18)]" />
+        <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light/70">
+          <span className="h-1 w-1 rounded-full bg-accent-light" />
+          Built via Atlas
+        </span>
       </div>
     </motion.article>
   );
