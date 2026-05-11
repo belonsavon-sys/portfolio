@@ -77,19 +77,6 @@ a {
   text-shadow: none;
 }
 
-/* Custom cursor — hide the system pointer everywhere when the custom
-   cursor is mounted (CustomCursor sets data-cursor="custom" on <html>).
-   Keep native text caret in inputs/textareas so typing still works. */
-html[data-cursor="custom"],
-html[data-cursor="custom"] body,
-html[data-cursor="custom"] a,
-html[data-cursor="custom"] button,
-html[data-cursor="custom"] [role="button"],
-html[data-cursor="custom"] label,
-html[data-cursor="custom"] summary {
-  cursor: none;
-}
-
 /* Custom scrollbars — thin, accent-tinted, modern. */
 @supports (scrollbar-width: thin) {
   html {
