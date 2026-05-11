@@ -37,7 +37,10 @@ export function HeroAvatarFrame({ onClick, src }: HeroAvatarFrameProps) {
     <motion.button
       aria-label="Open About — Pierre Belon Savon"
       className="group/avatar relative mb-8 inline-flex h-36 w-36 cursor-pointer items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-44 sm:w-44 lg:h-48 lg:w-48"
-      onClick={onClick}
+      onClick={(event) => {
+        event.preventDefault();
+        onClick?.();
+      }}
       type="button"
       initial={reduce ? { opacity: 1 } : { opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
