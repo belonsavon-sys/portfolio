@@ -133,25 +133,28 @@ export function SectionHeader({
             {title}
           </SplitText>
         ) : (
+          // Word-by-word mask reveal. The inter-word space lives OUTSIDE
+          // the overflow-hidden mask so it's not clipped — without this,
+          // the trailing space inside a shrink-to-fit inline-block can be
+          // collapsed and adjacent word masks end up touching.
           words.map((word, index) => (
-            <span
-              className="inline-block overflow-hidden align-top"
-              key={`${word}-${index}`}
-            >
-              <motion.span
-                className="inline-block"
-                initial={{ y: "110%" }}
-                transition={{
-                  delay: 0.08 + index * 0.035,
-                  duration: 0.7,
-                  ease: easeOut,
-                }}
-                viewport={viewport}
-                whileInView={{ y: 0 }}
-              >
-                {word}
-                {index < words.length - 1 ? " " : ""}
-              </motion.span>
+            <span key={`${word}-${index}`}>
+              <span className="inline-block overflow-hidden align-top">
+                <motion.span
+                  className="inline-block"
+                  initial={{ y: "110%" }}
+                  transition={{
+                    delay: 0.08 + index * 0.035,
+                    duration: 0.7,
+                    ease: easeOut,
+                  }}
+                  viewport={viewport}
+                  whileInView={{ y: 0 }}
+                >
+                  {word}
+                </motion.span>
+              </span>
+              {index < words.length - 1 ? " " : null}
             </span>
           ))
         )}
