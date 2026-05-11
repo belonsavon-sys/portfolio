@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
+  BackToTop,
+  ConsoleSignature,
+  KeyboardNav,
   PageTransition,
   ScrollProgress,
   SiteHeader,
@@ -17,6 +20,14 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Display face — Bricolage Grotesque has variable axes (wdth + opsz) for true
+// editorial display feel. Used for hero + section H2.
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-display",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const siteUrl = "https://pierrebelonsavon.com";
@@ -80,12 +91,24 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
-      <body className="flex min-h-full flex-col">
+      <body className="grain flex min-h-full flex-col">
+        <a
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:border focus:border-accent focus:bg-white focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-medium focus:uppercase focus:tracking-[0.22em] focus:text-accent focus:shadow-lg"
+          href="#main-content"
+        >
+          Skip to content →
+        </a>
         <ScrollProgress />
         <SiteHeader />
-        <PageTransition>{children}</PageTransition>
+        <div id="main-content">
+          <PageTransition>{children}</PageTransition>
+        </div>
+        <BackToTop />
+        <ConsoleSignature />
+        <KeyboardNav />
         <Analytics />
         <SpeedInsights />
       </body>
