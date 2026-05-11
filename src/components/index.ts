@@ -61,6 +61,8 @@ export type {
 } from "./SectionDivider";
 export { SiteFooter } from "./SiteFooter";
 export { SiteHeader } from "./SiteHeader";
+export { SplitText } from "./SplitText";
+export type { SplitTextProps } from "./SplitText";
 export { TerminalWindow } from "./TerminalWindow";
 export type { TerminalLine, TerminalWindowProps } from "./TerminalWindow";
 export { Testimonial } from "./Testimonial";
