@@ -156,9 +156,8 @@ function BusinessHero() {
         </ScrollReveal>
         <ScrollReveal delay={0.15} direction="up">
           <p className="mt-8 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
-            Not plans. Not decks. Systems running in production, solving real
-            problems, delivering measurable results — built from inside the
-            operations I was hired to run.
+            Not plans. Not decks. Systems running in production — built from
+            inside the operations I was hired to run.
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.22} direction="up">
