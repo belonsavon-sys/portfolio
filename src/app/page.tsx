@@ -87,15 +87,33 @@ export default function Home() {
         <MetricsBand />
       </LightSection>
 
-      <LightSection className="pb-12 pt-4 sm:pt-8" id="work">
-        <SectionHeader
-          align="center"
-          description="Real systems in production. Pick a thread, follow it."
-          eyebrow="Selected work"
-          title="Built. Shipping. Compounding."
-        />
-        <div className="mt-12">
-          <SelectedWork />
+      <LightSection className="pb-16 pt-8 sm:pb-20 sm:pt-12" id="work">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          {/* STICKY TITLE COLUMN — stays pinned while the cards scroll past */}
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-28">
+              <SectionHeader
+                description="Real systems in production. Pick a thread, follow it."
+                eyebrow="Selected work"
+                title="Built. Shipping. Compounding."
+              />
+              {/* Small live counter — tactile detail */}
+              <div className="mt-8 hidden items-center gap-3 lg:flex">
+                <span className="relative inline-flex h-2 w-2">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                  <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-result-green">
+                  4 projects · scroll to explore
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* WORKS COLUMN */}
+          <div className="lg:col-span-7">
+            <SelectedWork />
+          </div>
         </div>
       </LightSection>
 
