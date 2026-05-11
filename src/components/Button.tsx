@@ -58,14 +58,16 @@ export type NavPillProps = {
 
 const buttonVariants: Record<ButtonVariant, string> = {
   primary: "border-transparent bg-accent text-white",
-  ghost: "border-accent bg-transparent text-accent",
-  ghostDark: "border-accent bg-transparent text-text-dark",
+  ghost:
+    "btn-fill-host relative overflow-hidden border-accent bg-transparent text-accent",
+  ghostDark:
+    "btn-fill-host relative overflow-hidden border-accent bg-transparent text-text-dark",
 };
 
 const hoverFilter: Record<ButtonVariant, string> = {
   primary: "brightness(0.9)",
-  ghost: "brightness(1.1)",
-  ghostDark: "brightness(1.1)",
+  ghost: "brightness(1)",
+  ghostDark: "brightness(1)",
 };
 
 function cx(...classes: Array<string | false | null | undefined>) {
@@ -146,6 +148,16 @@ export function Button(props: ButtonProps) {
     whileTap: { scale: 0.97 },
   };
 
+  const isGhost = variant === "ghost" || variant === "ghostDark";
+  const inner = isGhost ? (
+    <>
+      <span aria-hidden="true" className="btn-fill" />
+      <span className="btn-label">{children}</span>
+    </>
+  ) : (
+    children
+  );
+
   if ("href" in rest && rest.href) {
     const { download, href, onClick, target, rel } = rest;
     const safeRel = target === "_blank" ? (rel ?? "noreferrer") : rel;
@@ -165,7 +177,7 @@ export function Button(props: ButtonProps) {
             {...magneticProps}
             {...motionProps}
           >
-            {children}
+            {inner}
           </motion.span>
         </Link>
       );
@@ -183,7 +195,7 @@ export function Button(props: ButtonProps) {
         {...magneticProps}
         {...motionProps}
       >
-        {children}
+        {inner}
       </motion.a>
     );
   }
@@ -201,7 +213,7 @@ export function Button(props: ButtonProps) {
       {...magneticProps}
       {...motionProps}
     >
-      {children}
+      {inner}
     </motion.button>
   );
 }

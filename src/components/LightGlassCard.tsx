@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import type { CSSProperties, ReactNode } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useCallback, useRef } from "react";
+import type { CSSProperties, MouseEvent as ReactMouseEvent, ReactNode } from "react";
 
 export type LightGlassCardProps = {
   "aria-describedby"?: string;
@@ -10,6 +11,7 @@ export type LightGlassCardProps = {
   className?: string;
   hoverable?: boolean;
   id?: string;
+  spotlight?: boolean;
   style?: CSSProperties;
   title?: string;
 };
@@ -23,14 +25,38 @@ export function LightGlassCard({
   className,
   hoverable = true,
   id,
+  spotlight = true,
   style,
   title,
   ...props
 }: LightGlassCardProps) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const onMouseMove = useCallback(
+    (event: ReactMouseEvent<HTMLDivElement>) => {
+      if (!spotlight || reduce) return;
+      const node = ref.current;
+      if (!node) return;
+      const rect = node.getBoundingClientRect();
+      const mx = ((event.clientX - rect.left) / rect.width) * 100;
+      const my = ((event.clientY - rect.top) / rect.height) * 100;
+      node.style.setProperty("--mx", `${mx}%`);
+      node.style.setProperty("--my", `${my}%`);
+    },
+    [spotlight, reduce],
+  );
+
   return (
     <motion.div
-      className={cx("rounded-2xl p-6 text-text-light", className)}
+      className={cx(
+        "rounded-2xl p-6 text-text-light",
+        spotlight && "card-spotlight",
+        className,
+      )}
       id={id}
+      onMouseMove={onMouseMove}
+      ref={ref}
       style={{
         background: "rgba(255, 255, 255, 0.45)",
         borderTop: "1px solid rgba(255, 255, 255, 0.90)",
@@ -68,7 +94,7 @@ export function LightGlassCard({
       }
       {...props}
     >
-      {children}
+      <div className="relative z-10">{children}</div>
     </motion.div>
   );
 }
