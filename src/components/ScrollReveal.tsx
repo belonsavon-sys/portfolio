@@ -57,9 +57,9 @@ export function ScrollReveal({
       transition={{
         delay,
         duration,
-        ease: [0.21, 0.47, 0.32, 0.98] as [number, number, number, number],
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
       }}
-      viewport={{ amount: 0.2, once }}
+      viewport={{ amount: 0.25, once }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
     >
       {children}

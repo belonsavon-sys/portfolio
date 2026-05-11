@@ -35,15 +35,32 @@ export function SiteFooter() {
   return (
     <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
       <ParallaxBackdrop>
-        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/18 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
         <div className="absolute bottom-[-8rem] right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/14 blur-3xl" />
-        <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/12 blur-3xl" />
+        <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/14 blur-3xl" />
       </ParallaxBackdrop>
 
-      <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
+      {/* Giant ghost text "LET'S TALK" */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-1/3 -z-0 flex justify-center overflow-hidden"
+      >
+        <span
+          className="select-none font-bold leading-[0.85] tracking-tighter"
+          style={{
+            fontSize: "clamp(5rem, 18vw, 18rem)",
+            WebkitTextStroke: "1px rgba(91,155,244,0.10)",
+            color: "transparent",
+          }}
+        >
+          LET&apos;S TALK
+        </span>
+      </div>
+
+      <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
         <LiveStatusBadge label="Available now · 3 min reply average" />
 
-        <h2 className="mt-8 text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl">
+        <h2 className="hero-display-md mt-8 font-semibold">
           <span className="block">Let&apos;s build something</span>
           <span
             className="block bg-gradient-to-r from-text-dark via-accent-light to-accent-light bg-clip-text text-transparent"
@@ -67,18 +84,31 @@ export function SiteFooter() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Button href="/contact">Contact Me →</Button>
-          <Button href="/resume" variant="ghostDark">
+          <Button className="!px-8 !py-4 !text-base" href="/contact">
+            Get in Touch →
+          </Button>
+          <Button
+            className="!px-8 !py-4 !text-base"
+            href="/resume"
+            variant="ghostDark"
+          >
             View Resume
           </Button>
         </div>
 
-        <p className="mt-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted">
-          <span>Remote</span>
-          <span aria-hidden="true" className="text-accent">·</span>
-          <span>Trilingual</span>
-          <span aria-hidden="true" className="text-accent">·</span>
-          <span>Replies in 24 hrs</span>
+        <p className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 font-mono text-xs uppercase tracking-[0.24em] text-text-dark-muted">
+          <span className="inline-flex items-center gap-2">
+            <span className="h-1 w-1 rounded-full bg-accent-light" />
+            Remote
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="h-1 w-1 rounded-full bg-accent-light" />
+            Trilingual
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="h-1 w-1 rounded-full bg-accent-light" />
+            Replies in 24 hrs
+          </span>
         </p>
       </div>
 
@@ -100,7 +130,7 @@ export function SiteFooter() {
               {FOOTER_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
-                    className="transition-colors hover:text-text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
+                    className="link-underline inline-block transition-colors hover:text-text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
                     href={link.href}
                   >
                     {link.label}
@@ -117,7 +147,7 @@ export function SiteFooter() {
               {FOOTER_CONTACTS.map((contact) => (
                 <li key={contact.label}>
                   <a
-                    className="break-words transition-colors hover:text-text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
+                    className="link-underline inline-block break-words transition-colors hover:text-text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
                     href={contact.href}
                     rel={contact.external ? "noreferrer" : undefined}
                     target={contact.external ? "_blank" : undefined}
@@ -131,8 +161,26 @@ export function SiteFooter() {
         </div>
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[rgba(41,110,214,0.12)] pt-6 sm:flex-row">
           <p className="text-xs text-text-dark-muted">© 2026 Pierre Belon Savon</p>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dark-muted">
-            Built business-first
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+            <span>Built with</span>
+            <span className="text-accent-light">Next.js</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-accent-light">Tailwind</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-accent-light">Framer Motion</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-accent-light">Vercel</span>
+          </div>
+          <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-dark-muted">
+            <span>Built business-first</span>
+            <span aria-hidden="true">·</span>
+            <span className="inline-flex items-center gap-1">
+              Press{" "}
+              <kbd className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-md border border-accent/40 bg-[rgba(41,110,214,0.15)] px-1 text-[10px] font-semibold text-accent-light">
+                ?
+              </kbd>{" "}
+              for shortcuts
+            </span>
           </p>
         </div>
       </footer>

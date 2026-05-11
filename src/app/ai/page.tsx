@@ -4,10 +4,14 @@ import {
   BeforeAfter,
   Button,
   CursorHalo,
+  IndexedDivider,
   LiveStatusBadge,
   LocalAiDemo,
+  MarqueeBand,
   ParallaxBackdrop,
   ScrollReveal,
+  SectionDivider,
+  SectionHeader,
   SiteFooter,
 } from "@/components";
 import type { ReactNode } from "react";
@@ -107,17 +111,28 @@ export default function AiPage() {
         <ServicesSection />
       </LightSection>
 
-      <SectionRule />
+      <IndexedDivider index="01" label="Built and shipped" />
 
       <LightSection className="py-20 sm:py-24" id="built-and-shipped">
         <CaseStudiesSection />
       </LightSection>
 
-      <SectionRule />
+      <IndexedDivider index="02" label="Atlas portfolio" />
 
       <LightSection className="py-20 sm:py-24">
         <AtlasGallerySection />
       </LightSection>
+
+      <MarqueeBand
+        items={[
+          "48 hrs → 3 min response time",
+          "100+ page ops manual digitized",
+          "3 Atlas products shipping",
+          "Top 10% Airbnb · Travelers' Choice",
+        ]}
+      />
+
+      <SectionDivider direction="light-to-dark" />
 
       <DemoSection
         eyebrow="Demo 1"
@@ -147,42 +162,84 @@ function AiHero() {
     <section className="relative overflow-hidden">
       <CursorHalo />
       <ParallaxBackdrop>
-        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
-        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
+        <div className="orb-drift-a absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
+        <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
       </ParallaxBackdrop>
 
-      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
+      {/* Giant ghost AI watermark — sits behind the hero content */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
+      >
+        <span className="ghost-text select-none">AI</span>
+      </div>
+
+      <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
+        {/* Slash + animated pulse — section identifier */}
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
-            /ai
-          </p>
+          <div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/60 px-4 py-1.5 backdrop-blur-md">
+            <span className="relative inline-flex h-2 w-2">
+              <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+              <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+            </span>
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+              /ai · what I build
+            </p>
+          </div>
         </ScrollReveal>
+
         <ScrollReveal delay={0.05} direction="up">
-          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7rem]">
+          <h1 className="hero-display-md mt-8 font-semibold">
             I build AI that{" "}
-            <span className="bg-gradient-to-r from-accent-deep via-accent to-accent-light bg-clip-text text-transparent">
-              ships.
+            <span className="relative inline-block">
+              <span className="gradient-shift">ships.</span>
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
+              />
             </span>
           </h1>
         </ScrollReveal>
-        <ScrollReveal delay={0.1} direction="up">
-          <div
-            aria-hidden="true"
-            className="mt-8 h-[3px] w-32 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
-          />
-        </ScrollReveal>
+
         <ScrollReveal delay={0.15} direction="up">
-          <p className="mt-8 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
+          <p className="mt-10 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
             Agent harnesses, process automation, full-stack applications —
             built to change how your business operates, not just to impress in
             a demo.
           </p>
         </ScrollReveal>
+
+        {/* Inline marker stats — three small fact pills */}
         <ScrollReveal delay={0.22} direction="up">
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Button href="/contact">Get in Touch →</Button>
-            <Button href="#built-and-shipped" variant="ghost">
-              Built and Shipped
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 font-mono text-xs uppercase tracking-[0.22em] text-text-light-muted">
+            <span className="inline-flex items-center gap-2">
+              <span className="text-accent">→</span>
+              3 Atlas products shipping
+            </span>
+            <span aria-hidden="true" className="h-3 w-px bg-border-light" />
+            <span className="inline-flex items-center gap-2">
+              <span className="text-accent">→</span>
+              48 hrs &rarr; 3 min reply time
+            </span>
+            <span aria-hidden="true" className="h-3 w-px bg-border-light" />
+            <span className="inline-flex items-center gap-2">
+              <span className="text-accent">→</span>
+              100+ page ops manual automated
+            </span>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.32} direction="up">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+            <Button className="!px-8 !py-4 !text-base" href="/contact">
+              Start a Project →
+            </Button>
+            <Button
+              className="!px-8 !py-4 !text-base"
+              href="#built-and-shipped"
+              variant="ghost"
+            >
+              See Built & Shipped
             </Button>
           </div>
         </ScrollReveal>
@@ -194,25 +251,32 @@ function AiHero() {
 function ServicesSection() {
   return (
     <div>
-      <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-        What I build
-      </p>
-      <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-        From process to product.
-      </h2>
-      <div className="mt-10 grid gap-x-10 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
-        {services.map((service) => (
-          <div className="border-l border-border-light pl-5" key={service.name}>
-            <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
-              {service.icon}
-            </p>
-            <h3 className="mt-3 text-xl font-semibold text-text-light">
-              {service.name}
-            </h3>
-            <p className="mt-3 text-sm leading-6 text-text-light-muted">
-              {service.description}
-            </p>
-          </div>
+      <SectionHeader eyebrow="What I build" title="From process to product." />
+      <div className="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
+        {services.map((service, index) => (
+          <ScrollReveal
+            delay={index * 0.05}
+            direction="up"
+            key={service.name}
+          >
+            <div className="group relative border-l border-border-light pl-5 transition-[border-color] duration-300 hover:border-accent">
+              <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
+                {service.icon}
+              </p>
+              <h3 className="mt-3 flex items-baseline gap-2 text-xl font-semibold text-text-light">
+                <span>{service.name}</span>
+                <span
+                  aria-hidden="true"
+                  className="inline-block translate-x-0 opacity-0 transition-[transform,opacity] duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100"
+                >
+                  →
+                </span>
+              </h3>
+              <p className="mt-3 text-sm leading-6 text-text-light-muted">
+                {service.description}
+              </p>
+            </div>
+          </ScrollReveal>
         ))}
       </div>
     </div>
@@ -222,12 +286,10 @@ function ServicesSection() {
 function CaseStudiesSection() {
   return (
     <div>
-      <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-        Built and shipped
-      </p>
-      <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl">
-        Case studies. Real systems. Real outcomes.
-      </h2>
+      <SectionHeader
+        eyebrow="Built and shipped"
+        title="Case studies. Real systems. Real outcomes."
+      />
 
       <div className="mt-12 grid gap-16">
         {caseStudies.map((study) => (
@@ -263,15 +325,40 @@ function CaseStudiesSection() {
             triggers and responses. Team focuses on decisions, not data
             movement.
           </p>
-          <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            {["Zapier", "Guesty API", "Twilio API"].map((item) => (
-              <div
-                className="rounded-xl border border-accent/30 bg-[rgba(41,110,214,0.06)] px-4 py-3 text-center font-mono text-sm uppercase tracking-[0.18em] text-text-light"
-                key={item}
-              >
-                {item}
-              </div>
-            ))}
+          {/* Wired-system visualization */}
+          <div className="relative mt-8">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:flex-nowrap sm:justify-between">
+              {[
+                { label: "Zapier", role: "Trigger" },
+                { label: "Guesty API", role: "Source" },
+                { label: "Twilio API", role: "Channel" },
+              ].map((item, i, arr) => (
+                <ScrollReveal
+                  delay={i * 0.08}
+                  direction="up"
+                  key={item.label}
+                >
+                  <div className="group flex items-center gap-3">
+                    <div className="rounded-xl border border-accent/30 bg-[rgba(41,110,214,0.06)] px-5 py-4 text-center transition-[border-color,background] duration-300 hover:border-accent hover:bg-[rgba(41,110,214,0.12)]">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-accent">
+                        {item.role}
+                      </p>
+                      <p className="mt-1.5 text-base font-semibold text-text-light">
+                        {item.label}
+                      </p>
+                    </div>
+                    {i < arr.length - 1 ? (
+                      <span
+                        aria-hidden="true"
+                        className="hidden text-accent/50 sm:inline-block"
+                      >
+                        →
+                      </span>
+                    ) : null}
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
           </div>
         </article>
       </div>
@@ -282,21 +369,12 @@ function CaseStudiesSection() {
 function AtlasGallerySection() {
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-3">
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
-          Atlas portfolio
-        </p>
-        <span aria-hidden="true" className="h-px w-8 bg-accent/40" />
-        <LiveStatusBadge label="3 products · in motion" />
-      </div>
-      <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight sm:text-5xl">
-        What Atlas has shipped.
-      </h2>
-      <p className="mt-5 max-w-3xl text-lg leading-8 text-text-light-muted">
-        Three products built end-to-end via the Atlas multi-agent harness.
-        Real agents wrote the code, opened the PRs, and shipped the features
-        under human review.
-      </p>
+      <SectionHeader
+        badge={<LiveStatusBadge label="3 products · in motion" />}
+        description="Three products built end-to-end via the Atlas multi-agent harness. Real agents wrote the code, opened the PRs, and shipped the features under human review."
+        eyebrow="Atlas portfolio"
+        title="What Atlas has shipped."
+      />
       <div className="mt-12">
         <AtlasGallery />
       </div>
@@ -323,33 +401,16 @@ function DemoSection({
         <div className="absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
       </div>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-center gap-3">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light">
-            {eyebrow}
-          </p>
-          <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
-          <LiveStatusBadge label={statusLabel} />
-        </div>
-        <h2 className="mt-4 max-w-4xl text-4xl font-semibold tracking-tight text-text-dark sm:text-5xl">
-          {title}
-        </h2>
-        <p className="mt-5 max-w-3xl text-lg leading-8 text-text-dark-muted">
-          {description}
-        </p>
+        <SectionHeader
+          badge={<LiveStatusBadge label={statusLabel} />}
+          description={description}
+          eyebrow={eyebrow}
+          title={title}
+          tone="dark"
+        />
         <div className="scanlines mt-10 rounded-3xl">{children}</div>
       </div>
     </section>
-  );
-}
-
-function SectionRule() {
-  return (
-    <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div
-        aria-hidden="true"
-        className="h-px w-full bg-gradient-to-r from-transparent via-border-light to-transparent"
-      />
-    </div>
   );
 }
 

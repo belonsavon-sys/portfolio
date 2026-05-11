@@ -70,3 +70,6 @@ coverage/
 # Misc
 .cache/
 .turbo/
+
+# Claude Code session state
+.claude/

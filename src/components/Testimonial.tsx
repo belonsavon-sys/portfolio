@@ -13,7 +13,7 @@ export type TestimonialProps = {
   children?: ReactNode;
 };
 
-const easeOut = [0.21, 0.47, 0.32, 0.98] as [number, number, number, number];
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 /**
  * Renders a quote card. If `body` is null/empty, the component returns null

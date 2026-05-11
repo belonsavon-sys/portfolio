@@ -36,14 +36,26 @@ export function GreetingRotator({
     >
       <AnimatePresence initial={false} mode="wait">
         <motion.span
-          animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+          animate={
+            reduce
+              ? { opacity: 1 }
+              : { opacity: 1, y: 0, filter: "blur(0px)" }
+          }
           aria-hidden="true"
           className="inline-block"
-          exit={reduce ? { opacity: 0 } : { opacity: 0, y: -10 }}
-          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 10 }}
+          exit={
+            reduce
+              ? { opacity: 0 }
+              : { opacity: 0, y: -8, filter: "blur(6px)" }
+          }
+          initial={
+            reduce
+              ? { opacity: 0 }
+              : { opacity: 0, y: 8, filter: "blur(6px)" }
+          }
           key={greetings[index].lang}
           lang={greetings[index].lang}
-          transition={{ duration: 0.45, ease: [0.21, 0.47, 0.32, 0.98] }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           {greetings[index].text}
         </motion.span>

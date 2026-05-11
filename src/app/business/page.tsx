@@ -2,8 +2,12 @@ import {
   BeforeAfter,
   Button,
   CursorHalo,
+  IndexedDivider,
+  MarqueeBand,
   ParallaxBackdrop,
   ScrollReveal,
+  SectionDivider,
+  SectionHeader,
   SiteFooter,
   Testimonial,
 } from "@/components";
@@ -66,19 +70,29 @@ export default function BusinessPage() {
         <BlackdoorSection />
       </LightSection>
 
-      <SectionRule />
+      <MarqueeBand
+        items={[
+          "Process design",
+          "Guest communications",
+          "Team leadership",
+          "Finance & admin",
+          "Agentic systems",
+        ]}
+      />
+
+      <IndexedDivider index="01" label="Process design" />
 
       <LightSection className="py-20 sm:py-24">
         <ProcessSection />
       </LightSection>
 
-      <SectionRule />
+      <IndexedDivider index="02" label="Communications" />
 
       <LightSection className="py-20 sm:py-24">
         <CommunicationsSection />
       </LightSection>
 
-      <SectionRule />
+      <IndexedDivider index="03" label="Team & training" />
 
       <LightSection className="py-20 sm:py-24">
         <TrainingSection />
@@ -93,11 +107,13 @@ export default function BusinessPage() {
         />
       </LightSection>
 
-      <SectionRule />
+      <IndexedDivider index="04" label="Finance & admin" />
 
       <LightSection className="py-20 sm:py-24">
         <FinanceSection />
       </LightSection>
+
+      <SectionDivider direction="light-to-dark" />
 
       <SiteFooter />
     </main>
@@ -109,20 +125,36 @@ function BusinessHero() {
     <section className="relative overflow-hidden">
       <CursorHalo />
       <ParallaxBackdrop>
-        <div className="absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
-        <div className="absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
+        <div className="orb-drift-a absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
+        <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
       </ParallaxBackdrop>
-      <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
+      >
+        <span className="ghost-text select-none">OPS</span>
+      </div>
+      <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
         <ScrollReveal direction="up">
-          <p className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent">
-            /business
-          </p>
+          <div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
+            <span className="relative inline-flex h-2 w-2">
+              <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+              <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+            </span>
+            <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+              /business · for operators
+            </p>
+          </div>
         </ScrollReveal>
         <ScrollReveal delay={0.05} direction="up">
-          <h1 className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[7rem]">
+          <h1 className="hero-display-md mt-6 font-semibold">
             I ship{" "}
-            <span className="bg-gradient-to-r from-accent-deep via-accent to-accent-light bg-clip-text text-transparent">
-              AI.
+            <span className="relative inline-block">
+              <span className="gradient-shift">AI.</span>
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
+              />
             </span>
           </h1>
         </ScrollReveal>
@@ -140,8 +172,10 @@ function BusinessHero() {
           </p>
         </ScrollReveal>
         <ScrollReveal delay={0.22} direction="up">
-          <div className="mt-10">
-            <Button href="/contact">Get in Touch →</Button>
+          <div className="mt-12">
+            <Button className="!px-8 !py-4 !text-base" href="/contact">
+              Start a Conversation →
+            </Button>
           </div>
         </ScrollReveal>
       </div>
@@ -153,17 +187,12 @@ function BlackdoorSection() {
   return (
     <div className="grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
       <div>
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-          Blackdoor operations
-        </p>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-          Building the company that builds companies.
-        </h2>
-        <p className="mt-5 max-w-md text-lg leading-8 text-text-light-muted">
-          Blackdoor is the holding company I co-founded with Ryder in 2025.
-          We develop and operate agentic companies across entertainment,
-          SaaS, robotics, and AI.
-        </p>
+        <SectionHeader
+          description="Blackdoor is the holding company I co-founded with Ryder in 2025. We develop and operate agentic companies across entertainment, SaaS, robotics, and AI."
+          eyebrow="Blackdoor operations"
+          size="md"
+          title="Building the company that builds companies."
+        />
 
         <ul className="mt-8 grid gap-3">
           {blackdoorOutcomes.map((outcome) => (
@@ -182,34 +211,51 @@ function BlackdoorSection() {
       </div>
 
       <div>
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-light-muted">
-          Atlas — the engine
-        </p>
-        <ul className="mt-4 grid gap-3">
-          {atlasLayers.map((layer) => (
-            <li
-              className="rounded-xl border border-border-light bg-bg-light-2 p-5"
+        <div className="flex items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-accent/30 bg-[rgba(41,110,214,0.10)]"
+          >
+            <span className="h-2 w-2 rounded-sm bg-accent" />
+          </span>
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+            Atlas · the engine
+          </p>
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        </div>
+        <ul className="relative mt-5 grid gap-3">
+          {/* Subtle vertical thread connecting the hierarchy levels */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-8 top-4 bottom-4 w-px bg-gradient-to-b from-accent/60 via-accent/25 to-transparent"
+          />
+          {atlasLayers.map((layer, index) => (
+            <ScrollReveal
+              delay={index * 0.06}
+              direction="left"
               key={layer.title}
             >
-              <div className="flex items-baseline gap-3">
-                <span className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-                  {layer.badge}
-                </span>
-                <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
-                  {layer.title}
-                </span>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {layer.items.map((item) => (
-                  <span
-                    className="inline-flex items-center rounded-md border border-accent/30 bg-[rgba(41,110,214,0.08)] px-2.5 py-1 text-sm font-medium text-text-light"
-                    key={item}
-                  >
-                    {item}
+              <li className="group relative rounded-xl border border-border-light bg-bg-light-2 p-5 transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-[0_8px_24px_-12px_rgba(41,110,214,0.25)]">
+                <div className="flex items-baseline gap-3">
+                  <span className="relative inline-flex h-6 w-6 items-center justify-center rounded-full border border-accent/40 bg-bg-light font-mono text-[10px] font-semibold tracking-tight text-accent">
+                    {layer.badge}
                   </span>
-                ))}
-              </div>
-            </li>
+                  <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted transition-colors duration-200 group-hover:text-text-light">
+                    {layer.title}
+                  </span>
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {layer.items.map((item) => (
+                    <span
+                      className="inline-flex items-center rounded-md border border-accent/30 bg-[rgba(41,110,214,0.08)] px-2.5 py-1 text-sm font-medium text-text-light"
+                      key={item}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </li>
+            </ScrollReveal>
           ))}
         </ul>
 
@@ -335,12 +381,10 @@ function FinanceSection() {
   return (
     <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:items-start">
       <div>
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-          Finance & administration
-        </p>
-        <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
-          Precision behind the scenes.
-        </h2>
+        <SectionHeader
+          eyebrow="Finance & administration"
+          title="Precision behind the scenes."
+        />
         <p className="mt-6 text-lg leading-8 text-text-light-muted">
           Before I was building AI systems, I was keeping the books. As a
           Finance Data Entry Assistant at ThePrivateHotels, I processed
@@ -387,12 +431,7 @@ function SectionShell({
   return (
     <div className="grid gap-12 lg:grid-cols-[1fr_320px] lg:items-start">
       <div>
-        <p className="font-mono text-sm font-medium uppercase tracking-[0.2em] text-accent">
-          {eyebrow}
-        </p>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-          {heading}
-        </h2>
+        <SectionHeader eyebrow={eyebrow} size="md" title={heading} />
         <div className="mt-8">{children}</div>
       </div>
 
@@ -411,17 +450,6 @@ function SectionShell({
           ))}
         </ul>
       </aside>
-    </div>
-  );
-}
-
-function SectionRule() {
-  return (
-    <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div
-        aria-hidden="true"
-        className="h-px w-full bg-gradient-to-r from-transparent via-border-light to-transparent"
-      />
     </div>
   );
 }

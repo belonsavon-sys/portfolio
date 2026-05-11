@@ -93,10 +93,31 @@ function stepsFromLive(prompt: string, atlas: AtlasApiPayload): DemoStep[] {
   return out;
 }
 
-const statusMeta: Record<TaskStatus, { label: string; marker: string }> = {
-  done: { label: "done", marker: "●" },
-  progress: { label: "in progress", marker: "◐" },
-  todo: { label: "todo", marker: "◯" },
+const statusMeta: Record<
+  TaskStatus,
+  { bg: string; border: string; label: string; marker: string; text: string }
+> = {
+  done: {
+    bg: "bg-[rgba(16,185,129,0.10)]",
+    border: "border-result-green/40",
+    label: "Done",
+    marker: "●",
+    text: "text-result-green",
+  },
+  progress: {
+    bg: "bg-[rgba(91,155,244,0.10)]",
+    border: "border-accent-light/40",
+    label: "In progress",
+    marker: "◐",
+    text: "text-accent-light",
+  },
+  todo: {
+    bg: "bg-[rgba(255,255,255,0.04)]",
+    border: "border-[rgba(41,110,214,0.25)]",
+    label: "Todo",
+    marker: "◯",
+    text: "text-text-dark-muted",
+  },
 };
 
 function createSteps(prompt: string): DemoStep[] {
@@ -329,91 +350,154 @@ export function AtlasDemo() {
 
   return (
     <div className="mt-10">
-      <div className="rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/80 p-5 backdrop-blur-md">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      {/* CONTROL DECK — cinematic header */}
+      <div className="relative overflow-hidden rounded-3xl border border-[rgba(41,110,214,0.28)] bg-gradient-to-br from-bg-dark-2 to-bg-dark p-6 backdrop-blur-md sm:p-8">
+        {/* Ambient corner glow */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-32 -top-32 h-72 w-72 rounded-full bg-accent/22 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-32 -bottom-32 h-72 w-72 rounded-full bg-accent-light/12 blur-3xl"
+        />
+
+        {/* TOP ROW — runtime label + status pill + step counter */}
+        <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
-              Atlas runtime
+            <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light">
+              Atlas · Live runtime
             </span>
-            <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
-            <span className={`flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] ${statusTone}`}>
-              <span
-                aria-hidden="true"
-                className={`h-2 w-2 rounded-full ${
-                  status === "running"
-                    ? "animate-pulse bg-accent-light"
-                    : status === "complete"
-                      ? "bg-result-green"
-                      : "bg-text-dark-muted"
-                }`}
-              />
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/50" />
+            <span
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] ${
+                status === "running"
+                  ? "border-accent-light/40 bg-[rgba(91,155,244,0.10)] text-accent-light"
+                  : status === "complete"
+                    ? "border-result-green/40 bg-[rgba(16,185,129,0.10)] text-result-green"
+                    : "border-[rgba(41,110,214,0.25)] bg-bg-dark/50 text-text-dark-muted"
+              } ${statusTone}`}
+            >
+              <span className="relative inline-flex h-2 w-2">
+                {status === "running" ? (
+                  <span className="absolute inset-0 animate-ping rounded-full bg-accent-light/60" />
+                ) : null}
+                <span
+                  className={`relative inline-block h-2 w-2 rounded-full ${
+                    status === "running"
+                      ? "bg-accent-light"
+                      : status === "complete"
+                        ? "bg-result-green"
+                        : "bg-text-dark-muted"
+                  }`}
+                />
+              </span>
               {statusLabel}
             </span>
           </div>
-          <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-dark-muted">
-            Step {stepProgress}/{totalSteps}
-          </span>
+          <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.24em] text-text-dark-muted">
+            <span>
+              Step{" "}
+              <span className="text-text-dark">
+                {String(stepProgress).padStart(2, "0")}
+              </span>{" "}
+              / {String(totalSteps).padStart(2, "0")}
+            </span>
+            {mode === "live" ? (
+              <span className="rounded-md border border-accent-light/40 bg-[rgba(91,155,244,0.10)] px-1.5 py-0.5 text-[10px] text-accent-light">
+                Live runtime
+              </span>
+            ) : (
+              <span className="rounded-md border border-[rgba(41,110,214,0.25)] bg-bg-dark/50 px-1.5 py-0.5 text-[10px] text-text-dark-muted">
+                Simulation
+              </span>
+            )}
+          </div>
         </div>
 
-        <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_auto_auto_auto] lg:items-end">
+        {/* TITLE */}
+        <h3 className="display-text relative mt-5 max-w-3xl text-text-dark">
+          Send a prompt. Watch the agents move.
+        </h3>
+        <p className="relative mt-3 max-w-2xl text-sm leading-7 text-text-dark-muted sm:text-base">
+          CEO routes the work, C-suite acknowledges, managers delegate, field
+          agents execute. Every layer logged to the terminal, persisted to the
+          DB, tracked on the board.
+        </p>
+
+        {/* PROMPT + CONTROLS */}
+        <div className="relative mt-7 grid gap-3 lg:grid-cols-[1fr_auto_auto_auto] lg:items-end">
           <label className="grid gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
               Prompt
             </span>
             <input
-              className="h-12 rounded-lg border border-[rgba(41,110,214,0.35)] bg-bg-dark px-4 font-mono text-sm text-text-dark outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
+              className="h-12 rounded-xl border border-[rgba(41,110,214,0.35)] bg-bg-dark px-4 font-mono text-sm text-text-dark outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/30"
               onChange={(event) => setPrompt(event.target.value)}
               value={prompt}
             />
           </label>
           <Button disabled={status === "running"} onClick={runLive}>
-            Run Live
+            Run Live →
           </Button>
           <Button
             disabled={status === "running"}
             onClick={runSimulation}
             variant="ghostDark"
           >
-            {status === "complete" ? "Replay" : "Run Simulation"}
+            {status === "complete" ? "Replay" : "Simulate"}
           </Button>
           <Button onClick={resetSimulation} variant="ghostDark">
-            Reset
+            Reset ↺
           </Button>
         </div>
+
         {liveError ? (
-          <p className="mt-3 rounded-lg border border-problem-red/40 bg-[rgba(239,68,68,0.08)] px-3 py-2 text-xs text-text-dark">
-            Live runtime unavailable — showing simulation. <span className="text-text-dark-muted">{liveError}</span>
+          <p className="relative mt-3 rounded-lg border border-problem-red/40 bg-[rgba(239,68,68,0.08)] px-3 py-2 text-xs text-text-dark">
+            Live runtime unavailable — showing simulation.{" "}
+            <span className="text-text-dark-muted">{liveError}</span>
           </p>
         ) : null}
         {liveSummary ? (
-          <p className="mt-3 rounded-lg border border-accent/30 bg-[rgba(41,110,214,0.08)] px-3 py-2 text-xs text-text-dark">
-            <span className="font-mono uppercase tracking-[0.18em] text-accent-light">Live · </span>
+          <p className="relative mt-3 rounded-lg border border-accent/30 bg-[rgba(41,110,214,0.08)] px-3 py-2 text-xs text-text-dark">
+            <span className="font-mono uppercase tracking-[0.18em] text-accent-light">
+              Live ·{" "}
+            </span>
             {liveSummary}
           </p>
         ) : null}
 
-        <div
-          aria-hidden="true"
-          className="mt-5 h-1 overflow-hidden rounded-full bg-[rgba(41,110,214,0.15)]"
-        >
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-accent to-accent-light transition-[width] duration-500"
-            style={{ width: `${(stepProgress / totalSteps) * 100}%` }}
-          />
+        {/* PROGRESS RAIL — segments instead of a single bar */}
+        <div className="relative mt-6">
+          <div className="flex gap-1.5">
+            {Array.from({ length: totalSteps }).map((_, i) => {
+              const filled = i < stepProgress;
+              return (
+                <motion.span
+                  animate={{ opacity: filled ? 1 : 0.25 }}
+                  className={`h-1 flex-1 rounded-full ${
+                    filled
+                      ? "bg-gradient-to-r from-accent-deep via-accent to-accent-light"
+                      : "bg-[rgba(41,110,214,0.2)]"
+                  }`}
+                  initial={false}
+                  key={i}
+                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
-        <GlassCard className="flex flex-col">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
-              Pane 1
-            </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted">
-              Stream
-            </span>
-          </div>
-          <h3 className="mt-3 text-xl font-semibold">Harness Terminal</h3>
+        <AtlasPanel
+          accent="text-accent-light"
+          eyebrow="01 · stream"
+          icon={<TerminalIcon className="h-4 w-4" />}
+          subtitle={`${currentStep.terminal.length} lines`}
+          title="Harness Terminal"
+        >
           <TerminalWindow
             className="mt-5"
             key={`terminal-${runId}`}
@@ -422,77 +506,189 @@ export function AtlasDemo() {
             title="atlas"
             typingSpeedMs={18}
           />
-        </GlassCard>
+        </AtlasPanel>
 
-        <GlassCard className="flex flex-col">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
-              Pane 2
-            </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted">
-              {currentStep.dbRows.length} {currentStep.dbRows.length === 1 ? "row" : "rows"}
-            </span>
-          </div>
-          <h3 className="mt-3 text-xl font-semibold">Database</h3>
+        <AtlasPanel
+          accent="text-accent-light"
+          eyebrow="02 · persistence"
+          icon={<DatabaseIcon className="h-4 w-4" />}
+          subtitle={`${currentStep.dbRows.length} ${currentStep.dbRows.length === 1 ? "row" : "rows"}`}
+          title="Database"
+        >
           <DatabaseTable rows={currentStep.dbRows} />
-        </GlassCard>
+        </AtlasPanel>
 
-        <GlassCard className="flex flex-col">
-          <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
-              Pane 3
-            </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted">
-              {currentStep.tasks.filter((t) => t.status === "done").length}/
-              {currentStep.tasks.length || 0} done
-            </span>
-          </div>
-          <h3 className="mt-3 text-xl font-semibold">Task Board</h3>
+        <AtlasPanel
+          accent="text-accent-light"
+          eyebrow="03 · orchestration"
+          icon={<BoardIcon className="h-4 w-4" />}
+          subtitle={`${currentStep.tasks.filter((t) => t.status === "done").length}/${currentStep.tasks.length || 0} done`}
+          title="Task Board"
+        >
           <TaskBoard tasks={currentStep.tasks} />
-        </GlassCard>
+        </AtlasPanel>
       </div>
     </div>
   );
 }
 
+function AtlasPanel({
+  accent,
+  children,
+  eyebrow,
+  icon,
+  subtitle,
+  title,
+}: {
+  accent: string;
+  children: React.ReactNode;
+  eyebrow: string;
+  icon: React.ReactNode;
+  subtitle: string;
+  title: string;
+}) {
+  return (
+    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/85 p-5 backdrop-blur-md transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-accent/45">
+      <div className="flex items-center justify-between">
+        <span
+          className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.28em] ${accent}`}
+        >
+          {icon}
+          {eyebrow}
+        </span>
+        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+          {subtitle}
+        </span>
+      </div>
+      <h3 className="mt-3 text-xl font-semibold text-text-dark sm:text-2xl">
+        {title}
+      </h3>
+      {children}
+    </div>
+  );
+}
+
+function TerminalIcon({ className }: { className?: string }) {
+  return (
+    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
+      <path
+        d="m6 8 4 4-4 4M12 16h6"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.7"
+      />
+      <rect
+        height="16"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        width="18"
+        x="3"
+        y="4"
+      />
+    </svg>
+  );
+}
+
+function DatabaseIcon({ className }: { className?: string }) {
+  return (
+    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
+      <ellipse
+        cx="12"
+        cy="6"
+        rx="8"
+        ry="3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M4 6v6c0 1.66 3.58 3 8 3s8-1.34 8-3V6M4 12v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+}
+
+function BoardIcon({ className }: { className?: string }) {
+  return (
+    <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
+      <rect
+        height="16"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        width="18"
+        x="3"
+        y="4"
+      />
+      <path
+        d="M8 8h8M8 12h6M8 16h4"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.6"
+      />
+    </svg>
+  );
+}
+
 function DatabaseTable({ rows }: { rows: DatabaseRow[] }) {
   return (
-    <div className="mt-5 overflow-hidden rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2">
-      <div className="grid grid-cols-[1fr_90px_90px] border-b border-[rgba(41,110,214,0.18)] px-4 py-3 text-sm font-semibold text-text-dark">
-        <span>tasks</span>
+    <div className="mt-5 overflow-hidden rounded-xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2">
+      <div className="grid grid-cols-[1fr_70px_80px] border-b border-[rgba(41,110,214,0.18)] bg-bg-dark/40 px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+        <span>row · id</span>
         <span>owner</span>
         <span>state</span>
       </div>
       <AnimatePresence initial={false}>
         {rows.length > 0 ? (
-          rows.map((row, index) => (
-            <motion.div
-              animate={{
-                backgroundColor:
-                  index === rows.length - 1
-                    ? "rgba(41, 110, 214, 0.18)"
+          rows.map((row, index) => {
+            const isNewest = index === rows.length - 1;
+            return (
+              <motion.div
+                animate={{
+                  backgroundColor: isNewest
+                    ? "rgba(41, 110, 214, 0.16)"
                     : "rgba(17, 24, 39, 0)",
-                opacity: 1,
-                y: 0,
-              }}
-              className="grid grid-cols-[1fr_90px_90px] border-b border-[rgba(41,110,214,0.18)] px-4 py-3 text-sm text-text-dark-muted last:border-b-0"
-              exit={{ opacity: 0, y: -8 }}
-              initial={{ opacity: 0, y: 8 }}
-              key={row.id}
-              transition={{ duration: 0.25 }}
-            >
-              <span>{row.operation === "insert" ? "+ " : "↻ "}{row.id}</span>
-              <span>{row.owner}</span>
-              <span>{row.state}</span>
-            </motion.div>
-          ))
+                  opacity: 1,
+                  y: 0,
+                }}
+                className="grid grid-cols-[1fr_70px_80px] items-center border-b border-[rgba(41,110,214,0.14)] px-4 py-2.5 font-mono text-[11px] text-text-dark-muted last:border-b-0"
+                exit={{ opacity: 0, y: -8 }}
+                initial={{ opacity: 0, y: 8 }}
+                key={row.id}
+                transition={{ duration: 0.3 }}
+              >
+                <span className="flex items-center gap-2">
+                  <span
+                    className={`inline-block h-2 w-2 rounded-sm ${
+                      row.operation === "insert"
+                        ? "bg-result-green"
+                        : "bg-accent-light"
+                    }`}
+                  />
+                  <span className="truncate text-text-dark">{row.id}</span>
+                </span>
+                <span className="uppercase tracking-[0.18em] text-accent-light">
+                  {row.owner}
+                </span>
+                <span className="uppercase tracking-[0.18em]">
+                  {row.state}
+                </span>
+              </motion.div>
+            );
+          })
         ) : (
           <motion.div
             animate={{ opacity: 1 }}
-            className="px-4 py-6 text-sm text-text-dark-muted"
+            className="flex items-center gap-2 px-4 py-6 font-mono text-xs text-text-dark-muted"
             initial={{ opacity: 0 }}
           >
-            Waiting for agent activity...
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-text-dark-muted" />
+            Waiting for agent activity…
           </motion.div>
         )}
       </AnimatePresence>
@@ -502,7 +698,7 @@ function DatabaseTable({ rows }: { rows: DatabaseRow[] }) {
 
 function TaskBoard({ tasks }: { tasks: TaskItem[] }) {
   return (
-    <div className="mt-5 grid gap-3">
+    <div className="mt-5 grid gap-2.5">
       <AnimatePresence initial={false}>
         {tasks.length > 0 ? (
           tasks.map((task) => {
@@ -511,21 +707,34 @@ function TaskBoard({ tasks }: { tasks: TaskItem[] }) {
             return (
               <motion.div
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 px-4 py-3"
+                className={`relative overflow-hidden rounded-xl border ${meta.border} bg-bg-dark-2 px-4 py-3 transition-colors`}
                 initial={{ opacity: 0, y: 8 }}
                 key={task.id}
                 layout
-                transition={{ duration: 0.25 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-medium text-text-dark">{task.title}</p>
-                    <p className="mt-1 text-sm text-text-dark-muted">
-                      {task.agent}
+                {/* Status accent stripe on left */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-y-2 left-1 w-0.5 rounded-full ${meta.text === "text-result-green" ? "bg-result-green" : meta.text === "text-accent-light" ? "bg-accent-light" : "bg-text-dark-muted/40"}`}
+                />
+                <div className="flex items-start justify-between gap-3 pl-2.5">
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-text-dark">
+                      {task.title}
+                    </p>
+                    <p className="mt-1 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+                      <span className="rounded border border-[rgba(41,110,214,0.3)] bg-bg-dark/50 px-1.5 py-0.5 text-accent-light">
+                        {task.agent}
+                      </span>
+                      <span>agent</span>
                     </p>
                   </div>
-                  <span className="shrink-0 rounded-md bg-[rgba(41,110,214,0.18)] px-2 py-1 text-sm text-text-dark">
-                    {meta.marker} {meta.label}
+                  <span
+                    className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border ${meta.border} ${meta.bg} px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] ${meta.text}`}
+                  >
+                    <span>{meta.marker}</span>
+                    {meta.label}
                   </span>
                 </div>
               </motion.div>
@@ -534,10 +743,11 @@ function TaskBoard({ tasks }: { tasks: TaskItem[] }) {
         ) : (
           <motion.div
             animate={{ opacity: 1 }}
-            className="rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 px-4 py-6 text-sm text-text-dark-muted"
+            className="flex items-center gap-2 rounded-xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2 px-4 py-6 font-mono text-xs text-text-dark-muted"
             initial={{ opacity: 0 }}
           >
-            Waiting for routed work...
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-text-dark-muted" />
+            Waiting for routed work…
           </motion.div>
         )}
       </AnimatePresence>

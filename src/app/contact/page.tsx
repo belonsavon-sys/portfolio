@@ -57,7 +57,7 @@ const contactLinks: ContactCardConfig[] = [
 
 export default function ContactPage() {
   const reduce = useReducedMotion();
-  const easeOut = [0.21, 0.47, 0.32, 0.98] as [number, number, number, number];
+  const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
   const fadeUp = (delay: number) =>
     reduce
@@ -72,21 +72,45 @@ export default function ContactPage() {
     <main className="min-h-screen bg-bg-dark text-text-dark">
       <section className="relative overflow-hidden">
         <ParallaxBackdrop>
-          <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
-          <div className="absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/10 blur-3xl" />
-          <div className="absolute -bottom-24 right-[-10%] h-[420px] w-[420px] rounded-full bg-accent/10 blur-3xl" />
+          <div className="orb-drift-a absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-accent/22 blur-3xl" />
+          <div className="orb-drift-c absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/12 blur-3xl" />
+          <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[420px] w-[420px] rounded-full bg-accent/12 blur-3xl" />
         </ParallaxBackdrop>
 
-        <div className="mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:px-8">
-          <motion.p
-            className="font-mono text-sm font-medium uppercase tracking-[0.22em] text-accent-light"
+        {/* Giant ghost watermark */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
+        >
+          <span
+            className="select-none font-bold leading-[0.85] tracking-tighter text-accent-light/[0.05]"
+            style={{
+              fontSize: "clamp(6rem, 22vw, 22rem)",
+              WebkitTextStroke: "1px rgba(91,155,244,0.10)",
+              color: "transparent",
+            }}
+          >
+            HELLO
+          </span>
+        </div>
+
+        <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:px-8">
+          {/* Status pill */}
+          <motion.div
+            className="inline-flex items-center gap-3 rounded-full border border-result-green/40 bg-[rgba(16,185,129,0.10)] px-4 py-1.5 backdrop-blur-md"
             {...fadeUp(0)}
           >
-            /contact
-          </motion.p>
+            <span className="relative inline-flex h-2 w-2">
+              <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+              <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+            </span>
+            <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-result-green">
+              /contact · open to work
+            </span>
+          </motion.div>
 
           <motion.h1
-            className="mt-6 text-5xl font-semibold leading-[0.95] tracking-tight text-text-dark sm:text-7xl lg:text-[7rem]"
+            className="hero-display-md mt-8 font-semibold text-text-dark"
             {...fadeUp(0.08)}
           >
             Ready when
@@ -96,30 +120,31 @@ export default function ContactPage() {
             </span>
           </motion.h1>
 
-          <motion.div
-            aria-hidden="true"
-            animate={{ scaleX: 1 }}
-            className="mt-8 h-[3px] w-32 origin-center rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
-            initial={reduce ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ delay: 0.55, duration: 0.55, ease: "easeOut" }}
-          />
-
           <motion.p
-            className="mt-8 max-w-2xl text-lg leading-8 text-text-dark-muted sm:text-xl sm:leading-9"
+            className="mt-10 max-w-2xl text-lg leading-8 text-text-dark-muted sm:text-xl sm:leading-9"
             {...fadeUp(0.18)}
           >
             Currently open to the right opportunity. Remote roles and freelance
-            projects welcome.
-            <span className="ml-2 inline-flex items-center gap-2">
-              <span
-                aria-hidden="true"
-                className="h-2 w-2 rounded-full bg-result-green"
-              />
-              <span className="font-mono text-sm uppercase tracking-[0.18em] text-result-green">
-                Replies in 24 hrs
-              </span>
-            </span>
+            projects welcome. Replies typically within 24 hours.
           </motion.p>
+
+          {/* Quick stats strip */}
+          <motion.div
+            className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted"
+            {...fadeUp(0.24)}
+          >
+            <span className="inline-flex items-center gap-2">
+              <span className="text-accent-light">→</span> Remote
+            </span>
+            <span aria-hidden="true" className="h-3 w-px bg-[rgba(91,155,244,0.25)]" />
+            <span className="inline-flex items-center gap-2">
+              <span className="text-accent-light">→</span> Trilingual EN · ES · IT
+            </span>
+            <span aria-hidden="true" className="h-3 w-px bg-[rgba(91,155,244,0.25)]" />
+            <span className="inline-flex items-center gap-2">
+              <span className="text-accent-light">→</span> Ocean Shores, WA
+            </span>
+          </motion.div>
 
           <motion.div className="mt-16 w-full" {...fadeUp(0.3)}>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -159,12 +184,6 @@ export default function ContactPage() {
             </div>
           </motion.div>
 
-          <motion.p
-            className="mt-12 font-mono text-xs uppercase tracking-[0.2em] text-text-dark-muted"
-            {...fadeUp(0.6)}
-          >
-            Ocean Shores, WA · Trilingual EN · ES · IT
-          </motion.p>
         </div>
       </section>
     </main>

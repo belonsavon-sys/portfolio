@@ -49,26 +49,50 @@ export function PhotoSlot({
 
   return (
     <figure className={className}>
-      <div className="relative h-full overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+      <div className="relative h-full overflow-hidden rounded-xl border border-[rgba(41,110,214,0.25)] bg-gradient-to-br from-bg-dark-2 to-bg-dark text-text-dark">
         {assetState !== "ready" ? (
-          <div className="flex h-full flex-col justify-between p-5">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-accent" />
-              <span className="h-2 w-2 rounded-full bg-accent-light" />
-              <span className="h-2 w-2 rounded-full bg-accent-deep" />
+          <div className="relative flex h-full flex-col justify-between p-5">
+            {/* Ambient glow */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-accent/30 blur-3xl"
+            />
+            {/* Top dots */}
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-accent-deep" />
+                <span className="h-2 w-2 rounded-full bg-accent" />
+                <span className="h-2 w-2 rounded-full bg-accent-light" />
+              </div>
+              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-dark-muted">
+                Placeholder
+              </span>
             </div>
-            <div className="py-4">
-              <p className="text-4xl font-semibold tracking-normal text-text-light">
+            {/* Center monogram */}
+            <div className="relative flex flex-1 items-center justify-center">
+              <span
+                className="select-none font-bold leading-none"
+                style={{
+                  fontSize: "clamp(3rem, 9vw, 5rem)",
+                  letterSpacing: "-0.05em",
+                  background:
+                    "linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
                 PBS
-              </p>
-              <p className="mt-3 text-sm font-semibold text-accent">
+              </span>
+            </div>
+            {/* Bottom meta */}
+            <div className="relative">
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
                 {fallbackTitle}
               </p>
-              <p className="mt-2 text-sm leading-6 text-text-light-muted">
+              <p className="mt-1 text-xs leading-5 text-text-dark-muted">
                 {fallbackMeta}
               </p>
             </div>
-            <div className="h-px w-full bg-border-light" />
           </div>
         ) : (
           // These photo paths are intentionally allowed to be missing until

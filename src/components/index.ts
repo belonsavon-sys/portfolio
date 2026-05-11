@@ -2,6 +2,8 @@ export { Button, NavPill } from "./Button";
 export type { ButtonProps, NavPillProps } from "./Button";
 export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps } from "./AnimatedCounter";
+export { BackToTop } from "./BackToTop";
+export { ConsoleSignature } from "./ConsoleSignature";
 export { AtlasDemo } from "./AtlasDemo";
 export { AtlasGallery } from "./AtlasGallery";
 export { BeforeAfter } from "./BeforeAfter";
@@ -31,11 +33,16 @@ export { GlassCard } from "./GlassCard";
 export type { GlassCardProps } from "./GlassCard";
 export { GreetingRotator } from "./GreetingRotator";
 export type { GreetingRotatorProps } from "./GreetingRotator";
+export { IndexedDivider } from "./IndexedDivider";
+export { KeyboardNav } from "./KeyboardNav";
+export type { IndexedDividerProps } from "./IndexedDivider";
 export { LightGlassCard } from "./LightGlassCard";
 export type { LightGlassCardProps } from "./LightGlassCard";
 export { LiveStatusBadge } from "./LiveStatusBadge";
 export type { LiveStatusBadgeProps } from "./LiveStatusBadge";
 export { LocalAiDemo } from "./LocalAiDemo";
+export { MarqueeBand } from "./MarqueeBand";
+export type { MarqueeBandProps } from "./MarqueeBand";
 export { PageTransition } from "./PageTransition";
 export { ParallaxBackdrop } from "./ParallaxBackdrop";
 export type { ParallaxBackdropProps } from "./ParallaxBackdrop";
@@ -45,6 +52,9 @@ export { ScrollProgress } from "./ScrollProgress";
 export { ScrollReveal } from "./ScrollReveal";
 export type { ScrollRevealProps } from "./ScrollReveal";
 export { SectionDivider } from "./SectionDivider";
+export { SelectedWork } from "./SelectedWork";
+export { SectionHeader } from "./SectionHeader";
+export type { SectionHeaderProps } from "./SectionHeader";
 export type {
   SectionDividerDirection,
   SectionDividerProps,

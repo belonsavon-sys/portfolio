@@ -74,17 +74,42 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full px-3 pt-3 sm:px-6 sm:pt-4">
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-24 bg-gradient-to-b from-white/80 via-white/40 to-transparent backdrop-blur-[2px]" />
-      <div className="mx-auto flex w-full max-w-fit justify-center">
-        <motion.nav
+
+      <motion.div
+        className="relative mx-auto flex w-full max-w-7xl items-center justify-between gap-3"
+        initial={reduce ? { opacity: 1 } : { opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {/* WORDMARK — left */}
+        <Link
+          aria-label="Pierre Belon Savon — Home"
+          className="pointer-events-auto group/mark inline-flex items-center gap-2 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          href="/"
+        >
+          <span
+            aria-hidden="true"
+            className="relative inline-flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-accent/30 bg-white/90 font-mono text-[12px] font-bold text-accent transition-[border-color,transform] duration-300 group-hover/mark:border-accent group-hover/mark:-rotate-3"
+          >
+            <span className="relative z-10">PBS</span>
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 -translate-y-full bg-gradient-to-br from-accent to-accent-deep opacity-0 transition-[transform,opacity] duration-300 group-hover/mark:translate-y-0 group-hover/mark:opacity-100"
+            />
+          </span>
+          <span className="hidden font-mono text-[11px] uppercase tracking-[0.24em] text-text-light-muted transition-colors duration-200 group-hover/mark:text-accent sm:inline-block">
+            Pierre Belon Savon
+          </span>
+        </Link>
+
+        {/* CENTERED NAV PILL */}
+        <nav
           aria-label="Primary"
-          className={`pointer-events-auto flex flex-wrap items-center gap-1 rounded-full border bg-white/95 p-1.5 transition-shadow duration-300 ${
+          className={`pointer-events-auto absolute left-1/2 top-0 -translate-x-1/2 flex flex-wrap items-center gap-1 rounded-full border bg-white/95 p-1.5 transition-shadow duration-300 ${
             scrolled
               ? "border-border-light shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]"
               : "border-border-light/70 shadow-sm"
           }`}
-          initial={reduce ? { opacity: 1 } : { opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] }}
         >
           {navItems.map((item) => (
             <NavPillItem
@@ -95,29 +120,25 @@ export function SiteHeader() {
               {item.label}
             </NavPillItem>
           ))}
+        </nav>
 
-          <span
-            aria-hidden="true"
-            className="mx-1 hidden h-6 w-px bg-border-light sm:inline-block"
-          />
-
-          <div className="flex items-center gap-0.5">
-            {contactLinks.map(({ Icon, href, label, rel, target }) => (
-              <a
-                aria-label={label}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-full text-text-light-muted transition-[background,color] duration-150 hover:bg-bg-light-2 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                href={href}
-                key={label}
-                rel={rel}
-                target={target}
-                title={label}
-              >
-                <Icon className="h-4 w-4" />
-              </a>
-            ))}
-          </div>
-        </motion.nav>
-      </div>
+        {/* CONTACT ICONS — right */}
+        <div className="pointer-events-auto flex items-center gap-0.5 rounded-full border border-border-light/70 bg-white/95 p-1.5 shadow-sm backdrop-blur-md">
+          {contactLinks.map(({ Icon, href, label, rel, target }) => (
+            <a
+              aria-label={label}
+              className="group/icon inline-flex h-9 w-9 items-center justify-center rounded-full text-text-light-muted transition-[background,color] duration-200 hover:bg-bg-light-2 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              href={href}
+              key={label}
+              rel={rel}
+              target={target}
+              title={label}
+            >
+              <Icon className="h-4 w-4 transition-transform duration-200 ease-out group-hover/icon:-translate-y-0.5" />
+            </a>
+          ))}
+        </div>
+      </motion.div>
     </header>
   );
 }
@@ -140,9 +161,9 @@ function NavPillItem({
       {active ? (
         <motion.span
           aria-hidden="true"
-          className="absolute inset-0 rounded-full bg-accent"
+          className="absolute inset-0 rounded-full bg-accent shadow-[0_4px_14px_-4px_rgba(41,110,214,0.55),0_1px_0_0_rgba(255,255,255,0.4)_inset]"
           layoutId="active-nav-pill"
-          transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         />
       ) : null}
       <span
