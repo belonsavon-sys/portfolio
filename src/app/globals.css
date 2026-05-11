@@ -45,6 +45,7 @@
   --color-problem-red-bg: var(--problem-red-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
 }
 
 * {
@@ -59,6 +60,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-feature-settings: "ss01", "cv11", "calt", "kern";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -69,6 +74,228 @@ a {
 ::selection {
   background: var(--accent);
   color: #ffffff;
+  text-shadow: none;
+}
+
+/* Custom scrollbars — thin, accent-tinted, modern. */
+@supports (scrollbar-width: thin) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(41, 110, 214, 0.45) transparent;
+  }
+}
+
+/* WebKit scrollbar (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(41, 110, 214, 0.32);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 10px;
+  transition: background 200ms;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(41, 110, 214, 0.55);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Animated underline — used by inline links and nav. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Sliding fill — for ghost-style buttons. The button must be relative + overflow-hidden,
+   and contain a child span.btn-fill. Hovering slides accent fill in from the left. */
+.btn-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--accent);
+  transform: translateX(-101%);
+  transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-fill-host:hover .btn-fill,
+.btn-fill-host:focus-visible .btn-fill {
+  transform: translateX(0);
+}
+
+.btn-fill-host:hover .btn-label,
+.btn-fill-host:focus-visible .btn-label {
+  color: #ffffff;
+}
+
+.btn-label {
+  position: relative;
+  z-index: 1;
+  transition: color 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Atmospheric noise grain — tactile depth without breaking the light system.
+   Inline SVG keeps it network-free. */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.7 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size: 200px 200px;
+}
+
+/* Display-class typography — Bricolage Grotesque, variable axes, big-by-default. */
+.display-text {
+  font-family: var(--font-display), var(--font-geist-sans), system-ui, sans-serif;
+  font-size: clamp(2.25rem, 6vw, 5.25rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-variation-settings: "wdth" 95, "opsz" 96;
+}
+
+.display-text-tight {
+  font-family: var(--font-display), var(--font-geist-sans), system-ui, sans-serif;
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  font-weight: 700;
+  font-variation-settings: "wdth" 90, "opsz" 96;
+}
+
+/* Fluid hero display — biggest type on the page. */
+.hero-display {
+  font-family: var(--font-display), var(--font-geist-sans), system-ui, sans-serif;
+  font-size: clamp(3rem, 12vw, 10rem);
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+  font-weight: 700;
+  font-variation-settings: "wdth" 88, "opsz" 96;
+}
+
+.hero-display-md {
+  font-family: var(--font-display), var(--font-geist-sans), system-ui, sans-serif;
+  font-size: clamp(3rem, 11vw, 9rem);
+  line-height: 0.88;
+  letter-spacing: -0.055em;
+  font-weight: 700;
+  font-variation-settings: "wdth" 90, "opsz" 96;
+}
+
+/* Animated gradient sweep — for showcase headlines.
+   Tuned to be subtle: most of the sweep stays on the dark base color
+   with a narrow accent band traveling slowly across. */
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.gradient-shift {
+  background-image: linear-gradient(
+    100deg,
+    var(--text-light) 0%,
+    var(--text-light) 30%,
+    var(--accent) 50%,
+    var(--text-light) 70%,
+    var(--text-light) 100%
+  );
+  background-size: 220% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 12s ease-in-out infinite;
+}
+
+.gradient-shift-dark {
+  background-image: linear-gradient(
+    100deg,
+    var(--text-dark) 0%,
+    var(--text-dark) 30%,
+    var(--accent-light) 50%,
+    var(--text-dark) 70%,
+    var(--text-dark) 100%
+  );
+  background-size: 220% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 12s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-shift,
+  .gradient-shift-dark {
+    animation: none;
+  }
+}
+
+/* Massive ambient outline — for backgrounds (giant ghost text). */
+.ghost-text {
+  font-size: clamp(6rem, 22vw, 22rem);
+  line-height: 0.85;
+  letter-spacing: -0.07em;
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(41, 110, 214, 0.12);
+  text-stroke: 1px rgba(41, 110, 214, 0.12);
+  font-feature-settings: "ss01", "cv01", "calt", "kern";
+}
+
+/* Cursor-tracked spotlight — used by .card-spotlight elements.
+   Coords come from JS via --mx / --my (0-100 percent). */
+.card-spotlight {
+  position: relative;
+  isolation: isolate;
+}
+
+.card-spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 220ms ease;
+  background: radial-gradient(
+    260px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(41, 110, 214, 0.18),
+    transparent 60%
+  );
+}
+
+.card-spotlight:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-spotlight::before {
+    display: none;
+  }
 }
 
 @keyframes terminal-blink {
@@ -80,6 +307,151 @@ a {
   50%,
   100% {
     opacity: 0;
+  }
+}
+
+@property --ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes ring-rotate {
+  to {
+    --ring-angle: 360deg;
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(28px);
+    opacity: 0;
+  }
+}
+
+/* Slow ambient drift for hero blur orbs.
+   Different keyframes per orb make the field feel alive without looking choreographed. */
+@keyframes orb-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(40px, -30px, 0) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-25px, 25px, 0) scale(0.95);
+  }
+}
+
+@keyframes orb-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-50px, 30px, 0) scale(1.12);
+  }
+}
+
+@keyframes orb-drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  40% {
+    transform: translate3d(35px, 20px, 0) scale(0.92);
+  }
+  80% {
+    transform: translate3d(-20px, -25px, 0) scale(1.05);
+  }
+}
+
+.orb-drift-a {
+  animation: orb-drift-a 28s ease-in-out infinite;
+  will-change: transform;
+}
+
+.orb-drift-b {
+  animation: orb-drift-b 36s ease-in-out infinite;
+  will-change: transform;
+}
+
+.orb-drift-c {
+  animation: orb-drift-c 32s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb-drift-a,
+  .orb-drift-b,
+  .orb-drift-c {
+    animation: none;
+  }
+}
+
+.scroll-cue-dot {
+  animation: scroll-cue 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue-dot {
+    animation: none;
+  }
+}
+
+.avatar-ring {
+  position: relative;
+}
+
+.avatar-ring::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from var(--ring-angle),
+    rgba(41, 110, 214, 0.55),
+    rgba(91, 155, 244, 0.25) 25%,
+    transparent 50%,
+    rgba(41, 110, 214, 0.45) 75%,
+    rgba(41, 110, 214, 0.55) 100%
+  );
+  filter: blur(10px);
+  opacity: 0.85;
+  animation: ring-rotate 14s linear infinite;
+  z-index: -1;
+}
+
+.avatar-float {
+  animation: float-slow 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-ring::before,
+  .avatar-float {
+    animation: none;
   }
 }
 
