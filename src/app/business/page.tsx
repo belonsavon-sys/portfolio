@@ -5,6 +5,7 @@ import {
   CursorHalo,
   IndexedDivider,
   ParallaxBackdrop,
+  ParallaxGhost,
   ScrollReveal,
   SectionDivider,
   SectionHeader,
@@ -123,7 +124,7 @@ function BusinessHero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
       >
-        <span className="ghost-text select-none">OPS</span>
+        <ParallaxGhost className="ghost-text select-none">OPS</ParallaxGhost>
       </div>
       <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
         <ScrollReveal direction="up">
