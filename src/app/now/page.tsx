@@ -226,10 +226,24 @@ function updatedLabel() {
   return `Updated ${months} mo ago`;
 }
 
+const _nowDescription =
+  "What Pierre Belon Savon is working on, reading, and learning right now. Inspired by nownownow.com.";
+
 export const metadata = {
-  description:
-    "What Pierre Belon Savon is working on, reading, and learning right now. Inspired by nownownow.com.",
+  alternates: { canonical: "/now" },
+  description: _nowDescription,
+  openGraph: {
+    description: _nowDescription,
+    title: "Now · Pierre Belon Savon",
+    type: "website",
+    url: "/now",
+  },
   title: "Now",
+  twitter: {
+    card: "summary_large_image",
+    description: _nowDescription,
+    title: "Now · Pierre Belon Savon",
+  },
 };
 
 export default function NowPage() {

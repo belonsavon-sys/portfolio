@@ -171,10 +171,24 @@ const PHILOSOPHY = [
   },
 ];
 
+const _usesDescription =
+  "What Pierre Belon Savon actually uses to ship AI systems — tools, editors, infra, hardware, with usage notes.";
+
 export const metadata = {
-  description:
-    "What Pierre Belon Savon actually uses to ship AI systems — tools, editors, infra, hardware, with usage notes.",
+  alternates: { canonical: "/uses" },
+  description: _usesDescription,
+  openGraph: {
+    description: _usesDescription,
+    title: "Uses · Pierre Belon Savon",
+    type: "website",
+    url: "/uses",
+  },
   title: "Uses",
+  twitter: {
+    card: "summary_large_image",
+    description: _usesDescription,
+    title: "Uses · Pierre Belon Savon",
+  },
 };
 
 export default function UsesPage() {
