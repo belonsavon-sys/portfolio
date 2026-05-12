@@ -16,14 +16,14 @@ import type { ReactNode } from "react";
 
 const processOutcomes = [
   "Manual → digital, trackable, auditable",
-  "Consistent standards across locations and teams",
+  "Consistent standards across every property and shift",
   "Accountability built into the workflow, not bolted on afterward",
 ];
 
 const communicationOutcomes = [
   "Response times measured in minutes, not hours",
-  "Brand-consistent communication at scale",
-  "Human oversight maintained — AI drafts, people decide",
+  "Voice that stays on-brand even when staff turn over",
+  "AI drafts, people decide. Nothing autopilots.",
 ];
 
 const trainingOutcomes = [
@@ -33,9 +33,9 @@ const trainingOutcomes = [
 ];
 
 const blackdoorOutcomes = [
-  "Proven ability to architect and ship agentic systems",
-  "Experience running multi-agent pipelines in real business contexts",
-  "A co-founder mindset: I take ownership and see things through",
+  "Architected and shipped agentic systems — not slideware",
+  "Multi-agent pipelines running across two live businesses",
+  "Co-founded Blackdoor — I ship at owner-pace",
 ];
 
 const atlasLayers = [
@@ -270,7 +270,7 @@ function CommunicationsSection() {
   return (
     <SectionShell
       eyebrow="Customer & guest communications"
-      heading="Faster answers. Consistent voice. Zero missed messages."
+      heading="Replies inside three minutes, in your voice, every time."
       outcomes={communicationOutcomes}
     >
       <BeforeAfter
