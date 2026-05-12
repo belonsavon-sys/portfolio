@@ -25,6 +25,7 @@ import {
   SelectedWork,
   SiteFooter,
   SplitText,
+  VelocityMarquee,
 } from "@/components";
 import { useRef, useState, type ReactNode } from "react";
 
@@ -100,6 +101,11 @@ export default function Home() {
       </LightSection>
 
       <BeyondTheCodeBand />
+
+      <VelocityMarquee
+        items={["Research", "Build", "Ship", "Measure", "Iterate"]}
+        tone="light"
+      />
 
       <LightSection className="py-20 sm:py-24" id="stack">
         <Stack />
