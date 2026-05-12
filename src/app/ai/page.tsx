@@ -221,8 +221,8 @@ function AiHero() {
 
         <ScrollReveal delay={0.32} direction="up">
           <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-            <Button className="!px-8 !py-4 !text-base" href="/contact">
-              Start a Project →
+            <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
+              Start a Project
             </Button>
             <Button
               className="!px-8 !py-4 !text-base"

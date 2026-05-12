@@ -318,8 +318,8 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           className="mt-12 flex flex-wrap items-center justify-center gap-4"
           {...fadeUp(0.32)}
         >
-          <Button className="!px-8 !py-4 !text-base" href="/ai">
-            See the work →
+          <Button arrow className="!px-8 !py-4 !text-base" href="/ai">
+            See the work
           </Button>
           <Button
             className="!px-8 !py-4 !text-base"

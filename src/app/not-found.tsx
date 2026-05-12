@@ -45,7 +45,7 @@ export default function NotFound() {
           architecture review. Either way, it&apos;s not here yet.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Button href="/">Back to Home →</Button>
+          <Button arrow href="/">Back to Home</Button>
           <Button href="/contact" variant="ghostDark">
             Get in Touch
           </Button>
