@@ -12,6 +12,8 @@ export { AtlasDemo } from "./AtlasDemo";
 export { AtlasGallery } from "./AtlasGallery";
 export { BeforeAfter } from "./BeforeAfter";
 export type { BeforeAfterProps, BeforeAfterSide } from "./BeforeAfter";
+export { ChapterRail } from "./ChapterRail";
+export type { ChapterRailProps, ChapterRailSection } from "./ChapterRail";
 export { BentoStack } from "./BentoStack";
 export { BrandLogo } from "./BrandLogo";
 export type { BrandLogoProps } from "./BrandLogo";
