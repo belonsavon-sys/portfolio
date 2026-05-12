@@ -404,6 +404,65 @@ function BlackdoorSection() {
           </div>
         </div>
       </div>
+
+      {/* Closing band — sends readers deeper into Atlas. Cross-links
+          to /ai (live demos), /uses (the AI stack reasoning), and
+          /now (what Atlas is shipping this week). */}
+      <div className="mt-16 rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-8">
+        <div className="grid grid-cols-12 gap-x-6 gap-y-6 lg:gap-x-8">
+          <div className="col-span-12 lg:col-span-7">
+            <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+              Dig deeper
+            </p>
+            <h3
+              className="mt-3 font-semibold tracking-tight text-text-light"
+              style={{
+                fontSize: "clamp(1.5rem, 3vw, 2.1rem)",
+                letterSpacing: "-0.03em",
+                lineHeight: 1.05,
+              }}
+            >
+              See Atlas in motion.
+            </h3>
+            <p className="mt-3 max-w-xl text-base leading-7 text-text-light-muted">
+              Three doors into the engine: live demos of the harness,
+              the AI stack reasoning, and what Atlas is shipping this
+              week.
+            </p>
+          </div>
+          <div className="col-span-12 self-center lg:col-span-5">
+            <ul className="grid gap-2 font-mono text-sm text-text-light-muted">
+              <li className="flex items-baseline gap-3">
+                <span aria-hidden="true" className="text-accent">→</span>
+                <a
+                  className="link-underline inline-block transition-colors hover:text-accent"
+                  href="/ai"
+                >
+                  /ai · the harness demo + case studies
+                </a>
+              </li>
+              <li className="flex items-baseline gap-3">
+                <span aria-hidden="true" className="text-accent">→</span>
+                <a
+                  className="link-underline inline-block transition-colors hover:text-accent"
+                  href="/uses"
+                >
+                  /uses · the AI stack with reasoning
+                </a>
+              </li>
+              <li className="flex items-baseline gap-3">
+                <span aria-hidden="true" className="text-accent">→</span>
+                <a
+                  className="link-underline inline-block transition-colors hover:text-accent"
+                  href="/now"
+                >
+                  /now · what Atlas is shipping this week
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
