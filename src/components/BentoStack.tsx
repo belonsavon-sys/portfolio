@@ -1,6 +1,12 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { useRef } from "react";
 import { BrandLogo } from "./BrandLogo";
 
 type StackItem = { label: string; name: Parameters<typeof BrandLogo>[0]["name"] };
@@ -84,6 +90,7 @@ const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 export function BentoStack() {
   const reduce = useReducedMotion();
+  const gridRef = useRef<HTMLDivElement>(null);
 
   // Magazine-style asymmetric grid for 6 categories on a 12-col base.
   // AI hero card spans wide; mobile is compact; design closes the spread.
@@ -96,15 +103,47 @@ export function BentoStack() {
     "lg:col-span-12",
   ];
 
+  // Scroll-tied scatter on exit: each card drifts in its own direction
+  // when the section scrolls past, so the grid disassembles rather than
+  // fading flat. Direction matches the card's column position in the
+  // magazine layout (left half → left, right half → right, mid-small →
+  // up, full-width bottom → down).
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end start"],
+    target: gridRef,
+  });
+  const exitOpacity = useTransform(scrollYProgress, [0.55, 0.95], [1, 0]);
+  const exitLeft = useTransform(scrollYProgress, [0.55, 1], [0, -110]);
+  const exitRight = useTransform(scrollYProgress, [0.55, 1], [0, 110]);
+  const exitUp = useTransform(scrollYProgress, [0.55, 1], [0, -70]);
+  const exitDown = useTransform(scrollYProgress, [0.55, 1], [0, 70]);
+
+  // One scatter vector per card index (0..5).
+  const scatterX = [exitLeft, exitRight, exitLeft, undefined, exitRight, undefined];
+  const scatterY = [undefined, undefined, undefined, exitUp, undefined, exitDown];
+
   return (
-    <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-12 lg:gap-6">
+    <div
+      className="grid gap-5 md:grid-cols-2 lg:grid-cols-12 lg:gap-6"
+      ref={gridRef}
+    >
       {categories.map((category, categoryIndex) => (
-        <motion.article
-          className={`group/cat relative overflow-hidden rounded-3xl border border-border-light bg-white/70 p-7 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/45 hover:shadow-[0_24px_48px_-20px_rgba(41,110,214,0.25)] sm:p-8 ${
-            spans[categoryIndex] ?? ""
-          }`}
-          initial={reduce ? false : { opacity: 0, y: 16 }}
+        <motion.div
+          className={spans[categoryIndex] ?? ""}
           key={category.title}
+          style={
+            reduce
+              ? undefined
+              : {
+                  opacity: exitOpacity,
+                  x: scatterX[categoryIndex],
+                  y: scatterY[categoryIndex],
+                }
+          }
+        >
+        <motion.article
+          className={`group/cat relative h-full overflow-hidden rounded-3xl border border-border-light bg-white/70 p-7 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/45 hover:shadow-[0_24px_48px_-20px_rgba(41,110,214,0.25)] sm:p-8`}
+          initial={reduce ? false : { opacity: 0, y: 16 }}
           transition={{
             delay: categoryIndex * 0.06,
             duration: 0.7,
@@ -173,6 +212,7 @@ export function BentoStack() {
             ))}
           </ul>
         </motion.article>
+        </motion.div>
       ))}
     </div>
   );
