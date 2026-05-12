@@ -184,74 +184,119 @@ function AiHero() {
         <ParallaxGhost className="ghost-text select-none">AI</ParallaxGhost>
       </div>
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
-        {/* Slash + animated pulse — section identifier */}
-        <ScrollReveal direction="up">
-          <div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/60 px-4 py-1.5 backdrop-blur-md">
-            <span className="relative inline-flex h-2 w-2">
-              <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
-              <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-20 sm:px-6 sm:py-24 lg:gap-x-8 lg:py-28">
+        {/* TOP STRIP — status pill + chapter mark, same editorial top
+            strip used on every other hero. */}
+        <ScrollReveal className="col-span-12 self-start" direction="up">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/60 px-4 py-1.5 backdrop-blur-md">
+              <span className="relative inline-flex h-2 w-2">
+                <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+                <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+              </span>
+              <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+                /ai · what I build
+              </span>
             </span>
-            <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
-              /ai · what I build
+            <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+              Chapter 02 · AI
+            </span>
+          </div>
+        </ScrollReveal>
+
+        {/* LEFT — stacked massive headline (cols 1–8 lg) */}
+        <div className="col-span-12 self-center lg:col-span-8">
+          <h1
+            className="font-semibold text-text-light"
+            style={{
+              fontSize: "clamp(3rem, 12vw, 10rem)",
+              letterSpacing: "-0.055em",
+              lineHeight: 0.88,
+            }}
+          >
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.14} duration={0.85}>
+                I build
+              </SplitText>
+            </span>
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.32} duration={0.85}>
+                AI that
+              </SplitText>
+            </span>
+            <span className="relative inline-block">
+              <span className="gradient-shift block">
+                <SplitText charDelay={0.025} delay={0.5} duration={0.85}>
+                  ships.
+                </SplitText>
+              </span>
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-2 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"
+              />
+            </span>
+          </h1>
+
+          <ScrollReveal delay={0.46} direction="up">
+            <div className="mt-10 flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-10 bg-accent" />
+              <p className="font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
+                Multi-agent harnesses · automation · agents
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.54} direction="up">
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
+                Start a Project
+              </Button>
+              <Button
+                className="!px-8 !py-4 !text-base"
+                href="#built-and-shipped"
+                variant="ghost"
+              >
+                See Built &amp; Shipped
+              </Button>
+            </div>
+          </ScrollReveal>
+        </div>
+
+        {/* RIGHT — supporting prose + 3 marker stats as a mono spec
+            rail (cols 9–12 lg). Replaces the centered subtitle +
+            inline-marker-row that lived below the headline. */}
+        <div className="col-span-12 self-center lg:col-span-4">
+          <ScrollReveal delay={0.24} direction="up">
+            <p className="text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
+              Multi-agent harnesses and automation, wired into the
+              workflows you already run.
             </p>
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
 
-        <h1 className="hero-display-md mt-8 font-semibold">
-          <SplitText charDelay={0.03} delay={0.1} duration={0.8}>
-            {"I build AI that "}
-          </SplitText>
-          <span className="relative inline-block">
-            <span className="gradient-shift">ships.</span>
-            <span
-              aria-hidden="true"
-              className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
-            />
-          </span>
-        </h1>
-
-        <ScrollReveal delay={0.15} direction="up">
-          <p className="mt-10 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
-            Multi-agent harnesses and automation, wired into the workflows
-            you already run.
-          </p>
-        </ScrollReveal>
-
-        {/* Inline marker stats — three small fact pills */}
-        <ScrollReveal delay={0.22} direction="up">
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 font-mono text-xs uppercase tracking-[0.22em] text-text-light-muted">
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent">→</span>
-              3 Atlas products live
-            </span>
-            <span aria-hidden="true" className="h-3 w-px bg-border-light" />
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent">→</span>
-              48 hrs &rarr; 3 min reply time
-            </span>
-            <span aria-hidden="true" className="h-3 w-px bg-border-light" />
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent">→</span>
-              100+ pages digitized into QA
-            </span>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.32} direction="up">
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-            <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
-              Start a Project
-            </Button>
-            <Button
-              className="!px-8 !py-4 !text-base"
-              href="#built-and-shipped"
-              variant="ghost"
-            >
-              See Built & Shipped
-            </Button>
-          </div>
-        </ScrollReveal>
+          <ScrollReveal delay={0.34} direction="up">
+            <ul className="mt-8 grid divide-y divide-border-light border-y border-border-light">
+              {[
+                { label: "Atlas products live", value: "3" },
+                { label: "Reply time", value: "48 hrs → 3 min" },
+                { label: "Pages digitized to QA", value: "100+" },
+              ].map((stat, index) => (
+                <li
+                  className="flex items-baseline justify-between gap-4 py-3"
+                  key={stat.label}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")} {stat.label}
+                  </span>
+                  <span className="font-mono text-[12.5px] font-semibold uppercase tracking-[0.18em] text-text-light">
+                    {stat.value}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   );
