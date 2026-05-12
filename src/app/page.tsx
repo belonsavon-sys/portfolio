@@ -448,13 +448,23 @@ function FloatingHeroLabels() {
   const opBL = useTransform(scrollYProgress, [0.6, 0.8], [0.85, 0]);
   const opBR = useTransform(scrollYProgress, [0.65, 0.85], [0.85, 0]);
 
+  // One label is now LIVE — it picks up the short build sha so it
+  // ties to the live-shipped pulse in the top strip. The other three
+  // carry sharpened editorial copy.
+  const shortSha = process.env.NEXT_PUBLIC_BUILD_SHA
+    ? process.env.NEXT_PUBLIC_BUILD_SHA.slice(0, 7)
+    : null;
+  const liveLabel = shortSha
+    ? `Shipping · ${shortSha}`
+    : "Shipping · daily";
+
   const labels = [
     {
       className:
         "left-[6%] top-[18%] -rotate-2 sm:left-[8%] sm:top-[22%] lg:left-[10%] lg:top-[26%]",
       opacity: opTL,
       parallaxY: ySlow,
-      text: "AI Engineer",
+      text: liveLabel,
     },
     {
       className:
@@ -468,14 +478,14 @@ function FloatingHeroLabels() {
         "left-[4%] bottom-[16%] -rotate-3 sm:left-[7%] sm:bottom-[20%] lg:left-[8%] lg:bottom-[28%]",
       opacity: opBL,
       parallaxY: yMid,
-      text: "EN · ES · IT",
+      text: "Trilingual · EN · ES · IT",
     },
     {
       className:
         "right-[5%] bottom-[14%] rotate-2 sm:right-[8%] sm:bottom-[18%] lg:right-[8%] lg:bottom-[24%]",
       opacity: opBR,
       parallaxY: yVeryFast,
-      text: "Co-founder · Blackdoor",
+      text: "Co-founder · Blackdoor · 2025",
     },
   ];
 
