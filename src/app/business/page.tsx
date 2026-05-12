@@ -274,23 +274,38 @@ function BlackdoorSection() {
         autonomous agent harness — in place of a human dev team.
       </p>
 
-      <div className="mt-12 grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
-        <div>
-          <ul className="grid gap-3">
-            {blackdoorOutcomes.map((outcome) => (
-              <li
-                className="flex items-start gap-3 text-sm leading-7 text-text-light-muted"
-                key={outcome}
-              >
-                <span
-                  aria-hidden="true"
-                  className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-                />
-                <span>{outcome}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="mt-12 grid gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
+        {/* ~/outcomes datasheet — same shape as the Process /
+            Communications / Training / Finance sidebars so the four
+            chapters speak one language. */}
+        <aside className="lg:sticky lg:top-24">
+          <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+              <span>~/outcomes</span>
+              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+              <span className="text-text-light-muted">
+                {blackdoorOutcomes.length} signals
+              </span>
+            </div>
+            <ul className="grid">
+              {blackdoorOutcomes.map((outcome, index) => (
+                <li
+                  className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                  key={outcome}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm leading-6 text-text-light">
+                    {outcome}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
 
         <div>
           <AtlasHierarchy layers={atlasLayers} />
