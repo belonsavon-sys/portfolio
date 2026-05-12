@@ -57,6 +57,29 @@ const contactLinks: ContactCardConfig[] = [
 
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+const pipelineSteps = [
+  {
+    body: "Within 24 hours. I confirm the scope, ask any clarifying questions, and propose a time to talk if there's a fit.",
+    timing: "Within 24 hrs",
+    verb: "Reply",
+  },
+  {
+    body: "A 30-min call. We talk through what you need, what's measurable, what's not. You get a written brief back the same day.",
+    timing: "Week 1",
+    verb: "Scope",
+  },
+  {
+    body: "Solo or paired with AI. Research-first. Every change ships through a PR with documentation and a clean commit history.",
+    timing: "Weeks 2+",
+    verb: "Build",
+  },
+  {
+    body: "Live in production. We measure what changed against the manual workflow it replaced. Done means measured-done.",
+    timing: "On cadence",
+    verb: "Ship",
+  },
+];
+
 export default function ContactPage() {
   const reduce = useReducedMotion();
 
@@ -300,8 +323,81 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Trailing spacer — iters 184–186 add real content sections
-          here (pipeline, engagements, availability). */}
+      {/* PIPELINE — what happens after a user reaches out. Reads like
+          the Process band on the home page (verb + body + hover
+          hairline) so the contact page extends the same "research →
+          build → ship" rhythm into the engagement itself. */}
+      <section className="relative mt-24" id="pipeline">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              02 · What happens next
+            </span>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <h2
+              className="font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              }}
+            >
+              From send to ship.
+            </h2>
+          </div>
+
+          <ol className="grid divide-y divide-[rgba(91,155,244,0.18)] border-b border-[rgba(91,155,244,0.18)]">
+            {pipelineSteps.map((step, index) => (
+              <motion.li
+                animate={reduce ? undefined : { opacity: 1, y: 0 }}
+                className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-3 py-10 sm:py-12"
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                key={step.verb}
+                transition={{
+                  delay: index * 0.06,
+                  duration: 0.55,
+                  ease: easeOut,
+                }}
+                viewport={{ amount: 0.3, once: true }}
+                whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+              >
+                {/* LEFT 8 — index + massive verb */}
+                <div className="col-span-12 lg:col-span-8">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+                    {String(index + 1).padStart(2, "0")} · {step.timing}
+                  </p>
+                  <h3
+                    className="mt-3 font-semibold tracking-tight text-text-dark transition-colors duration-300 group-hover:text-accent-light"
+                    style={{
+                      fontSize: "clamp(3rem, 8vw, 6rem)",
+                      letterSpacing: "-0.05em",
+                      lineHeight: 0.95,
+                    }}
+                  >
+                    {step.verb}
+                    <span className="text-accent-light">.</span>
+                  </h3>
+                </div>
+
+                {/* RIGHT 4 — body prose */}
+                <div className="col-span-12 lg:col-span-4">
+                  <p className="text-base leading-7 text-text-dark-muted sm:text-lg sm:leading-8">
+                    {step.body}
+                  </p>
+                </div>
+
+                {/* Hover gradient hairline */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+                />
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* Trailing spacer — iters 185–186 add engagements + availability. */}
       <div className="h-24" aria-hidden="true" />
     </main>
   );
