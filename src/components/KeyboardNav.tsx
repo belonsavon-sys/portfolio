@@ -94,6 +94,7 @@ const META_SHORTCUTS: { key: string; label: string }[] = [
   { key: "⌘K", label: "Toggle palette" },
   { key: "?", label: "Toggle palette" },
   { key: "T", label: "Scroll to top" },
+  { key: "R", label: "Random route" },
   { key: "Esc", label: "Dismiss" },
 ];
 
@@ -198,6 +199,20 @@ export function KeyboardNav() {
           behavior: "smooth",
           top: 0,
         });
+        return;
+      }
+
+      // R → navigate to a random route (excluding the current page).
+      if (event.key === "r" || event.key === "R") {
+        event.preventDefault();
+        const allRoutes = Object.values(routes);
+        const currentPath = window.location.pathname;
+        const others = allRoutes.filter((path) => path !== currentPath);
+        const target = others[Math.floor(Math.random() * others.length)];
+        if (target) {
+          setHelpOpen(false);
+          router.push(target);
+        }
         return;
       }
 
