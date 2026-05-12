@@ -641,15 +641,95 @@ function CaseStudyRow({
 }
 
 function AtlasGallerySection() {
+  const reduce = useReducedMotion();
+
+  // Use a darker palette for the editorial top strip but stay on the
+  // light page background (no curtain reveal — that's the DemoSection
+  // signature). This gives the Atlas portfolio the same THEATER
+  // HEADER treatment as the demos so the three feature sections read
+  // as one continuous program.
   return (
     <div>
-      <SectionHeader
-        badge={<LiveStatusBadge label="3 products · in motion" />}
-        description="Three products built end-to-end via the Atlas multi-agent harness. The agents write the code and ship it; humans review every PR."
-        eyebrow="Atlas portfolio"
-        title="What Atlas has shipped."
-      />
-      <div className="mt-12">
+      {/* THEATER HEADER — chapter + headline left, oversized chapter
+          mark + live-status badge right. Anchors the Atlas gallery
+          like a feature in the program; DemoSection uses the exact
+          same shape on the dark band. */}
+      <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+        <motion.div
+          className="lg:max-w-3xl"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.55, ease: easeOut }}
+          viewport={{ amount: 0.3, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+        >
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              Atlas portfolio
+            </span>
+            <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-light-muted">
+              02 / 03
+            </span>
+          </div>
+          <h2
+            className="mt-5 font-semibold tracking-tight text-text-light"
+            style={{
+              fontSize: "clamp(2.25rem, 5.5vw, 4.25rem)",
+              letterSpacing: "-0.045em",
+              lineHeight: 0.95,
+            }}
+          >
+            What Atlas has shipped.
+          </h2>
+          <p className="mt-6 max-w-2xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+            Three products built end-to-end via the Atlas multi-agent
+            harness. The agents write the code and ship it; humans review
+            every PR.
+          </p>
+        </motion.div>
+
+        {/* RIGHT — oversized chapter mark + live-status badge */}
+        <motion.div
+          className="flex flex-row items-end gap-6 lg:flex-col lg:items-end"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          transition={{ delay: 0.15, duration: 0.55, ease: easeOut }}
+          viewport={{ amount: 0.3, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+        >
+          <span
+            className="font-semibold leading-none text-accent/30"
+            style={{
+              fontSize: "clamp(4.5rem, 9vw, 7.5rem)",
+              letterSpacing: "-0.06em",
+            }}
+          >
+            02
+          </span>
+          <LiveStatusBadge label="3 products · in motion" />
+        </motion.div>
+      </div>
+
+      {/* GALLERY — kept on the light bg with subtle editorial frame
+          elements (corner ticks + ambient accent line) to echo the
+          cinematic frame used by DemoSection without flipping the
+          background tone. */}
+      <div className="relative mt-12">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-2 -top-2 h-6 w-6 border-l-2 border-t-2 border-accent/35 sm:-left-3 sm:-top-3 sm:h-8 sm:w-8"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-2 -top-2 h-6 w-6 border-r-2 border-t-2 border-accent/35 sm:-right-3 sm:-top-3 sm:h-8 sm:w-8"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-2 -bottom-2 h-6 w-6 border-b-2 border-l-2 border-accent/35 sm:-left-3 sm:-bottom-3 sm:h-8 sm:w-8"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-2 -bottom-2 h-6 w-6 border-b-2 border-r-2 border-accent/35 sm:-right-3 sm:-bottom-3 sm:h-8 sm:w-8"
+        />
         <AtlasGallery />
       </div>
     </div>
