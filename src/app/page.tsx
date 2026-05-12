@@ -147,13 +147,66 @@ const heroMetrics = [
   },
 ];
 
-const detailedMetrics = [
-  { label: "Guest-reply lag eliminated", suffix: " hrs", to: 48 },
-  { label: "Saved per drafted reply", suffix: "–20 min", to: 15 },
-  { label: "Inventory items managed", suffix: "+", to: 100 },
-  { label: "Staff trained on the stack", suffix: "", to: 6 },
-  { label: "Error-free months in QuickBooks", suffix: "", to: 6 },
-  { label: "Native languages", suffix: "", to: 3 },
+type DetailedMetric = {
+  context: string;
+  fromLabel?: string;
+  href?: string;
+  label: string;
+  live: boolean;
+  suffix: string;
+  to: number;
+};
+
+const detailedMetrics: DetailedMetric[] = [
+  {
+    context: "ThePrivateHotels · live since Apr 2024",
+    fromLabel: "→ < 3 min now",
+    href: "/business#communications",
+    label: "Guest-reply lag eliminated",
+    live: true,
+    suffix: " hrs",
+    to: 48,
+  },
+  {
+    context: "ThePrivateHotels · per-reply average",
+    href: "/business#communications",
+    label: "Saved per drafted reply",
+    live: true,
+    suffix: "–20 min",
+    to: 15,
+  },
+  {
+    context: "ThePrivateHotels · digital QA system",
+    href: "/business#process",
+    label: "Inventory items managed",
+    live: true,
+    suffix: "+",
+    to: 100,
+  },
+  {
+    context: "ThePrivateHotels · 2 teams · 6 staff",
+    href: "/business#training",
+    label: "Staff trained on the stack",
+    live: true,
+    suffix: "",
+    to: 6,
+  },
+  {
+    context: "ThePrivateHotels · Finance, 6 months in 2024",
+    href: "/business#finance",
+    label: "Error-free months in QuickBooks",
+    live: false,
+    suffix: "",
+    to: 6,
+  },
+  {
+    context: "EN · ES · IT · all native",
+    href: "/resume",
+    label: "Native languages",
+    live: true,
+    suffix: "",
+    to: 3,
+  },
 ];
 
 export default function Home() {
@@ -933,6 +986,41 @@ function MetricsBand() {
           <MetricRow index={index} key={metric.label} metric={metric} />
         ))}
       </motion.ol>
+
+      {/* CLOSING BAND — sends readers to the page where these
+          metrics are described in depth. Mirrors the per-metric
+          deep-links but as a one-stop "see how they shipped". */}
+      <div className="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+          07 · Where the receipts live
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a
+            className="group/recv inline-flex items-center gap-2 rounded-full border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent"
+            href="/business"
+          >
+            <span>/business · 5 chapters</span>
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-200 group-hover/recv:translate-x-0.5"
+            >
+              →
+            </span>
+          </a>
+          <a
+            className="group/recv inline-flex items-center gap-2 rounded-full border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent"
+            href="/ai#built-and-shipped"
+          >
+            <span>/ai · case studies</span>
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-200 group-hover/recv:translate-x-0.5"
+            >
+              →
+            </span>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
@@ -942,14 +1030,18 @@ function MetricRow({
   metric,
 }: {
   index: number;
-  metric: (typeof detailedMetrics)[number];
+  metric: DetailedMetric;
 }) {
   const reduce = useReducedMotion();
+
+  // Whole-row link when an href is set; falls back to a non-link
+  // wrapper for the few metrics that have no destination.
+  const RowTag = metric.href ? "a" : "div";
 
   return (
     <motion.li
       animate={reduce ? undefined : { opacity: 1, y: 0 }}
-      className="group relative grid grid-cols-12 items-baseline gap-4 py-8 sm:py-10 lg:py-12"
+      className="group relative"
       initial={reduce ? false : { opacity: 0, y: 24 }}
       transition={{
         delay: index * 0.05,
@@ -959,36 +1051,66 @@ function MetricRow({
       viewport={{ amount: 0.3, once: true }}
       whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
     >
-      {/* LEFT 7 — massive number */}
-      <div className="col-span-12 lg:col-span-7">
-        <p
-          className="font-bold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
-          style={{
-            fontSize: "clamp(3.5rem, 9vw, 7rem)",
-            letterSpacing: "-0.055em",
-            lineHeight: 0.88,
-          }}
-        >
-          <AnimatedCounter suffix={metric.suffix} to={metric.to} />
-        </p>
-      </div>
+      <RowTag
+        className={`grid grid-cols-12 items-baseline gap-4 py-8 sm:py-10 lg:py-12 ${
+          metric.href
+            ? "block transition-transform duration-300 hover:-translate-y-0.5"
+            : ""
+        }`}
+        href={metric.href}
+      >
+        {/* LEFT 7 — massive number + optional "from" prefix */}
+        <div className="col-span-12 lg:col-span-7">
+          <p
+            className="font-bold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+            style={{
+              fontSize: "clamp(3.5rem, 9vw, 7rem)",
+              letterSpacing: "-0.055em",
+              lineHeight: 0.88,
+            }}
+          >
+            <AnimatedCounter suffix={metric.suffix} to={metric.to} />
+            {metric.fromLabel ? (
+              <span className="ml-3 font-mono text-base font-medium text-text-light/40 sm:text-lg">
+                {metric.fromLabel}
+              </span>
+            ) : null}
+          </p>
+        </div>
 
-      {/* RIGHT 5 — label + index */}
-      <div className="col-span-12 flex items-baseline gap-4 lg:col-span-5 lg:justify-end">
-        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
-          {`0${index + 1}`}
-        </span>
-        <span aria-hidden="true" className="h-px flex-1 bg-border-light lg:w-12 lg:flex-none" />
-        <p className="max-w-xs text-base font-medium leading-6 text-text-light sm:text-lg lg:text-right">
-          {metric.label}
-        </p>
-      </div>
+        {/* RIGHT 5 — label + index + live pulse + context */}
+        <div className="col-span-12 flex items-baseline gap-4 lg:col-span-5 lg:justify-end">
+          <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+            {metric.live ? (
+              <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+                <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+              </span>
+            ) : null}
+            <span>{`0${index + 1}`}</span>
+          </span>
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light lg:w-12 lg:flex-none" />
+          <div className="flex max-w-xs flex-col items-end gap-1 lg:text-right">
+            <p className="text-base font-medium leading-6 text-text-light sm:text-lg">
+              {metric.label}
+            </p>
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+              {metric.context}
+            </p>
+            {metric.href ? (
+              <span className="inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.22em] text-accent opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                See receipts <span aria-hidden="true">→</span>
+              </span>
+            ) : null}
+          </div>
+        </div>
 
-      {/* Hover accent — thin gradient line that draws across on hover */}
-      <span
-        aria-hidden="true"
-        className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
-      />
+        {/* Hover accent — thin gradient line that draws across on hover */}
+        <span
+          aria-hidden="true"
+          className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+        />
+      </RowTag>
     </motion.li>
   );
 }
