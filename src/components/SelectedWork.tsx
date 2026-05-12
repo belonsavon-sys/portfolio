@@ -116,7 +116,18 @@ export function SelectedWork() {
               <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
                 {work.index}
               </span>
-              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+              <motion.span
+                aria-hidden="true"
+                className="h-px flex-1 origin-left bg-border-light"
+                initial={reduce ? false : { scaleX: 0 }}
+                transition={{
+                  delay: index * 0.06 + 0.28,
+                  duration: 0.7,
+                  ease: easeOut,
+                }}
+                viewport={{ amount: 0.3, once: true }}
+                whileInView={reduce ? undefined : { scaleX: 1 }}
+              />
               <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
                 {work.tag}
               </span>
@@ -147,7 +158,23 @@ export function SelectedWork() {
                   letterSpacing: "-0.04em",
                 }}
               >
-                {work.metric}
+                <motion.span
+                  className="inline-block"
+                  initial={
+                    reduce ? false : { clipPath: "inset(0 0 100% 0)", y: 14 }
+                  }
+                  transition={{
+                    delay: index * 0.06 + 0.42,
+                    duration: 0.85,
+                    ease: easeOut,
+                  }}
+                  viewport={{ amount: 0.3, once: true }}
+                  whileInView={
+                    reduce ? undefined : { clipPath: "inset(0 0 0 0)", y: 0 }
+                  }
+                >
+                  {work.metric}
+                </motion.span>
               </p>
               <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.24em] text-text-light-muted">
                 {work.metricLabel}
