@@ -477,8 +477,30 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
 
 function MetricsBand() {
   const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-tied scatter for the 6 metric cards on the way out of the
+  // section. Each column drifts in a different direction in the back
+  // half of progress, mirroring the hero's parting-curtain feel —
+  // column 0 lifts and drifts left, column 1 just fades, column 2
+  // drifts right.
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end start"],
+    target: sectionRef,
+  });
+  const scatterLeftX = useTransform(scrollYProgress, [0.55, 1], [0, -90]);
+  const scatterRightX = useTransform(scrollYProgress, [0.55, 1], [0, 90]);
+  const scatterOpacity = useTransform(
+    scrollYProgress,
+    [0.55, 0.95],
+    [1, 0],
+  );
+
   return (
-    <div className="relative grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
+    <div
+      className="relative grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]"
+      ref={sectionRef}
+    >
       {/* Ambient corner glow on the left side */}
       <div
         aria-hidden="true"
@@ -492,8 +514,22 @@ function MetricsBand() {
       />
 
       <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-        {detailedMetrics.map((metric, index) => (
+        {detailedMetrics.map((metric, index) => {
+          // 3-col layout (lg): col 0,1,2 → scatter left / none / right.
+          const col = index % 3;
+          const exitX =
+            col === 0 ? scatterLeftX : col === 2 ? scatterRightX : undefined;
+          return (
           <ScrollReveal delay={index * 0.05} direction="up" key={metric.label}>
+            <motion.div
+              style={
+                reduce
+                  ? undefined
+                  : exitX
+                    ? { opacity: scatterOpacity, x: exitX }
+                    : { opacity: scatterOpacity }
+              }
+            >
             <div className="group relative border-l-2 border-border-light pl-5 transition-[border-color] duration-300 hover:border-accent">
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
                 {metric.label}
@@ -525,8 +561,10 @@ function MetricsBand() {
                 }
               />
             </div>
+            </motion.div>
           </ScrollReveal>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
