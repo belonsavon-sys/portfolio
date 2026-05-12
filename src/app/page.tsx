@@ -8,7 +8,6 @@ import {
   useTransform,
 } from "framer-motion";
 import {
-  AboutModal,
   AnimatedCounter,
   BentoStack,
   Button,
@@ -27,7 +26,7 @@ import {
   SplitText,
   VelocityMarquee,
 } from "@/components";
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 const aboutParagraphs = [
   "I'm an engineer who learned to ship by automating the business I was hired to run.",
@@ -72,11 +71,13 @@ const detailedMetrics = [
 ];
 
 export default function Home() {
-  const [aboutOpen, setAboutOpen] = useState(false);
-
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
-      <Hero onOpenAbout={() => setAboutOpen(true)} />
+      <Hero onOpenAbout={scrollToAbout} />
+
+      <LightSection className="pt-20 sm:pt-28" id="about">
+        <AboutBand />
+      </LightSection>
 
       <LightSection className="pt-16 sm:pt-24" id="outcomes">
         <MetricsBand />
@@ -117,25 +118,50 @@ export default function Home() {
 
       <SiteFooter />
 
-      <AboutModal
-        onClose={() => setAboutOpen(false)}
-        open={aboutOpen}
-        title={aboutParagraphs[0]}
-      >
-        {aboutParagraphs.slice(1).map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
-      </AboutModal>
-
       <NowReading
         sections={[
-          { id: "outcomes", index: "01", label: "Outcomes" },
-          { id: "work", index: "02", label: "Selected work" },
-          { id: "beyond", index: "03", label: "Beyond the code" },
-          { id: "stack", index: "04", label: "My stack" },
+          { id: "about", index: "01", label: "About" },
+          { id: "outcomes", index: "02", label: "Outcomes" },
+          { id: "work", index: "03", label: "Selected work" },
+          { id: "beyond", index: "04", label: "Beyond the code" },
+          { id: "stack", index: "05", label: "My stack" },
         ]}
       />
     </main>
+  );
+}
+
+function scrollToAbout() {
+  if (typeof document === "undefined") return;
+  const el = document.getElementById("about");
+  if (!el) return;
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function AboutBand() {
+  return (
+    <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,1.6fr)] lg:gap-12">
+      <SectionHeader
+        description="The two-minute version. The systems came from somebody who had to make payroll, not from a slide deck."
+        eyebrow="About"
+        size="md"
+        title="I ship what others would plan."
+      />
+      <div className="grid gap-5 text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+        {aboutParagraphs.map((paragraph, index) => (
+          <p
+            className={
+              index === 0
+                ? "text-xl font-medium leading-8 text-text-light sm:text-2xl sm:leading-9"
+                : undefined
+            }
+            key={paragraph}
+          >
+            {paragraph}
+          </p>
+        ))}
+      </div>
+    </div>
   );
 }
 
