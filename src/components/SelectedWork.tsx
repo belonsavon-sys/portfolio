@@ -5,64 +5,84 @@ import { useState } from "react";
 
 type Work = {
   context: string;
+  href?: string;
   index: string;
   metric: string;
   metricLabel: string;
+  shippedAt?: string;
+  sourceType?: "production" | "internal" | "open";
   source: string;
   status: "shipped" | "live" | "internal";
   tag: string;
   tech: string[];
   title: string;
+  year: string;
 };
 
 const works: Work[] = [
   {
     context:
       "AI chatbot trained on company data — drafts guest replies in Smarttask, human-reviewed before send.",
+    href: "/business#communications",
     index: "01",
     metric: "<3 min",
     metricLabel: "reply time",
+    shippedAt: "2024-06-01",
     source: "ThePrivateHotels · live since 2024",
+    sourceType: "production",
     status: "live",
     tag: "Hospitality AI",
     tech: ["Claude", "Smarttask", "Custom data"],
     title: "Guest Communications Chatbot",
+    year: "2024",
   },
   {
     context:
       "100+ page operations manual digitized room-by-room into a trackable QA inspection system.",
+    href: "/business#process",
     index: "02",
     metric: "Top 10%",
     metricLabel: "Airbnb rating",
+    shippedAt: "2024-04-01",
     source: "ThePrivateHotels · Guest Favorites + Travelers' Choice",
+    sourceType: "internal",
     status: "shipped",
     tag: "Ops · QA",
     tech: ["Process design", "QA tooling", "Inspections"],
     title: "Manual → Auditable QA System",
+    year: "2024",
   },
   {
     context:
       "Multi-level autonomous agent harness that ships real products end-to-end.",
+    href: "/atlas",
     index: "03",
     metric: "3 products",
     metricLabel: "shipping",
+    shippedAt: "2025-09-01",
     source: "Blackdoor · co-founded 2025",
+    sourceType: "internal",
     status: "live",
     tag: "Multi-agent harness",
     tech: ["MCP", "Claude", "Codex", "GitHub"],
     title: "Atlas — Agent Architecture",
+    year: "2025",
   },
   {
     context:
       "Zapier + Guesty API + Twilio orchestration replacing multi-hour manual coordination loops.",
+    href: "/business#communications",
     index: "04",
     metric: "−hours",
     metricLabel: "of coordination",
+    shippedAt: "2024-08-01",
     source: "ThePrivateHotels · ops automation, 2024",
+    sourceType: "production",
     status: "shipped",
     tag: "Workflow Automation",
     tech: ["Zapier", "Guesty API", "Twilio API"],
     title: "Connected Automation Layer",
+    year: "2024",
   },
 ];
 
@@ -114,13 +134,17 @@ export function SelectedWork() {
             >
               {/* LEFT 7 — chapter rail + title */}
               <span className="col-span-12 lg:col-span-7">
-                <span className="flex items-center gap-3">
+                <span className="flex flex-wrap items-center gap-3">
                   <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
                     {work.index} · Work
                   </span>
                   <span aria-hidden="true" className="h-px w-8 bg-accent/40" />
                   <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
                     {work.tag}
+                  </span>
+                  <span aria-hidden="true" className="hidden h-3 w-px bg-border-light sm:inline-block" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                    {work.year}
                   </span>
                 </span>
                 <span
