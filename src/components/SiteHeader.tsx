@@ -43,6 +43,12 @@ const moreNavItems: Array<{ chapter: string; description: string; href: string; 
     href: "/atlas",
     label: "Atlas",
   },
+  {
+    chapter: "09",
+    description: "How this site is built",
+    href: "/colophon",
+    label: "Colophon",
+  },
 ];
 
 type HeaderLink = {
