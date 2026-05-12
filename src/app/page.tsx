@@ -284,7 +284,12 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
       <CursorHalo />
 
       <ParallaxBackdrop>
-        <div className="orb-drift-a absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/30 blur-3xl" />
+        {/* Centered orb — outer div owns the -50% horizontal centering;
+            inner div owns the orb-drift animation, so the centering
+            transform doesn't get clobbered by the keyframes' transform. */}
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2">
+          <div className="orb-drift-a h-[520px] w-[520px] rounded-full bg-accent/30 blur-3xl" />
+        </div>
         <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/25 blur-3xl" />
         <div className="orb-drift-c absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/22 blur-3xl" />
       </ParallaxBackdrop>

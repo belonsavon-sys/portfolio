@@ -36,7 +36,11 @@ export function SiteFooter() {
   return (
     <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
       <ParallaxBackdrop>
-        <div className="orb-drift-a absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
+        {/* Centered orb wrapped so the -50% horizontal centering isn't
+            clobbered by the orb-drift keyframes' transform. */}
+        <div className="absolute -top-32 left-1/2 -translate-x-1/2">
+          <div className="orb-drift-a h-[620px] w-[620px] rounded-full bg-accent/20 blur-3xl" />
+        </div>
         <div className="orb-drift-b absolute bottom-[-8rem] right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/14 blur-3xl" />
         <div className="orb-drift-c absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/14 blur-3xl" />
       </ParallaxBackdrop>
@@ -49,7 +53,7 @@ export function SiteFooter() {
         <ParallaxGhost
           className="select-none font-bold leading-[0.85] tracking-tighter"
           style={{
-            WebkitTextStroke: "1px rgba(91,155,244,0.10)",
+            WebkitTextStroke: "1.5px rgba(91,155,244,0.28)",
             color: "transparent",
             fontSize: "clamp(5rem, 18vw, 18rem)",
           }}
