@@ -63,14 +63,49 @@ function readRecentCommits(limit = 10) {
   }
 }
 
+// Total commit count on the current branch — feeds /colophon's
+// "At a glance" card with a real iteration count instead of a
+// hardcoded number. Vercel builds may have a shallow clone, so
+// fall back to "" if git can't see the full history.
+function readCommitCount() {
+  try {
+    return execSync("git rev-list --count HEAD", {
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .toString()
+      .trim();
+  } catch {
+    return "";
+  }
+}
+
+// Count of "Merge pull request" subjects — a fair proxy for PRs
+// merged into this branch. Combined with commit count it gives a
+// quick read of how many iterations have shipped.
+function readPrCount() {
+  try {
+    return execSync('git log --grep="Merge pull request" --pretty=oneline | wc -l', {
+      stdio: ["ignore", "pipe", "ignore"],
+    })
+      .toString()
+      .trim();
+  } catch {
+    return "";
+  }
+}
+
 const buildSha = readGitSha();
 const buildTime = new Date().toISOString();
 const buildCommitSubject = readGitCommitSubject();
 const buildRecentCommits = readRecentCommits();
+const buildCommitCount = readCommitCount();
+const buildPrCount = readPrCount();
 
 const nextConfig: NextConfig = {
   env: {
+    NEXT_PUBLIC_BUILD_COMMIT_COUNT: buildCommitCount,
     NEXT_PUBLIC_BUILD_COMMIT_SUBJECT: buildCommitSubject,
+    NEXT_PUBLIC_BUILD_PR_COUNT: buildPrCount,
     NEXT_PUBLIC_BUILD_RECENT_COMMITS: buildRecentCommits,
     NEXT_PUBLIC_BUILD_SHA: buildSha,
     NEXT_PUBLIC_BUILD_TIME: buildTime,
