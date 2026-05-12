@@ -13,6 +13,7 @@ type StackItem = {
 
 type StackCategory = {
   eyebrow: string;
+  frequency: string;
   href?: string;
   items: StackItem[];
   title: string;
@@ -21,6 +22,7 @@ type StackCategory = {
 const categories: StackCategory[] = [
   {
     eyebrow: "01",
+    frequency: "Daily · all 6 tools",
     href: "/uses#ai-stack",
     items: [
       { label: "Claude", name: "claude", note: "Daily reasoning + code", primary: true },
@@ -34,6 +36,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "02",
+    frequency: "Daily · this site + apps",
     href: "/uses",
     items: [
       { label: "TypeScript", name: "typescript", note: "Default · everywhere" },
@@ -45,6 +48,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "03",
+    frequency: "Weekly · per-app",
     href: "/uses#infra",
     items: [
       { label: "Node.js", name: "node", note: "API + scripts" },
@@ -56,6 +60,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "04",
+    frequency: "Project-based",
     href: "/uses",
     items: [
       { label: "Flutter", name: "flutter", note: "Cross-platform mobile", primary: true },
@@ -65,6 +70,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "05",
+    frequency: "Daily · CI + deploys",
     href: "/uses#infra",
     items: [
       { label: "Vercel", name: "vercel", note: "This site lives here", primary: true },
@@ -75,6 +81,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "06",
+    frequency: "Daily · primary editor",
     href: "/uses#editor",
     items: [
       { label: "VS Code", name: "vscode", note: "Daily editor", primary: true },
@@ -133,6 +140,13 @@ export function BentoStack() {
             <p className="mt-2 font-mono text-[10px] tabular-nums uppercase tracking-[0.22em] text-text-light-muted">
               {category.items.length}{" "}
               {category.items.length === 1 ? "tool" : "tools"}
+            </p>
+            <p className="mt-1 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+              <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+                <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+              </span>
+              {category.frequency}
             </p>
             {category.href ? (
               <a
