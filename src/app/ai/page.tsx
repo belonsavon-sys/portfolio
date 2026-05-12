@@ -26,7 +26,7 @@ const services = [
   },
   {
     description:
-      "Chatbots trained on your data, tuned to your voice, drafting inside your existing tools. Every reply stays human-reviewed before send.",
+      "Chatbots that learn your voice from your data and draft inside your existing tools. Every reply stays human-reviewed before send.",
     icon: "02",
     name: "Custom Chatbots",
   },
@@ -77,7 +77,7 @@ const caseStudies = [
     },
   },
   {
-    body: "A 100+ page property operations manual digitized, room by room, into a trackable, quantifiable inspection system. Static documentation became an auditable QA tool.",
+    body: "The property's 100+ page operations manual digitized room-by-room into an auditable QA inspection system. Static documentation became a tool staff actually use on every shift.",
     eyebrow: "02 · ThePrivateHotels · 2024",
     title: "Operations Manual → QA System",
     comparison: {
@@ -91,7 +91,7 @@ const caseStudies = [
         ],
       },
       before: {
-        caption: "Static, unenforceable, no accountability",
+        caption: "Static document. No way to audit.",
         metric: "100+ pages",
         points: [
           "No way to track compliance",
