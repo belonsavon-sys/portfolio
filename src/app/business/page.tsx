@@ -4,6 +4,7 @@ import {
   AtlasHierarchy,
   BeforeAfter,
   Button,
+  ChapterRail,
   CursorHalo,
   IndexedDivider,
   ParallaxGhost,
@@ -102,14 +103,14 @@ export default function BusinessPage() {
       <BusinessHero />
 
       {/* Chapter 01 — Blackdoor */}
-      <div className="snap-start">
+      <div className="scroll-mt-28 snap-start" id="blackdoor">
         <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
           <BlackdoorSection />
         </LightSection>
       </div>
 
       {/* Chapter 02 — Process */}
-      <div className="snap-start">
+      <div className="scroll-mt-28 snap-start" id="process">
         <IndexedDivider index="01" label="Process design" />
         <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
           <ProcessSection />
@@ -117,7 +118,7 @@ export default function BusinessPage() {
       </div>
 
       {/* Chapter 03 — Communications */}
-      <div className="snap-start">
+      <div className="scroll-mt-28 snap-start" id="communications">
         <IndexedDivider index="02" label="Communications" />
         <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
           <CommunicationsSection />
@@ -125,7 +126,7 @@ export default function BusinessPage() {
       </div>
 
       {/* Chapter 04 — Team & training (bundles the testimonial frame) */}
-      <div className="snap-start">
+      <div className="scroll-mt-28 snap-start" id="training">
         <IndexedDivider index="03" label="Team & training" />
         <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
           <TrainingSection />
@@ -141,7 +142,7 @@ export default function BusinessPage() {
       </div>
 
       {/* Chapter 05 — Finance */}
-      <div className="snap-start">
+      <div className="scroll-mt-28 snap-start" id="finance">
         <IndexedDivider index="04" label="Finance & admin" />
         <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
           <FinanceSection />
@@ -153,6 +154,19 @@ export default function BusinessPage() {
         <SectionDivider direction="light-to-dark" />
         <SiteFooter />
       </div>
+
+      {/* CHAPTER RAIL — completes the cross-site nav coverage. The
+          /business chapters use scroll-snap (proximity), so smooth
+          scroll to id still lands cleanly. */}
+      <ChapterRail
+        sections={[
+          { id: "blackdoor", index: "00", label: "Blackdoor" },
+          { id: "process", index: "01", label: "Process" },
+          { id: "communications", index: "02", label: "Comms" },
+          { id: "training", index: "03", label: "Training" },
+          { id: "finance", index: "04", label: "Finance" },
+        ]}
+      />
     </main>
   );
 }
