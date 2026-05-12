@@ -117,6 +117,31 @@ const LEARNING: Array<{
   },
 ];
 
+const NEXT_QUARTER: Array<{
+  detail: string;
+  horizon: string;
+  label: string;
+}> = [
+  {
+    detail:
+      "Wire Atlas to fewer human checkpoints — keep human PR review at the merge boundary, automate everything earlier.",
+    horizon: "Q3 2026",
+    label: "Atlas v4 — fewer checkpoints",
+  },
+  {
+    detail:
+      "Two more freelance builds, one advisory engagement. Open slot Q2 already booked.",
+    horizon: "Q3 2026",
+    label: "Pipeline · 2 builds + 1 advisory",
+  },
+  {
+    detail:
+      "Two long-form essays — one on multi-agent governance, one on shipping AI in a hotel.",
+    horizon: "Q3 2026",
+    label: "First two essays",
+  },
+];
+
 const LEARNING_STATUS_META: Record<
   LearningStatus,
   { dot: string; label: string; text: string }
@@ -288,6 +313,7 @@ export default function NowPage() {
                   { key: "Reading", value: `${READING.length} sources` },
                   { key: "Learning", value: `${LEARNING.length} threads` },
                   { key: "Shipped", value: `${SHIPPED.length} this week` },
+                  { key: "Next", value: `${NEXT_QUARTER.length} on horizon` },
                 ].map((row, index) => (
                   <li
                     className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
@@ -522,6 +548,42 @@ export default function NowPage() {
         </ol>
       </NowSection>
 
+      {/* WHAT'S NEXT — forward-looking section so /now reads with
+          intent, not just as a snapshot. Three horizon items, mono
+          spec rail. */}
+      <NowSection
+        chapter="05"
+        eyebrow="What's next"
+        id="next"
+        title="On the next horizon."
+      >
+        <ol className="grid divide-y divide-border-light border-y border-border-light">
+          {NEXT_QUARTER.map((entry, index) => (
+            <li
+              className="grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-7 sm:py-8"
+              key={entry.label}
+            >
+              <span className="col-span-12 font-mono text-[11px] uppercase tracking-[0.32em] text-accent lg:col-span-2">
+                {String(index + 1).padStart(2, "0")} · {entry.horizon}
+              </span>
+              <h3
+                className="col-span-12 font-semibold tracking-tight text-text-light lg:col-span-6"
+                style={{
+                  fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.15,
+                }}
+              >
+                {entry.label}
+              </h3>
+              <p className="col-span-12 text-sm leading-6 text-text-light-muted lg:col-span-4 lg:text-right">
+                {entry.detail}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </NowSection>
+
       {/* CLOSING */}
       <section className="relative pb-24 pt-16">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -577,6 +639,7 @@ export default function NowPage() {
           { id: "reading", index: "02", label: "Reading" },
           { id: "learning", index: "03", label: "Learning" },
           { id: "shipped", index: "04", label: "Recent ships" },
+          { id: "next", index: "05", label: "What's next" },
         ]}
       />
     </main>
