@@ -623,9 +623,12 @@ function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
                 {String(index + 1).padStart(2, "0")} · Role
               </span>
               {entry.featured ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-[rgba(41,110,214,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-                  <span className="h-1 w-1 rounded-full bg-accent" />
-                  Now
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-result-green/40 bg-[rgba(16,185,129,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-result-green">
+                  <span className="relative inline-flex h-1.5 w-1.5">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                    <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                  </span>
+                  Now · Active
                 </span>
               ) : null}
             </div>
