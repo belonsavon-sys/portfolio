@@ -369,21 +369,39 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           shipping real products end-to-end.
         </motion.p>
 
-        <motion.div
-          className="mt-12 flex flex-wrap items-center justify-center gap-4"
-          {...fadeUp(0.32)}
-        >
-          <Button arrow className="!px-8 !py-4 !text-base" href="/ai">
-            See the work
-          </Button>
-          <Button
-            className="!px-8 !py-4 !text-base"
-            href="/resume"
-            variant="ghost"
-          >
-            Read the résumé
-          </Button>
-        </motion.div>
+        <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+          {[
+            <Button
+              arrow
+              className="!px-8 !py-4 !text-base"
+              href="/ai"
+              key="see-work"
+            >
+              See the work
+            </Button>,
+            <Button
+              className="!px-8 !py-4 !text-base"
+              href="/resume"
+              key="read-resume"
+              variant="ghost"
+            >
+              Read the résumé
+            </Button>,
+          ].map((cta, index) => (
+            <motion.div
+              animate={reduce ? undefined : { opacity: 1, y: 0 }}
+              initial={reduce ? false : { opacity: 0, y: 18 }}
+              key={cta.key}
+              transition={{
+                delay: 0.32 + index * 0.1,
+                duration: 0.55,
+                ease: easeOut,
+              }}
+            >
+              {cta}
+            </motion.div>
+          ))}
+        </div>
 
         <motion.div
           className="mt-16 grid w-full max-w-4xl gap-4 sm:grid-cols-3"
