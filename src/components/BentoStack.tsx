@@ -7,10 +7,14 @@ import { BrandLogo } from "./BrandLogo";
 type StackItem = {
   label: string;
   name: Parameters<typeof BrandLogo>[0]["name"];
+  note?: string;
+  primary?: boolean;
 };
 
 type StackCategory = {
   eyebrow: string;
+  frequency: string;
+  href?: string;
   items: StackItem[];
   title: string;
 };
@@ -18,60 +22,72 @@ type StackCategory = {
 const categories: StackCategory[] = [
   {
     eyebrow: "01",
+    frequency: "Daily · all 6 tools",
+    href: "/uses#ai-stack",
     items: [
-      { label: "Claude", name: "claude" },
-      { label: "Codex", name: "codex" },
-      { label: "ChatGPT", name: "chatgpt" },
-      { label: "MCP", name: "mcp" },
-      { label: "Zapier", name: "zapier" },
-      { label: "n8n", name: "n8n" },
+      { label: "Claude", name: "claude", note: "Daily reasoning + code", primary: true },
+      { label: "Codex", name: "codex", note: "Multi-file edits" },
+      { label: "ChatGPT", name: "chatgpt", note: "Utility shots" },
+      { label: "MCP", name: "mcp", note: "Agent ↔ tool bridge" },
+      { label: "Zapier", name: "zapier", note: "Hotel ops glue" },
+      { label: "n8n", name: "n8n", note: "Self-hosted automation" },
     ],
     title: "AI & Automation",
   },
   {
     eyebrow: "02",
+    frequency: "Daily · this site + apps",
+    href: "/uses",
     items: [
-      { label: "TypeScript", name: "typescript" },
-      { label: "React", name: "react" },
-      { label: "Next.js", name: "nextjs" },
-      { label: "Tailwind", name: "tailwind" },
+      { label: "TypeScript", name: "typescript", note: "Default · everywhere" },
+      { label: "React", name: "react", note: "UI framework" },
+      { label: "Next.js", name: "nextjs", note: "App router · this site", primary: true },
+      { label: "Tailwind", name: "tailwind", note: "Atomic styles" },
     ],
     title: "Frontend",
   },
   {
     eyebrow: "03",
+    frequency: "Weekly · per-app",
+    href: "/uses#infra",
     items: [
-      { label: "Node.js", name: "node" },
-      { label: "Express", name: "express" },
-      { label: "Supabase", name: "supabase" },
-      { label: "MySQL", name: "mysql" },
+      { label: "Node.js", name: "node", note: "API + scripts" },
+      { label: "Express", name: "express", note: "Lightweight servers" },
+      { label: "Supabase", name: "supabase", note: "Postgres + auth + RLS", primary: true },
+      { label: "MySQL", name: "mysql", note: "Legacy reads" },
     ],
     title: "Backend & DB",
   },
   {
     eyebrow: "04",
+    frequency: "Project-based",
+    href: "/uses",
     items: [
-      { label: "Flutter", name: "flutter" },
-      { label: "Kotlin", name: "kotlin" },
+      { label: "Flutter", name: "flutter", note: "Cross-platform mobile", primary: true },
+      { label: "Kotlin", name: "kotlin", note: "KMP shared logic" },
     ],
     title: "Mobile",
   },
   {
     eyebrow: "05",
+    frequency: "Daily · CI + deploys",
+    href: "/uses#infra",
     items: [
-      { label: "Vercel", name: "vercel" },
-      { label: "GitHub", name: "github" },
-      { label: "Twilio", name: "twilio" },
+      { label: "Vercel", name: "vercel", note: "This site lives here", primary: true },
+      { label: "GitHub", name: "github", note: "PR-driven workflow" },
+      { label: "Twilio", name: "twilio", note: "SMS for ops" },
     ],
     title: "Infra & APIs",
   },
   {
     eyebrow: "06",
+    frequency: "Daily · primary editor",
+    href: "/uses#editor",
     items: [
-      { label: "VS Code", name: "vscode" },
-      { label: "Cursor", name: "cursor" },
-      { label: "Figma", name: "figma" },
-      { label: "Framer", name: "framer" },
+      { label: "VS Code", name: "vscode", note: "Daily editor", primary: true },
+      { label: "Cursor", name: "cursor", note: "Single-file AI edits" },
+      { label: "Figma", name: "figma", note: "Design + tokens" },
+      { label: "Framer", name: "framer", note: "Layout prototypes" },
     ],
     title: "Tooling & Design",
   },
@@ -125,6 +141,28 @@ export function BentoStack() {
               {category.items.length}{" "}
               {category.items.length === 1 ? "tool" : "tools"}
             </p>
+            <p className="mt-1 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+              <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+                <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+              </span>
+              {category.frequency}
+            </p>
+            {category.href ? (
+              <a
+                className="group/cat mt-4 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                href={category.href}
+              >
+                <span aria-hidden="true" className="text-accent/70">↳</span>
+                <span className="link-underline">Why these</span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover/cat:translate-x-0.5"
+                >
+                  →
+                </span>
+              </a>
+            ) : null}
           </div>
 
           {/* RIGHT — logo wall */}
@@ -140,6 +178,26 @@ export function BentoStack() {
           </ul>
         </motion.div>
       ))}
+
+      {/* CLOSING — points readers to /uses for the deeper "stack
+          with reasons" treatment of each category. */}
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border-light pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+          07 · Stack with reasons
+        </p>
+        <a
+          className="group/usesnav inline-flex items-center gap-2 rounded-full border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent"
+          href="/uses"
+        >
+          <span>/uses · why each tool</span>
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover/usesnav:translate-x-0.5"
+          >
+            →
+          </span>
+        </a>
+      </div>
     </div>
   );
 }
@@ -167,29 +225,50 @@ function ToolTile({
       whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
     >
       <button
-        aria-label={item.label}
-        className="group relative flex h-16 w-16 items-center justify-center rounded-xl border border-border-light bg-white/70 backdrop-blur-md transition-[transform,border-color,box-shadow,background] duration-300 hover:-translate-y-1 hover:border-accent/55 hover:bg-white hover:shadow-[0_18px_36px_-18px_rgba(41,110,214,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-20 sm:w-20"
+        aria-label={item.primary ? `${item.label} · primary` : item.label}
+        className={`group relative flex h-16 w-16 items-center justify-center rounded-xl border bg-white/70 backdrop-blur-md transition-[transform,border-color,box-shadow,background] duration-300 hover:-translate-y-1 hover:border-accent/55 hover:bg-white hover:shadow-[0_18px_36px_-18px_rgba(41,110,214,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-20 sm:w-20 ${
+          item.primary
+            ? "border-accent/45 shadow-[0_8px_24px_-12px_rgba(41,110,214,0.35)]"
+            : "border-border-light"
+        }`}
         onFocus={() => setHovered(true)}
         onBlur={() => setHovered(false)}
         type="button"
       >
         <BrandLogo
-          className="text-text-light-muted transition-colors duration-300 group-hover:text-accent"
+          className={`transition-colors duration-300 group-hover:text-accent ${
+            item.primary ? "text-accent" : "text-text-light-muted"
+          }`}
           name={item.name}
           size={32}
         />
+        {item.primary ? (
+          <span
+            aria-hidden="true"
+            className="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded-full border border-accent bg-bg-light font-mono text-[10px] font-semibold text-accent shadow-[0_2px_6px_-2px_rgba(41,110,214,0.55)]"
+            title="Primary in this category"
+          >
+            ★
+          </span>
+        ) : null}
       </button>
 
-      {/* Tooltip — appears above the tile on hover/focus */}
+      {/* Tooltip — appears above the tile on hover/focus.
+          Carries the tool's usage note when present (iter-268). */}
       <motion.span
         animate={{
           opacity: hovered && !reduce ? 1 : 0,
           y: hovered && !reduce ? -6 : 0,
         }}
-        className="pointer-events-none absolute bottom-full left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md border border-accent/30 bg-bg-light px-2 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
+        className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 inline-flex max-w-[220px] -translate-x-1/2 flex-col items-center gap-1 whitespace-nowrap rounded-md border border-accent/30 bg-bg-light px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
         transition={{ duration: 0.2, ease: easeOut }}
       >
-        {item.label}
+        <span className="font-semibold">{item.label}</span>
+        {item.note ? (
+          <span className="font-normal tracking-[0.18em] text-text-light-muted">
+            {item.note}
+          </span>
+        ) : null}
       </motion.span>
     </motion.li>
   );
