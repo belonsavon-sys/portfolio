@@ -673,7 +673,7 @@ function Stack() {
     <div>
       <SectionHeader
         align="center"
-        description="Cloud AI, local AI, the web stack to ship them, and the orchestration glue that ties everything together."
+        description="The tools I reach for first — chosen because they get out of the way once the work starts."
         eyebrow="My stack"
         title="What I use to ship."
       />
