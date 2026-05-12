@@ -135,19 +135,23 @@ export default function AiPage() {
       <SectionDivider direction="light-to-dark" />
 
       <DemoSection
-        eyebrow="Demo 1"
+        chapter="01"
+        eyebrow="Demo · Local AI"
         statusLabel="Local · In your browser"
         title="Local AI. Real business. No cloud required."
         description="Five tasks running on your machine. Pick a tab, load the model, run it. Models cache after first download. No API key, no server, no data leaving your browser."
+        total="02"
       >
         <LocalAiDemo />
       </DemoSection>
 
       <DemoSection
-        eyebrow="Demo 2"
+        chapter="02"
+        eyebrow="Demo · Atlas runtime"
         statusLabel="Atlas · Live runtime"
         title="This is what an agent harness looks like in motion."
         description="Atlas is the multi-agent system I co-architect at Blackdoor. Send a prompt. The CEO agent routes it through C-suite to manager to field agents."
+        total="02"
       >
         <AtlasDemo />
       </DemoSection>
@@ -433,31 +437,175 @@ function AtlasGallerySection() {
 }
 
 function DemoSection({
+  chapter,
   children,
   description,
   eyebrow,
   statusLabel,
   title,
+  total,
 }: {
+  chapter: string;
   children: ReactNode;
   description: string;
   eyebrow: string;
   statusLabel: string;
   title: string;
+  total: string;
 }) {
+  const easeOutCubic = [0.65, 0, 0.35, 1] as [number, number, number, number];
+
   return (
-    <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
+    <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-28">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          badge={<LiveStatusBadge label={statusLabel} />}
-          description={description}
-          eyebrow={eyebrow}
-          title={title}
-          tone="dark"
-        />
-        <div className="scanlines mt-10 rounded-3xl">{children}</div>
+        {/* THEATER HEADER — chapter + headline left, oversized chapter
+            number + live-status badge right. Anchored editorial layout
+            that frames each demo like a feature in a film program. */}
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+          <motion.div
+            className="lg:max-w-3xl"
+            initial={{ opacity: 0, y: 18 }}
+            transition={{ duration: 0.55, ease: easeOutCubic }}
+            viewport={{ amount: 0.3, once: true }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <div className="flex items-center gap-4">
+              <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+                {eyebrow}
+              </span>
+              <span aria-hidden="true" className="h-px w-12 bg-accent-light/40" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted">
+                {chapter} / {total}
+              </span>
+            </div>
+            <h2
+              className="mt-5 font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(2.25rem, 5.5vw, 4.25rem)",
+                letterSpacing: "-0.045em",
+                lineHeight: 0.95,
+              }}
+            >
+              {title}
+            </h2>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-text-dark-muted sm:text-lg sm:leading-8">
+              {description}
+            </p>
+          </motion.div>
+
+          {/* RIGHT — oversized chapter mark + status badge */}
+          <motion.div
+            className="flex flex-row items-end gap-6 lg:flex-col lg:items-end"
+            initial={{ opacity: 0, y: 18 }}
+            transition={{ delay: 0.15, duration: 0.55, ease: easeOutCubic }}
+            viewport={{ amount: 0.3, once: true }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <span
+              className="font-semibold leading-none text-accent-light/55"
+              style={{
+                fontSize: "clamp(4.5rem, 9vw, 7.5rem)",
+                letterSpacing: "-0.06em",
+              }}
+            >
+              {chapter}
+            </span>
+            <LiveStatusBadge label={statusLabel} />
+          </motion.div>
+        </div>
+
+        {/* CINEMATIC DEMO FRAME — corner brackets + dual curtain reveal */}
+        <CinematicFrame>{children}</CinematicFrame>
       </div>
     </section>
+  );
+}
+
+function CinematicFrame({ children }: { children: ReactNode }) {
+  const reduce = useReducedMotion();
+  const easeOutCubic = [0.65, 0, 0.35, 1] as [number, number, number, number];
+
+  return (
+    <div className="relative mt-12 overflow-hidden rounded-3xl border border-accent-light/15 bg-[rgba(15,23,42,0.6)] p-3 shadow-[0_36px_72px_-30px_rgba(0,0,0,0.7)] sm:p-4">
+      {/* Corner brackets — film-slate aesthetic */}
+      <CornerBracket position="tl" />
+      <CornerBracket position="tr" />
+      <CornerBracket position="bl" />
+      <CornerBracket position="br" />
+
+      {/* Dual curtain reveal — top + bottom dark bars retract as the
+          demo enters view, like a stage opening. */}
+      {!reduce ? (
+        <>
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 z-20 h-1/2 origin-top bg-bg-dark"
+            initial={{ scaleY: 1 }}
+            transition={{ duration: 0.9, ease: easeOutCubic }}
+            viewport={{ amount: 0.3, once: true }}
+            whileInView={{ scaleY: 0 }}
+          />
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-1/2 origin-bottom bg-bg-dark"
+            initial={{ scaleY: 1 }}
+            transition={{ duration: 0.9, ease: easeOutCubic }}
+            viewport={{ amount: 0.3, once: true }}
+            whileInView={{ scaleY: 0 }}
+          />
+          {/* Accent seam line where the two curtains meet, briefly visible */}
+          <motion.span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-1/2 z-30 h-px bg-gradient-to-r from-transparent via-accent-light to-transparent shadow-[0_0_24px_rgba(91,155,244,0.6)]"
+            initial={{ opacity: 0 }}
+            transition={{
+              duration: 0.9,
+              ease: easeOutCubic,
+              times: [0, 0.35, 1],
+            }}
+            viewport={{ amount: 0.3, once: true }}
+            whileInView={{ opacity: [0, 1, 0] }}
+          />
+        </>
+      ) : null}
+
+      <div className="scanlines relative z-10 rounded-2xl">{children}</div>
+    </div>
+  );
+}
+
+function CornerBracket({
+  position,
+}: {
+  position: "tl" | "tr" | "bl" | "br";
+}) {
+  const posClass = {
+    tl: "left-0 top-0",
+    tr: "right-0 top-0",
+    bl: "left-0 bottom-0",
+    br: "right-0 bottom-0",
+  }[position];
+  const rotation = {
+    tl: "rotate-0",
+    tr: "rotate-90",
+    bl: "-rotate-90",
+    br: "rotate-180",
+  }[position];
+
+  return (
+    <svg
+      aria-hidden="true"
+      className={`pointer-events-none absolute z-30 h-6 w-6 text-accent-light sm:h-8 sm:w-8 ${posClass} ${rotation}`}
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M2 8V2h6"
+        stroke="currentColor"
+        strokeLinecap="square"
+        strokeWidth="1.5"
+      />
+    </svg>
   );
 }
 
