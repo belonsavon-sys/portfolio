@@ -12,6 +12,8 @@ const routes: Record<string, string> = {
   "5": "/contact",
   "6": "/now",
   "7": "/uses",
+  "8": "/atlas",
+  "9": "/colophon",
 };
 
 type ChapterShortcut = {
@@ -71,6 +73,20 @@ const CHAPTERS: ChapterShortcut[] = [
     href: "/uses",
     key: "7",
     title: "Uses",
+  },
+  {
+    chapter: "08",
+    description: "/atlas · the multi-agent harness",
+    href: "/atlas",
+    key: "8",
+    title: "Atlas",
+  },
+  {
+    chapter: "09",
+    description: "/colophon · how this is built",
+    href: "/colophon",
+    key: "9",
+    title: "Colophon",
   },
 ];
 
