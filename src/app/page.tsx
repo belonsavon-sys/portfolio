@@ -2,6 +2,7 @@
 
 import {
   motion,
+  useMotionValue,
   useReducedMotion,
   useScroll,
   useSpring,
@@ -315,6 +316,42 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
     [1, 0.9, 0],
   );
 
+  // Mouse-parallax for the stacked name. Each line responds with a
+  // different magnitude — Pierre least, Savon. most — so the name feels
+  // like it's catching a breeze when the cursor moves over the hero.
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springMouseX = useSpring(mouseX, {
+    damping: 30,
+    mass: 0.5,
+    stiffness: 180,
+  });
+  const springMouseY = useSpring(mouseY, {
+    damping: 30,
+    mass: 0.5,
+    stiffness: 180,
+  });
+  const line1X = useTransform(springMouseX, (v) => v * 8);
+  const line1Y = useTransform(springMouseY, (v) => v * 4);
+  const line2X = useTransform(springMouseX, (v) => v * 18);
+  const line2Y = useTransform(springMouseY, (v) => v * 9);
+  const line3X = useTransform(springMouseX, (v) => v * 30);
+  const line3Y = useTransform(springMouseY, (v) => v * 14);
+
+  const onHeroMouseMove = (event: React.MouseEvent<HTMLElement>) => {
+    if (reduce) return;
+    const rect = heroRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const nx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    const ny = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+    mouseX.set(Math.max(-1, Math.min(1, nx)));
+    mouseY.set(Math.max(-1, Math.min(1, ny)));
+  };
+  const onHeroMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
   const fadeUp = (delay: number) =>
     reduce
       ? { animate: { opacity: 1 }, initial: { opacity: 1 } }
@@ -325,7 +362,12 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
         };
 
   return (
-    <section className="relative overflow-hidden" ref={heroRef}>
+    <section
+      className="relative overflow-hidden"
+      onMouseLeave={onHeroMouseLeave}
+      onMouseMove={onHeroMouseMove}
+      ref={heroRef}
+    >
       <CursorHalo />
 
       {/* Floating accent labels — desktop-only decoration */}
@@ -357,7 +399,10 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
             <GreetingRotator />
           </motion.p>
 
-          {/* MASSIVE name — stacked across 3 lines, hard-bound left, breaks the grid on lg */}
+          {/* MASSIVE name — stacked across 3 lines, hard-bound left, breaks
+              the grid on lg. Each line gets its own mouse-parallax
+              magnitude (Pierre least, Savon. most) so the name catches a
+              breeze when the cursor passes over the hero. */}
           <h1
             className="mt-2 font-semibold text-text-light"
             style={{
@@ -366,21 +411,30 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               lineHeight: 0.86,
             }}
           >
-            <span className="block">
+            <motion.span
+              className="block will-change-transform"
+              style={reduce ? undefined : { x: line1X, y: line1Y }}
+            >
               <SplitText charDelay={0.025} delay={0.18} duration={0.85}>
                 Pierre
               </SplitText>
-            </span>
-            <span className="block">
+            </motion.span>
+            <motion.span
+              className="block will-change-transform"
+              style={reduce ? undefined : { x: line2X, y: line2Y }}
+            >
               <SplitText charDelay={0.025} delay={0.36} duration={0.85}>
                 Belon
               </SplitText>
-            </span>
-            <span className="gradient-shift block">
+            </motion.span>
+            <motion.span
+              className="gradient-shift block will-change-transform"
+              style={reduce ? undefined : { x: line3X, y: line3Y }}
+            >
               <SplitText charDelay={0.025} delay={0.52} duration={0.85}>
                 Savon.
               </SplitText>
-            </span>
+            </motion.span>
           </h1>
 
           {/* Mono kicker right below the name — editorial role tag */}
