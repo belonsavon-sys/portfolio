@@ -60,22 +60,30 @@ const BUILDING_STATUS_META: Record<
   },
 };
 
-const READING = [
+const READING: Array<{
+  detail: string;
+  label: string;
+  medium: string;
+  progress: number;
+}> = [
   {
     detail: "Daniel Kahneman · re-read for the system-1/system-2 framework.",
     label: "Thinking, Fast and Slow",
     medium: "Book",
+    progress: 62,
   },
   {
     detail:
       "Following the latest Anthropic / OpenAI / DeepMind agent-systems research drops.",
     label: "Agent design papers",
     medium: "Papers",
+    progress: 35,
   },
   {
     detail: "Watching the MCP spec land in production projects across the ecosystem.",
     label: "MCP changelog",
     medium: "Spec",
+    progress: 80,
   },
 ];
 
@@ -360,6 +368,25 @@ export default function NowPage() {
                 <p className="mt-2 text-sm leading-6 text-text-light-muted">
                   {entry.detail}
                 </p>
+
+                {/* Progress rail — thin accent bar showing how far
+                    along Pierre is on this source. Makes the queue
+                    feel like an in-motion log rather than a static
+                    list. */}
+                <div className="mt-5 flex items-center gap-3">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                    {entry.progress}%
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="relative h-px flex-1 overflow-hidden rounded-full bg-border-light"
+                  >
+                    <span
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light"
+                      style={{ width: `${entry.progress}%` }}
+                    />
+                  </span>
+                </div>
               </li>
             ))}
           </ul>
