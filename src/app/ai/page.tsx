@@ -195,8 +195,8 @@ function AiHero() {
 
         <ScrollReveal delay={0.15} direction="up">
           <p className="mt-10 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
-            Multi-agent harnesses and automation built to change how your
-            business operates — not just to impress in a demo.
+            Multi-agent harnesses and automation, wired into the workflows
+            you already run.
           </p>
         </ScrollReveal>
 

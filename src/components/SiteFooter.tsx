@@ -1,11 +1,11 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
 import { Button } from "./Button";
 import { LiveStatusBadge } from "./LiveStatusBadge";
 import { ParallaxBackdrop } from "./ParallaxBackdrop";
+import { ParallaxGhost } from "./ParallaxGhost";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -32,29 +32,9 @@ const FOOTER_CONTACTS = [
 
 export function SiteFooter() {
   const reduce = useReducedMotion();
-  const sectionRef = useRef<HTMLElement>(null);
-
-  // Scroll-driven parallax + opacity ramp on the giant LET'S TALK ghost.
-  // As the footer scrolls into view, the ghost drifts up (~80px) and
-  // brightens from 60% → 100% stroke intensity. As you pass it, it
-  // continues drifting up + fades, so it reads as an "appearing then
-  // disappearing" beat as the page closes out.
-  const { scrollYProgress } = useScroll({
-    offset: ["start end", "end start"],
-    target: sectionRef,
-  });
-  const ghostY = useTransform(scrollYProgress, [0, 0.5, 1], [60, 0, -60]);
-  const ghostOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.7, 1],
-    [0.4, 1, 1, 0.5],
-  );
 
   return (
-    <section
-      className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32"
-      ref={sectionRef}
-    >
+    <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
       <ParallaxBackdrop>
         <div className="absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
         <div className="absolute bottom-[-8rem] right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/14 blur-3xl" />
@@ -66,26 +46,16 @@ export function SiteFooter() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-1/3 -z-0 flex justify-center overflow-hidden"
       >
-        <motion.span
+        <ParallaxGhost
           className="select-none font-bold leading-[0.85] tracking-tighter"
-          style={
-            reduce
-              ? {
-                  WebkitTextStroke: "1px rgba(91,155,244,0.10)",
-                  color: "transparent",
-                  fontSize: "clamp(5rem, 18vw, 18rem)",
-                }
-              : {
-                  WebkitTextStroke: "1px rgba(91,155,244,0.10)",
-                  color: "transparent",
-                  fontSize: "clamp(5rem, 18vw, 18rem)",
-                  opacity: ghostOpacity,
-                  y: ghostY,
-                }
-          }
+          style={{
+            WebkitTextStroke: "1px rgba(91,155,244,0.10)",
+            color: "transparent",
+            fontSize: "clamp(5rem, 18vw, 18rem)",
+          }}
         >
           LET&apos;S TALK
-        </motion.span>
+        </ParallaxGhost>
       </div>
 
       <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
