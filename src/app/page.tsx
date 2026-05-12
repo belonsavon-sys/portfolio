@@ -305,21 +305,31 @@ function scrollToAbout() {
   el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-const processSteps = [
+type ProcessStep = {
+  body: string;
+  link: { href: string; label: string };
+  verb: string;
+};
+
+const processSteps: ProcessStep[] = [
   {
     body: "I take problems to mastery before I execute. The first hours go to research — docs, primary sources, working code I can read.",
+    link: { href: "/uses", label: "see the stack" },
     verb: "Research",
   },
   {
     body: "Solo or paired with AI, I prototype until something works. The harness writes the boring parts; I keep judgment on what ships.",
+    link: { href: "/atlas", label: "see the harness" },
     verb: "Build",
   },
   {
     body: "Every change goes through a PR with documentation, spec, and a clean commit history. Production is the only environment that matters.",
+    link: { href: "/now#shipped", label: "see recent ships" },
     verb: "Ship",
   },
   {
     body: "Real numbers, real systems running. No demos that didn't survive contact with a guest, a payment, or a manager.",
+    link: { href: "#outcomes", label: "see the numbers" },
     verb: "Measure",
   },
 ];
@@ -368,11 +378,27 @@ function ProcessBand() {
               </h3>
             </div>
 
-            {/* RIGHT 4 — body prose */}
+            {/* RIGHT 4 — body prose + cross-link to where the
+                practice shows up elsewhere on the site. */}
             <div className="col-span-12 lg:col-span-4">
               <p className="text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
                 {step.body}
               </p>
+              <a
+                className="group/proc-link mt-5 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.24em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                href={step.link.href}
+              >
+                <span aria-hidden="true" className="text-accent/70">
+                  ↳
+                </span>
+                <span className="link-underline">{step.link.label}</span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover/proc-link:translate-x-0.5"
+                >
+                  →
+                </span>
+              </a>
             </div>
 
             {/* Hover accent — gradient hair-line draws under the row */}
