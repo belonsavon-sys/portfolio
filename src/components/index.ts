@@ -54,6 +54,8 @@ export type { NowReadingProps, NowReadingSection } from "./NowReading";
 export { PageTransition } from "./PageTransition";
 export { ParallaxBackdrop } from "./ParallaxBackdrop";
 export type { ParallaxBackdropProps } from "./ParallaxBackdrop";
+export { ParallaxGhost } from "./ParallaxGhost";
+export type { ParallaxGhostProps } from "./ParallaxGhost";
 export { PhotoSlot } from "./PhotoSlot";
 export type { PhotoSlotProps } from "./PhotoSlot";
 export { ScrollProgress } from "./ScrollProgress";
