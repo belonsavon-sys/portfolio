@@ -309,6 +309,18 @@ export default function ResumePage() {
               >
                 Download Resume
               </Button>
+              <button
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-border-light bg-bg-light-2 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light-muted transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent no-print"
+                onClick={() => {
+                  if (typeof window !== "undefined") window.print();
+                }}
+                type="button"
+              >
+                <span aria-hidden="true" className="text-accent/70">
+                  ⌥
+                </span>
+                Print clean (browser)
+              </button>
               <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
                 PDF · One page · Recruiter-ready
               </p>
