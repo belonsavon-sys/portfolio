@@ -142,6 +142,12 @@ export function KeyboardNav() {
     return () => window.clearTimeout(id);
   }, [helpOpen]);
 
+  // Letter-sequence Easter egg: typing "pierre" anywhere (outside
+  // an editable field) opens the command palette. Buffer resets on
+  // any non-matching key or after 1.5s of inactivity.
+  const sequenceRef = useRef("");
+  const sequenceTimerRef = useRef<number | null>(null);
+
   useEffect(() => {
     function isEditable(target: EventTarget | null): boolean {
       if (!(target instanceof HTMLElement)) return false;
@@ -192,6 +198,25 @@ export function KeyboardNav() {
           behavior: "smooth",
           top: 0,
         });
+        return;
+      }
+
+      // "pierre" letter-sequence easter egg.
+      if (event.key.length === 1 && /^[a-zA-Z]$/.test(event.key)) {
+        const target = "pierre";
+        sequenceRef.current = (sequenceRef.current + event.key.toLowerCase())
+          .slice(-target.length);
+        if (sequenceTimerRef.current !== null) {
+          window.clearTimeout(sequenceTimerRef.current);
+        }
+        sequenceTimerRef.current = window.setTimeout(() => {
+          sequenceRef.current = "";
+        }, 1500);
+
+        if (sequenceRef.current === target) {
+          sequenceRef.current = "";
+          setHelpOpen(true);
+        }
       }
     }
 
