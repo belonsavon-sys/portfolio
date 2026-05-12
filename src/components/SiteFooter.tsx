@@ -23,6 +23,7 @@ const FOOTER_LINKS: Array<{ href: string; label: string; external?: boolean }> =
   { href: "/resume", label: "Resume" },
   { href: "/contact", label: "Get in Touch" },
   { href: "/now", label: "Now" },
+  { href: "/uses", label: "Uses" },
 ];
 
 const FOOTER_CONTACTS = [

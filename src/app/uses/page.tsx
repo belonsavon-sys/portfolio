@@ -7,6 +7,37 @@ type StackEntry = {
   tags: string[];
 };
 
+const HARDWARE_STACK: StackEntry[] = [
+  {
+    detail:
+      "Main machine. Runs the whole stack — VS Code with multiple harness sessions, browser, Figma, terminal — without breaking a sweat.",
+    name: "MacBook Pro",
+    role: "Main rig",
+    tags: ["Apple Silicon", "macOS"],
+  },
+  {
+    detail:
+      "Connects everything. Hotel ops control, Atlas roadmap, message routing — all surfaced on one device for the times I'm away from the rig.",
+    name: "iPhone",
+    role: "Mobile control",
+    tags: ["iOS", "Notifications", "On-call"],
+  },
+  {
+    detail:
+      "External display when I'm at the desk. Wide enough to keep editor + browser + terminal stacked vertically without window juggling.",
+    name: "External display",
+    role: "Desk · pairing",
+    tags: ["27in", "Single window"],
+  },
+  {
+    detail:
+      "Mechanical keyboard for the typing miles. Quiet enough for shared spaces, satisfying enough to sit at for 10-hour shipping sessions.",
+    name: "Keyboard",
+    role: "Input · daily driver",
+    tags: ["Mechanical", "Tactile"],
+  },
+];
+
 const INFRA_STACK: StackEntry[] = [
   {
     detail:
@@ -270,7 +301,14 @@ export default function UsesPage() {
         title="Where it ships and runs."
       />
 
-      {/* CLOSING placeholder — iter-205 injects ~/hardware here. */}
+      {/* 04 · HARDWARE */}
+      <UsesStackSection
+        chapter="04"
+        eyebrow="Hardware"
+        entries={HARDWARE_STACK}
+        slug="~/hardware"
+        title="What it physically runs on."
+      />
       <section className="relative pb-24 pt-16">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-8">
