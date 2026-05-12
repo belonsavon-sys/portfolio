@@ -116,9 +116,9 @@ export function BentoStack() {
           {/* Numbered eyebrow row */}
           <div className="relative flex items-baseline justify-between gap-4">
             <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-              {category.eyebrow} /  stack
+              {category.eyebrow}
             </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-light-muted">
+            <span className="font-mono text-[10px] tabular-nums uppercase tracking-[0.24em] text-text-light-muted">
               {category.items.length}{" "}
               {category.items.length === 1 ? "tool" : "tools"}
             </span>
@@ -138,7 +138,7 @@ export function BentoStack() {
 
           <motion.span
             aria-hidden="true"
-            className={`relative mt-5 block h-px origin-left bg-gradient-to-r ${category.accent}`}
+            className={`relative mt-5 block h-px w-3/5 origin-left bg-gradient-to-r transition-[width] duration-500 ease-out group-hover/cat:w-full ${category.accent}`}
             initial={reduce ? false : { scaleX: 0 }}
             transition={{
               delay: categoryIndex * 0.06 + 0.25,
@@ -147,7 +147,6 @@ export function BentoStack() {
             }}
             viewport={{ amount: 0.4, once: true }}
             whileInView={reduce ? undefined : { scaleX: 1 }}
-            style={{ width: "60%" }}
           />
 
           <ul className="relative mt-6 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3">
