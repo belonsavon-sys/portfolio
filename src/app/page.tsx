@@ -264,6 +264,92 @@ function HeroRecentDatasheet() {
   );
 }
 
+/**
+ * Continuous commit ticker for the hero — renders the last 10
+ * commits as a single horizontal scrolling marquee. Pauses on
+ * hover so visitors can actually read entries. Falls back to a
+ * static "live · shipping" pill when no commits are available
+ * (so the markup doesn't go empty on shallow clones).
+ */
+function HeroCommitTicker() {
+  type C = { sha: string; subject: string; when: string };
+  let commits: C[] = [];
+  try {
+    const raw = process.env.NEXT_PUBLIC_BUILD_RECENT_COMMITS;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) commits = parsed.slice(0, 10);
+    }
+  } catch {
+    commits = [];
+  }
+
+  if (commits.length === 0) {
+    return (
+      <div className="flex items-center gap-3 rounded-xl border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+        <span className="relative inline-flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+          <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+        </span>
+        <span>~/ticker · live · shipping</span>
+      </div>
+    );
+  }
+
+  // Duplicate the commit list so the marquee can loop seamlessly
+  // (the second copy fills the gap left as the first scrolls out).
+  const doubled = [...commits, ...commits];
+
+  return (
+    <div className="group relative overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+      {/* HEADER STRIP — eyebrow + counter */}
+      <div className="relative z-10 flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+        <span className="relative inline-flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+          <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+        </span>
+        <span>~/ticker</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        <span className="text-text-light-muted">
+          last {commits.length} ships · hover to pause
+        </span>
+      </div>
+
+      {/* MARQUEE TRACK — fades on both edges, doubled entries scroll
+          left at a constant rate. Pauses when the user hovers the
+          parent container so individual entries are readable. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-bg-light-2 to-transparent"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-bg-light-2 to-transparent"
+      />
+      <div
+        className="flex w-max items-center gap-8 py-2.5 font-mono text-[12px] uppercase tracking-[0.22em] motion-safe:animate-[hero-ticker_60s_linear_infinite] group-hover:[animation-play-state:paused]"
+        style={{ paddingLeft: "1rem", paddingRight: "1rem" }}
+      >
+        {doubled.map((c, index) => (
+          <span
+            className="flex shrink-0 items-center gap-3"
+            key={`${c.sha}-${index}`}
+          >
+            <span className="text-accent">{c.sha}</span>
+            <span className="text-text-light/85 normal-case tracking-normal">
+              {c.subject}
+            </span>
+            <span className="text-text-light-muted">· {c.when}</span>
+            <span aria-hidden="true" className="text-accent/40">
+              ◇
+            </span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 type HeroRecentCommit = {
   sha: string;
   subject: string;
@@ -1452,6 +1538,18 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           }
         >
           <HeroRecentDatasheet />
+        </motion.div>
+
+        {/* COMMIT TICKER — continuous horizontal feed of the last 10
+            commits. Reads as a live "this site ships" ribbon directly
+            inside the hero. Pauses on hover so visitors can read. */}
+        <motion.div
+          className="col-span-12"
+          style={
+            reduce ? undefined : { opacity: bottomZoneOpacity, y: bottomZoneY }
+          }
+        >
+          <HeroCommitTicker />
         </motion.div>
 
         {/* CHIP STRIP — left-aligned, last chip is a live local clock */}

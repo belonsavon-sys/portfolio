@@ -375,6 +375,18 @@ a {
   animation: scroll-cue 2.4s ease-in-out infinite;
 }
 
+/* Home hero commit ticker — single-direction marquee. The track is
+ * rendered at double width (commit list duplicated in markup) so a
+ * 50% translate produces a seamless loop. */
+@keyframes hero-ticker {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scroll-cue-dot {
     animation: none;
