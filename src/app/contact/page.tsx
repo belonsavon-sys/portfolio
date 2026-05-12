@@ -55,9 +55,10 @@ const contactLinks: ContactCardConfig[] = [
     : []),
 ];
 
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
 export default function ContactPage() {
   const reduce = useReducedMotion();
-  const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
   const fadeUp = (delay: number) =>
     reduce
@@ -70,9 +71,11 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-bg-dark text-text-dark">
+      {/* HERO — tightened to ~80vh so the page becomes scrollable into
+          the contact methods, pipeline, engagements, and availability
+          sections that follow. */}
       <section className="relative overflow-hidden">
-
-        {/* Giant ghost watermark */}
+        {/* Giant ghost watermark — same parallax pattern as other heroes */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
@@ -89,7 +92,7 @@ export default function ContactPage() {
           </ParallaxGhost>
         </div>
 
-        <div className="relative mx-auto grid min-h-[calc(100vh-72px)] w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24">
+        <div className="relative mx-auto grid w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-20 sm:px-6 sm:py-24 lg:gap-x-8 lg:py-28">
           {/* TOP STRIP — status pill + chapter mark */}
           <motion.div
             className="col-span-12 flex flex-wrap items-center gap-3 self-start"
@@ -106,7 +109,7 @@ export default function ContactPage() {
             </span>
             <span aria-hidden="true" className="h-px w-12 bg-accent-light/40" />
             <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-dark-muted">
-              Reply window · 24 hrs
+              Chapter 05 · Intake
             </span>
           </motion.div>
 
@@ -121,8 +124,8 @@ export default function ContactPage() {
             {...fadeUp(0.08)}
           >
             <span className="block">Ready when</span>
-            <span className="block bg-gradient-to-r from-text-dark via-accent-light to-accent-light bg-clip-text text-transparent">
-              you are.
+            <span className="gradient-shift-dark block">
+              you are<span className="text-accent-light">.</span>
             </span>
           </motion.h1>
 
@@ -166,10 +169,49 @@ export default function ContactPage() {
             </div>
           </motion.div>
 
-          {/* BOTTOM — contact links as full-width row entries */}
+          {/* SCROLL CUE — anchors the hero to the methods section below */}
+          <motion.a
+            aria-label="Scroll to contact methods"
+            className="group/cue col-span-12 mt-10 hidden flex-row items-center gap-3 self-end sm:flex"
+            href="#methods"
+            {...fadeUp(0.34)}
+          >
+            <span className="relative h-px w-10 overflow-hidden bg-gradient-to-r from-[rgba(91,155,244,0.2)] via-accent-light to-transparent transition-colors duration-200 group-hover/cue:via-accent-light">
+              <span className="scroll-cue-dot absolute left-0 top-1/2 h-px w-2 -translate-y-1/2 bg-accent-light" />
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-text-dark-muted transition-colors duration-200 group-hover/cue:text-accent-light">
+              Reach me
+            </span>
+          </motion.a>
+        </div>
+      </section>
+
+      {/* METHODS — temporary placeholder; iter-183 rebuilds this as
+          editorial chapter cards. For now we keep the existing
+          full-width row pattern but in a dedicated section below the
+          hero (no longer crammed into the hero grid). */}
+      <section className="relative" id="methods">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              01 · Reach me
+            </span>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <h2
+              className="font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              }}
+            >
+              Four ways in.
+            </h2>
+          </div>
+
           <motion.div
-            className="col-span-12 grid divide-y divide-[rgba(91,155,244,0.20)] border-y border-[rgba(91,155,244,0.20)]"
-            {...fadeUp(0.32)}
+            className="grid divide-y divide-[rgba(91,155,244,0.20)]"
+            {...fadeUp(0)}
           >
             {contactLinks.map(
               ({ Icon, href, label, rel, target, value }, index) => (
@@ -182,7 +224,7 @@ export default function ContactPage() {
                   rel={rel}
                   target={target}
                   transition={{
-                    delay: 0.42 + index * 0.06,
+                    delay: 0.12 + index * 0.06,
                     duration: 0.45,
                     ease: easeOut,
                   }}
@@ -196,9 +238,7 @@ export default function ContactPage() {
                     <span className="w-24 font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
                       {label}
                     </span>
-                    <span
-                      className="break-all text-lg font-semibold text-text-dark transition-colors duration-200 group-hover:text-accent-light sm:text-xl"
-                    >
+                    <span className="break-all text-lg font-semibold text-text-dark transition-colors duration-200 group-hover:text-accent-light sm:text-xl">
                       {value}
                     </span>
                   </div>
@@ -224,6 +264,10 @@ export default function ContactPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Trailing spacer — iters 184–186 add real content sections
+          here (pipeline, engagements, availability). */}
+      <div className="h-24" aria-hidden="true" />
     </main>
   );
 }
@@ -306,4 +350,3 @@ function LinkedInIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-
