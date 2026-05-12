@@ -25,6 +25,8 @@ import {
 } from "@/components";
 import type { ReactNode } from "react";
 
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
 type ServiceStatus = "available" | "flagship" | "always";
 
 const services: Array<{
@@ -427,75 +429,88 @@ function ServicesSection() {
 
 function CaseStudiesSection() {
   const reduce = useReducedMotion();
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Scroll-tied scatter: 3 case studies zig-zag on exit (odd indices
-  // drift left, even drift right), all fade 0.6 → 0.95.
-  const { scrollYProgress } = useScroll({
-    offset: ["start start", "end start"],
-    target: sectionRef,
-  });
-  const exitOpacity = useTransform(scrollYProgress, [0.6, 0.95], [1, 0]);
-  const exitLeft = useTransform(scrollYProgress, [0.6, 1], [0, -90]);
-  const exitRight = useTransform(scrollYProgress, [0.6, 1], [0, 90]);
 
   return (
-    <div ref={sectionRef}>
+    <div>
       <SectionHeader
         eyebrow="Built and shipped"
         title="Three case studies, with receipts."
       />
 
-      <div className="mt-12 grid gap-16">
-        {caseStudies.map((study, index) => {
-          const exitX = index % 2 === 0 ? exitLeft : exitRight;
-          return (
-          <motion.article
+      {/* Editorial timeline — each case study is a full-width indexed
+          row matching the /resume Experience ledger and home Process
+          band patterns. Hover gradient hairline ties the rows together. */}
+      <ol className="mt-14 grid divide-y divide-border-light border-y border-border-light">
+        {caseStudies.map((study, index) => (
+          <CaseStudyRow
+            body={study.body}
+            comparison={study.comparison}
+            eyebrow={study.eyebrow}
+            index={index}
             key={study.title}
-            style={
-              reduce ? undefined : { opacity: exitOpacity, x: exitX }
-            }
-          >
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-              {study.eyebrow}
-            </p>
-            <h3 className="mt-3 text-2xl font-semibold sm:text-3xl">
-              {study.title}
-            </h3>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-text-light-muted">
-              {study.body}
-            </p>
-            <div className="mt-8">
-              <BeforeAfter
-                after={study.comparison.after}
-                before={study.comparison.before}
-              />
-            </div>
-          </motion.article>
-          );
-        })}
+            reduce={!!reduce}
+            title={study.title}
+          />
+        ))}
 
-        <motion.article
-          style={
-            reduce
-              ? undefined
-              : { opacity: exitOpacity, x: caseStudies.length % 2 === 0 ? exitLeft : exitRight }
-          }
+        {/* Third case study — Zapier + Guesty + Twilio (no BeforeAfter;
+            uses the wired-system visualization instead). */}
+        <motion.li
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          className="group relative grid grid-cols-12 gap-x-6 gap-y-6 py-14 sm:py-16"
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          transition={{
+            delay: caseStudies.length * 0.06,
+            duration: 0.6,
+            ease: easeOut,
+          }}
+          viewport={{ amount: 0.2, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
         >
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            03 · ThePrivateHotels · 2024
-          </p>
-          <h3 className="mt-3 text-2xl font-semibold sm:text-3xl">
-            Workflow Automation — Zapier + Guesty + Twilio
-          </h3>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-text-light-muted">
-            A connected automation layer using Zapier, Guesty API, and Twilio
-            API — replacing multi-hour coordination loops with automated
-            triggers and responses. Team focuses on decisions, not data
-            movement.
-          </p>
-          {/* Wired-system visualization */}
-          <div className="relative mt-8">
+          <div className="col-span-12 lg:col-span-7">
+            <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              03 · Case study
+            </p>
+            <h3
+              className="mt-4 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+              style={{
+                fontSize: "clamp(1.75rem, 4.5vw, 3rem)",
+                letterSpacing: "-0.04em",
+                lineHeight: 0.98,
+              }}
+            >
+              Workflow Automation — Zapier + Guesty + Twilio
+            </h3>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+              A connected automation layer using Zapier, Guesty API, and
+              Twilio API — replacing multi-hour coordination loops with
+              automated triggers and responses. Team focuses on decisions,
+              not data movement.
+            </p>
+          </div>
+          <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              Property
+            </p>
+            <p className="mt-2 font-mono text-sm text-text-light">
+              ThePrivateHotels · 2024
+            </p>
+            <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              Stack
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {["Zapier", "Guesty API", "Twilio API"].map((tech) => (
+                <li
+                  className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted"
+                  key={tech}
+                >
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="col-span-12">
             <div className="flex flex-wrap items-center justify-center gap-3 sm:flex-nowrap sm:justify-between">
               {[
                 { label: "Zapier", role: "Trigger" },
@@ -507,7 +522,7 @@ function CaseStudiesSection() {
                   direction="up"
                   key={item.label}
                 >
-                  <div className="group flex items-center gap-3">
+                  <div className="flex items-center gap-3">
                     <div className="rounded-xl border border-accent/30 bg-[rgba(41,110,214,0.06)] px-5 py-4 text-center transition-[border-color,background] duration-300 hover:border-accent hover:bg-[rgba(41,110,214,0.12)]">
                       <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-accent">
                         {item.role}
@@ -529,9 +544,99 @@ function CaseStudiesSection() {
               ))}
             </div>
           </div>
-        </motion.article>
-      </div>
+
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+          />
+        </motion.li>
+      </ol>
     </div>
+  );
+}
+
+/**
+ * Editorial case study row. Massive title + body on the left, mono
+ * spec rail (property + stack) on the right, BeforeAfter spanning
+ * full width below. Hover gradient hairline at the bottom of the row
+ * ties it into the surrounding divided-list.
+ */
+function CaseStudyRow({
+  body,
+  comparison,
+  eyebrow,
+  index,
+  reduce,
+  title,
+}: {
+  body: string;
+  comparison: (typeof caseStudies)[number]["comparison"];
+  eyebrow: string;
+  index: number;
+  reduce: boolean;
+  title: string;
+}) {
+  // Eyebrow comes in as "01 · ThePrivateHotels · 2024". Split into
+  // chapter index vs property+year for the spec rail.
+  const segments = eyebrow.split(" · ").map((s) => s.trim());
+  const propertyMeta = segments.slice(1).join(" · ");
+
+  return (
+    <motion.li
+      animate={reduce ? undefined : { opacity: 1, y: 0 }}
+      className="group relative grid grid-cols-12 gap-x-6 gap-y-6 py-14 sm:py-16"
+      initial={reduce ? false : { opacity: 0, y: 24 }}
+      transition={{
+        delay: index * 0.06,
+        duration: 0.6,
+        ease: easeOut,
+      }}
+      viewport={{ amount: 0.2, once: true }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+    >
+      <div className="col-span-12 lg:col-span-7">
+        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+          {String(index + 1).padStart(2, "0")} · Case study
+        </p>
+        <h3
+          className="mt-4 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+          style={{
+            fontSize: "clamp(1.75rem, 4.5vw, 3rem)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.98,
+          }}
+        >
+          {title}
+        </h3>
+        <p className="mt-5 max-w-2xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+          {body}
+        </p>
+      </div>
+      <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
+        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          Property
+        </p>
+        <p className="mt-2 font-mono text-sm text-text-light">{propertyMeta}</p>
+        <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          Result
+        </p>
+        <p className="mt-2 text-base font-semibold leading-6 text-text-light sm:text-lg">
+          {comparison.after.metric}
+        </p>
+        <p className="mt-1 text-xs leading-5 text-text-light-muted">
+          {comparison.after.caption}
+        </p>
+      </div>
+
+      <div className="col-span-12 mt-2">
+        <BeforeAfter after={comparison.after} before={comparison.before} />
+      </div>
+
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+      />
+    </motion.li>
   );
 }
 
