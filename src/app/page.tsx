@@ -83,6 +83,8 @@ export default function Home() {
         <MetricsBand />
       </LightSection>
 
+      <CurtainWipe />
+
       <LightSection className="pb-16 pt-10 sm:pb-20 sm:pt-16" id="work">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
@@ -257,6 +259,11 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
     offset: ["start start", "end start"],
     target: heroRef,
   });
+  // Composite scroll-exit choreography: the hero doesn't fade as one
+  // block. Top zone (avatar, title, badge, divider) lifts up FAST and
+  // shrinks; bottom zone (metrics, chip rail) drifts DOWN, lags behind,
+  // and fades on its own band. The two trajectories diverge so the
+  // hero scatters open like a curtain rather than fading flat.
   const rawOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
   const rawY = useTransform(scrollYProgress, [0, 0.55], [0, -64]);
   const heroOpacity = useSpring(rawOpacity, {
@@ -269,6 +276,19 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
     mass: 0.5,
     stiffness: 160,
   });
+
+  // Avatar shrinks + drifts up faster than the wrapper.
+  const avatarScale = useTransform(scrollYProgress, [0, 0.55], [1, 0.82]);
+  const avatarY = useTransform(scrollYProgress, [0, 0.55], [0, -80]);
+
+  // Bottom zone (metrics + chips) lags BEHIND the wrapper's upward y
+  // (composite y = wrapper y + this y → net drifts down).
+  const bottomZoneY = useTransform(scrollYProgress, [0, 0.55], [0, 96]);
+  const bottomZoneOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.35, 0.55],
+    [1, 0.9, 0],
+  );
 
   const fadeUp = (delay: number) =>
     reduce
@@ -301,7 +321,11 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
         className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8"
         style={reduce ? undefined : { opacity: heroOpacity, y: heroY }}
       >
-        <HeroAvatarFrame onClick={onOpenAbout} src="/avatar-photo.png" />
+        <motion.div
+          style={reduce ? undefined : { scale: avatarScale, y: avatarY }}
+        >
+          <HeroAvatarFrame onClick={onOpenAbout} src="/avatar-photo.png" />
+        </motion.div>
 
         <motion.div {...fadeUp(0.06)}>
           <LiveStatusBadge label="Currently shipping · Atlas v3" />
@@ -361,7 +385,12 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           </Button>
         </motion.div>
 
-        <div className="mt-16 grid w-full max-w-4xl gap-4 sm:grid-cols-3">
+        <motion.div
+          className="mt-16 grid w-full max-w-4xl gap-4 sm:grid-cols-3"
+          style={
+            reduce ? undefined : { opacity: bottomZoneOpacity, y: bottomZoneY }
+          }
+        >
           {heroMetrics.map((m, index) => (
             <motion.div
               animate={reduce ? undefined : { opacity: 1, y: 0 }}
@@ -398,9 +427,14 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               </LightGlassCard>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mt-16 flex flex-wrap items-center justify-center gap-2.5">
+        <motion.div
+          className="mt-16 flex flex-wrap items-center justify-center gap-2.5"
+          style={
+            reduce ? undefined : { opacity: bottomZoneOpacity, y: bottomZoneY }
+          }
+        >
           {[
             "EN · ES · IT",
             "Remote-first",
@@ -421,7 +455,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               {role}
             </motion.span>
           ))}
-        </div>
+        </motion.div>
 
         <motion.a
           aria-label="Scroll to live status"
@@ -659,6 +693,24 @@ function ScrollProgressWord({
       {word}
       {!isLast ? " " : ""}
     </motion.span>
+  );
+}
+
+function CurtainWipe() {
+  const reduce = useReducedMotion();
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none relative my-4 h-1 overflow-hidden sm:my-6"
+    >
+      <motion.div
+        className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-transparent via-accent to-transparent shadow-[0_0_24px_rgba(41,110,214,0.45)]"
+        initial={reduce ? { x: "100%" } : { x: "-100%" }}
+        transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1] }}
+        viewport={{ amount: 0.5, once: true }}
+        whileInView={{ x: "100%" }}
+      />
+    </div>
   );
 }
 

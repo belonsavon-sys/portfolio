@@ -73,6 +73,8 @@ export type {
 } from "./SectionDivider";
 export { SiteFooter } from "./SiteFooter";
 export { SiteHeader } from "./SiteHeader";
+export { StaggeredChipRail } from "./StaggeredChipRail";
+export type { StaggeredChipRailProps } from "./StaggeredChipRail";
 export { SplitText } from "./SplitText";
 export type { SplitTextProps } from "./SplitText";
 export { TerminalWindow } from "./TerminalWindow";
