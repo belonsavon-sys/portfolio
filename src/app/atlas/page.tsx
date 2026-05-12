@@ -7,41 +7,54 @@ import {
   ParallaxGhost,
 } from "@/components";
 
-const CAPABILITIES = [
+type Capability = {
+  detail: string;
+  label: string;
+  link: { href: string; label: string };
+  role: string;
+};
+
+const CAPABILITIES: Capability[] = [
   {
     detail:
       "Reads briefs, pulls source docs, drafts specs before any code lands. Spec research is a separate PR; implementation is its own.",
     label: "Research",
+    link: { href: "/uses", label: "the stack" },
     role: "First pass",
   },
   {
     detail:
       "Field agents pick tickets, write tests + code locally, run them, and only file a PR when the local suite is green.",
     label: "Build",
+    link: { href: "/now#shipped", label: "recent ships" },
     role: "Implementation",
   },
   {
     detail:
       "PRs include the spec, the diff, and an auto-generated commit history. CI runs Vercel previews. Humans hit merge.",
     label: "Ship",
+    link: { href: "/now#shipped", label: "today's commits" },
     role: "PR-driven",
   },
   {
     detail:
       "Every decision is governed. The audit log records which agent made what choice, on what input, with what model.",
     label: "Govern",
+    link: { href: "/business#process", label: "audit example" },
     role: "Audit trail",
   },
   {
     detail:
       "Atlas reads its own production logs, surfaces incidents to manager agents, and proposes follow-up tickets autonomously.",
     label: "Operate",
+    link: { href: "/business#communications", label: "ops in prod" },
     role: "Self-monitoring",
   },
   {
     detail:
       "Same harness powers Blackdoor's three products AND the hotel ops chatbot at ThePrivateHotels. One codepath, two deployments.",
     label: "Reuse",
+    link: { href: "/business#blackdoor", label: "Blackdoor → Hotels" },
     role: "Cross-deploy",
   },
 ];
@@ -254,6 +267,19 @@ export default function AtlasPage() {
                 <p className="mt-3 text-sm leading-6 text-text-light-muted sm:text-base sm:leading-7">
                   {entry.detail}
                 </p>
+                <a
+                  className="group/cap mt-4 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                  href={entry.link.href}
+                >
+                  <span aria-hidden="true" className="text-accent/70">↳</span>
+                  <span className="link-underline">{entry.link.label}</span>
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-hover/cap:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </a>
               </li>
             ))}
           </ul>
@@ -288,22 +314,27 @@ export default function AtlasPage() {
           {[
             {
               body: "CEO agent reads the brief. Within minutes it routes to the right C-suite agent (CFO scope, CMO voice, or both).",
+              timing: "~10 min",
               verb: "Brief",
             },
             {
               body: "A spec PR lands first — research, design choices, and acceptance criteria. Humans review the spec before any code is written.",
+              timing: "~1 day",
               verb: "Spec",
             },
             {
               body: "Manager agents break the approved spec into tickets. Field agents claim tickets, write code, run tests locally.",
+              timing: "per ticket",
               verb: "Build",
             },
             {
               body: "Implementation PR lands with the diff, the test results, and a Vercel preview URL. Human reviews + merges.",
+              timing: "per PR",
               verb: "Ship",
             },
             {
               body: "Atlas monitors production logs. Incidents bubble up to manager agents and become tickets in the same loop.",
+              timing: "always on",
               verb: "Operate",
             },
           ].map((step, index) => (
@@ -312,9 +343,19 @@ export default function AtlasPage() {
               key={step.verb}
             >
               <div className="col-span-12 lg:col-span-8">
-                <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
-                  {String(index + 1).padStart(2, "0")} · Step
-                </p>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                    {String(index + 1).padStart(2, "0")} · Step
+                  </p>
+                  <span
+                    aria-hidden="true"
+                    className="h-px w-6 bg-border-light"
+                  />
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/5 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.24em] text-accent">
+                    <span aria-hidden="true">⌛</span>
+                    {step.timing}
+                  </span>
+                </div>
                 <h3
                   className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
                   style={{
@@ -339,6 +380,62 @@ export default function AtlasPage() {
             </li>
           ))}
         </ol>
+
+        {/* PROCESS LOOP DIAGRAM — visualizes the cyclical nature of the workflow */}
+        <div className="mt-12 rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-8">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+              ~/loop
+            </span>
+            <span aria-hidden="true" className="h-px w-6 bg-border-light" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-light-muted">
+              the cycle, not a line
+            </span>
+          </div>
+
+          {/* TERMINAL-STYLE DIAGRAM */}
+          <div className="mt-6 overflow-x-auto">
+            <pre className="select-none whitespace-pre font-mono text-[11px] leading-6 text-text-light-muted sm:text-xs sm:leading-7">
+              <span className="text-accent">{"  ┌──→"}</span>
+              {" brief "}
+              <span className="text-accent-light/70">{"──→"}</span>
+              {" spec "}
+              <span className="text-accent-light/70">{"──→"}</span>
+              {" build "}
+              <span className="text-accent-light/70">{"──→"}</span>
+              {" ship "}
+              <span className="text-accent-light/70">{"──→"}</span>
+              {" operate "}
+              <span className="text-accent">{"──┐"}</span>
+              {"\n"}
+              <span className="text-accent">
+                {"  │                                                                 │"}
+              </span>
+              {"\n"}
+              <span className="text-accent">
+                {"  └──────────────── incidents · learnings ←──────────────────────────┘"}
+              </span>
+            </pre>
+          </div>
+
+          <div className="mt-6 grid grid-cols-12 gap-x-6 gap-y-4">
+            <p className="col-span-12 text-sm leading-6 text-text-light-muted lg:col-span-7">
+              Atlas isn&apos;t a one-shot. Production signal — incidents,
+              latency, missing features — becomes the next brief. The harness
+              keeps looping, with humans gating every PR.
+            </p>
+            <div className="col-span-12 flex flex-wrap items-center gap-2 lg:col-span-5 lg:justify-end">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/5 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-accent">
+                <span aria-hidden="true">↻</span>
+                no waterfall
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/5 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-accent">
+                <span aria-hidden="true">●</span>
+                always shipping
+              </span>
+            </div>
+          </div>
+        </div>
       </AtlasSection>
 
       {/* CLOSING — sends readers deeper. */}

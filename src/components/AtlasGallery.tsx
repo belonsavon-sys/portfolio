@@ -8,6 +8,7 @@ type AtlasProduct = {
   gradient: string;
   href?: string;
   imageSrc?: string;
+  link: { href: string; label: string };
   status: "shipped" | "internal";
   tag: string;
   title: string;
@@ -19,6 +20,7 @@ const products: AtlasProduct[] = [
       "End-to-end mini party game. Atlas built the whole thing — gameplay to scoring — under human review.",
     gradient: "linear-gradient(135deg, #1A4E9C 0%, #5B9BF4 100%)",
     imageSrc: "/atlas-game.png",
+    link: { href: "/ai#party-game", label: "play the demo" },
     status: "shipped",
     tag: "Game",
     title: "Mini party game",
@@ -28,6 +30,7 @@ const products: AtlasProduct[] = [
       "Personal finance tracker with a built-in AI advisor that reads transactions and answers questions about spending in plain language.",
     gradient: "linear-gradient(135deg, #0F172A 0%, #296ED6 60%, #5B9BF4 100%)",
     imageSrc: "/atlas-budget.png",
+    link: { href: "/now#shipped", label: "ship log entry" },
     status: "shipped",
     tag: "Budget",
     title: "Personal budgeting app",
@@ -37,6 +40,7 @@ const products: AtlasProduct[] = [
       "Project management surface where field agents pick up work and file PRs against the board. Currently powering Atlas's own roadmap.",
     gradient: "linear-gradient(135deg, #111827 0%, #1A4E9C 50%, #296ED6 100%)",
     imageSrc: "/atlas-pm.png",
+    link: { href: "/atlas#workflow", label: "the workflow loop" },
     status: "internal",
     tag: "Project Mgmt",
     title: "Agent-augmented PM",
@@ -237,12 +241,27 @@ function Tile({
         </p>
       </div>
 
-      {/* BOTTOM FOOTER — built-via stamp anchored to the tile bottom */}
-      <div className="relative z-10 mt-auto flex items-center gap-3">
-        <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.25)]" />
-        <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light/80">
-          Built end-to-end by Atlas
-        </span>
+      {/* BOTTOM FOOTER — built-via stamp + per-product cross-link */}
+      <div className="relative z-10 mt-auto flex flex-col gap-3">
+        <div className="flex items-center gap-3">
+          <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.25)]" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light/80">
+            Built end-to-end by Atlas
+          </span>
+        </div>
+        <a
+          className="group/prod inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.24em] text-accent-light transition-colors duration-200 hover:text-text-dark"
+          href={product.link.href}
+        >
+          <span aria-hidden="true" className="text-accent-light/70">↳</span>
+          <span className="link-underline">{product.link.label}</span>
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover/prod:translate-x-0.5"
+          >
+            →
+          </span>
+        </a>
       </div>
     </motion.article>
   );
