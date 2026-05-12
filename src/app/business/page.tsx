@@ -102,6 +102,9 @@ export default function BusinessPage() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <BusinessHero />
 
+      {/* CHAPTERS STRIPE — 5-column overview between hero and first chapter */}
+      <BusinessChaptersStripe />
+
       {/* Chapter 01 — Blackdoor */}
       <div className="scroll-mt-28 snap-start" id="blackdoor">
         <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
@@ -258,6 +261,95 @@ function BusinessHero() {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Chapters overview stripe — 5-column directory under the hero
+ * with chapter index · label · key signal · jump anchor. Mirrors
+ * the cadence stripe pattern on /now and the stack stripe on /uses.
+ */
+function BusinessChaptersStripe() {
+  const chapters: Array<{
+    anchor: string;
+    index: string;
+    label: string;
+    signal: string;
+  }> = [
+    {
+      anchor: "#blackdoor",
+      index: "00",
+      label: "Blackdoor",
+      signal: "Atlas in production",
+    },
+    {
+      anchor: "#process",
+      index: "01",
+      label: "Process design",
+      signal: "Chaos → auditable systems",
+    },
+    {
+      anchor: "#communications",
+      index: "02",
+      label: "Communications",
+      signal: "Response in minutes, not hours",
+    },
+    {
+      anchor: "#training",
+      index: "03",
+      label: "Team & training",
+      signal: "SOPs anyone can run",
+    },
+    {
+      anchor: "#finance",
+      index: "04",
+      label: "Finance & admin",
+      signal: "Books that close themselves",
+    },
+  ];
+
+  return (
+    <div className="relative border-y border-border-light bg-bg-light-2">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          <span className="relative inline-flex h-2 w-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+            <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+          </span>
+          <span>~/chapters</span>
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+          <span className="text-text-light-muted">
+            {chapters.length} doors · jump anywhere
+          </span>
+        </div>
+        <ul className="grid grid-cols-2 divide-y divide-border-light border-t border-border-light sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-5">
+          {chapters.map((ch) => (
+            <li className="group/ch relative" key={ch.label}>
+              <a
+                className="flex flex-col gap-1.5 px-3 py-4 transition-colors duration-200 hover:bg-accent/5 sm:px-4 sm:py-5"
+                href={ch.anchor}
+              >
+                <span className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {ch.index} {ch.label}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-[11px] text-accent transition-transform duration-200 group-hover/ch:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </span>
+                <span className="font-mono text-[12px] leading-5 text-text-light sm:text-[12.5px]">
+                  {ch.signal}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
 
