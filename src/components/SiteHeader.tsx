@@ -16,12 +16,12 @@ import {
   PHONE_TEL,
 } from "./contact-config";
 
-const navItems = [
-  { href: "/", label: "Welcome" },
-  { href: "/ai", label: "AI" },
-  { href: "/business", label: "Business" },
-  { href: "/resume", label: "Resume" },
-  { href: "/contact", label: "Get in Touch" },
+const navItems: Array<{ chapter: string; href: string; label: string }> = [
+  { chapter: "01", href: "/", label: "Welcome" },
+  { chapter: "02", href: "/ai", label: "AI" },
+  { chapter: "03", href: "/business", label: "Business" },
+  { chapter: "04", href: "/resume", label: "Resume" },
+  { chapter: "05", href: "/contact", label: "Get in Touch" },
 ];
 
 type HeaderLink = {
@@ -130,6 +130,7 @@ export function SiteHeader() {
           {navItems.map((item) => (
             <NavPillItem
               active={isActive(pathname, item.href)}
+              chapter={item.chapter}
               href={item.href}
               key={item.href}
             >
@@ -244,17 +245,19 @@ function HeaderLiveShipped() {
 
 function NavPillItem({
   active,
+  chapter,
   children,
   href,
 }: {
   active: boolean;
+  chapter?: string;
   children: string;
   href: string;
 }) {
   return (
     <Link
       aria-current={active ? "page" : undefined}
-      className="relative inline-flex items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="group/nav relative inline-flex items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       href={href}
     >
       {active ? (
@@ -266,11 +269,21 @@ function NavPillItem({
         />
       ) : null}
       <span
-        className={`relative px-4 py-2 text-sm font-medium transition-colors duration-150 ${
+        className={`relative flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-150 ${
           active ? "text-white" : "text-text-light hover:text-accent"
         }`}
       >
-        {children}
+        {/* Chapter index — only visible when active, gives the
+            current route a film-slate confirmation marker. */}
+        {chapter && active ? (
+          <span
+            aria-hidden="true"
+            className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/65"
+          >
+            {chapter}
+          </span>
+        ) : null}
+        <span>{children}</span>
       </span>
     </Link>
   );
