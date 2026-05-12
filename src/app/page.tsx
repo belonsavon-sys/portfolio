@@ -763,6 +763,21 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               </motion.div>
             ))}
           </div>
+
+          {/* ⌘K teaser — surfaces the command palette to first-time
+              visitors without making them scroll to the footer hint. */}
+          <motion.p
+            animate={reduce ? undefined : { opacity: 1, y: 0 }}
+            className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.28em] text-text-light-muted"
+            initial={reduce ? false : { opacity: 0, y: 8 }}
+            transition={{ delay: 0.78, duration: 0.55, ease: easeOut }}
+          >
+            <span>or</span>
+            <kbd className="inline-flex h-6 min-w-[44px] items-center justify-center rounded-md border border-accent/35 bg-[rgba(41,110,214,0.08)] px-1.5 font-mono text-[11px] font-semibold text-accent">
+              ⌘K
+            </kbd>
+            <span>to jump anywhere</span>
+          </motion.p>
         </div>
 
         {/* RIGHT — avatar, justified to the right edge on lg (cols 8–12) */}
