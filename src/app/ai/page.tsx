@@ -36,6 +36,7 @@ const services: Array<{
   icon: string;
   includes: string[];
   name: string;
+  receipt: { href: string; label: string };
   status: ServiceStatus;
   statusLabel: string;
 }> = [
@@ -46,6 +47,7 @@ const services: Array<{
     icon: "01",
     includes: ["Zapier", "n8n", "Custom APIs", "Review loop"],
     name: "Process Automation",
+    receipt: { href: "/business#process", label: "process audit example" },
     status: "available",
     statusLabel: "Available · 2 slots Q2",
   },
@@ -56,6 +58,7 @@ const services: Array<{
     icon: "02",
     includes: ["Curated data prep", "In-tool drafting", "Human review"],
     name: "Custom Chatbots",
+    receipt: { href: "#built-and-shipped", label: "the hotel comms case study" },
     status: "available",
     statusLabel: "Available · 1 slot Q2",
   },
@@ -66,6 +69,7 @@ const services: Array<{
     icon: "03",
     includes: ["Next.js", "Supabase", "Flutter", "Kotlin"],
     name: "Full-Stack Web & Mobile",
+    receipt: { href: "/atlas#products", label: "3 products built end-to-end" },
     status: "available",
     statusLabel: "Available · in-flight",
   },
@@ -76,6 +80,7 @@ const services: Array<{
     icon: "04",
     includes: ["Multi-agent architecture", "MCP wiring", "Model routing"],
     name: "Agent Harness Design",
+    receipt: { href: "/atlas", label: "Atlas architecture" },
     status: "flagship",
     statusLabel: "Flagship · always taking",
   },
@@ -86,6 +91,7 @@ const services: Array<{
     icon: "05",
     includes: ["Research-led discovery", "Rapid prototyping"],
     name: "Whatever the brief calls for",
+    receipt: { href: "/contact", label: "start a conversation" },
     status: "always",
     statusLabel: "Always · intro call",
   },
@@ -155,6 +161,9 @@ export default function AiPage() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <AiHero />
 
+      {/* MENU STRIPE — directory between hero and Services */}
+      <AiMenuStripe />
+
       <LightSection className="py-20 sm:py-24" id="services">
         <ServicesSection />
       </LightSection>
@@ -218,6 +227,94 @@ export default function AiPage() {
         ]}
       />
     </main>
+  );
+}
+
+/**
+ * Menu stripe — 4-column directory between /ai hero and the
+ * first section. Counts derived from data arrays so adding a
+ * service / case study auto-updates the stripe.
+ */
+function AiMenuStripe() {
+  const items: Array<{
+    anchor: string;
+    count: string;
+    label: string;
+    primary: string;
+  }> = [
+    {
+      anchor: "#services",
+      count: `${services.length}`,
+      label: "Services",
+      primary: services[0]?.name ?? "—",
+    },
+    {
+      anchor: "#built-and-shipped",
+      count: `${caseStudies.length}`,
+      label: "Built & shipped",
+      primary: "Hotel comms · QA",
+    },
+    {
+      anchor: "#atlas-portfolio",
+      count: "3",
+      label: "Atlas portfolio",
+      primary: "3 live products",
+    },
+    {
+      anchor: "#demos",
+      count: "2",
+      label: "Demos",
+      primary: "Local AI · Atlas",
+    },
+  ];
+
+  return (
+    <div className="relative border-y border-border-light bg-bg-light-2">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          <span className="relative inline-flex h-2 w-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+            <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+          </span>
+          <span>~/menu</span>
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+          <span className="text-text-light-muted">
+            {items.length} doors · jump anywhere
+          </span>
+        </div>
+        <ul className="grid grid-cols-2 divide-y divide-border-light border-t border-border-light sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+          {items.map((item, index) => (
+            <li className="group/menu relative" key={item.label}>
+              <a
+                className="flex flex-col gap-1.5 px-3 py-4 transition-colors duration-200 hover:bg-accent/5 sm:px-5 sm:py-5"
+                href={item.anchor}
+              >
+                <span className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")} {item.label}
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/5 px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-accent">
+                    ×{item.count}
+                  </span>
+                </span>
+                <span className="flex items-center justify-between gap-2">
+                  <span className="truncate font-mono text-[13px] font-semibold text-text-light sm:text-sm">
+                    {item.primary}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-[11px] text-accent transition-transform duration-200 group-hover/menu:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
 
@@ -325,26 +422,44 @@ function AiHero() {
           </ScrollReveal>
 
           <ScrollReveal delay={0.34} direction="up">
-            <ul className="mt-8 grid divide-y divide-border-light border-y border-border-light">
-              {[
-                { label: "Atlas products live", value: "3" },
-                { label: "Reply time", value: "48 hrs → 3 min" },
-                { label: "Pages digitized to QA", value: "100+" },
-              ].map((stat, index) => (
-                <li
-                  className="flex items-baseline justify-between gap-4 py-3"
-                  key={stat.label}
-                >
-                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
-                    <span className="text-text-light-muted/60">// </span>
-                    {String(index + 1).padStart(2, "0")} {stat.label}
-                  </span>
-                  <span className="font-mono text-[12.5px] font-semibold uppercase tracking-[0.18em] text-text-light">
-                    {stat.value}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-8 overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+              <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                <span className="relative inline-flex h-2 w-2">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                  <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+                </span>
+                <span>~/demos</span>
+                <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+                <span className="text-text-light-muted">Live · scroll to play</span>
+              </div>
+              <ul className="grid">
+                {[
+                  { key: "Live demos", tone: "green" as const, value: "2 · in-browser" },
+                  { key: "Atlas products", value: "3 · in production" },
+                  { key: "Reply time", value: "48 hrs → 3 min" },
+                  { key: "Pages → QA", value: "100+ digitized" },
+                ].map((row, index) => (
+                  <li
+                    className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                    key={row.key}
+                  >
+                    <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                      <span className="text-text-light-muted/60">// </span>
+                      {String(index + 1).padStart(2, "0")} {row.key}
+                    </span>
+                    <span
+                      className={`text-right font-mono text-[12.5px] leading-6 ${
+                        row.tone === "green"
+                          ? "text-result-green"
+                          : "text-text-light"
+                      }`}
+                    >
+                      {row.value}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </ScrollReveal>
         </div>
       </div>
@@ -412,6 +527,19 @@ function ServicesSection() {
               <p className="mt-5 max-w-xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
                 {service.description}
               </p>
+              <a
+                className="group/svc mt-4 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.24em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                href={service.receipt.href}
+              >
+                <span aria-hidden="true" className="text-accent/70">↳</span>
+                <span className="link-underline">see receipt: {service.receipt.label}</span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover/svc:translate-x-0.5"
+                >
+                  →
+                </span>
+              </a>
             </div>
 
             {/* RIGHT 5 — spec block */}
@@ -630,6 +758,23 @@ function CaseStudyRow({
         >
           {title}
         </h3>
+        {/* RESULT CHIPS — at-a-glance summary before the body. Surfaces
+            the before→after metric, the year, and the property without
+            requiring the reader to scroll into the BeforeAfter widget. */}
+        <ul className="mt-5 flex flex-wrap gap-2">
+          <li className="inline-flex items-center gap-1.5 rounded-full border border-result-green/30 bg-result-green/5 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-result-green">
+            <span aria-hidden="true">●</span>
+            shipped {segments[segments.length - 1] ?? "—"}
+          </li>
+          <li className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/5 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+            <span aria-hidden="true">↗</span>
+            {comparison.before.metric} → {comparison.after.metric}
+          </li>
+          <li className="inline-flex items-center gap-1.5 rounded-full border border-border-light bg-bg-light-2 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+            <span aria-hidden="true">▸</span>
+            {segments[1] ?? "—"}
+          </li>
+        </ul>
         <p className="mt-5 max-w-2xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
           {body}
         </p>
@@ -729,6 +874,67 @@ function AtlasGallerySection() {
           </span>
           <LiveStatusBadge label="3 products · in motion" />
         </motion.div>
+      </div>
+
+      {/* CONTEXT BAND — what each Atlas product powers, with deep
+          links into /atlas#products for the full per-product page. */}
+      <div className="mt-10 rounded-2xl border border-border-light bg-bg-light-2 p-5 sm:p-6">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+            ~/powering
+          </span>
+          <span aria-hidden="true" className="h-px w-6 bg-border-light" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-light-muted">
+            what these products power
+          </span>
+        </div>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+          {[
+            {
+              href: "/atlas#products",
+              label: "Mini party game",
+              powers: "Showcase title — Atlas's first end-to-end ship",
+              tag: "Game",
+            },
+            {
+              href: "/atlas#products",
+              label: "Personal budgeting app",
+              powers: "Personal finance tracker with AI advisor on transactions",
+              tag: "Budget",
+            },
+            {
+              href: "/atlas#products",
+              label: "Agent-augmented PM",
+              powers: "Atlas's own roadmap, internal ticketing for field agents",
+              tag: "Project Mgmt",
+            },
+          ].map((entry) => (
+            <li key={entry.label}>
+              <a
+                className="group/pwr block rounded-xl border border-border-light bg-white/40 px-4 py-3 transition-colors duration-200 hover:border-accent/40 hover:bg-accent/5"
+                href={entry.href}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                    {entry.tag}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-[11px] text-accent transition-transform duration-200 group-hover/pwr:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </div>
+                <p className="mt-1 font-semibold tracking-tight text-text-light">
+                  {entry.label}
+                </p>
+                <p className="mt-1 text-xs leading-5 text-text-light-muted">
+                  {entry.powers}
+                </p>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
 
       {/* GALLERY — kept on the light bg with subtle editorial frame
