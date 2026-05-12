@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type AtlasHierarchyLayer = {
   badge: string;
@@ -29,11 +29,72 @@ export function AtlasHierarchy({ layers }: AtlasHierarchyProps) {
   const reduce = useReducedMotion();
   const [pinnedIndex, setPinnedIndex] = useState(0);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
-  const activeIndex = hoverIndex ?? pinnedIndex;
+  const [traceIndex, setTraceIndex] = useState<number | null>(null);
+  const [tracing, setTracing] = useState(false);
+  const traceTimeouts = useRef<number[]>([]);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const tracedOnce = useRef(false);
+  // Trace overrides hover overrides pinned — the auto-tour wins
+  // visually while it's running.
+  const activeIndex = traceIndex ?? hoverIndex ?? pinnedIndex;
   const activeLayer = layers[activeIndex];
 
+  // Run a one-shot trace sequence: each layer activates in turn over
+  // ~2s total, then the trace clears and hover/pin resume control.
+  function runTrace() {
+    if (tracing || reduce) return;
+    setTracing(true);
+    traceTimeouts.current.forEach((id) => window.clearTimeout(id));
+    traceTimeouts.current = [];
+    const stepMs = 360;
+    layers.forEach((_, i) => {
+      const id = window.setTimeout(() => {
+        setTraceIndex(i);
+      }, i * stepMs);
+      traceTimeouts.current.push(id);
+    });
+    const endId = window.setTimeout(
+      () => {
+        setTraceIndex(null);
+        setTracing(false);
+      },
+      layers.length * stepMs + 600,
+    );
+    traceTimeouts.current.push(endId);
+  }
+
+  // Auto-trace on first viewport-enter — gives the visitor a free
+  // "demo" of the Atlas flow before they even hover.
+  useEffect(() => {
+    if (reduce) return;
+    const node = rootRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !tracedOnce.current) {
+            tracedOnce.current = true;
+            // Small lead-in so the trace doesn't fire while the
+            // section is still mid-scroll-in.
+            const id = window.setTimeout(() => runTrace(), 350);
+            traceTimeouts.current.push(id);
+          }
+        }
+      },
+      { threshold: 0.35 },
+    );
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+      traceTimeouts.current.forEach((id) => window.clearTimeout(id));
+      traceTimeouts.current = [];
+    };
+    // We only want this to wire once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div>
+    <div ref={rootRef}>
       {/* Section eyebrow header */}
       <div className="flex items-center gap-3">
         <span
@@ -46,9 +107,22 @@ export function AtlasHierarchy({ layers }: AtlasHierarchyProps) {
           Atlas · the engine
         </p>
         <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
-          Hover · click to pin
-        </p>
+        {/* Trace control — manual re-run after the auto-tour finishes */}
+        <button
+          aria-label={tracing ? "Tracing request through Atlas" : "Trace a request through Atlas"}
+          className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-[rgba(41,110,214,0.06)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-[border-color,background] duration-200 hover:border-accent hover:bg-[rgba(41,110,214,0.12)] disabled:opacity-60"
+          disabled={tracing}
+          onClick={runTrace}
+          type="button"
+        >
+          <span className="relative inline-flex h-1.5 w-1.5">
+            <span
+              className={`absolute inset-0 rounded-full bg-accent ${tracing ? "animate-ping" : ""}`}
+            />
+            <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-accent" />
+          </span>
+          {tracing ? "Tracing…" : "Trace a request ↓"}
+        </button>
       </div>
 
       <div
