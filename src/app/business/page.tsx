@@ -167,49 +167,81 @@ function BusinessHero() {
       >
         <ParallaxGhost className="ghost-text select-none">OPS</ParallaxGhost>
       </div>
-      <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
-        <ScrollReveal direction="up">
-          <div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
-            <span className="relative inline-flex h-2 w-2">
-              <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
-              <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+
+      <div className="relative mx-auto grid min-h-[calc(100vh-72px)] w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24">
+        {/* TOP STRIP — status pill + chapter mark */}
+        <ScrollReveal className="col-span-12 self-start" direction="up">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
+              <span className="relative inline-flex h-2 w-2">
+                <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+                <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+              </span>
+              <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+                /business · for operators
+              </span>
             </span>
-            <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
-              /business · for operators
+            <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+              Chapter 01 / Hero
+            </span>
+          </div>
+        </ScrollReveal>
+
+        {/* LEFT — stacked massive title (cols 1–8 lg) */}
+        <div className="col-span-12 self-center lg:col-span-8">
+          <h1
+            className="font-semibold text-text-light"
+            style={{
+              fontSize: "clamp(3rem, 12vw, 10rem)",
+              letterSpacing: "-0.055em",
+              lineHeight: 0.88,
+            }}
+          >
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.16} duration={0.85}>
+                I ship
+              </SplitText>
+            </span>
+            <span className="relative inline-block">
+              <span className="gradient-shift block">
+                <SplitText charDelay={0.025} delay={0.36} duration={0.85}>
+                  AI.
+                </SplitText>
+              </span>
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-3 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"
+              />
+            </span>
+          </h1>
+
+          <ScrollReveal delay={0.32} direction="up">
+            <div className="mt-10 flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-10 bg-accent" />
+              <p className="font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
+                For operators · For doers
+              </p>
+            </div>
+          </ScrollReveal>
+        </div>
+
+        {/* RIGHT — subtitle + CTA (cols 9–12 lg) */}
+        <div className="col-span-12 self-end lg:col-span-4 lg:self-center">
+          <ScrollReveal delay={0.4} direction="up">
+            <p className="text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
+              Not plans. Not decks. Systems running in production —
+              built from inside the operations I was hired to run.
             </p>
-          </div>
-        </ScrollReveal>
-        <h1 className="hero-display-md mt-6 font-semibold">
-          <SplitText charDelay={0.04} delay={0.1} duration={0.8}>
-            {"I ship "}
-          </SplitText>
-          <span className="relative inline-block">
-            <span className="gradient-shift">AI.</span>
-            <span
-              aria-hidden="true"
-              className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
-            />
-          </span>
-        </h1>
-        <ScrollReveal delay={0.1} direction="up">
-          <div
-            aria-hidden="true"
-            className="mt-8 h-[3px] w-32 rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
-          />
-        </ScrollReveal>
-        <ScrollReveal delay={0.15} direction="up">
-          <p className="mt-8 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
-            Not plans. Not decks. Systems running in production — built from
-            inside the operations I was hired to run.
-          </p>
-        </ScrollReveal>
-        <ScrollReveal delay={0.22} direction="up">
-          <div className="mt-12">
-            <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
-              Start a Conversation
-            </Button>
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
+          <ScrollReveal delay={0.5} direction="up">
+            <div className="mt-8">
+              <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
+                Start a Conversation
+              </Button>
+            </div>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   );
