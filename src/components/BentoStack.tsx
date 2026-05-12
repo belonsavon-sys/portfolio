@@ -178,6 +178,26 @@ export function BentoStack() {
           </ul>
         </motion.div>
       ))}
+
+      {/* CLOSING — points readers to /uses for the deeper "stack
+          with reasons" treatment of each category. */}
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border-light pt-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+          07 · Stack with reasons
+        </p>
+        <a
+          className="group/usesnav inline-flex items-center gap-2 rounded-full border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent"
+          href="/uses"
+        >
+          <span>/uses · why each tool</span>
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover/usesnav:translate-x-0.5"
+          >
+            →
+          </span>
+        </a>
+      </div>
     </div>
   );
 }
