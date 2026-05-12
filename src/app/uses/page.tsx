@@ -286,6 +286,9 @@ export default function UsesPage() {
             </div>
           </div>
         </div>
+
+        {/* STACK OVERVIEW STRIPE — full-width strip with category counts + primaries */}
+        <UsesStackOverviewStripe />
       </section>
 
       {/* 01 · AI STACK */}
@@ -384,6 +387,103 @@ export default function UsesPage() {
  * role + usage note + relationship tags. Reads as one continuous
  * uses.tech-style dossier across all 4 blocks.
  */
+/**
+ * Stack overview stripe — 4 columns (AI · Editor · Infra · Hardware)
+ * with count + primary tool + jump anchor. Inserted directly below
+ * the hero so visitors get a category map before diving in.
+ */
+function UsesStackOverviewStripe() {
+  const cats: Array<{
+    anchor: string;
+    count: number;
+    label: string;
+    primary: string;
+  }> = [
+    {
+      anchor: "#ai-stack",
+      count: AI_STACK.length,
+      label: "AI stack",
+      primary: AI_STACK[0]?.name ?? "—",
+    },
+    {
+      anchor: "#editor",
+      count: EDITOR_STACK.length,
+      label: "Editor / IDE",
+      primary: EDITOR_STACK[0]?.name ?? "—",
+    },
+    {
+      anchor: "#infra",
+      count: INFRA_STACK.length,
+      label: "Infrastructure",
+      primary: INFRA_STACK[0]?.name ?? "—",
+    },
+    {
+      anchor: "#hardware",
+      count: HARDWARE_STACK.length,
+      label: "Hardware",
+      primary: HARDWARE_STACK[0]?.name ?? "—",
+    },
+  ];
+
+  const total =
+    AI_STACK.length +
+    EDITOR_STACK.length +
+    INFRA_STACK.length +
+    HARDWARE_STACK.length;
+
+  return (
+    <div className="relative border-y border-border-light bg-bg-light-2">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          <span className="relative inline-flex h-2 w-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+            <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+          </span>
+          <span>~/stack</span>
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+          <span className="text-text-light-muted">
+            {total} tools · {cats.length} categories
+          </span>
+        </div>
+        <ul className="grid grid-cols-2 divide-y divide-border-light border-t border-border-light sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+          {cats.map((cat, index) => (
+            <li
+              className="group/cat relative"
+              key={cat.label}
+            >
+              <a
+                className="flex flex-col gap-1.5 px-3 py-4 transition-colors duration-200 hover:bg-accent/5 sm:px-5 sm:py-5"
+                href={cat.anchor}
+              >
+                <span className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")} {cat.label}
+                  </span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-accent/30 bg-accent/5 px-1.5 py-0.5 font-mono text-[10px] tabular-nums text-accent">
+                    ×{cat.count}
+                  </span>
+                </span>
+                <span className="flex items-center justify-between gap-2">
+                  <span className="truncate font-mono text-[13px] font-semibold text-text-light sm:text-sm">
+                    {cat.primary}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-[11px] text-accent transition-transform duration-200 group-hover/cat:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 function UsesStackSection({
   chapter,
   entries,
