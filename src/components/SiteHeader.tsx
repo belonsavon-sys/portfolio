@@ -16,12 +16,33 @@ import {
   PHONE_TEL,
 } from "./contact-config";
 
-const navItems = [
-  { href: "/", label: "Welcome" },
-  { href: "/ai", label: "AI" },
-  { href: "/business", label: "Business" },
-  { href: "/resume", label: "Resume" },
-  { href: "/contact", label: "Get in Touch" },
+const navItems: Array<{ chapter: string; href: string; label: string }> = [
+  { chapter: "01", href: "/", label: "Welcome" },
+  { chapter: "02", href: "/ai", label: "AI" },
+  { chapter: "03", href: "/business", label: "Business" },
+  { chapter: "04", href: "/resume", label: "Resume" },
+  { chapter: "05", href: "/contact", label: "Get in Touch" },
+];
+
+const moreNavItems: Array<{ chapter: string; description: string; href: string; label: string }> = [
+  {
+    chapter: "06",
+    description: "What I'm doing this week",
+    href: "/now",
+    label: "Now",
+  },
+  {
+    chapter: "07",
+    description: "Stack with reasons",
+    href: "/uses",
+    label: "Uses",
+  },
+  {
+    chapter: "08",
+    description: "The multi-agent harness",
+    href: "/atlas",
+    label: "Atlas",
+  },
 ];
 
 type HeaderLink = {
@@ -65,8 +86,36 @@ function isActive(currentPath: string, navHref: string) {
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const [scrolled, setScrolled] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const reduce = useReducedMotion();
   const navRef = useRef<HTMLElement>(null);
+  const moreRef = useRef<HTMLDivElement>(null);
+
+  // Close the More flyout on outside click or Escape.
+  useEffect(() => {
+    if (!moreOpen) return;
+    function onClick(event: MouseEvent) {
+      if (!moreRef.current) return;
+      if (event.target instanceof Node && moreRef.current.contains(event.target)) {
+        return;
+      }
+      setMoreOpen(false);
+    }
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setMoreOpen(false);
+    }
+    window.addEventListener("click", onClick);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("click", onClick);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [moreOpen]);
+
+  // Close the More flyout on route change.
+  useEffect(() => {
+    setMoreOpen(false);
+  }, [pathname]);
 
   // Scroll-driven backdrop saturation + blur ramp on the nav pill.
   // Maps scrollY [0, 600] -> blur [4px, 14px] and saturate [1, 1.5].
@@ -100,13 +149,21 @@ export function SiteHeader() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* CENTERED NAV PILL — backdrop blur + saturation ramp tied to scrollY */}
+        {/* Header live-shipped mini-pill — pulled to the right
+            margin on lg+. Pulls from NEXT_PUBLIC_BUILD_TIME +
+            NEXT_PUBLIC_BUILD_SHA so the header carries a small
+            "shipped X · sha" pulse on every page. */}
+        <HeaderLiveShipped />
+        {/* CENTERED NAV PILL — backdrop blur + saturation ramp tied to scrollY.
+            Padding + density tighten when scrolled past 8px so the
+            header collapses into a denser compact mode as the user
+            moves through the page. */}
         <motion.nav
           aria-label="Primary"
-          className={`pointer-events-auto flex flex-wrap items-center gap-1 rounded-full border bg-white/85 p-1.5 transition-shadow duration-300 ${
+          className={`pointer-events-auto flex flex-wrap items-center gap-1 rounded-full border bg-white/85 transition-[padding,box-shadow,gap] duration-300 ${
             scrolled
-              ? "border-border-light shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]"
-              : "border-border-light/70 shadow-sm"
+              ? "border-border-light p-1 shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]"
+              : "border-border-light/70 p-1.5 shadow-sm"
           }`}
           ref={navRef}
           style={
@@ -125,6 +182,8 @@ export function SiteHeader() {
           {navItems.map((item) => (
             <NavPillItem
               active={isActive(pathname, item.href)}
+              chapter={item.chapter}
+              compact={scrolled}
               href={item.href}
               key={item.href}
             >
@@ -152,25 +211,189 @@ export function SiteHeader() {
               </a>
             ))}
           </div>
+
+          {/* MORE pill — surfaces the secondary routes (/now, /uses,
+              /atlas) that don't fit in the primary 5-item nav. */}
+          <span
+            aria-hidden="true"
+            className="mx-1 hidden h-6 w-px bg-border-light sm:inline-block"
+          />
+          <div className="relative hidden sm:block" ref={moreRef}>
+            <button
+              aria-expanded={moreOpen}
+              aria-haspopup="menu"
+              aria-label="More routes"
+              className={`flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-text-light transition-colors duration-150 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                moreOpen ? "text-accent" : ""
+              }`}
+              onClick={() => setMoreOpen((v) => !v)}
+              type="button"
+            >
+              <span>More</span>
+              <svg
+                aria-hidden="true"
+                className={`h-3 w-3 transition-transform duration-200 ${moreOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+
+            {moreOpen ? (
+              <div
+                aria-label="Secondary routes"
+                className="absolute right-0 top-full z-50 mt-3 w-72 overflow-hidden rounded-xl border border-border-light bg-white shadow-[0_24px_72px_-24px_rgba(15,23,42,0.35)]"
+                role="menu"
+              >
+                <ul className="grid">
+                  {moreNavItems.map((item) => {
+                    const active = isActive(pathname, item.href);
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          aria-current={active ? "page" : undefined}
+                          className={`group/more flex items-baseline gap-3 border-t border-border-light px-4 py-3 transition-colors duration-200 first:border-t-0 hover:bg-[rgba(41,110,214,0.06)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-accent ${
+                            active ? "bg-[rgba(41,110,214,0.06)]" : ""
+                          }`}
+                          href={item.href}
+                          role="menuitem"
+                        >
+                          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                            {item.chapter}
+                          </span>
+                          <span className="flex-1">
+                            <span
+                              className={`block text-sm font-semibold transition-colors duration-200 ${
+                                active ? "text-accent-deep" : "text-text-light group-hover/more:text-accent-deep"
+                              }`}
+                            >
+                              {item.label}
+                            </span>
+                            <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                              {item.description}
+                            </span>
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="text-accent-light/70 transition-transform duration-200 group-hover/more:translate-x-0.5"
+                          >
+                            →
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : null}
+          </div>
+
+          {/* ⌘K palette opener — sits at the right end of the nav
+              pill. Dispatches a synthetic Cmd+K keydown so the
+              global KeyboardNav listener picks it up; no React
+              state plumbing needed. */}
+          <span
+            aria-hidden="true"
+            className="mx-1 hidden h-6 w-px bg-border-light sm:inline-block"
+          />
+          <button
+            aria-label="Open command palette"
+            className="group/cmdk hidden h-9 items-center gap-1.5 rounded-full border border-accent/30 bg-[rgba(41,110,214,0.06)] px-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-[border-color,background] duration-200 hover:border-accent hover:bg-[rgba(41,110,214,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:inline-flex"
+            onClick={() => {
+              if (typeof window === "undefined") return;
+              window.dispatchEvent(
+                new KeyboardEvent("keydown", {
+                  bubbles: true,
+                  key: "k",
+                  metaKey: true,
+                }),
+              );
+            }}
+            title="Open command palette (⌘K)"
+            type="button"
+          >
+            <span className="text-base font-semibold leading-none">⌘</span>
+            <span>K</span>
+          </button>
         </motion.nav>
       </motion.div>
     </header>
   );
 }
 
+/**
+ * Compact live-shipped mini-pill that sits on the right margin of
+ * the header on lg+ breakpoints. Mirrors the home hero badge but
+ * tighter — just "shipped X · sha" with the green pulse.
+ */
+function HeaderLiveShipped() {
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+  const buildSha = process.env.NEXT_PUBLIC_BUILD_SHA;
+  const [now, setNow] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!buildTime) return;
+    setNow(Date.now());
+    const id = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, [buildTime]);
+
+  if (!buildTime || !buildSha) return null;
+
+  const buildDate = new Date(buildTime);
+  const seconds = now
+    ? Math.max(0, Math.round((now - buildDate.getTime()) / 1000))
+    : 0;
+  const relative =
+    seconds < 60
+      ? "just now"
+      : seconds < 3600
+        ? `${Math.round(seconds / 60)} min ago`
+        : seconds < 86_400
+          ? `${Math.round(seconds / 3600)} hr ago`
+          : `${Math.round(seconds / 86_400)} d ago`;
+
+  return (
+    <span
+      aria-label={`Last shipped ${relative}, commit ${buildSha}`}
+      className="pointer-events-auto absolute right-0 hidden items-center gap-2 rounded-full border border-result-green/40 bg-white/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-sm backdrop-blur-md xl:inline-flex"
+      title={`Last shipped ${relative} · commit ${buildSha}`}
+    >
+      <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+        <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+        <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+      </span>
+      <span>
+        Shipped <span className="text-text-light-muted">{relative}</span>
+      </span>
+      <span aria-hidden="true" className="text-text-light-muted/60">·</span>
+      <span className="text-accent">{buildSha.slice(0, 7)}</span>
+    </span>
+  );
+}
+
 function NavPillItem({
   active,
+  chapter,
   children,
+  compact = false,
   href,
 }: {
   active: boolean;
+  chapter?: string;
   children: string;
+  compact?: boolean;
   href: string;
 }) {
   return (
     <Link
       aria-current={active ? "page" : undefined}
-      className="relative inline-flex items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="group/nav relative inline-flex items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       href={href}
     >
       {active ? (
@@ -182,11 +405,21 @@ function NavPillItem({
         />
       ) : null}
       <span
-        className={`relative px-4 py-2 text-sm font-medium transition-colors duration-150 ${
-          active ? "text-white" : "text-text-light hover:text-accent"
-        }`}
+        className={`relative flex items-center gap-1.5 font-medium transition-[color,padding,font-size] duration-200 ${
+          compact ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
+        } ${active ? "text-white" : "text-text-light hover:text-accent"}`}
       >
-        {children}
+        {/* Chapter index — only visible when active, gives the
+            current route a film-slate confirmation marker. */}
+        {chapter && active ? (
+          <span
+            aria-hidden="true"
+            className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/65"
+          >
+            {chapter}
+          </span>
+        ) : null}
+        <span>{children}</span>
       </span>
     </Link>
   );
