@@ -1,10 +1,19 @@
 import Link from "next/link";
 import { Button, ChapterRail, ParallaxGhost } from "@/components";
 
-const BUILDING = [
+type BuildingStatus = "active" | "maintaining" | "warm";
+
+const BUILDING: Array<{
+  detail: string;
+  health: BuildingStatus;
+  label: string;
+  project: string;
+  status: string;
+}> = [
   {
     detail:
       "Lead AI R&D — multi-level autonomous agent harness shipping under PR review.",
+    health: "active",
     label: "Atlas v3",
     project: "Blackdoor",
     status: "Daily",
@@ -12,6 +21,7 @@ const BUILDING = [
   {
     detail:
       "Hotel operations supervisor — guest comms, QA system, automation pipelines.",
+    health: "maintaining",
     label: "Live operations",
     project: "ThePrivateHotels",
     status: "Weekly",
@@ -19,47 +29,139 @@ const BUILDING = [
   {
     detail:
       "This portfolio. Every iteration shipped through a PR — sometimes 5 in a row.",
+    health: "active",
     label: "pierrebelonsavon.com",
     project: "Personal",
     status: "Hourly",
   },
 ];
 
-const READING = [
+const BUILDING_STATUS_META: Record<
+  BuildingStatus,
+  { dot: string; label: string; pulse: boolean; text: string }
+> = {
+  active: {
+    dot: "bg-result-green",
+    label: "Active",
+    pulse: true,
+    text: "text-result-green",
+  },
+  maintaining: {
+    dot: "bg-accent",
+    label: "Maintaining",
+    pulse: false,
+    text: "text-accent",
+  },
+  warm: {
+    dot: "bg-text-light-muted",
+    label: "Warm",
+    pulse: false,
+    text: "text-text-light-muted",
+  },
+};
+
+const READING: Array<{
+  detail: string;
+  label: string;
+  medium: string;
+  progress: number;
+}> = [
   {
     detail: "Daniel Kahneman · re-read for the system-1/system-2 framework.",
     label: "Thinking, Fast and Slow",
     medium: "Book",
+    progress: 62,
   },
   {
     detail:
       "Following the latest Anthropic / OpenAI / DeepMind agent-systems research drops.",
     label: "Agent design papers",
     medium: "Papers",
+    progress: 35,
   },
   {
     detail: "Watching the MCP spec land in production projects across the ecosystem.",
     label: "MCP changelog",
     medium: "Spec",
+    progress: 80,
   },
 ];
 
-const LEARNING = [
+type LearningStatus = "exploring" | "drafting" | "blocked";
+
+const LEARNING: Array<{
+  detail: string;
+  label: string;
+  next: string;
+  status: LearningStatus;
+}> = [
   {
     detail:
       "Pushing the harness toward fewer human checkpoints without losing reviewability.",
     label: "Multi-agent orchestration patterns",
+    next: "Draft a 3-tier authority spec",
+    status: "drafting",
   },
   {
     detail:
       "Curating real conversations into RAG-quality datasets for brand-voice replies.",
     label: "Voice-trained chatbot data prep",
+    next: "Build the curation pipeline",
+    status: "exploring",
   },
   {
     detail: "Tightening cold start + cache hit rates on Vercel Fluid Compute.",
     label: "Edge-first deployment trade-offs",
+    next: "Awaiting Vercel SDK update",
+    status: "blocked",
   },
 ];
+
+const NEXT_QUARTER: Array<{
+  detail: string;
+  horizon: string;
+  label: string;
+}> = [
+  {
+    detail:
+      "Wire Atlas to fewer human checkpoints — keep human PR review at the merge boundary, automate everything earlier.",
+    horizon: "Q3 2026",
+    label: "Atlas v4 — fewer checkpoints",
+  },
+  {
+    detail:
+      "Two more freelance builds, one advisory engagement. Open slot Q2 already booked.",
+    horizon: "Q3 2026",
+    label: "Pipeline · 2 builds + 1 advisory",
+  },
+  {
+    detail:
+      "Two long-form essays — one on multi-agent governance, one on shipping AI in a hotel.",
+    horizon: "Q3 2026",
+    label: "First two essays",
+  },
+];
+
+const LEARNING_STATUS_META: Record<
+  LearningStatus,
+  { dot: string; label: string; text: string }
+> = {
+  blocked: {
+    dot: "bg-problem-red",
+    label: "Blocked",
+    text: "text-problem-red",
+  },
+  drafting: {
+    dot: "bg-accent",
+    label: "Drafting",
+    text: "text-accent",
+  },
+  exploring: {
+    dot: "bg-result-green",
+    label: "Exploring",
+    text: "text-result-green",
+  },
+};
 
 type ShippedEntry = {
   fullSha?: string;
@@ -99,6 +201,30 @@ function readShipped(): ShippedEntry[] {
 }
 
 const SHIPPED = readShipped();
+
+/**
+ * "Updated X ago" label for the ~/snapshot header. Derived from
+ * NEXT_PUBLIC_BUILD_TIME at build, so the value refreshes every
+ * deploy. Server-rendered — won't tick while the page is open, but
+ * recruiters scanning at deploy-time see fresh signal.
+ */
+function updatedLabel() {
+  const raw = process.env.NEXT_PUBLIC_BUILD_TIME;
+  if (!raw) return "Just now";
+  const then = new Date(raw).getTime();
+  const seconds = Math.max(0, Math.round((Date.now() - then) / 1000));
+  if (seconds < 60) return "Updated just now";
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `Updated ${minutes} min ago`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `Updated ${hours} hr ago`;
+  const days = Math.round(hours / 24);
+  if (days < 7) return `Updated ${days} d ago`;
+  const weeks = Math.round(days / 7);
+  if (weeks < 5) return `Updated ${weeks} wk ago`;
+  const months = Math.round(days / 30);
+  return `Updated ${months} mo ago`;
+}
 
 export const metadata = {
   description:
@@ -179,7 +305,7 @@ export default function NowPage() {
                 <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
                 <span>~/snapshot</span>
                 <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-                <span className="text-text-light-muted">May 2026</span>
+                <span className="text-text-light-muted">{updatedLabel()}</span>
               </div>
               <ul className="grid">
                 {[
@@ -187,6 +313,7 @@ export default function NowPage() {
                   { key: "Reading", value: `${READING.length} sources` },
                   { key: "Learning", value: `${LEARNING.length} threads` },
                   { key: "Shipped", value: `${SHIPPED.length} this week` },
+                  { key: "Next", value: `${NEXT_QUARTER.length} on horizon` },
                 ].map((row, index) => (
                   <li
                     className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
@@ -234,16 +361,37 @@ export default function NowPage() {
                 </p>
               </div>
               <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
-                  Cadence
-                </p>
-                <p className="mt-2 inline-flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-text-light">
-                  <span className="relative inline-flex h-1.5 w-1.5">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-                    <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
-                  </span>
-                  {entry.status}
-                </p>
+                {(() => {
+                  const meta = BUILDING_STATUS_META[entry.health];
+                  return (
+                    <>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        Status
+                      </p>
+                      <p
+                        className={`mt-2 inline-flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] ${meta.text}`}
+                      >
+                        <span className="relative inline-flex h-1.5 w-1.5">
+                          {meta.pulse ? (
+                            <span
+                              className={`absolute inset-0 animate-ping rounded-full ${meta.dot}/60`}
+                            />
+                          ) : null}
+                          <span
+                            className={`relative inline-block h-1.5 w-1.5 rounded-full ${meta.dot}`}
+                          />
+                        </span>
+                        {meta.label}
+                      </p>
+                      <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        Cadence
+                      </p>
+                      <p className="mt-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-text-light">
+                        {entry.status}
+                      </p>
+                    </>
+                  );
+                })()}
               </div>
               <span
                 aria-hidden="true"
@@ -280,38 +428,91 @@ export default function NowPage() {
                 <p className="mt-2 text-sm leading-6 text-text-light-muted">
                   {entry.detail}
                 </p>
+
+                {/* Progress rail — thin accent bar showing how far
+                    along Pierre is on this source. Makes the queue
+                    feel like an in-motion log rather than a static
+                    list. */}
+                <div className="mt-5 flex items-center gap-3">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                    {entry.progress}%
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="relative h-px flex-1 overflow-hidden rounded-full bg-border-light"
+                  >
+                    <span
+                      className="absolute inset-y-0 left-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light"
+                      style={{ width: `${entry.progress}%` }}
+                    />
+                  </span>
+                </div>
               </li>
             ))}
           </ul>
         </div>
       </NowSection>
 
-      {/* LEARNING */}
+      {/* LEARNING — each open loop now carries a status (Exploring /
+          Drafting / Blocked) + a "next action" line. Reads as a
+          live R&D log rather than a static curiosity list. */}
       <NowSection chapter="03" eyebrow="Learning" id="learning" title="Open loops.">
         <ol className="grid divide-y divide-border-light border-y border-border-light">
-          {LEARNING.map((entry, index) => (
-            <li
-              className="grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-6 sm:py-8"
-              key={entry.label}
-            >
-              <span className="col-span-12 font-mono text-[11px] uppercase tracking-[0.32em] text-accent lg:col-span-1">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <h3
-                className="col-span-12 font-semibold tracking-tight text-text-light lg:col-span-6"
-                style={{
-                  fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1.1,
-                }}
+          {LEARNING.map((entry, index) => {
+            const meta = LEARNING_STATUS_META[entry.status];
+            return (
+              <li
+                className="grid grid-cols-12 items-baseline gap-x-4 gap-y-3 py-7 sm:py-9"
+                key={entry.label}
               >
-                {entry.label}
-              </h3>
-              <p className="col-span-12 text-sm leading-6 text-text-light-muted lg:col-span-5 lg:text-right">
-                {entry.detail}
-              </p>
-            </li>
-          ))}
+                <span className="col-span-12 flex items-center gap-3 lg:col-span-1">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </span>
+                <div className="col-span-12 lg:col-span-7">
+                  <span
+                    className={`inline-flex items-center gap-2 rounded-full border border-current/30 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.24em] ${meta.text}`}
+                  >
+                    <span
+                      className={`relative inline-flex h-1.5 w-1.5 rounded-full ${meta.dot}`}
+                    >
+                      {entry.status === "exploring" ? (
+                        <span
+                          className={`absolute inset-0 animate-ping rounded-full ${meta.dot}/60`}
+                        />
+                      ) : null}
+                    </span>
+                    {meta.label}
+                  </span>
+                  <h3
+                    className="mt-3 font-semibold tracking-tight text-text-light"
+                    style={{
+                      fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
+                      letterSpacing: "-0.02em",
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    {entry.label}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-text-light-muted">
+                    {entry.detail}
+                  </p>
+                </div>
+                <div className="col-span-12 lg:col-span-4 lg:text-right">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    Next action
+                  </p>
+                  <p className="mt-2 inline-flex items-baseline gap-2 font-mono text-[12.5px] leading-6 text-text-light">
+                    <span aria-hidden="true" className="text-accent/70">
+                      →
+                    </span>
+                    <span>{entry.next}</span>
+                  </p>
+                </div>
+              </li>
+            );
+          })}
         </ol>
       </NowSection>
 
@@ -342,6 +543,42 @@ export default function NowPage() {
               <span className="col-span-12 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light-muted sm:col-span-3 sm:text-right">
                 {entry.when ?? "—"}
               </span>
+            </li>
+          ))}
+        </ol>
+      </NowSection>
+
+      {/* WHAT'S NEXT — forward-looking section so /now reads with
+          intent, not just as a snapshot. Three horizon items, mono
+          spec rail. */}
+      <NowSection
+        chapter="05"
+        eyebrow="What's next"
+        id="next"
+        title="On the next horizon."
+      >
+        <ol className="grid divide-y divide-border-light border-y border-border-light">
+          {NEXT_QUARTER.map((entry, index) => (
+            <li
+              className="grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-7 sm:py-8"
+              key={entry.label}
+            >
+              <span className="col-span-12 font-mono text-[11px] uppercase tracking-[0.32em] text-accent lg:col-span-2">
+                {String(index + 1).padStart(2, "0")} · {entry.horizon}
+              </span>
+              <h3
+                className="col-span-12 font-semibold tracking-tight text-text-light lg:col-span-6"
+                style={{
+                  fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.15,
+                }}
+              >
+                {entry.label}
+              </h3>
+              <p className="col-span-12 text-sm leading-6 text-text-light-muted lg:col-span-4 lg:text-right">
+                {entry.detail}
+              </p>
             </li>
           ))}
         </ol>
@@ -402,6 +639,7 @@ export default function NowPage() {
           { id: "reading", index: "02", label: "Reading" },
           { id: "learning", index: "03", label: "Learning" },
           { id: "shipped", index: "04", label: "Recent ships" },
+          { id: "next", index: "05", label: "What's next" },
         ]}
       />
     </main>
