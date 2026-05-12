@@ -986,6 +986,41 @@ function MetricsBand() {
           <MetricRow index={index} key={metric.label} metric={metric} />
         ))}
       </motion.ol>
+
+      {/* CLOSING BAND — sends readers to the page where these
+          metrics are described in depth. Mirrors the per-metric
+          deep-links but as a one-stop "see how they shipped". */}
+      <div className="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
+        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+          07 · Where the receipts live
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a
+            className="group/recv inline-flex items-center gap-2 rounded-full border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent"
+            href="/business"
+          >
+            <span>/business · 5 chapters</span>
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-200 group-hover/recv:translate-x-0.5"
+            >
+              →
+            </span>
+          </a>
+          <a
+            className="group/recv inline-flex items-center gap-2 rounded-full border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent"
+            href="/ai#built-and-shipped"
+          >
+            <span>/ai · case studies</span>
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-200 group-hover/recv:translate-x-0.5"
+            >
+              →
+            </span>
+          </a>
+        </div>
+      </div>
     </div>
   );
 }
