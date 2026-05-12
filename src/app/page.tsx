@@ -203,27 +203,43 @@ function FloatingHeroLabels() {
       className="pointer-events-none absolute inset-0 z-[1] hidden md:block"
       ref={wrapperRef}
     >
-      {labels.map((label) => (
+      {labels.map((label, index) => (
+        // Outer wrapper handles the one-shot mount fade-in. Inner span
+        // owns the scroll-driven parallax + exit opacity. CSS multiplies
+        // both opacities so the composed value reads as: 0 → 0.85 on
+        // mount (staggered), hold at 0.85 through the hero, then fade
+        // to 0 as the hero scrolls out.
         <motion.span
-          className={`absolute inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/65 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent backdrop-blur-md ${label.className}`}
+          animate={reduce ? undefined : { opacity: 1, scale: 1 }}
+          className={`absolute ${label.className}`}
+          initial={reduce ? false : { opacity: 0, scale: 0.94 }}
           key={label.text}
-          style={
-            reduce
-              ? {
-                  boxShadow:
-                    "0 8px 24px -10px rgba(41,110,214,0.25), 0 1px 0 0 rgba(255,255,255,0.9) inset",
-                  opacity: 0.85,
-                }
-              : {
-                  boxShadow:
-                    "0 8px 24px -10px rgba(41,110,214,0.25), 0 1px 0 0 rgba(255,255,255,0.9) inset",
-                  opacity: label.opacity,
-                  y: label.parallaxY,
-                }
-          }
+          transition={{
+            delay: 0.9 + index * 0.12,
+            duration: 0.7,
+            ease: easeOut,
+          }}
         >
-          <span className="h-1 w-1 rounded-full bg-accent" />
-          {label.text}
+          <motion.span
+            className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/65 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent backdrop-blur-md"
+            style={
+              reduce
+                ? {
+                    boxShadow:
+                      "0 8px 24px -10px rgba(41,110,214,0.25), 0 1px 0 0 rgba(255,255,255,0.9) inset",
+                    opacity: 0.85,
+                  }
+                : {
+                    boxShadow:
+                      "0 8px 24px -10px rgba(41,110,214,0.25), 0 1px 0 0 rgba(255,255,255,0.9) inset",
+                    opacity: label.opacity,
+                    y: label.parallaxY,
+                  }
+            }
+          >
+            <span className="h-1 w-1 rounded-full bg-accent" />
+            {label.text}
+          </motion.span>
         </motion.span>
       ))}
     </div>
