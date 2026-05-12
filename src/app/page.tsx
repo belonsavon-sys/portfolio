@@ -12,12 +12,12 @@ import {
   AnimatedCounter,
   BentoStack,
   Button,
+  ChapterRail,
   CursorHalo,
   GreetingRotator,
   HeroAvatarFrame,
   LightGlassCard,
   LiveStatusBadge,
-  NowReading,
   PhotoSlot,
   ScrollReveal,
   SectionDivider,
@@ -123,7 +123,7 @@ export default function Home() {
 
       <SiteFooter />
 
-      <NowReading
+      <ChapterRail
         sections={[
           { id: "about", index: "01", label: "About" },
           { id: "process", index: "02", label: "How I work" },
