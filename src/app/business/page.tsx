@@ -235,7 +235,7 @@ function ProcessSection() {
     >
       <BeforeAfter
         after={{
-          caption: "Trackable, measurable, enforceable",
+          caption: "Auditable, every check enforced",
           metric: "Top 10% Airbnb",
           points: [
             "Digital QA system — every standard is a checkpoint",
@@ -244,7 +244,7 @@ function ProcessSection() {
           ],
         }}
         before={{
-          caption: "Static documentation, no accountability",
+          caption: "Static documentation, no audit trail",
           metric: "100+ pages",
           points: [
             "Operations manual no one could practically enforce",
@@ -257,8 +257,8 @@ function ProcessSection() {
       <p className="text-lg leading-8 text-text-light-muted">
         When I arrived at ThePrivateHotels, operations ran on a 100+ page
         manual that no one could practically enforce. I digitized the entire
-        manual — room by room, process by process — into a trackable,
-        quantifiable inspection system. Every standard became a measurable
+        manual — room by room, process by process — into an auditable QA
+        inspection system where every standard became a measurable
         checkpoint.
       </p>
       <p className="mt-5 text-lg leading-8 text-text-light-muted">
@@ -278,7 +278,7 @@ function CommunicationsSection() {
     >
       <BeforeAfter
         after={{
-          caption: "AI drafts, humans approve, brand is preserved",
+          caption: "AI drafts; humans approve before send",
           metric: "< 3 min",
           points: [
             "Chatbot drafts replies inside the operating system",
@@ -287,7 +287,7 @@ function CommunicationsSection() {
           ],
         }}
         before={{
-          caption: "Slow, inconsistent, missed notifications",
+          caption: "Slow drafts, missed notifications",
           metric: "48 hrs",
           points: [
             "Guests waited up to 48 hours for a response",
@@ -298,9 +298,9 @@ function CommunicationsSection() {
         className="mb-10"
       />
       <p className="text-lg leading-8 text-text-light-muted">
-        I built a chatbot trained on curated company data — brand voice,
-        approved templates, every scenario a guest might raise. It drafts
-        replies inside our operating system. We review, approve, send.
+        I built a chatbot trained on curated company data — brand voice
+        plus every scenario a guest might raise. It drafts replies inside
+        our operating system; we review, approve, send.
       </p>
     </SectionShell>
   );
