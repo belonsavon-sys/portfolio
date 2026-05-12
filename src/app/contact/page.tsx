@@ -124,8 +124,7 @@ export default function ContactPage() {
             className="mt-10 max-w-2xl text-lg leading-8 text-text-dark-muted sm:text-xl sm:leading-9"
             {...fadeUp(0.18)}
           >
-            Currently open to the right opportunity. Remote roles and freelance
-            projects welcome. Replies typically within 24 hours.
+            Open to remote roles and freelance projects. Replies inside 24 hours.
           </motion.p>
 
           {/* Quick stats strip */}
