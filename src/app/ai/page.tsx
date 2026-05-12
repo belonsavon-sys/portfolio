@@ -204,7 +204,7 @@ function AiHero() {
           <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 font-mono text-xs uppercase tracking-[0.22em] text-text-light-muted">
             <span className="inline-flex items-center gap-2">
               <span className="text-accent">→</span>
-              3 Atlas products shipping
+              3 Atlas products live
             </span>
             <span aria-hidden="true" className="h-3 w-px bg-border-light" />
             <span className="inline-flex items-center gap-2">
@@ -214,7 +214,7 @@ function AiHero() {
             <span aria-hidden="true" className="h-3 w-px bg-border-light" />
             <span className="inline-flex items-center gap-2">
               <span className="text-accent">→</span>
-              100+ page ops manual automated
+              100+ pages digitized into QA
             </span>
           </div>
         </ScrollReveal>
