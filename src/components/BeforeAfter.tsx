@@ -20,6 +20,13 @@ export type BeforeAfterProps = {
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 const viewport = { amount: 0.3, once: true } as const;
 
+/**
+ * Before / After comparison block. Reads as a transformation: each
+ * side is an editorial spec card (chapter mark + massive metric +
+ * terminal-style bullets), and a strong animated connector with a
+ * traveling pulse dot lives between them. The After column gets a
+ * soft accent glow to mark it as the goal state.
+ */
 export function BeforeAfter({
   after,
   before,
@@ -66,36 +73,62 @@ function SideColumn({
   const reduce = useReducedMotion();
   const isAfter = kind === "after";
   const labelText = isAfter ? "After" : "Before";
-
-  const metricClass = isAfter ? "text-accent" : "text-text-light/55";
+  const chapterMark = isAfter ? "02" : "01";
 
   return (
     <motion.div
-      className={`group relative flex flex-col border-l-2 ${
-        isAfter ? "border-accent/50" : "border-border-light"
-      } pl-5 transition-[border-color] duration-300 sm:pl-6`}
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-bg-light-2 p-5 transition-[border-color,box-shadow] duration-300 sm:p-6 ${
+        isAfter
+          ? "border-accent/40 shadow-[0_18px_36px_-22px_rgba(41,110,214,0.30)] hover:border-accent/70"
+          : "border-border-light hover:border-text-light/30"
+      }`}
       initial={reduce ? false : { opacity: 0, x: isAfter ? 16 : -16 }}
       transition={{ delay, duration: 0.65, ease: easeOut }}
       viewport={viewport}
       whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
     >
-      <p
-        className={`inline-flex w-fit items-center gap-2 rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.24em] ${
-          isAfter
-            ? "border-accent/40 bg-[rgba(41,110,214,0.08)] text-accent"
-            : "border-border-light bg-bg-light-2 text-text-light-muted"
-        }`}
-      >
-        <span
-          className={`h-1 w-1 rounded-full ${isAfter ? "bg-accent" : "bg-text-light-muted/60"}`}
+      {/* After-column accent glow — a subtle "goal state" wash sitting
+          behind the card content. */}
+      {isAfter ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent/15 blur-3xl"
         />
-        {labelText}
-      </p>
+      ) : null}
 
-      <span className="mt-3 inline-block overflow-hidden align-top">
+      {/* Chapter rail — mark + label + accent rule. Matches the
+          editorial chapter cards used elsewhere on the site. */}
+      <div className="relative flex items-center gap-3">
+        <span
+          className={`font-mono text-[11px] uppercase tracking-[0.32em] ${
+            isAfter ? "text-accent" : "text-text-light-muted"
+          }`}
+        >
+          {chapterMark} · {labelText}
+        </span>
+        <span
+          aria-hidden="true"
+          className={`h-px w-8 ${isAfter ? "bg-accent/40" : "bg-border-light"}`}
+        />
+        {isAfter ? (
+          <span className="relative inline-flex h-1.5 w-1.5">
+            <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+            <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-accent" />
+          </span>
+        ) : null}
+      </div>
+
+      {/* Massive metric — slides up on viewport-enter. */}
+      <span className="relative mt-4 inline-block overflow-hidden align-top">
         <motion.span
-          className={`block text-4xl font-semibold leading-tight tracking-tight sm:text-5xl ${metricClass}`}
+          className={`block font-semibold leading-[1] tracking-tight ${
+            isAfter ? "text-accent" : "text-text-light/55"
+          }`}
           initial={reduce ? false : { y: "100%" }}
+          style={{
+            fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
+            letterSpacing: "-0.04em",
+          }}
           transition={{ delay: delay + 0.15, duration: 0.75, ease: easeOut }}
           viewport={viewport}
           whileInView={reduce ? undefined : { y: 0 }}
@@ -104,12 +137,16 @@ function SideColumn({
         </motion.span>
       </span>
 
-      <p className="mt-2 text-sm leading-6 text-text-light-muted">{caption}</p>
+      <p className="relative mt-3 text-sm leading-6 text-text-light-muted">
+        {caption}
+      </p>
 
-      <ul className="mt-6 grid gap-2 text-sm leading-6 text-text-light-muted">
+      {/* Terminal-style bullets — `>` prefix matches the resume
+          datasheets, /now reading queue, and engagement specs. */}
+      <ul className="relative mt-6 grid gap-2 text-sm leading-6 text-text-light-muted">
         {points.map((point, index) => (
           <motion.li
-            className="flex items-start gap-2"
+            className="flex items-start gap-2 font-mono text-[12.5px] leading-6"
             initial={reduce ? false : { opacity: 0, y: 6 }}
             key={point}
             transition={{
@@ -122,11 +159,13 @@ function SideColumn({
           >
             <span
               aria-hidden="true"
-              className={`mt-2 h-1 w-1 shrink-0 rounded-full ${
-                isAfter ? "bg-accent" : "bg-text-light-muted/50"
-              }`}
-            />
-            <span>{point}</span>
+              className={`shrink-0 ${isAfter ? "text-accent/70" : "text-text-light-muted/60"}`}
+            >
+              &gt;
+            </span>
+            <span className="text-[13.5px] leading-7 text-text-light-muted sm:text-sm">
+              {point}
+            </span>
           </motion.li>
         ))}
       </ul>
@@ -135,46 +174,29 @@ function SideColumn({
 }
 
 function Connector(): ReactNode {
+  const reduce = useReducedMotion();
   return (
-    <div className="hidden items-center justify-center sm:flex">
-      <motion.svg
+    <div className="relative hidden items-center justify-center sm:flex">
+      {/* Gradient connector rail — draws from left to right as the
+          comparison enters view. */}
+      <motion.span
         aria-hidden="true"
-        className="h-8 w-8 text-accent"
-        fill="none"
-        initial="hidden"
-        viewBox="0 0 32 32"
+        className="h-px w-12 origin-left bg-gradient-to-r from-text-light-muted/30 via-accent to-accent-light"
+        initial={reduce ? false : { scaleX: 0 }}
+        transition={{ duration: 0.7, ease: easeOut }}
         viewport={viewport}
-        whileInView="show"
+        whileInView={reduce ? undefined : { scaleX: 1 }}
+      />
+
+      {/* Pulsing dot at the After-end of the connector — signals
+          "this is where the change lands". */}
+      <span
+        aria-hidden="true"
+        className="absolute right-[-3px] top-1/2 inline-flex h-2 w-2 -translate-y-1/2"
       >
-        <motion.path
-          d="M6 16h20"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeWidth="1.6"
-          variants={{
-            hidden: { pathLength: 0 },
-            show: {
-              pathLength: 1,
-              transition: { delay: 0.15, duration: 0.6, ease: easeOut },
-            },
-          }}
-        />
-        <motion.path
-          d="m20 10 6 6-6 6"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="1.6"
-          variants={{
-            hidden: { opacity: 0, x: -4 },
-            show: {
-              opacity: 1,
-              x: 0,
-              transition: { delay: 0.7, duration: 0.4, ease: easeOut },
-            },
-          }}
-        />
-      </motion.svg>
+        <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+        <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+      </span>
     </div>
   );
 }
