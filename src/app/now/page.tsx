@@ -346,6 +346,9 @@ export default function NowPage() {
             </div>
           </div>
         </div>
+
+        {/* LIVE CADENCE STRIPE — real ship counts derived from build env */}
+        <LiveCadenceStripe />
       </section>
 
       {/* BUILDING */}
@@ -657,6 +660,124 @@ export default function NowPage() {
         ]}
       />
     </main>
+  );
+}
+
+/**
+ * Live cadence stripe — full-width band under the hero that
+ * surfaces real ship velocity. Pulls NEXT_PUBLIC_BUILD_PR_COUNT
+ * (set in next.config.ts) for the total, then derives "today"
+ * and "this week" counts by parsing the relative-time strings
+ * inside BUILD_RECENT_COMMITS. Falls back to safe placeholders
+ * on shallow Vercel clones.
+ */
+function LiveCadenceStripe() {
+  type RC = { sha: string; subject: string; when: string };
+
+  const totalPRs = process.env.NEXT_PUBLIC_BUILD_PR_COUNT ?? "";
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+
+  let recent: RC[] = [];
+  try {
+    const raw = process.env.NEXT_PUBLIC_BUILD_RECENT_COMMITS;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) recent = parsed;
+    }
+  } catch {
+    recent = [];
+  }
+
+  // Parse the relative "when" string into approximate seconds.
+  // Returns Infinity for anything older than days (weeks/months).
+  function approxSeconds(when: string): number {
+    const m = when.match(
+      /^(\d+|a|an)\s+(second|minute|hour|day|week|month|year)s?\s+ago/i,
+    );
+    if (!m) return when.toLowerCase().includes("now") ? 0 : Infinity;
+    const n = m[1] === "a" || m[1] === "an" ? 1 : Number(m[1]);
+    const unit = m[2].toLowerCase();
+    const mult: Record<string, number> = {
+      day: 86400,
+      hour: 3600,
+      minute: 60,
+      month: 2628000,
+      second: 1,
+      week: 604800,
+      year: 31536000,
+    };
+    return n * (mult[unit] ?? Infinity);
+  }
+
+  const shipsToday = recent.filter((c) => approxSeconds(c.when) < 86400).length;
+  const prsToday = recent.filter(
+    (c) =>
+      c.subject.startsWith("Merge pull request") &&
+      approxSeconds(c.when) < 86400,
+  ).length;
+  const latest = recent[0];
+
+  function freshness(iso?: string): string {
+    if (!iso) return "fresh";
+    const then = new Date(iso).getTime();
+    if (Number.isNaN(then)) return "fresh";
+    const mins = Math.max(0, Math.round((Date.now() - then) / 60000));
+    if (mins < 1) return "deployed just now";
+    if (mins < 60) return `deployed ${mins} min ago`;
+    const hours = Math.round(mins / 60);
+    if (hours < 24) return `deployed ${hours} h ago`;
+    const days = Math.round(hours / 24);
+    return `deployed ${days} d ago`;
+  }
+
+  const items: Array<{ key: string; pulse?: boolean; value: string }> = [
+    {
+      key: "Last ship",
+      pulse: true,
+      value: latest ? `${latest.when} · ${latest.sha}` : "—",
+    },
+    { key: "Ships today", value: shipsToday ? `${shipsToday}` : "0" },
+    { key: "PRs today", value: prsToday ? `${prsToday}` : "0" },
+    { key: "Total PRs", value: totalPRs || "—" },
+    { key: "Build", value: freshness(buildTime) },
+  ];
+
+  return (
+    <div className="relative border-y border-border-light bg-bg-light-2">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          <span className="relative inline-flex h-2 w-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+            <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+          </span>
+          <span>~/cadence</span>
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+          <span className="text-text-light-muted">live · derived from git</span>
+        </div>
+        <ul className="grid grid-cols-2 divide-y divide-border-light border-t border-border-light sm:grid-cols-3 sm:divide-x lg:grid-cols-5 lg:divide-y-0">
+          {items.map((item, index) => (
+            <li
+              className="flex flex-col gap-1 px-2 py-4 sm:px-4 sm:py-5"
+              key={item.key}
+            >
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                <span className="text-text-light-muted/60">// </span>
+                {String(index + 1).padStart(2, "0")} {item.key}
+              </span>
+              <span className="flex items-center gap-2 font-mono text-[13px] leading-6 text-text-light sm:text-sm">
+                {item.pulse ? (
+                  <span className="relative inline-flex h-1.5 w-1.5">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                    <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                  </span>
+                ) : null}
+                <span className="truncate">{item.value}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
   );
 }
 
