@@ -1,3 +1,6 @@
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Button,
   ParallaxBackdrop,
@@ -149,7 +152,19 @@ const education = [
 
 const languages = ["English", "Spanish", "Italian"];
 
+const easeOutCurve = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
 export default function ResumePage() {
+  const reduce = useReducedMotion();
+  const asideEntry = (delay: number) =>
+    reduce
+      ? { animate: { opacity: 1 }, initial: { opacity: 1 } }
+      : {
+          animate: { opacity: 1, y: 0 },
+          initial: { opacity: 0, y: 16 },
+          transition: { delay, duration: 0.55, ease: easeOutCurve },
+        };
+
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
       <ResumeHero />
@@ -221,16 +236,21 @@ export default function ResumePage() {
           </article>
 
           <aside className="rounded-3xl border border-border-light bg-bg-light-2 p-6 lg:sticky lg:top-24">
-            <Button
-              className="w-full !py-4 !text-base"
-              download
-              downArrow
-              href="/pierre-belon-savon-resume.pdf"
-            >
-              Download Resume
-            </Button>
+            <motion.div {...asideEntry(0.1)}>
+              <Button
+                className="w-full !py-4 !text-base"
+                download
+                downArrow
+                href="/pierre-belon-savon-resume.pdf"
+              >
+                Download Resume
+              </Button>
+            </motion.div>
 
-            <div className="mt-8 border-t border-border-light pt-6">
+            <motion.div
+              className="mt-8 border-t border-border-light pt-6"
+              {...asideEntry(0.22)}
+            >
               <h2 className="text-lg font-semibold">Contact</h2>
               <dl className="mt-4 grid gap-4 text-sm">
                 {contactItems.map((item) => (
@@ -249,9 +269,12 @@ export default function ResumePage() {
                   </div>
                 ))}
               </dl>
-            </div>
+            </motion.div>
 
-            <div className="mt-8 border-t border-border-light pt-6">
+            <motion.div
+              className="mt-8 border-t border-border-light pt-6"
+              {...asideEntry(0.34)}
+            >
               <div className="flex items-baseline justify-between gap-3">
                 <h2 className="text-lg font-semibold">Languages</h2>
                 <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
@@ -263,7 +286,7 @@ export default function ResumePage() {
                   <li key={language}>{language}</li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           </aside>
         </div>
       </LightSection>
