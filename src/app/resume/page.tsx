@@ -25,7 +25,7 @@ const contactItems = [
 ];
 
 const professionalSummary =
-  "AI Engineer with a proven track record of designing and deploying intelligent automation systems that eliminate operational inefficiency and produce measurable business outcomes. Experienced building full-stack applications, multi-agent AI harnesses, and process digitization tools, and putting them to work inside live business operations. Trilingual communicator with a background bridging hospitality operations, finance, and AI-driven product development.";
+  "AI engineer who learned to ship by automating the hotel I was hired to supervise. Co-founded Blackdoor in 2025 and co-architect Atlas — a multi-level agent harness shipping real apps under human review. Bridges live operations (hospitality, finance) and AI engineering. Trilingual EN · ES · IT.";
 
 // Blackdoor leads now (most novel asset).
 const experience = [
@@ -35,10 +35,10 @@ const experience = [
       "Designed and built Atlas, a multi-level autonomous agent harness connecting subscription AI models, local models, API models, and any external tool via API, MCP, or OAuth.",
       "Atlas orchestrates a full company hierarchy: CEO agent to C-suite agents, manager agents, and field agents.",
       "Atlas has shipped a game app, a budget web app, and an agent-augmented project management system.",
-      "Directing AI R&D across agent harness architecture, backend AI systems, and cloud and local deployment strategies.",
-      "All development is governed through GitHub PR workflows, with full documentation and spec research completed before implementation sprints.",
-      "Technologies: Claude, Codex, Perplexity, Antigravity, Cursor, VS Code, GitHub.",
-      "Underlying technology reworked and deployed at an active hospitality business.",
+      "Lead AI R&D — agent harness architecture, backend systems, on-device + cloud deployment.",
+      "Every change ships through a GitHub PR with documentation + spec research filed before the implementation sprint.",
+      "Tooling: Claude, Codex, Perplexity, Antigravity, Cursor, VS Code, GitHub.",
+      "Same underlying tech now running in production at ThePrivateHotels.",
     ],
     company: "Blackdoor",
     featured: true,
@@ -68,16 +68,16 @@ const experience = [
 const projects = [
   {
     bullets: [
-      "Built a fully functional personal workout tracking application from scratch, eliminating the need for paid subscription fitness apps.",
-      "Stack: Next.js, React, Supabase, Vercel, built with Codex and Claude in VS Code and Antigravity.",
+      "Personal workout tracker. Replaced the paid subscription fitness apps I used to use.",
+      "Stack: Next.js, React, Supabase, Vercel — built with Codex and Claude in VS Code and Antigravity.",
     ],
     name: "Workout App",
     scope: "End-to-end, personal",
   },
   {
     bullets: [
-      "Developed a budgeting application with a built-in AI financial advisor that had full context of the user's financial data.",
-      "Stack: Next.js, React, Supabase, Vercel, built with Codex and Claude.",
+      "Budgeting app with a built-in AI advisor that reads your full transaction history and answers in plain language.",
+      "Stack: Next.js, React, Supabase, Vercel — built with Codex and Claude.",
     ],
     name: "Personal Budgeting App",
     scope: "End-to-end, personal",
