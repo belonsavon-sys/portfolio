@@ -21,6 +21,42 @@ export const metadata: Metadata = {
   },
 };
 
+const atlasSoftwareLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  applicationCategory: "DeveloperApplication",
+  applicationSubCategory: "Multi-agent harness",
+  author: {
+    "@type": "Person",
+    name: "Pierre Belon Savon",
+    url: "https://pierrebelonsavon.com/resume",
+  },
+  creator: {
+    "@type": "Organization",
+    name: "Blackdoor",
+  },
+  description,
+  featureList: [
+    "Multi-level autonomous agent harness",
+    "MCP / OAuth tool integration",
+    "GitHub PR-driven workflow",
+    "C-suite agent routing",
+    "Manager + field agent execution",
+    "Self-monitoring + audit trail",
+  ],
+  name: "Atlas",
+  operatingSystem: "Cross-platform",
+  url: "https://pierrebelonsavon.com/atlas",
+};
+
 export default function AtlasLayout({ children }: { children: ReactNode }) {
-  return children;
+  return (
+    <>
+      <script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(atlasSoftwareLd) }}
+        type="application/ld+json"
+      />
+      {children}
+    </>
+  );
 }

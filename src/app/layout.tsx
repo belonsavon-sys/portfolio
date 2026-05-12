@@ -96,6 +96,32 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
     >
       <body className="grain flex min-h-full flex-col">
+        {/* WebSite JSON-LD — sets up the canonical site identity for
+            search engines. Single Person reference on /resume; this
+            handles the homepage / general site context. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              author: {
+                "@type": "Person",
+                name: "Pierre Belon Savon",
+                url: `${siteUrl}/resume`,
+              },
+              description:
+                "AI Engineer building production systems for operations-heavy businesses. Currently running at ThePrivateHotels and Blackdoor.",
+              inLanguage: ["en", "es", "it"],
+              name: "Pierre Belon Savon",
+              publisher: {
+                "@type": "Person",
+                name: "Pierre Belon Savon",
+              },
+              url: siteUrl,
+            }),
+          }}
+          type="application/ld+json"
+        />
         <a
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:border focus:border-accent focus:bg-white focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-medium focus:uppercase focus:tracking-[0.22em] focus:text-accent focus:shadow-lg"
           href="#main-content"
