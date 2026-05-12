@@ -856,18 +856,28 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           ))}
         </motion.div>
 
-        {/* SCROLL CUE — left-aligned, anchored to lower-left margin */}
+        {/* SCROLL CUE — left-aligned, anchored to lower-left margin.
+            Names the next section ("Next · About") instead of a vague
+            "Scroll" prompt, so first-time visitors know what's below
+            before they commit. Hover surfaces a richer preview chip. */}
         <motion.a
-          aria-label="Scroll to live status"
+          aria-label="Scroll to About"
           className="group/cue col-span-12 hidden flex-row items-center gap-3 self-end sm:flex"
-          href="#work"
+          href="#about"
           {...fadeUp(1.1)}
         >
           <span className="relative h-px w-10 overflow-hidden bg-gradient-to-r from-border-light via-accent to-transparent transition-colors duration-200 group-hover/cue:via-accent">
             <span className="scroll-cue-dot absolute left-0 top-1/2 h-px w-2 -translate-y-1/2 bg-accent" />
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-text-light-muted/60 transition-colors duration-200 group-hover/cue:text-accent">
-            Scroll
+          <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.32em] text-text-light-muted/60 transition-colors duration-200 group-hover/cue:text-accent">
+            <span aria-hidden="true" className="text-accent/70">↓</span>
+            Next · About
+            <span
+              aria-hidden="true"
+              className="hidden translate-x-[-4px] opacity-0 transition-[opacity,transform] duration-200 group-hover/cue:translate-x-0 group-hover/cue:opacity-100 sm:inline"
+            >
+              · the two-minute version
+            </span>
           </span>
         </motion.a>
       </motion.div>
