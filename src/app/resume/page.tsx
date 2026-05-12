@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   Button,
   ParallaxGhost,
-  RoleEntry,
   SplitText,
   StaggeredChipRail,
 } from "@/components";
@@ -36,8 +35,7 @@ const contactItems = [
 const professionalSummary =
   "AI engineer who learned to ship by automating the hotel I was hired to supervise. Co-founded Blackdoor in 2025 and co-architect Atlas — a multi-level agent harness shipping real apps under human review. Bridges live operations (hospitality, finance) and AI engineering. Trilingual EN · ES · IT.";
 
-// Blackdoor leads now (most novel asset).
-const experience = [
+const experience: ExperienceEntry[] = [
   {
     bullets: [
       "Co-founded the holding company. Products are built and shipped end-to-end by an autonomous agent harness, in place of a human dev team.",
@@ -51,12 +49,13 @@ const experience = [
     ],
     company: "Blackdoor",
     featured: true,
-    meta: "Sept 2025 - Present | Remote",
+    location: "Remote",
+    period: "Sept 2025 – Present",
     role: "Co-founder & President",
+    summary:
+      "Co-architecting Atlas — the multi-agent harness that ships our products under human review.",
   },
   {
-    // Trimmed: removed pure-ops bullets (laundry SOPs detail, F&B inventory specifics,
-    // multi-line Hawaii breakdown). Kept the AI/engineering work.
     bullets: [
       "Progressed from Finance Data Entry Assistant and part-time Housekeeper to Hotel Operations Supervisor.",
       "Built and deployed a guest communications chatbot trained on curated company data — drafts replies in Smarttask, human-reviewed before send.",
@@ -68,13 +67,16 @@ const experience = [
       "Contributed to Airbnb Guest Favorites top 10%, Booking.com Travelers' Choice Award, VRBO Premier Partner status.",
       "Attended leadership meetings and a company leadership retreat in Hawaii.",
     ],
-    company: "ThePrivateHotels (Soquinomere)",
-    meta: "Apr 2024 - Present | Ocean Shores, WA",
+    company: "ThePrivateHotels",
+    location: "Ocean Shores, WA",
+    period: "Apr 2024 – Present",
     role: "Hotel Operations Supervisor",
+    summary:
+      "Took a 100+ page manual and a 48-hour reply lag — left a digital QA system and 3-minute responses.",
   },
 ];
 
-const projects = [
+const projects: ProjectEntry[] = [
   {
     bullets: [
       "Personal workout tracker. Replaced the paid subscription fitness apps I used to use.",
@@ -82,6 +84,7 @@ const projects = [
     ],
     name: "Workout App",
     scope: "End-to-end, personal",
+    stack: ["Next.js", "React", "Supabase", "Vercel"],
   },
   {
     bullets: [
@@ -90,6 +93,7 @@ const projects = [
     ],
     name: "Personal Budgeting App",
     scope: "End-to-end, personal",
+    stack: ["Next.js", "Supabase", "AI advisor"],
   },
   {
     bullets: [
@@ -97,6 +101,7 @@ const projects = [
     ],
     name: "Daily Market & News Automation",
     scope: "Personal",
+    stack: ["ChatGPT", "Google Calendar API"],
   },
 ];
 
@@ -140,18 +145,35 @@ const education = [
   {
     meta: "Expected completion: June 2026",
     program: "IBM Full Stack Software Engineer — Professional Certificate",
-    school: "In Progress",
+    status: "In progress",
   },
   {
-    meta: "Kingsville, TX | 2019-2020",
+    meta: "Kingsville, TX · 2019–2020",
     program: "Civil Engineering",
-    school: "Texas A&M University of Kingsville",
+    status: "Texas A&M University of Kingsville",
   },
 ];
 
 const languages = ["English", "Spanish", "Italian"];
 
 const easeOutCurve = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+type ExperienceEntry = {
+  bullets: string[];
+  company: string;
+  featured?: boolean;
+  location: string;
+  period: string;
+  role: string;
+  summary: string;
+};
+
+type ProjectEntry = {
+  bullets: string[];
+  name: string;
+  scope: string;
+  stack: string[];
+};
 
 export default function ResumePage() {
   const reduce = useReducedMotion();
@@ -168,108 +190,36 @@ export default function ResumePage() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <ResumeHero />
 
-      <LightSection className="pb-24 pt-8 sm:pb-32">
-        <div className="grid gap-8 lg:grid-cols-[1fr_320px] lg:items-start">
-          <article className="rounded-3xl border border-border-light bg-white p-6 shadow-sm sm:p-10 lg:p-12">
-              <ResumeSection title="Professional Summary">
-                <p className="leading-8 text-text-light-muted">
-                  {professionalSummary}
-                </p>
-              </ResumeSection>
+      {/* Body — editorial dossier. No card wrapper, no boxed feel.
+          Long-form sections breathe against the page. Sidebar mirrors
+          the Technical Skills datasheet aesthetic. */}
+      <LightSection className="pb-24 pt-4 sm:pb-32">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16 lg:items-start">
+          <article className="min-w-0">
+            <ResumeSection index="00" title="Professional Summary">
+              <p className="text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
+                {professionalSummary}
+              </p>
+            </ResumeSection>
 
-              <ResumeSection title="Experience">
-                <div className="grid gap-10">
-                  {experience.map((item) => (
-                    <RoleEntry
-                      bullets={item.bullets}
-                      featured={item.featured}
-                      key={item.company}
-                      meta={item.meta}
-                      role={`${item.company} — ${item.role}`}
-                    />
-                  ))}
-                </div>
-              </ResumeSection>
+            <ResumeSection index="01" title="Experience">
+              <ExperienceLedger entries={experience} />
+            </ResumeSection>
 
-              <ResumeSection title="Independent Projects">
-                <div className="grid gap-8">
-                  {projects.map((project) => (
-                    <RoleEntry
-                      bullets={project.bullets}
-                      key={project.name}
-                      meta={project.scope}
-                      role={project.name}
-                    />
-                  ))}
-                </div>
-              </ResumeSection>
+            <ResumeSection index="02" title="Independent Projects">
+              <ProjectLedger entries={projects} />
+            </ResumeSection>
 
-              <ResumeSection title="Technical Skills">
-                {/* Datasheet — engineering spec-sheet aesthetic: mono
-                    everything, terminal-style >  prefixes, accent
-                    vertical rule on each block. */}
-                <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-                  <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
-                    <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
-                    <span>~/stack</span>
-                    <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-                    <span className="text-text-light-muted">
-                      {skillGroups.length} categories
-                    </span>
-                  </div>
-                  <div className="grid divide-y divide-border-light md:grid-cols-2 md:divide-x md:divide-y-0">
-                    {skillGroups.map((group, groupIndex) => (
-                      <div
-                        className="relative px-5 py-5 transition-colors duration-200 hover:bg-[rgba(41,110,214,0.04)]"
-                        key={group.title}
-                      >
-                        <span
-                          aria-hidden="true"
-                          className="pointer-events-none absolute left-0 top-5 h-[calc(100%-2.5rem)] w-0.5 bg-accent/50"
-                        />
-                        <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
-                          <span className="text-text-light-muted/60">// </span>
-                          {String(groupIndex + 1).padStart(2, "0")}{" "}
-                          {group.title}
-                        </p>
-                        <ul className="mt-3 grid gap-1.5">
-                          {group.items.map((item) => (
-                            <li
-                              className="flex items-start gap-2 font-mono text-[12.5px] leading-6 text-text-light-muted"
-                              key={item}
-                            >
-                              <span
-                                aria-hidden="true"
-                                className="mt-1 shrink-0 text-accent/70"
-                              >
-                                &gt;
-                              </span>
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </ResumeSection>
+            <ResumeSection index="03" title="Technical Skills">
+              <SkillsDatasheet groups={skillGroups} />
+            </ResumeSection>
 
-              <ResumeSection title="Education">
-                <div className="grid gap-5">
-                  {education.map((item) => (
-                    <div key={item.program}>
-                      <h3 className="font-semibold">{item.program}</h3>
-                      <p className="mt-1 text-text-light-muted">{item.school}</p>
-                      <p className="mt-1 text-sm text-text-light-muted">
-                        {item.meta}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </ResumeSection>
+            <ResumeSection index="04" title="Education">
+              <EducationSpec entries={education} />
+            </ResumeSection>
           </article>
 
-          <aside className="rounded-3xl border border-border-light bg-bg-light-2 p-6 lg:sticky lg:top-24">
+          <aside className="lg:sticky lg:top-24">
             <motion.div {...asideEntry(0.1)}>
               <Button
                 className="w-full !py-4 !text-base"
@@ -279,47 +229,105 @@ export default function ResumePage() {
               >
                 Download Resume
               </Button>
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                PDF · One page · Recruiter-ready
+              </p>
             </motion.div>
 
-            <motion.div
-              className="mt-8 border-t border-border-light pt-6"
-              {...asideEntry(0.22)}
-            >
-              <h2 className="text-lg font-semibold">Contact</h2>
-              <dl className="mt-4 grid gap-4 text-sm">
-                {contactItems.map((item) => (
-                  <div key={item.label}>
-                    <dt className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
-                      {item.label}
-                    </dt>
-                    <dd className="mt-1">
+            {/* CONTACT DATASHEET — mirrors the Technical Skills aesthetic:
+                terminal header, mono spec rows, accent rule on the side. */}
+            <motion.div className="mt-8" {...asideEntry(0.22)}>
+              <DatasheetCard
+                slug="~/contact"
+                meta={`${contactItems.length} channels`}
+              >
+                <ul className="grid">
+                  {contactItems.map((item) => (
+                    <li
+                      className="group/row relative border-t border-border-light px-5 py-4 transition-colors duration-200 first:border-t-0 hover:bg-[rgba(41,110,214,0.04)]"
+                      key={item.label}
+                    >
+                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        <span className="text-text-light-muted/60">// </span>
+                        {item.label}
+                      </p>
                       <a
-                        className="break-words text-text-light transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        className="mt-1.5 inline-flex items-center gap-2 break-all font-mono text-[12.5px] leading-6 text-text-light transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                         href={item.href}
                       >
-                        {item.value}
+                        <span
+                          aria-hidden="true"
+                          className="shrink-0 text-accent/70 transition-transform duration-200 group-hover/row:translate-x-0.5"
+                        >
+                          &gt;
+                        </span>
+                        <span>{item.value}</span>
                       </a>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+                    </li>
+                  ))}
+                </ul>
+              </DatasheetCard>
             </motion.div>
 
-            <motion.div
-              className="mt-8 border-t border-border-light pt-6"
-              {...asideEntry(0.34)}
-            >
-              <div className="flex items-baseline justify-between gap-3">
-                <h2 className="text-lg font-semibold">Languages</h2>
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
-                  All native
-                </p>
-              </div>
-              <ul className="mt-4 grid gap-2 text-sm text-text-light-muted">
-                {languages.map((language) => (
-                  <li key={language}>{language}</li>
-                ))}
-              </ul>
+            <motion.div className="mt-8" {...asideEntry(0.34)}>
+              <DatasheetCard slug="~/languages" meta="All native">
+                <ul className="grid">
+                  {languages.map((language, index) => (
+                    <li
+                      className="flex items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                      key={language}
+                    >
+                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-mono text-[12.5px] leading-6 text-text-light">
+                        {language}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="ml-auto h-px flex-1 bg-border-light"
+                      />
+                      <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                        Native
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </DatasheetCard>
+            </motion.div>
+
+            {/* SHIP STATS — anchor on the sidebar that ties the resume to
+                the production receipts on the AI page. */}
+            <motion.div className="mt-8" {...asideEntry(0.46)}>
+              <DatasheetCard slug="~/receipts" meta="Production">
+                <ul className="grid">
+                  {[
+                    { label: "Atlas products live", value: "3" },
+                    { label: "Guest reply time", value: "< 3 min" },
+                    { label: "Pages digitized to QA", value: "100+" },
+                    { label: "Staff trained", value: "6" },
+                  ].map((stat, index) => (
+                    <li
+                      className="flex items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                      key={stat.label}
+                    >
+                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-mono text-[12.5px] leading-6 text-text-light-muted">
+                        {stat.label}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="ml-auto h-px flex-1 bg-border-light"
+                      />
+                      <span className="font-mono text-[12.5px] font-semibold leading-6 text-text-light">
+                        {stat.value}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </DatasheetCard>
             </motion.div>
           </aside>
         </div>
@@ -331,7 +339,6 @@ export default function ResumePage() {
 function ResumeHero() {
   return (
     <section className="relative overflow-hidden">
-      {/* Ghost watermark */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
@@ -349,7 +356,6 @@ function ResumeHero() {
       </div>
 
       <div className="relative mx-auto grid w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24">
-        {/* TOP STRIP — status pill + accent rule + chapter marker */}
         <div className="col-span-12 flex flex-wrap items-center gap-3">
           <span className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
             <span className="relative inline-flex h-2 w-2">
@@ -366,7 +372,6 @@ function ResumeHero() {
           </span>
         </div>
 
-        {/* LEFT — stacked name + role + chips (cols 1–8 lg) */}
         <div className="col-span-12 lg:col-span-8">
           <h1
             className="font-semibold text-text-light"
@@ -409,7 +414,6 @@ function ResumeHero() {
           </div>
         </div>
 
-        {/* RIGHT — Download CTA anchored to the right, top-aligned with chips (cols 9–12 lg) */}
         <div className="col-span-12 self-end lg:col-span-4 lg:justify-self-end">
           <Button
             className="!px-8 !py-4 !text-base"
@@ -444,24 +448,380 @@ function LightSection({
   );
 }
 
+/**
+ * Editorial section heading — large H2 + chapter index + accent rule.
+ * Anchors each resume section like a chapter mark in the rest of the site.
+ */
 function ResumeSection({
   children,
+  index,
   title,
 }: {
   children: ReactNode;
+  index: string;
   title: string;
 }) {
   return (
-    <section className="mt-10 border-t border-border-light pt-8 first:mt-0 first:border-t-0 first:pt-0">
-      <div className="mb-6 flex items-center gap-3">
-        <span
-          aria-hidden="true"
-          className="h-px w-6 bg-accent"
-        />
-        <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+    <section className="mt-20 first:mt-0">
+      <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
+        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+          {index} · Section
+        </span>
+        <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
+        <h2
+          className="font-semibold tracking-tight text-text-light"
+          style={{
+            fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+            letterSpacing: "-0.035em",
+            lineHeight: 1,
+          }}
+        >
+          {title}
+        </h2>
       </div>
-      {children}
+      <div className="mt-10">{children}</div>
     </section>
   );
 }
 
+/**
+ * Editorial experience timeline. Each role is a full-width entry with
+ * massive company display, mono role/period/location rail, summary line,
+ * indexed terminal bullets, and a hover gradient hair-line at the bottom.
+ * Reads like a printed dossier rather than a resume card.
+ */
+function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
+  const reduce = useReducedMotion();
+
+  return (
+    <ol className="grid divide-y divide-border-light border-y border-border-light">
+      {entries.map((entry, index) => (
+        <motion.li
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          className="group relative grid grid-cols-12 gap-x-6 gap-y-6 py-12 sm:py-14"
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          key={entry.company}
+          transition={{
+            delay: index * 0.08,
+            duration: 0.6,
+            ease: easeOutCurve,
+          }}
+          viewport={{ amount: 0.2, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+        >
+          {/* LEFT 7 — index + company display + summary + bullets */}
+          <div className="col-span-12 lg:col-span-7">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                {String(index + 1).padStart(2, "0")} · Role
+              </span>
+              {entry.featured ? (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-[rgba(41,110,214,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                  <span className="h-1 w-1 rounded-full bg-accent" />
+                  Now
+                </span>
+              ) : null}
+            </div>
+
+            <h3
+              className="mt-4 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+              style={{
+                fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                letterSpacing: "-0.04em",
+                lineHeight: 0.96,
+              }}
+            >
+              {entry.company}
+            </h3>
+
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-text-light sm:text-xl sm:leading-9">
+              {entry.summary}
+            </p>
+
+            {/* Bullets — terminal `>` prefix to echo the Technical Skills datasheet. */}
+            <motion.ul
+              className="mt-8 grid gap-2.5"
+              initial={reduce ? false : "hidden"}
+              variants={{
+                hidden: {},
+                show: { transition: { staggerChildren: 0.05 } },
+              }}
+              viewport={{ amount: 0.2, once: true }}
+              whileInView={reduce ? undefined : "show"}
+            >
+              {entry.bullets.map((bullet) => (
+                <motion.li
+                  className="flex items-start gap-2.5 font-mono text-[12.5px] leading-6 text-text-light-muted"
+                  key={bullet}
+                  variants={{
+                    hidden: { opacity: 0, x: -8 },
+                    show: {
+                      opacity: 1,
+                      x: 0,
+                      transition: { duration: 0.45, ease: easeOutCurve },
+                    },
+                  }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-1 shrink-0 text-accent/70"
+                  >
+                    &gt;
+                  </span>
+                  <span className="text-[13.5px] leading-7 text-text-light-muted sm:text-sm">
+                    {bullet}
+                  </span>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+
+          {/* RIGHT 5 — spec block: role, period, location, accent vertical rule. */}
+          <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
+            <dl className="grid gap-5">
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  Role
+                </dt>
+                <dd className="mt-2 text-base font-semibold leading-6 text-text-light sm:text-lg">
+                  {entry.role}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  Period
+                </dt>
+                <dd className="mt-2 font-mono text-[12.5px] uppercase tracking-[0.16em] text-text-light">
+                  {entry.period}
+                </dd>
+              </div>
+              <div>
+                <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  Location
+                </dt>
+                <dd className="mt-2 font-mono text-[12.5px] uppercase tracking-[0.16em] text-text-light">
+                  {entry.location}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          {/* Hover gradient hair-line — matches the home page Process band. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+          />
+        </motion.li>
+      ))}
+    </ol>
+  );
+}
+
+/**
+ * Independent projects ledger — same editorial language as Experience
+ * but tighter. Project name as display type, mono scope rail, terminal
+ * bullets, stack chips on the right.
+ */
+function ProjectLedger({ entries }: { entries: ProjectEntry[] }) {
+  const reduce = useReducedMotion();
+
+  return (
+    <ol className="grid divide-y divide-border-light border-y border-border-light">
+      {entries.map((entry, index) => (
+        <motion.li
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          className="group relative grid grid-cols-12 gap-x-6 gap-y-5 py-10 sm:py-12"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          key={entry.name}
+          transition={{
+            delay: index * 0.06,
+            duration: 0.55,
+            ease: easeOutCurve,
+          }}
+          viewport={{ amount: 0.2, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+        >
+          <div className="col-span-12 lg:col-span-7">
+            <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              {String(index + 1).padStart(2, "0")} · Project
+            </p>
+            <h3
+              className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+              style={{
+                fontSize: "clamp(1.5rem, 3.5vw, 2.25rem)",
+                letterSpacing: "-0.03em",
+                lineHeight: 1.02,
+              }}
+            >
+              {entry.name}
+            </h3>
+
+            <ul className="mt-5 grid gap-2">
+              {entry.bullets.map((bullet) => (
+                <li
+                  className="flex items-start gap-2.5 text-[13.5px] leading-7 text-text-light-muted sm:text-sm"
+                  key={bullet}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-1.5 shrink-0 font-mono text-accent/70"
+                  >
+                    &gt;
+                  </span>
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              Scope
+            </p>
+            <p className="mt-2 text-sm leading-6 text-text-light">
+              {entry.scope}
+            </p>
+            <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              Stack
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {entry.stack.map((tech) => (
+                <li
+                  className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted"
+                  key={tech}
+                >
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+          />
+        </motion.li>
+      ))}
+    </ol>
+  );
+}
+
+/**
+ * Skills datasheet — reused from the prior Technical Skills design,
+ * lifted into its own component so the sidebar datasheets and this
+ * block share visual DNA.
+ */
+function SkillsDatasheet({
+  groups,
+}: {
+  groups: { items: string[]; title: string }[];
+}) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+        <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+        <span>~/stack</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        <span className="text-text-light-muted">{groups.length} categories</span>
+      </div>
+      <div className="grid divide-y divide-border-light md:grid-cols-2 md:divide-x md:divide-y-0">
+        {groups.map((group, groupIndex) => (
+          <div
+            className="relative px-5 py-5 transition-colors duration-200 hover:bg-[rgba(41,110,214,0.04)]"
+            key={group.title}
+          >
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute left-0 top-5 h-[calc(100%-2.5rem)] w-0.5 bg-accent/50"
+            />
+            <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+              <span className="text-text-light-muted/60">// </span>
+              {String(groupIndex + 1).padStart(2, "0")} {group.title}
+            </p>
+            <ul className="mt-3 grid gap-1.5">
+              {group.items.map((item) => (
+                <li
+                  className="flex items-start gap-2 font-mono text-[12.5px] leading-6 text-text-light-muted"
+                  key={item}
+                >
+                  <span aria-hidden="true" className="mt-1 shrink-0 text-accent/70">
+                    &gt;
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Education spec rows — same datasheet feel as Skills but linear.
+ */
+function EducationSpec({
+  entries,
+}: {
+  entries: { meta: string; program: string; status: string }[];
+}) {
+  return (
+    <ol className="grid divide-y divide-border-light border-y border-border-light">
+      {entries.map((entry, index) => (
+        <li
+          className="grid grid-cols-12 gap-x-6 gap-y-2 py-6 sm:py-8"
+          key={entry.program}
+        >
+          <div className="col-span-12 flex items-baseline gap-3 lg:col-span-2">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span
+              aria-hidden="true"
+              className="hidden h-px flex-1 bg-border-light lg:block"
+            />
+          </div>
+          <div className="col-span-12 lg:col-span-7">
+            <h3 className="text-base font-semibold leading-7 text-text-light sm:text-lg">
+              {entry.program}
+            </h3>
+            <p className="mt-1 text-sm text-text-light-muted">{entry.status}</p>
+          </div>
+          <div className="col-span-12 lg:col-span-3 lg:text-right">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-light-muted">
+              {entry.meta}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/**
+ * Generic datasheet card — reused for the sidebar contact, languages,
+ * and ship-stats panels so they read as one consistent dossier of
+ * spec sheets rather than mismatched blocks.
+ */
+function DatasheetCard({
+  children,
+  meta,
+  slug,
+}: {
+  children: ReactNode;
+  meta: string;
+  slug: string;
+}) {
+  return (
+    <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+        <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+        <span>{slug}</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        <span className="text-text-light-muted">{meta}</span>
+      </div>
+      {children}
+    </div>
+  );
+}
