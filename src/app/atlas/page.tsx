@@ -1,4 +1,42 @@
-import { ParallaxGhost } from "@/components";
+import { AtlasHierarchy, ParallaxGhost } from "@/components";
+
+const ATLAS_LAYERS = [
+  {
+    badge: "01",
+    description:
+      "Two-person scope. Pierre leads AI R&D and harness implementation; Ryder runs business + strategy. No employees, no junior staff. The harness is the team.",
+    items: ["Pierre + Ryder · co-founders"],
+    title: "Founders",
+  },
+  {
+    badge: "02",
+    description:
+      "Atlas itself — the multi-level autonomous harness. Wires any AI model to any external tool through MCP or OAuth. Owns routing, retries, governance, and audit log.",
+    items: ["Atlas v3 · the engine"],
+    title: "Engine",
+  },
+  {
+    badge: "03",
+    description:
+      "Strategic-tier agents read the brief and decide direction. CEO routes work. CFO scopes budget + capacity. CMO shapes voice and channel. All decisions land in the audit log.",
+    items: ["CEO agent", "CFO agent", "CMO agent"],
+    title: "C-suite agents",
+  },
+  {
+    badge: "04",
+    description:
+      "Manager agents break work into tickets and assign them. Field agents pick tickets up, write code, run tests locally, and file PRs against the project board. Human review at the merge boundary.",
+    items: ["Manager agents", "Field agents"],
+    title: "Execution",
+  },
+  {
+    badge: "05",
+    description:
+      "Real products operating in production. Game app, budget web app, agent-augmented project management system. Same underlying tech deployed at ThePrivateHotels.",
+    items: ["Game · Budget · PM", "Hotel ops automation"],
+    title: "Shipped products",
+  },
+];
 
 export default function AtlasPage() {
   return (
@@ -107,8 +145,56 @@ export default function AtlasPage() {
         </div>
       </section>
 
-      {/* Trailing spacer — iters 235–238 inject sections here. */}
+      {/* 01 · HIERARCHY */}
+      <AtlasSection
+        chapter="01"
+        eyebrow="Hierarchy"
+        id="hierarchy"
+        title="Five layers, top to bottom."
+      >
+        <AtlasHierarchy layers={ATLAS_LAYERS} />
+      </AtlasSection>
+
+      {/* Trailing spacer — iters 236–238 inject sections here. */}
       <div className="h-24" aria-hidden="true" />
     </main>
+  );
+}
+
+function AtlasSection({
+  chapter,
+  children,
+  eyebrow,
+  id,
+  title,
+}: {
+  chapter: string;
+  children: React.ReactNode;
+  eyebrow: string;
+  id?: string;
+  title: string;
+}) {
+  return (
+    <section className="relative mt-16 scroll-mt-28 sm:mt-20" id={id}>
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+            {chapter} · {eyebrow}
+          </span>
+          <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
+          <h2
+            className="font-semibold tracking-tight text-text-light"
+            style={{
+              fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+              letterSpacing: "-0.035em",
+              lineHeight: 1,
+            }}
+          >
+            {title}
+          </h2>
+        </div>
+        <div className="mt-10">{children}</div>
+      </div>
+    </section>
   );
 }
