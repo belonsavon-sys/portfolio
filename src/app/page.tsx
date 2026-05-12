@@ -32,7 +32,7 @@ import { useRef, useState, type ReactNode } from "react";
 
 const aboutParagraphs = [
   "I'm an engineer who learned to ship by automating the business I was hired to run.",
-  "Two years ago I supervised a hotel. Today, the AI systems running it are systems I built — every guest message, every inspection, every automated workflow. In parallel, at Blackdoor (the company I co-founded), I co-architect Atlas: a multi-level autonomous agent harness shipping real games, apps, and operating systems.",
+  "Two years ago I supervised a hotel. Today, the AI systems running it are systems I built — every guest message, every inspection, every automated workflow. In parallel, at Blackdoor (the company I co-founded), I co-architect Atlas: a multi-level autonomous agent harness that ships real products end-to-end.",
   'When a problem enters my scope, I take it to mastery before I execute. Solo or paired with AI, I research relentlessly and finish what I start. My divergent thinking catches what specialists miss — and turns "we should automate that" into "it\'s already running."',
   "Trilingual EN · ES · IT. Based in Ocean Shores, WA — open to remote roles and freelance projects.",
 ];

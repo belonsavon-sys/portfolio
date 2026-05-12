@@ -44,7 +44,7 @@ const works: Work[] = [
   },
   {
     context:
-      "Multi-level autonomous agent harness shipping real games, apps, and operating systems end-to-end.",
+      "Multi-level autonomous agent harness that ships real products end-to-end.",
     index: "03",
     metric: "3 products",
     metricLabel: "shipping",
