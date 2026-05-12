@@ -58,7 +58,7 @@ export function SiteFooter() {
       </div>
 
       <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center px-4 text-center sm:px-6 lg:px-8">
-        <LiveStatusBadge label="Available now · 3 min reply average" />
+        <LiveStatusBadge label="Available now · replies in 24 hrs" />
 
         <h2 className="hero-display-md mt-8 font-semibold">
           <span className="block">Let&apos;s build something</span>
@@ -79,8 +79,8 @@ export function SiteFooter() {
         />
 
         <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-text-dark-muted sm:text-xl sm:leading-9">
-          Whether you need AI automation, a full-stack product, or a system that
-          runs itself — I&apos;m available for remote roles and projects.
+          AI automation, a full-stack build, or an agent harness — available
+          for remote roles and freelance projects.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -103,7 +103,7 @@ export function SiteFooter() {
           </span>
           <span className="inline-flex items-center gap-2">
             <span className="h-1 w-1 rounded-full bg-accent-light" />
-            Trilingual
+            EN · ES · IT
           </span>
           <span className="inline-flex items-center gap-2">
             <span className="h-1 w-1 rounded-full bg-accent-light" />
