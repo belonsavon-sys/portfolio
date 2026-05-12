@@ -88,6 +88,21 @@ const works: Work[] = [
 
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+/** Compact "shipped X ago" relative-time string. Server-rendered;
+ *  refreshes on each request without ticking while the page is open. */
+function shippedAgo(iso: string): string {
+  const then = new Date(iso).getTime();
+  if (Number.isNaN(then)) return iso;
+  const days = Math.max(0, Math.round((Date.now() - then) / (24 * 3600 * 1000)));
+  if (days === 0) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 30) return `${days} d ago`;
+  const months = Math.round(days / 30);
+  if (months < 12) return `${months} mo ago`;
+  const years = (days / 365).toFixed(1);
+  return `${years} yr ago`;
+}
+
 const statusMeta: Record<
   Work["status"],
   { dot: string; label: string; text: string }
@@ -238,7 +253,7 @@ export function SelectedWork() {
                   transition={{ duration: 0.45, ease: easeOut }}
                 >
                   <div className="grid gap-8 pb-9 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-12">
-                    {/* LEFT — context paragraph + tech chips */}
+                    {/* LEFT — context paragraph + tech chips + deep-link */}
                     <div>
                       <p className="text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
                         {work.context}
@@ -253,6 +268,20 @@ export function SelectedWork() {
                           </span>
                         ))}
                       </div>
+                      {work.href ? (
+                        <a
+                          className="group/recv mt-6 inline-flex items-center gap-2 rounded-full border border-accent/35 bg-[rgba(41,110,214,0.06)] px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-accent transition-[border-color,background] duration-200 hover:border-accent hover:bg-[rgba(41,110,214,0.12)]"
+                          href={work.href}
+                        >
+                          <span>See receipts</span>
+                          <span
+                            aria-hidden="true"
+                            className="transition-transform duration-200 group-hover/recv:translate-x-0.5"
+                          >
+                            →
+                          </span>
+                        </a>
+                      ) : null}
                     </div>
 
                     {/* RIGHT — source citation in a mono spec card */}
@@ -267,6 +296,21 @@ export function SelectedWork() {
                         </span>
                         {work.source}
                       </p>
+                      {work.sourceType ? (
+                        <p className="mt-3 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                          <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
+                          {work.sourceType === "production"
+                            ? "Production · ThePrivateHotels"
+                            : work.sourceType === "internal"
+                              ? "Internal · co-built"
+                              : "Open"}
+                        </p>
+                      ) : null}
+                      {work.shippedAt ? (
+                        <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                          Shipped {shippedAgo(work.shippedAt)}
+                        </p>
+                      ) : null}
                     </div>
                   </div>
                 </motion.div>
