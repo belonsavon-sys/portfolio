@@ -29,31 +29,41 @@ const services = [
   {
     description:
       "Manual workflows automated through Zapier, n8n, and custom APIs. Built with you in the review loop, not around you.",
+    forWho: "Operations-heavy businesses",
     icon: "01",
+    includes: ["Zapier", "n8n", "Custom APIs", "Review loop"],
     name: "Process Automation",
   },
   {
     description:
       "Chatbots that learn your voice from your data and draft inside your existing tools. Every reply stays human-reviewed before send.",
+    forWho: "Customer-facing teams",
     icon: "02",
+    includes: ["Curated data prep", "In-tool drafting", "Human review"],
     name: "Custom Chatbots",
   },
   {
     description:
       "Next.js + Supabase web apps, Flutter / Kotlin mobile builds. Idea to deployed product, end-to-end.",
+    forWho: "End-to-end product builds",
     icon: "03",
+    includes: ["Next.js", "Supabase", "Flutter", "Kotlin"],
     name: "Full-Stack Web & Mobile",
   },
   {
     description:
       "Multi-level autonomous agent systems modeled on Atlas — the harness I co-architect at Blackdoor.",
+    forWho: "Teams replacing manual coordination",
     icon: "04",
+    includes: ["Multi-agent architecture", "MCP wiring", "Model routing"],
     name: "Agent Harness Design",
   },
   {
     description:
       "If you have a problem and need AI to solve it, I'll figure out how.",
+    forWho: "Novel problems, vague briefs",
     icon: "05",
+    includes: ["Research-led discovery", "Rapid prototyping"],
     name: "Whatever the brief calls for",
   },
 ];
@@ -249,63 +259,82 @@ function AiHero() {
 
 function ServicesSection() {
   const reduce = useReducedMotion();
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Scroll-tied scatter on exit, matching the pattern on /. Columns 0/1/2
-  // on xl scatter left / center / right.
-  const { scrollYProgress } = useScroll({
-    offset: ["start start", "end start"],
-    target: sectionRef,
-  });
-  const exitOpacity = useTransform(scrollYProgress, [0.6, 0.95], [1, 0]);
-  const exitLeft = useTransform(scrollYProgress, [0.6, 1], [0, -90]);
-  const exitRight = useTransform(scrollYProgress, [0.6, 1], [0, 90]);
+  const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
   return (
-    <div ref={sectionRef}>
+    <div>
       <SectionHeader eyebrow="What I build" title="From process to product." />
-      <div className="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
-        {services.map((service, index) => {
-          const col = index % 3;
-          const exitX =
-            col === 0 ? exitLeft : col === 2 ? exitRight : undefined;
-          return (
-          <ScrollReveal
-            delay={index * 0.05}
-            direction="up"
+
+      {/* Editorial services menu — each row reads like a printed bill
+          entry: huge index + service name on the left, includes / for-
+          whom spec block on the right. Hover draws a gradient hair-line
+          across the bottom. */}
+      <ol className="mt-14 grid divide-y divide-border-light border-y border-border-light">
+        {services.map((service, index) => (
+          <motion.li
+            animate={reduce ? undefined : { opacity: 1, y: 0 }}
+            className="group relative grid grid-cols-12 gap-x-6 gap-y-6 py-10 sm:py-12"
+            initial={reduce ? false : { opacity: 0, y: 24 }}
             key={service.name}
+            transition={{
+              delay: index * 0.06,
+              duration: 0.55,
+              ease: easeOut,
+            }}
+            viewport={{ amount: 0.2, once: true }}
+            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
           >
-            <motion.div
-              style={
-                reduce
-                  ? undefined
-                  : exitX
-                    ? { opacity: exitOpacity, x: exitX }
-                    : { opacity: exitOpacity }
-              }
-            >
-            <div className="group relative border-l border-border-light pl-5 transition-[border-color] duration-300 hover:border-accent">
-              <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
-                {service.icon}
+            {/* LEFT 7 — index + service name + description */}
+            <div className="col-span-12 lg:col-span-7">
+              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                {service.icon} · Service
               </p>
-              <h3 className="mt-3 flex items-baseline gap-2 text-xl font-semibold text-text-light">
-                <span>{service.name}</span>
-                <span
-                  aria-hidden="true"
-                  className="inline-block translate-x-0 opacity-0 transition-[transform,opacity] duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100"
-                >
-                  →
-                </span>
+              <h3
+                className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+                style={{
+                  fontSize: "clamp(1.75rem, 4vw, 3rem)",
+                  letterSpacing: "-0.035em",
+                  lineHeight: 1.02,
+                }}
+              >
+                {service.name}
               </h3>
-              <p className="mt-3 text-sm leading-6 text-text-light-muted">
+              <p className="mt-5 max-w-xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
                 {service.description}
               </p>
             </div>
-            </motion.div>
-          </ScrollReveal>
-          );
-        })}
-      </div>
+
+            {/* RIGHT 5 — spec block */}
+            <div className="col-span-12 lg:col-span-5 lg:pl-8 lg:border-l lg:border-border-light">
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                Includes
+              </p>
+              <ul className="mt-3 flex flex-wrap gap-1.5">
+                {service.includes.map((item) => (
+                  <li
+                    className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted"
+                    key={item}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                For
+              </p>
+              <p className="mt-2 text-sm leading-6 text-text-light">
+                {service.forWho}
+              </p>
+            </div>
+
+            {/* Hover gradient hair-line */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+            />
+          </motion.li>
+        ))}
+      </ol>
     </div>
   );
 }
