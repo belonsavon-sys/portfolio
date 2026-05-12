@@ -209,59 +209,94 @@ export default function ContactPage() {
             </h2>
           </div>
 
-          <motion.div
-            className="grid divide-y divide-[rgba(91,155,244,0.20)]"
+          {/* Methods rebuilt as editorial chapter cards — same indexed
+              row pattern used by KeyboardNav and the 404 route ledger.
+              Each card has chapter index + method + value + a magic
+              key chip (E/P/G/L) on the right to hint that the
+              KeyboardNav palette can be used too. */}
+          <motion.ol
+            className="grid divide-y divide-[rgba(91,155,244,0.18)]"
             {...fadeUp(0)}
           >
             {contactLinks.map(
               ({ Icon, href, label, rel, target, value }, index) => (
-                <motion.a
-                  aria-label={label}
-                  className="group flex items-center gap-4 py-5 transition-[background] duration-200 hover:bg-[rgba(91,155,244,0.06)] sm:gap-6 sm:py-6"
-                  href={href}
+                <motion.li
                   initial={reduce ? { opacity: 1 } : { opacity: 0, y: 12 }}
                   key={label}
-                  rel={rel}
-                  target={target}
                   transition={{
                     delay: 0.12 + index * 0.06,
                     duration: 0.45,
                     ease: easeOut,
                   }}
-                  viewport={{ amount: 0.4, once: true }}
+                  viewport={{ amount: 0.3, once: true }}
                   whileInView={{ opacity: 1, y: 0 }}
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[rgba(91,155,244,0.35)] bg-[rgba(41,110,214,0.10)] text-accent-light transition-[border-color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:border-accent-light/70 sm:h-14 sm:w-14">
-                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </div>
-                  <div className="flex flex-1 flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-6">
-                    <span className="w-24 font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
-                      {label}
-                    </span>
-                    <span className="break-all text-lg font-semibold text-text-dark transition-colors duration-200 group-hover:text-accent-light sm:text-xl">
-                      {value}
-                    </span>
-                  </div>
-                  <span
-                    aria-hidden="true"
-                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[rgba(91,155,244,0.30)] text-accent-light/70 transition-[transform,border-color,background,color] duration-300 group-hover:translate-x-1 group-hover:border-accent-light group-hover:bg-accent-light group-hover:text-bg-dark"
+                  <a
+                    aria-label={label}
+                    className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-7 transition-colors duration-200 hover:bg-[rgba(91,155,244,0.06)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light sm:py-8"
+                    href={href}
+                    rel={rel}
+                    target={target}
                   >
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M5 12h14m-7-7 7 7-7 7" />
-                    </svg>
-                  </span>
-                </motion.a>
+                    {/* LEFT 7 — chapter index, method title, value */}
+                    <span className="col-span-12 lg:col-span-7">
+                      <span className="flex items-center gap-4">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+                          {String(index + 1).padStart(2, "0")} · Method
+                        </span>
+                        <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[rgba(91,155,244,0.30)] bg-[rgba(41,110,214,0.10)] text-accent-light">
+                          <Icon className="h-3.5 w-3.5" />
+                        </span>
+                      </span>
+                      <span
+                        className="mt-3 block font-semibold tracking-tight text-text-dark transition-colors duration-200 group-hover:text-accent-light"
+                        style={{
+                          fontSize: "clamp(1.75rem, 4.5vw, 3rem)",
+                          letterSpacing: "-0.04em",
+                          lineHeight: 0.98,
+                        }}
+                      >
+                        {label}
+                      </span>
+                      <span className="mt-3 inline-block break-all font-mono text-sm text-text-dark-muted transition-colors duration-200 group-hover:text-accent-light/80 sm:text-base">
+                        {value}
+                      </span>
+                    </span>
+
+                    {/* RIGHT 5 — magic key chip + arrow indicator */}
+                    <span className="col-span-12 flex items-end justify-end gap-4 lg:col-span-5 lg:items-center">
+                      <span className="hidden font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted sm:inline">
+                        {target === "_blank" ? "Opens in new tab" : "Direct"}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[rgba(91,155,244,0.30)] text-accent-light/70 transition-[transform,border-color,background,color] duration-300 group-hover:translate-x-1 group-hover:border-accent-light group-hover:bg-accent-light group-hover:text-bg-dark"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M5 12h14m-7-7 7 7-7 7" />
+                        </svg>
+                      </span>
+                    </span>
+
+                    {/* Hover gradient hairline */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+                    />
+                  </a>
+                </motion.li>
               ),
             )}
-          </motion.div>
+          </motion.ol>
         </div>
       </section>
 
