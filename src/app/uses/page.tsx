@@ -1,4 +1,4 @@
-import { Button, ParallaxGhost } from "@/components";
+import { Button, ChapterRail, ParallaxGhost } from "@/components";
 
 type StackEntry = {
   detail: string;
@@ -279,6 +279,7 @@ export default function UsesPage() {
         chapter="01"
         eyebrow="AI stack"
         entries={AI_STACK}
+        id="ai-stack"
         slug="~/ai-stack"
         title="What the harness runs on."
       />
@@ -288,6 +289,7 @@ export default function UsesPage() {
         chapter="02"
         eyebrow="Editor / IDE"
         entries={EDITOR_STACK}
+        id="editor"
         slug="~/editor"
         title="Where the code gets written."
       />
@@ -297,6 +299,7 @@ export default function UsesPage() {
         chapter="03"
         eyebrow="Infrastructure"
         entries={INFRA_STACK}
+        id="infra"
         slug="~/infra"
         title="Where it ships and runs."
       />
@@ -306,6 +309,7 @@ export default function UsesPage() {
         chapter="04"
         eyebrow="Hardware"
         entries={HARDWARE_STACK}
+        id="hardware"
         slug="~/hardware"
         title="What it physically runs on."
       />
@@ -344,6 +348,17 @@ export default function UsesPage() {
           </div>
         </div>
       </section>
+
+      {/* CHAPTER RAIL — floating right-margin nav for the four
+          /uses stack datasheets. */}
+      <ChapterRail
+        sections={[
+          { id: "ai-stack", index: "01", label: "AI stack" },
+          { id: "editor", index: "02", label: "Editor / IDE" },
+          { id: "infra", index: "03", label: "Infrastructure" },
+          { id: "hardware", index: "04", label: "Hardware" },
+        ]}
+      />
     </main>
   );
 }
@@ -359,17 +374,19 @@ function UsesStackSection({
   chapter,
   entries,
   eyebrow,
+  id,
   slug,
   title,
 }: {
   chapter: string;
   entries: StackEntry[];
   eyebrow: string;
+  id?: string;
   slug: string;
   title: string;
 }) {
   return (
-    <section className="relative mt-16 sm:mt-20">
+    <section className="relative mt-16 scroll-mt-28 sm:mt-20" id={id}>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
           <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">

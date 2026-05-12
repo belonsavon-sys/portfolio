@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button, ParallaxGhost } from "@/components";
+import { Button, ChapterRail, ParallaxGhost } from "@/components";
 
 const BUILDING = [
   {
@@ -179,7 +179,7 @@ export default function NowPage() {
       </section>
 
       {/* BUILDING */}
-      <NowSection chapter="01" eyebrow="Building" title="What I'm shipping.">
+      <NowSection chapter="01" eyebrow="Building" id="building" title="What I'm shipping.">
         <ol className="grid divide-y divide-border-light border-y border-border-light">
           {BUILDING.map((entry, index) => (
             <li
@@ -226,7 +226,7 @@ export default function NowPage() {
       </NowSection>
 
       {/* READING */}
-      <NowSection chapter="02" eyebrow="Reading" title="In my queue.">
+      <NowSection chapter="02" eyebrow="Reading" id="reading" title="In my queue.">
         <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
           <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
             <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
@@ -258,7 +258,7 @@ export default function NowPage() {
       </NowSection>
 
       {/* LEARNING */}
-      <NowSection chapter="03" eyebrow="Learning" title="Open loops.">
+      <NowSection chapter="03" eyebrow="Learning" id="learning" title="Open loops.">
         <ol className="grid divide-y divide-border-light border-y border-border-light">
           {LEARNING.map((entry, index) => (
             <li
@@ -287,7 +287,7 @@ export default function NowPage() {
       </NowSection>
 
       {/* SHIPPED — recent activity */}
-      <NowSection chapter="04" eyebrow="Recent ships" title="Last week's PRs.">
+      <NowSection chapter="04" eyebrow="Recent ships" id="shipped" title="Last week's PRs.">
         <ol className="grid divide-y divide-border-light border-y border-border-light">
           {SHIPPED.map((entry, index) => (
             <li
@@ -357,6 +357,17 @@ export default function NowPage() {
           </div>
         </div>
       </section>
+
+      {/* CHAPTER RAIL — floating right-margin nav for the four /now
+          sections. */}
+      <ChapterRail
+        sections={[
+          { id: "building", index: "01", label: "Building" },
+          { id: "reading", index: "02", label: "Reading" },
+          { id: "learning", index: "03", label: "Learning" },
+          { id: "shipped", index: "04", label: "Recent ships" },
+        ]}
+      />
     </main>
   );
 }
@@ -365,15 +376,17 @@ function NowSection({
   chapter,
   children,
   eyebrow,
+  id,
   title,
 }: {
   chapter: string;
   children: React.ReactNode;
   eyebrow: string;
+  id?: string;
   title: string;
 }) {
   return (
-    <section className="relative mt-16 sm:mt-20">
+    <section className="relative mt-16 scroll-mt-28 sm:mt-20" id={id}>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
           <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
