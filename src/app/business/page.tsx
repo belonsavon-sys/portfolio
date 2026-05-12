@@ -1,3 +1,5 @@
+"use client";
+
 import {
   AtlasHierarchy,
   BeforeAfter,
@@ -12,6 +14,7 @@ import {
   SplitText,
   Testimonial,
 } from "@/components";
+import { useEffect } from "react";
 import type { ReactNode } from "react";
 
 const processOutcomes = [
@@ -63,57 +66,82 @@ const TESTIMONIAL_AUTHOR = "";
 const TESTIMONIAL_ROLE = "";
 
 export default function BusinessPage() {
+  // Activate scroll-snap chapters on /business only. Sets
+  // scroll-snap-type on the html scroller while this page is mounted;
+  // restores on unmount. "proximity" lets users free-scroll within a
+  // chapter without being yanked to the next one.
+  useEffect(() => {
+    const html = document.documentElement;
+    const prev = html.style.scrollSnapType;
+    html.style.scrollSnapType = "y proximity";
+    return () => {
+      html.style.scrollSnapType = prev;
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
       <BusinessHero />
 
-      <LightSection className="py-20 sm:py-24">
-        <BlackdoorSection />
-      </LightSection>
+      {/* Chapter 01 — Blackdoor */}
+      <div className="snap-start">
+        <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
+          <BlackdoorSection />
+        </LightSection>
+      </div>
 
-      <IndexedDivider index="01" label="Process design" />
+      {/* Chapter 02 — Process */}
+      <div className="snap-start">
+        <IndexedDivider index="01" label="Process design" />
+        <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
+          <ProcessSection />
+        </LightSection>
+      </div>
 
-      <LightSection className="py-20 sm:py-24">
-        <ProcessSection />
-      </LightSection>
+      {/* Chapter 03 — Communications */}
+      <div className="snap-start">
+        <IndexedDivider index="02" label="Communications" />
+        <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
+          <CommunicationsSection />
+        </LightSection>
+      </div>
 
-      <IndexedDivider index="02" label="Communications" />
+      {/* Chapter 04 — Team & training (bundles the testimonial frame) */}
+      <div className="snap-start">
+        <IndexedDivider index="03" label="Team & training" />
+        <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
+          <TrainingSection />
+        </LightSection>
+        <LightSection className="pb-20 pt-4 sm:pb-24">
+          <Testimonial
+            author={TESTIMONIAL_AUTHOR}
+            body={TESTIMONIAL_BODY}
+            className="mx-auto max-w-3xl"
+            role={TESTIMONIAL_ROLE}
+          />
+        </LightSection>
+      </div>
 
-      <LightSection className="py-20 sm:py-24">
-        <CommunicationsSection />
-      </LightSection>
+      {/* Chapter 05 — Finance */}
+      <div className="snap-start">
+        <IndexedDivider index="04" label="Finance & admin" />
+        <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
+          <FinanceSection />
+        </LightSection>
+      </div>
 
-      <IndexedDivider index="03" label="Team & training" />
-
-      <LightSection className="py-20 sm:py-24">
-        <TrainingSection />
-      </LightSection>
-
-      <LightSection className="pb-20 pt-4 sm:pb-24">
-        <Testimonial
-          author={TESTIMONIAL_AUTHOR}
-          body={TESTIMONIAL_BODY}
-          className="mx-auto max-w-3xl"
-          role={TESTIMONIAL_ROLE}
-        />
-      </LightSection>
-
-      <IndexedDivider index="04" label="Finance & admin" />
-
-      <LightSection className="py-20 sm:py-24">
-        <FinanceSection />
-      </LightSection>
-
-      <SectionDivider direction="light-to-dark" />
-
-      <SiteFooter />
+      {/* Chapter 06 — Closer (footer) */}
+      <div className="snap-start">
+        <SectionDivider direction="light-to-dark" />
+        <SiteFooter />
+      </div>
     </main>
   );
 }
 
 function BusinessHero() {
   return (
-    <section className="relative overflow-hidden">
+    <section className="relative snap-start overflow-hidden">
       <CursorHalo />
       <div
         aria-hidden="true"
