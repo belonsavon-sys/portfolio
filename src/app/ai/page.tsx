@@ -314,16 +314,36 @@ function ServicesSection() {
 }
 
 function CaseStudiesSection() {
+  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-tied scatter: 3 case studies zig-zag on exit (odd indices
+  // drift left, even drift right), all fade 0.6 → 0.95.
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end start"],
+    target: sectionRef,
+  });
+  const exitOpacity = useTransform(scrollYProgress, [0.6, 0.95], [1, 0]);
+  const exitLeft = useTransform(scrollYProgress, [0.6, 1], [0, -90]);
+  const exitRight = useTransform(scrollYProgress, [0.6, 1], [0, 90]);
+
   return (
-    <div>
+    <div ref={sectionRef}>
       <SectionHeader
         eyebrow="Built and shipped"
         title="Three case studies, with receipts."
       />
 
       <div className="mt-12 grid gap-16">
-        {caseStudies.map((study) => (
-          <article key={study.title}>
+        {caseStudies.map((study, index) => {
+          const exitX = index % 2 === 0 ? exitLeft : exitRight;
+          return (
+          <motion.article
+            key={study.title}
+            style={
+              reduce ? undefined : { opacity: exitOpacity, x: exitX }
+            }
+          >
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
               {study.eyebrow}
             </p>
@@ -339,10 +359,17 @@ function CaseStudiesSection() {
                 before={study.comparison.before}
               />
             </div>
-          </article>
-        ))}
+          </motion.article>
+          );
+        })}
 
-        <article>
+        <motion.article
+          style={
+            reduce
+              ? undefined
+              : { opacity: exitOpacity, x: caseStudies.length % 2 === 0 ? exitLeft : exitRight }
+          }
+        >
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
             03 · ThePrivateHotels · 2024
           </p>
@@ -390,7 +417,7 @@ function CaseStudiesSection() {
               ))}
             </div>
           </div>
-        </article>
+        </motion.article>
       </div>
     </div>
   );
