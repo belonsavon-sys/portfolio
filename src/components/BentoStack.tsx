@@ -11,6 +11,7 @@ type StackItem = {
 
 type StackCategory = {
   eyebrow: string;
+  href?: string;
   items: StackItem[];
   title: string;
 };
@@ -18,6 +19,7 @@ type StackCategory = {
 const categories: StackCategory[] = [
   {
     eyebrow: "01",
+    href: "/uses#ai-stack",
     items: [
       { label: "Claude", name: "claude" },
       { label: "Codex", name: "codex" },
@@ -30,6 +32,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "02",
+    href: "/uses",
     items: [
       { label: "TypeScript", name: "typescript" },
       { label: "React", name: "react" },
@@ -40,6 +43,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "03",
+    href: "/uses#infra",
     items: [
       { label: "Node.js", name: "node" },
       { label: "Express", name: "express" },
@@ -50,6 +54,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "04",
+    href: "/uses",
     items: [
       { label: "Flutter", name: "flutter" },
       { label: "Kotlin", name: "kotlin" },
@@ -58,6 +63,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "05",
+    href: "/uses#infra",
     items: [
       { label: "Vercel", name: "vercel" },
       { label: "GitHub", name: "github" },
@@ -67,6 +73,7 @@ const categories: StackCategory[] = [
   },
   {
     eyebrow: "06",
+    href: "/uses#editor",
     items: [
       { label: "VS Code", name: "vscode" },
       { label: "Cursor", name: "cursor" },
@@ -125,6 +132,21 @@ export function BentoStack() {
               {category.items.length}{" "}
               {category.items.length === 1 ? "tool" : "tools"}
             </p>
+            {category.href ? (
+              <a
+                className="group/cat mt-4 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                href={category.href}
+              >
+                <span aria-hidden="true" className="text-accent/70">↳</span>
+                <span className="link-underline">Why these</span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover/cat:translate-x-0.5"
+                >
+                  →
+                </span>
+              </a>
+            ) : null}
           </div>
 
           {/* RIGHT — logo wall */}
