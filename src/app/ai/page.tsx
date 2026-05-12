@@ -25,7 +25,17 @@ import {
 } from "@/components";
 import type { ReactNode } from "react";
 
-const services = [
+type ServiceStatus = "available" | "flagship" | "always";
+
+const services: Array<{
+  description: string;
+  forWho: string;
+  icon: string;
+  includes: string[];
+  name: string;
+  status: ServiceStatus;
+  statusLabel: string;
+}> = [
   {
     description:
       "Manual workflows automated through Zapier, n8n, and custom APIs. Built with you in the review loop, not around you.",
@@ -33,6 +43,8 @@ const services = [
     icon: "01",
     includes: ["Zapier", "n8n", "Custom APIs", "Review loop"],
     name: "Process Automation",
+    status: "available",
+    statusLabel: "Available · 2 slots Q2",
   },
   {
     description:
@@ -41,6 +53,8 @@ const services = [
     icon: "02",
     includes: ["Curated data prep", "In-tool drafting", "Human review"],
     name: "Custom Chatbots",
+    status: "available",
+    statusLabel: "Available · 1 slot Q2",
   },
   {
     description:
@@ -49,6 +63,8 @@ const services = [
     icon: "03",
     includes: ["Next.js", "Supabase", "Flutter", "Kotlin"],
     name: "Full-Stack Web & Mobile",
+    status: "available",
+    statusLabel: "Available · in-flight",
   },
   {
     description:
@@ -57,6 +73,8 @@ const services = [
     icon: "04",
     includes: ["Multi-agent architecture", "MCP wiring", "Model routing"],
     name: "Agent Harness Design",
+    status: "flagship",
+    statusLabel: "Flagship · always taking",
   },
   {
     description:
@@ -65,8 +83,16 @@ const services = [
     icon: "05",
     includes: ["Research-led discovery", "Rapid prototyping"],
     name: "Whatever the brief calls for",
+    status: "always",
+    statusLabel: "Always · intro call",
   },
 ];
+
+const STATUS_COLOR: Record<ServiceStatus, string> = {
+  always: "bg-accent-light",
+  available: "bg-result-green",
+  flagship: "bg-accent",
+};
 
 const caseStudies = [
   {
@@ -329,13 +355,28 @@ function ServicesSection() {
             viewport={{ amount: 0.2, once: true }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
           >
-            {/* LEFT 7 — index + service name + description */}
+            {/* LEFT 7 — index + service name + description + live status */}
             <div className="col-span-12 lg:col-span-7">
-              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
-                {service.icon} · Service
-              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                  {service.icon} · Service
+                </p>
+                {/* STATUS CHIP — pulse + label. Mirrors the availability
+                    panel on /contact (Engaged / Open slot / Always open). */}
+                <span className="inline-flex items-center gap-2 rounded-full border border-border-light bg-white/80 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-[0_1px_0_0_rgba(255,255,255,0.6)_inset]">
+                  <span className="relative inline-flex h-1.5 w-1.5">
+                    <span
+                      className={`absolute inset-0 animate-ping rounded-full ${STATUS_COLOR[service.status]}/60`}
+                    />
+                    <span
+                      className={`relative inline-block h-1.5 w-1.5 rounded-full ${STATUS_COLOR[service.status]}`}
+                    />
+                  </span>
+                  {service.statusLabel}
+                </span>
+              </div>
               <h3
-                className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+                className="mt-4 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
                 style={{
                   fontSize: "clamp(1.75rem, 4vw, 3rem)",
                   letterSpacing: "-0.035em",
