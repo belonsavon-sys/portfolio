@@ -52,6 +52,7 @@ const experience: ExperienceEntry[] = [
     featured: true,
     location: "Remote",
     period: "Sept 2025 – Present",
+    receipts: { href: "/atlas", label: "/atlas · the harness in depth" },
     role: "Co-founder & President",
     summary:
       "Co-architecting Atlas — the multi-agent harness that ships our products under human review.",
@@ -71,6 +72,10 @@ const experience: ExperienceEntry[] = [
     company: "ThePrivateHotels",
     location: "Ocean Shores, WA",
     period: "Apr 2024 – Present",
+    receipts: {
+      href: "/ai#built-and-shipped",
+      label: "/ai · case studies + receipts",
+    },
     role: "Hotel Operations Supervisor",
     summary:
       "Took a 100+ page manual and a 48-hour reply lag — left a digital QA system and 3-minute responses.",
@@ -165,6 +170,7 @@ type ExperienceEntry = {
   featured?: boolean;
   location: string;
   period: string;
+  receipts?: { href: string; label: string };
   role: string;
   summary: string;
 };
@@ -619,6 +625,32 @@ function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
                   {entry.location}
                 </dd>
               </div>
+              {entry.receipts ? (
+                <div>
+                  <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    Receipts
+                  </dt>
+                  <dd className="mt-2">
+                    <a
+                      className="group/receipts inline-flex items-baseline gap-1.5 font-mono text-[12.5px] leading-6 text-text-light transition-colors duration-200 hover:text-accent"
+                      href={entry.receipts.href}
+                    >
+                      <span aria-hidden="true" className="text-accent/70">
+                        ↳
+                      </span>
+                      <span className="link-underline">
+                        {entry.receipts.label}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="text-accent/70 transition-transform duration-200 group-hover/receipts:translate-x-0.5"
+                      >
+                        →
+                      </span>
+                    </a>
+                  </dd>
+                </div>
+              ) : null}
             </dl>
           </div>
 
