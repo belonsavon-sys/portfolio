@@ -25,7 +25,19 @@ import {
 } from "@/components";
 import type { ReactNode } from "react";
 
-const services = [
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+type ServiceStatus = "available" | "flagship" | "always";
+
+const services: Array<{
+  description: string;
+  forWho: string;
+  icon: string;
+  includes: string[];
+  name: string;
+  status: ServiceStatus;
+  statusLabel: string;
+}> = [
   {
     description:
       "Manual workflows automated through Zapier, n8n, and custom APIs. Built with you in the review loop, not around you.",
@@ -33,6 +45,8 @@ const services = [
     icon: "01",
     includes: ["Zapier", "n8n", "Custom APIs", "Review loop"],
     name: "Process Automation",
+    status: "available",
+    statusLabel: "Available · 2 slots Q2",
   },
   {
     description:
@@ -41,6 +55,8 @@ const services = [
     icon: "02",
     includes: ["Curated data prep", "In-tool drafting", "Human review"],
     name: "Custom Chatbots",
+    status: "available",
+    statusLabel: "Available · 1 slot Q2",
   },
   {
     description:
@@ -49,6 +65,8 @@ const services = [
     icon: "03",
     includes: ["Next.js", "Supabase", "Flutter", "Kotlin"],
     name: "Full-Stack Web & Mobile",
+    status: "available",
+    statusLabel: "Available · in-flight",
   },
   {
     description:
@@ -57,6 +75,8 @@ const services = [
     icon: "04",
     includes: ["Multi-agent architecture", "MCP wiring", "Model routing"],
     name: "Agent Harness Design",
+    status: "flagship",
+    statusLabel: "Flagship · always taking",
   },
   {
     description:
@@ -65,8 +85,16 @@ const services = [
     icon: "05",
     includes: ["Research-led discovery", "Rapid prototyping"],
     name: "Whatever the brief calls for",
+    status: "always",
+    statusLabel: "Always · intro call",
   },
 ];
+
+const STATUS_COLOR: Record<ServiceStatus, string> = {
+  always: "bg-accent-light",
+  available: "bg-result-green",
+  flagship: "bg-accent",
+};
 
 const caseStudies = [
   {
@@ -144,6 +172,11 @@ export default function AiPage() {
 
       <SectionDivider direction="light-to-dark" />
 
+      {/* PROGRAM HEADER — chapter slate that frames the two demos as
+          one feature program. Establishes "you are now entering the
+          theatre" before the first demo's cinematic curtain reveals. */}
+      <DemoProgramHeader />
+
       <DemoSection
         chapter="01"
         eyebrow="Demo · Local AI"
@@ -154,6 +187,10 @@ export default function AiPage() {
       >
         <LocalAiDemo />
       </DemoSection>
+
+      {/* INTERMISSION SEAM — a one-line marker between demos. Reads
+          as a credits-roll moment that signals "next feature loading". */}
+      <DemoIntermission />
 
       <DemoSection
         chapter="02"
@@ -184,74 +221,119 @@ function AiHero() {
         <ParallaxGhost className="ghost-text select-none">AI</ParallaxGhost>
       </div>
 
-      <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8">
-        {/* Slash + animated pulse — section identifier */}
-        <ScrollReveal direction="up">
-          <div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/60 px-4 py-1.5 backdrop-blur-md">
-            <span className="relative inline-flex h-2 w-2">
-              <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
-              <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-20 sm:px-6 sm:py-24 lg:gap-x-8 lg:py-28">
+        {/* TOP STRIP — status pill + chapter mark, same editorial top
+            strip used on every other hero. */}
+        <ScrollReveal className="col-span-12 self-start" direction="up">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/60 px-4 py-1.5 backdrop-blur-md">
+              <span className="relative inline-flex h-2 w-2">
+                <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+                <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+              </span>
+              <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+                /ai · what I build
+              </span>
             </span>
-            <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
-              /ai · what I build
+            <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+              Chapter 02 · AI
+            </span>
+          </div>
+        </ScrollReveal>
+
+        {/* LEFT — stacked massive headline (cols 1–8 lg) */}
+        <div className="col-span-12 self-center lg:col-span-8">
+          <h1
+            className="font-semibold text-text-light"
+            style={{
+              fontSize: "clamp(3rem, 12vw, 10rem)",
+              letterSpacing: "-0.055em",
+              lineHeight: 0.88,
+            }}
+          >
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.14} duration={0.85}>
+                I build
+              </SplitText>
+            </span>
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.32} duration={0.85}>
+                AI that
+              </SplitText>
+            </span>
+            <span className="relative inline-block">
+              <span className="gradient-shift block">
+                <SplitText charDelay={0.025} delay={0.5} duration={0.85}>
+                  ships.
+                </SplitText>
+              </span>
+              <span
+                aria-hidden="true"
+                className="absolute -bottom-2 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"
+              />
+            </span>
+          </h1>
+
+          <ScrollReveal delay={0.46} direction="up">
+            <div className="mt-10 flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-10 bg-accent" />
+              <p className="font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
+                Multi-agent harnesses · automation · agents
+              </p>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal delay={0.54} direction="up">
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
+                Start a Project
+              </Button>
+              <Button
+                className="!px-8 !py-4 !text-base"
+                href="#built-and-shipped"
+                variant="ghost"
+              >
+                See Built &amp; Shipped
+              </Button>
+            </div>
+          </ScrollReveal>
+        </div>
+
+        {/* RIGHT — supporting prose + 3 marker stats as a mono spec
+            rail (cols 9–12 lg). Replaces the centered subtitle +
+            inline-marker-row that lived below the headline. */}
+        <div className="col-span-12 self-center lg:col-span-4">
+          <ScrollReveal delay={0.24} direction="up">
+            <p className="text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
+              Multi-agent harnesses and automation, wired into the
+              workflows you already run.
             </p>
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
 
-        <h1 className="hero-display-md mt-8 font-semibold">
-          <SplitText charDelay={0.03} delay={0.1} duration={0.8}>
-            {"I build AI that "}
-          </SplitText>
-          <span className="relative inline-block">
-            <span className="gradient-shift">ships.</span>
-            <span
-              aria-hidden="true"
-              className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-sm"
-            />
-          </span>
-        </h1>
-
-        <ScrollReveal delay={0.15} direction="up">
-          <p className="mt-10 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9">
-            Multi-agent harnesses and automation, wired into the workflows
-            you already run.
-          </p>
-        </ScrollReveal>
-
-        {/* Inline marker stats — three small fact pills */}
-        <ScrollReveal delay={0.22} direction="up">
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 font-mono text-xs uppercase tracking-[0.22em] text-text-light-muted">
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent">→</span>
-              3 Atlas products live
-            </span>
-            <span aria-hidden="true" className="h-3 w-px bg-border-light" />
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent">→</span>
-              48 hrs &rarr; 3 min reply time
-            </span>
-            <span aria-hidden="true" className="h-3 w-px bg-border-light" />
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent">→</span>
-              100+ pages digitized into QA
-            </span>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal delay={0.32} direction="up">
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-            <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
-              Start a Project
-            </Button>
-            <Button
-              className="!px-8 !py-4 !text-base"
-              href="#built-and-shipped"
-              variant="ghost"
-            >
-              See Built & Shipped
-            </Button>
-          </div>
-        </ScrollReveal>
+          <ScrollReveal delay={0.34} direction="up">
+            <ul className="mt-8 grid divide-y divide-border-light border-y border-border-light">
+              {[
+                { label: "Atlas products live", value: "3" },
+                { label: "Reply time", value: "48 hrs → 3 min" },
+                { label: "Pages digitized to QA", value: "100+" },
+              ].map((stat, index) => (
+                <li
+                  className="flex items-baseline justify-between gap-4 py-3"
+                  key={stat.label}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")} {stat.label}
+                  </span>
+                  <span className="font-mono text-[12.5px] font-semibold uppercase tracking-[0.18em] text-text-light">
+                    {stat.value}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   );
@@ -284,13 +366,28 @@ function ServicesSection() {
             viewport={{ amount: 0.2, once: true }}
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
           >
-            {/* LEFT 7 — index + service name + description */}
+            {/* LEFT 7 — index + service name + description + live status */}
             <div className="col-span-12 lg:col-span-7">
-              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
-                {service.icon} · Service
-              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                  {service.icon} · Service
+                </p>
+                {/* STATUS CHIP — pulse + label. Mirrors the availability
+                    panel on /contact (Engaged / Open slot / Always open). */}
+                <span className="inline-flex items-center gap-2 rounded-full border border-border-light bg-white/80 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-[0_1px_0_0_rgba(255,255,255,0.6)_inset]">
+                  <span className="relative inline-flex h-1.5 w-1.5">
+                    <span
+                      className={`absolute inset-0 animate-ping rounded-full ${STATUS_COLOR[service.status]}/60`}
+                    />
+                    <span
+                      className={`relative inline-block h-1.5 w-1.5 rounded-full ${STATUS_COLOR[service.status]}`}
+                    />
+                  </span>
+                  {service.statusLabel}
+                </span>
+              </div>
               <h3
-                className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+                className="mt-4 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
                 style={{
                   fontSize: "clamp(1.75rem, 4vw, 3rem)",
                   letterSpacing: "-0.035em",
@@ -341,75 +438,88 @@ function ServicesSection() {
 
 function CaseStudiesSection() {
   const reduce = useReducedMotion();
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Scroll-tied scatter: 3 case studies zig-zag on exit (odd indices
-  // drift left, even drift right), all fade 0.6 → 0.95.
-  const { scrollYProgress } = useScroll({
-    offset: ["start start", "end start"],
-    target: sectionRef,
-  });
-  const exitOpacity = useTransform(scrollYProgress, [0.6, 0.95], [1, 0]);
-  const exitLeft = useTransform(scrollYProgress, [0.6, 1], [0, -90]);
-  const exitRight = useTransform(scrollYProgress, [0.6, 1], [0, 90]);
 
   return (
-    <div ref={sectionRef}>
+    <div>
       <SectionHeader
         eyebrow="Built and shipped"
         title="Three case studies, with receipts."
       />
 
-      <div className="mt-12 grid gap-16">
-        {caseStudies.map((study, index) => {
-          const exitX = index % 2 === 0 ? exitLeft : exitRight;
-          return (
-          <motion.article
+      {/* Editorial timeline — each case study is a full-width indexed
+          row matching the /resume Experience ledger and home Process
+          band patterns. Hover gradient hairline ties the rows together. */}
+      <ol className="mt-14 grid divide-y divide-border-light border-y border-border-light">
+        {caseStudies.map((study, index) => (
+          <CaseStudyRow
+            body={study.body}
+            comparison={study.comparison}
+            eyebrow={study.eyebrow}
+            index={index}
             key={study.title}
-            style={
-              reduce ? undefined : { opacity: exitOpacity, x: exitX }
-            }
-          >
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-              {study.eyebrow}
-            </p>
-            <h3 className="mt-3 text-2xl font-semibold sm:text-3xl">
-              {study.title}
-            </h3>
-            <p className="mt-4 max-w-3xl text-base leading-7 text-text-light-muted">
-              {study.body}
-            </p>
-            <div className="mt-8">
-              <BeforeAfter
-                after={study.comparison.after}
-                before={study.comparison.before}
-              />
-            </div>
-          </motion.article>
-          );
-        })}
+            reduce={!!reduce}
+            title={study.title}
+          />
+        ))}
 
-        <motion.article
-          style={
-            reduce
-              ? undefined
-              : { opacity: exitOpacity, x: caseStudies.length % 2 === 0 ? exitLeft : exitRight }
-          }
+        {/* Third case study — Zapier + Guesty + Twilio (no BeforeAfter;
+            uses the wired-system visualization instead). */}
+        <motion.li
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          className="group relative grid grid-cols-12 gap-x-6 gap-y-6 py-14 sm:py-16"
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          transition={{
+            delay: caseStudies.length * 0.06,
+            duration: 0.6,
+            ease: easeOut,
+          }}
+          viewport={{ amount: 0.2, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
         >
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            03 · ThePrivateHotels · 2024
-          </p>
-          <h3 className="mt-3 text-2xl font-semibold sm:text-3xl">
-            Workflow Automation — Zapier + Guesty + Twilio
-          </h3>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-text-light-muted">
-            A connected automation layer using Zapier, Guesty API, and Twilio
-            API — replacing multi-hour coordination loops with automated
-            triggers and responses. Team focuses on decisions, not data
-            movement.
-          </p>
-          {/* Wired-system visualization */}
-          <div className="relative mt-8">
+          <div className="col-span-12 lg:col-span-7">
+            <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              03 · Case study
+            </p>
+            <h3
+              className="mt-4 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+              style={{
+                fontSize: "clamp(1.75rem, 4.5vw, 3rem)",
+                letterSpacing: "-0.04em",
+                lineHeight: 0.98,
+              }}
+            >
+              Workflow Automation — Zapier + Guesty + Twilio
+            </h3>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+              A connected automation layer using Zapier, Guesty API, and
+              Twilio API — replacing multi-hour coordination loops with
+              automated triggers and responses. Team focuses on decisions,
+              not data movement.
+            </p>
+          </div>
+          <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              Property
+            </p>
+            <p className="mt-2 font-mono text-sm text-text-light">
+              ThePrivateHotels · 2024
+            </p>
+            <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              Stack
+            </p>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {["Zapier", "Guesty API", "Twilio API"].map((tech) => (
+                <li
+                  className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted"
+                  key={tech}
+                >
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="col-span-12">
             <div className="flex flex-wrap items-center justify-center gap-3 sm:flex-nowrap sm:justify-between">
               {[
                 { label: "Zapier", role: "Trigger" },
@@ -421,7 +531,7 @@ function CaseStudiesSection() {
                   direction="up"
                   key={item.label}
                 >
-                  <div className="group flex items-center gap-3">
+                  <div className="flex items-center gap-3">
                     <div className="rounded-xl border border-accent/30 bg-[rgba(41,110,214,0.06)] px-5 py-4 text-center transition-[border-color,background] duration-300 hover:border-accent hover:bg-[rgba(41,110,214,0.12)]">
                       <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-accent">
                         {item.role}
@@ -443,25 +553,276 @@ function CaseStudiesSection() {
               ))}
             </div>
           </div>
-        </motion.article>
+
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+          />
+        </motion.li>
+      </ol>
+    </div>
+  );
+}
+
+/**
+ * Editorial case study row. Massive title + body on the left, mono
+ * spec rail (property + stack) on the right, BeforeAfter spanning
+ * full width below. Hover gradient hairline at the bottom of the row
+ * ties it into the surrounding divided-list.
+ */
+function CaseStudyRow({
+  body,
+  comparison,
+  eyebrow,
+  index,
+  reduce,
+  title,
+}: {
+  body: string;
+  comparison: (typeof caseStudies)[number]["comparison"];
+  eyebrow: string;
+  index: number;
+  reduce: boolean;
+  title: string;
+}) {
+  // Eyebrow comes in as "01 · ThePrivateHotels · 2024". Split into
+  // chapter index vs property+year for the spec rail.
+  const segments = eyebrow.split(" · ").map((s) => s.trim());
+  const propertyMeta = segments.slice(1).join(" · ");
+
+  return (
+    <motion.li
+      animate={reduce ? undefined : { opacity: 1, y: 0 }}
+      className="group relative grid grid-cols-12 gap-x-6 gap-y-6 py-14 sm:py-16"
+      initial={reduce ? false : { opacity: 0, y: 24 }}
+      transition={{
+        delay: index * 0.06,
+        duration: 0.6,
+        ease: easeOut,
+      }}
+      viewport={{ amount: 0.2, once: true }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+    >
+      <div className="col-span-12 lg:col-span-7">
+        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+          {String(index + 1).padStart(2, "0")} · Case study
+        </p>
+        <h3
+          className="mt-4 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+          style={{
+            fontSize: "clamp(1.75rem, 4.5vw, 3rem)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.98,
+          }}
+        >
+          {title}
+        </h3>
+        <p className="mt-5 max-w-2xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+          {body}
+        </p>
+      </div>
+      <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
+        <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          Property
+        </p>
+        <p className="mt-2 font-mono text-sm text-text-light">{propertyMeta}</p>
+        <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          Result
+        </p>
+        <p className="mt-2 text-base font-semibold leading-6 text-text-light sm:text-lg">
+          {comparison.after.metric}
+        </p>
+        <p className="mt-1 text-xs leading-5 text-text-light-muted">
+          {comparison.after.caption}
+        </p>
+      </div>
+
+      <div className="col-span-12 mt-2">
+        <BeforeAfter after={comparison.after} before={comparison.before} />
+      </div>
+
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+      />
+    </motion.li>
+  );
+}
+
+function AtlasGallerySection() {
+  const reduce = useReducedMotion();
+
+  // Use a darker palette for the editorial top strip but stay on the
+  // light page background (no curtain reveal — that's the DemoSection
+  // signature). This gives the Atlas portfolio the same THEATER
+  // HEADER treatment as the demos so the three feature sections read
+  // as one continuous program.
+  return (
+    <div>
+      {/* THEATER HEADER — chapter + headline left, oversized chapter
+          mark + live-status badge right. Anchors the Atlas gallery
+          like a feature in the program; DemoSection uses the exact
+          same shape on the dark band. */}
+      <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+        <motion.div
+          className="lg:max-w-3xl"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.55, ease: easeOut }}
+          viewport={{ amount: 0.3, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+        >
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              Atlas portfolio
+            </span>
+            <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-light-muted">
+              02 / 03
+            </span>
+          </div>
+          <h2
+            className="mt-5 font-semibold tracking-tight text-text-light"
+            style={{
+              fontSize: "clamp(2.25rem, 5.5vw, 4.25rem)",
+              letterSpacing: "-0.045em",
+              lineHeight: 0.95,
+            }}
+          >
+            What Atlas has shipped.
+          </h2>
+          <p className="mt-6 max-w-2xl text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+            Three products built end-to-end via the Atlas multi-agent
+            harness. The agents write the code and ship it; humans review
+            every PR.
+          </p>
+        </motion.div>
+
+        {/* RIGHT — oversized chapter mark + live-status badge */}
+        <motion.div
+          className="flex flex-row items-end gap-6 lg:flex-col lg:items-end"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          transition={{ delay: 0.15, duration: 0.55, ease: easeOut }}
+          viewport={{ amount: 0.3, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+        >
+          <span
+            className="font-semibold leading-none text-accent/30"
+            style={{
+              fontSize: "clamp(4.5rem, 9vw, 7.5rem)",
+              letterSpacing: "-0.06em",
+            }}
+          >
+            02
+          </span>
+          <LiveStatusBadge label="3 products · in motion" />
+        </motion.div>
+      </div>
+
+      {/* GALLERY — kept on the light bg with subtle editorial frame
+          elements (corner ticks + ambient accent line) to echo the
+          cinematic frame used by DemoSection without flipping the
+          background tone. */}
+      <div className="relative mt-12">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-2 -top-2 h-6 w-6 border-l-2 border-t-2 border-accent/35 sm:-left-3 sm:-top-3 sm:h-8 sm:w-8"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-2 -top-2 h-6 w-6 border-r-2 border-t-2 border-accent/35 sm:-right-3 sm:-top-3 sm:h-8 sm:w-8"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-2 -bottom-2 h-6 w-6 border-b-2 border-l-2 border-accent/35 sm:-left-3 sm:-bottom-3 sm:h-8 sm:w-8"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-2 -bottom-2 h-6 w-6 border-b-2 border-r-2 border-accent/35 sm:-right-3 sm:-bottom-3 sm:h-8 sm:w-8"
+        />
+        <AtlasGallery />
       </div>
     </div>
   );
 }
 
-function AtlasGallerySection() {
+/**
+ * Program header — sits on the dark band between the SectionDivider
+ * and the first DemoSection. Reads like a film slate: "PROGRAM ·
+ * Demos · 02 features". Tells the user the next two sections belong
+ * together as one feature program.
+ */
+function DemoProgramHeader() {
+  const reduce = useReducedMotion();
   return (
-    <div>
-      <SectionHeader
-        badge={<LiveStatusBadge label="3 products · in motion" />}
-        description="Three products built end-to-end via the Atlas multi-agent harness. The agents write the code and ship it; humans review every PR."
-        eyebrow="Atlas portfolio"
-        title="What Atlas has shipped."
-      />
-      <div className="mt-12">
-        <AtlasGallery />
+    <section className="relative overflow-hidden bg-bg-dark pb-10 pt-20 text-text-dark sm:pb-12 sm:pt-24">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.18)] pb-6"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.55, ease: easeOut }}
+          viewport={{ amount: 0.4, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+        >
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+            03 · Program
+          </span>
+          <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted">
+            02 features · Run in your browser
+          </span>
+          <span aria-hidden="true" className="hidden h-px flex-1 bg-[rgba(91,155,244,0.12)] sm:block" />
+          <h2
+            className="ml-auto font-semibold tracking-tight text-text-dark"
+            style={{
+              fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+              letterSpacing: "-0.025em",
+              lineHeight: 1,
+            }}
+          >
+            Now showing<span className="text-accent-light">.</span>
+          </h2>
+        </motion.div>
       </div>
-    </div>
+    </section>
+  );
+}
+
+/**
+ * Intermission seam — a thin accent band between the two demos with
+ * a centered "INTERMISSION · feature 02 of 02 loading" marker. Reads
+ * as a credits-roll beat that signals the next feature.
+ */
+function DemoIntermission() {
+  const reduce = useReducedMotion();
+  return (
+    <section
+      aria-hidden="true"
+      className="relative overflow-hidden bg-bg-dark py-10 text-text-dark sm:py-12"
+    >
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+        <motion.span
+          className="h-px flex-1 origin-left bg-gradient-to-r from-transparent via-accent-light/50 to-transparent"
+          initial={reduce ? false : { scaleX: 0 }}
+          transition={{ duration: 0.9, ease: easeOut }}
+          viewport={{ amount: 0.5, once: true }}
+          whileInView={reduce ? undefined : { scaleX: 1 }}
+        />
+        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(91,155,244,0.30)] bg-[rgba(15,23,42,0.6)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light backdrop-blur">
+          <span className="relative inline-flex h-1.5 w-1.5">
+            <span className="absolute inset-0 animate-ping rounded-full bg-accent-light/60" />
+            <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-accent-light" />
+          </span>
+          Intermission · Feature 02 / 02 loading
+        </span>
+        <motion.span
+          className="h-px flex-1 origin-right bg-gradient-to-l from-transparent via-accent-light/50 to-transparent"
+          initial={reduce ? false : { scaleX: 0 }}
+          transition={{ duration: 0.9, ease: easeOut }}
+          viewport={{ amount: 0.5, once: true }}
+          whileInView={reduce ? undefined : { scaleX: 1 }}
+        />
+      </div>
+    </section>
   );
 }
 
