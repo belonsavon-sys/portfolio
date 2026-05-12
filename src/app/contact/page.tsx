@@ -137,7 +137,7 @@ export default function ContactPage() {
             </span>
             <span aria-hidden="true" className="h-3 w-px bg-[rgba(91,155,244,0.25)]" />
             <span className="inline-flex items-center gap-2">
-              <span className="text-accent-light">→</span> Trilingual EN · ES · IT
+              <span className="text-accent-light">→</span> EN · ES · IT
             </span>
             <span aria-hidden="true" className="h-3 w-px bg-[rgba(91,155,244,0.25)]" />
             <span className="inline-flex items-center gap-2">
