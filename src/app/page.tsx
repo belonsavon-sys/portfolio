@@ -17,6 +17,7 @@ import {
   HeroAvatarFrame,
   LightGlassCard,
   LiveStatusBadge,
+  NowReading,
   ParallaxBackdrop,
   PhotoSlot,
   ScrollReveal,
@@ -78,7 +79,7 @@ export default function Home() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <Hero onOpenAbout={() => setAboutOpen(true)} />
 
-      <LightSection className="pt-16 sm:pt-24">
+      <LightSection className="pt-16 sm:pt-24" id="outcomes">
         <MetricsBand />
       </LightSection>
 
@@ -124,6 +125,15 @@ export default function Home() {
           <p key={paragraph}>{paragraph}</p>
         ))}
       </AboutModal>
+
+      <NowReading
+        sections={[
+          { id: "outcomes", index: "01", label: "Outcomes" },
+          { id: "work", index: "02", label: "Selected work" },
+          { id: "beyond", index: "03", label: "Beyond the code" },
+          { id: "stack", index: "04", label: "My stack" },
+        ]}
+      />
     </main>
   );
 }
@@ -460,7 +470,10 @@ function BeyondTheCodeBand() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-28">
+    <section
+      className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-28"
+      id="beyond"
+    >
       <ParallaxBackdrop>
         <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/18 blur-3xl" />
         <div className="absolute bottom-[-8rem] right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/14 blur-3xl" />
