@@ -1,21 +1,13 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import { useRef } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 
 type Work = {
   context: string;
   index: string;
   metric: string;
   metricLabel: string;
-  /** Where / when the metric was measured. Renders as a small mono
-   *  attribution line beneath the metric label so the number reads
-   *  as a verifiable claim, not a marketing figure. */
   source: string;
   status: "shipped" | "live" | "internal";
   tag: string;
@@ -99,67 +91,36 @@ const statusMeta: Record<
 
 export function SelectedWork() {
   const reduce = useReducedMotion();
-  const listRef = useRef<HTMLDivElement>(null);
-
-  // Scroll-tied scatter on exit: cards zig-zag — odd indices drift left,
-  // even indices drift right, all fade out as the section approaches
-  // the next one (BeyondTheCodeBand).
-  const { scrollYProgress } = useScroll({
-    offset: ["start start", "end start"],
-    target: listRef,
-  });
-  const exitOpacity = useTransform(scrollYProgress, [0.6, 0.95], [1, 0]);
-  const exitLeft = useTransform(scrollYProgress, [0.6, 1], [0, -90]);
-  const exitRight = useTransform(scrollYProgress, [0.6, 1], [0, 90]);
+  // First work expanded by default so users see real content immediately.
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
 
   return (
-    <div
-      className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 lg:gap-5"
-      ref={listRef}
-    >
+    <ol className="grid divide-y divide-border-light border-y border-border-light">
       {works.map((work, index) => {
+        const isOpen = expandedIndex === index;
         const meta = statusMeta[work.status];
-        const exitX = index % 2 === 0 ? exitLeft : exitRight;
         return (
-          <motion.div
-            key={work.title}
-            style={
-              reduce ? undefined : { opacity: exitOpacity, x: exitX }
-            }
-          >
-          <motion.article
-            className="group relative flex h-full flex-col gap-6 overflow-hidden rounded-3xl border border-border-light bg-white/75 p-7 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_28px_56px_-22px_rgba(41,110,214,0.22)] sm:p-8"
-            initial={reduce ? false : { opacity: 0, y: 18 }}
-            transition={{
-              delay: index * 0.06,
-              duration: 0.7,
-              ease: easeOut,
-            }}
-            viewport={{ amount: 0.25, once: true }}
-            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-          >
-            {/* TOP META — index, tag, status — all in one row */}
-            <div className="relative flex items-center gap-3">
+          <li key={work.title}>
+            <button
+              aria-controls={`work-panel-${index}`}
+              aria-expanded={isOpen}
+              className="group flex w-full items-center gap-3 py-5 text-left transition-colors duration-200 sm:py-6"
+              onClick={() => setExpandedIndex(isOpen ? null : index)}
+              type="button"
+            >
               <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
                 {work.index}
               </span>
-              <motion.span
+              <span
                 aria-hidden="true"
-                className="h-px flex-1 origin-left bg-border-light"
-                initial={reduce ? false : { scaleX: 0 }}
-                transition={{
-                  delay: index * 0.06 + 0.28,
-                  duration: 0.7,
-                  ease: easeOut,
-                }}
-                viewport={{ amount: 0.3, once: true }}
-                whileInView={reduce ? undefined : { scaleX: 1 }}
+                className="hidden h-px w-6 bg-border-light transition-colors duration-300 group-hover:bg-accent/60 sm:inline-block"
               />
               <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
                 {work.tag}
               </span>
+              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
               <span
-                className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] ${meta.text}`}
+                className={`hidden items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] sm:inline-flex ${meta.text}`}
               >
                 <span
                   className={`relative inline-flex h-1.5 w-1.5 rounded-full ${meta.dot}`}
@@ -172,79 +133,108 @@ export function SelectedWork() {
                 </span>
                 {meta.label}
               </span>
-            </div>
+              {/* Open/close chevron */}
+              <span
+                aria-hidden="true"
+                className={`ml-2 inline-flex h-7 w-7 items-center justify-center rounded-full border transition-[transform,border-color,background] duration-300 ${
+                  isOpen
+                    ? "rotate-45 border-accent bg-accent text-white"
+                    : "border-border-light bg-bg-light text-text-light-muted group-hover:border-accent group-hover:text-accent"
+                }`}
+              >
+                <svg
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </button>
 
-            {/* METRIC — editorial display, accent color, the visual anchor.
-                Attribution line below grounds the number in a place + time
-                so it reads as a verifiable claim. */}
-            <div className="relative">
-              <p
-                className="select-none font-bold leading-[0.95] tracking-tight text-accent"
+            {/* Title sits between the meta row and the expanding body */}
+            <button
+              className="group block w-full text-left"
+              onClick={() => setExpandedIndex(isOpen ? null : index)}
+              type="button"
+            >
+              <h3
+                className="-mt-2 font-semibold tracking-tight text-text-light transition-colors duration-200 group-hover:text-accent-deep"
                 style={{
-                  fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                  letterSpacing: "-0.04em",
+                  fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)",
+                  letterSpacing: "-0.035em",
+                  lineHeight: 1.05,
                 }}
               >
-                <motion.span
-                  className="inline-block"
-                  initial={
-                    reduce ? false : { clipPath: "inset(0 0 100% 0)", y: 14 }
-                  }
-                  transition={{
-                    delay: index * 0.06 + 0.42,
-                    duration: 0.85,
-                    ease: easeOut,
-                  }}
-                  viewport={{ amount: 0.3, once: true }}
-                  whileInView={
-                    reduce ? undefined : { clipPath: "inset(0 0 0 0)", y: 0 }
-                  }
-                >
-                  {work.metric}
-                </motion.span>
-              </p>
-              <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.24em] text-text-light-muted">
-                {work.metricLabel}
-              </p>
-              <p className="mt-1.5 font-mono text-[10px] tracking-[0.04em] text-text-light/55">
-                <span className="text-accent/70">↳</span> {work.source}
-              </p>
-            </div>
-
-            {/* TITLE — moved below the metric, smaller than the metric so the
-                metric does the heavy visual lifting. Title is reading-rank. */}
-            <div className="relative">
-              <h3 className="flex items-baseline gap-2 text-2xl font-semibold tracking-tight text-text-light sm:text-3xl">
-                <span className="transition-colors duration-200 group-hover:text-accent-deep">
-                  {work.title}
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="inline-block translate-x-0 text-base text-accent opacity-0 transition-[transform,opacity] duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100"
-                >
-                  ↗
-                </span>
+                {work.title}
               </h3>
-              <p className="mt-3 text-sm leading-6 text-text-light-muted">
-                {work.context}
-              </p>
-            </div>
+            </button>
 
-            {/* TECH FOOTER */}
-            <div className="relative mt-auto flex flex-wrap items-center gap-1.5">
-              {work.tech.map((t) => (
-                <span
-                  className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted transition-colors duration-200 group-hover:border-accent/30 group-hover:text-text-light"
-                  key={t}
+            <AnimatePresence initial={false}>
+              {isOpen ? (
+                <motion.div
+                  animate={reduce ? { height: "auto" } : { height: "auto", opacity: 1 }}
+                  className="overflow-hidden"
+                  exit={
+                    reduce
+                      ? { height: 0 }
+                      : { height: 0, opacity: 0 }
+                  }
+                  id={`work-panel-${index}`}
+                  initial={
+                    reduce
+                      ? { height: 0 }
+                      : { height: 0, opacity: 0 }
+                  }
+                  key="panel"
+                  transition={{ duration: 0.45, ease: easeOut }}
                 >
-                  {t}
-                </span>
-              ))}
-            </div>
-          </motion.article>
-          </motion.div>
+                  <div className="grid gap-8 pb-8 pt-6 lg:grid-cols-[minmax(0,360px)_1fr] lg:gap-12">
+                    {/* LEFT — big metric anchor */}
+                    <div>
+                      <p
+                        className="select-none font-bold leading-[0.95] tracking-tight text-accent"
+                        style={{
+                          fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+                          letterSpacing: "-0.04em",
+                        }}
+                      >
+                        {work.metric}
+                      </p>
+                      <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.24em] text-text-light-muted">
+                        {work.metricLabel}
+                      </p>
+                      <p className="mt-1.5 font-mono text-[10px] tracking-[0.04em] text-text-light/55">
+                        <span className="text-accent/70">↳</span> {work.source}
+                      </p>
+                    </div>
+
+                    {/* RIGHT — context + tech */}
+                    <div>
+                      <p className="text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+                        {work.context}
+                      </p>
+                      <div className="mt-6 flex flex-wrap items-center gap-1.5">
+                        {work.tech.map((t) => (
+                          <span
+                            className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted"
+                            key={t}
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </li>
         );
       })}
-    </div>
+    </ol>
   );
 }
