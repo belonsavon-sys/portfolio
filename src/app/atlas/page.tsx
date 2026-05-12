@@ -1,6 +1,8 @@
 import {
   AtlasGallery,
   AtlasHierarchy,
+  Button,
+  ChapterRail,
   LiveStatusBadge,
   ParallaxGhost,
 } from "@/components";
@@ -271,8 +273,119 @@ export default function AtlasPage() {
         <AtlasGallery />
       </AtlasSection>
 
-      {/* Trailing spacer — iter 238 injects how-it-ships + closing. */}
-      <div className="h-24" aria-hidden="true" />
+      {/* 04 · WORKFLOW */}
+      <AtlasSection
+        chapter="04"
+        eyebrow="Workflow"
+        id="workflow"
+        title="How it ships."
+      >
+        <ol className="grid divide-y divide-border-light border-y border-border-light">
+          {[
+            {
+              body: "CEO agent reads the brief. Within minutes it routes to the right C-suite agent (CFO scope, CMO voice, or both).",
+              verb: "Brief",
+            },
+            {
+              body: "A spec PR lands first — research, design choices, and acceptance criteria. Humans review the spec before any code is written.",
+              verb: "Spec",
+            },
+            {
+              body: "Manager agents break the approved spec into tickets. Field agents claim tickets, write code, run tests locally.",
+              verb: "Build",
+            },
+            {
+              body: "Implementation PR lands with the diff, the test results, and a Vercel preview URL. Human reviews + merges.",
+              verb: "Ship",
+            },
+            {
+              body: "Atlas monitors production logs. Incidents bubble up to manager agents and become tickets in the same loop.",
+              verb: "Operate",
+            },
+          ].map((step, index) => (
+            <li
+              className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-3 py-10 sm:py-12"
+              key={step.verb}
+            >
+              <div className="col-span-12 lg:col-span-8">
+                <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                  {String(index + 1).padStart(2, "0")} · Step
+                </p>
+                <h3
+                  className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+                  style={{
+                    fontSize: "clamp(3rem, 8vw, 6rem)",
+                    letterSpacing: "-0.05em",
+                    lineHeight: 0.95,
+                  }}
+                >
+                  {step.verb}
+                  <span className="text-accent">.</span>
+                </h3>
+              </div>
+              <div className="col-span-12 lg:col-span-4">
+                <p className="text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+                  {step.body}
+                </p>
+              </div>
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+              />
+            </li>
+          ))}
+        </ol>
+      </AtlasSection>
+
+      {/* CLOSING — sends readers deeper. */}
+      <section className="relative mt-20 pb-24" id="closing">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-8">
+            <div className="grid grid-cols-12 gap-x-6 gap-y-6 lg:gap-x-8">
+              <div className="col-span-12 lg:col-span-7">
+                <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+                  Dig deeper
+                </p>
+                <h3
+                  className="mt-3 font-semibold tracking-tight text-text-light"
+                  style={{
+                    fontSize: "clamp(1.5rem, 3vw, 2.1rem)",
+                    letterSpacing: "-0.03em",
+                    lineHeight: 1.05,
+                  }}
+                >
+                  Talk to me about Atlas.
+                </h3>
+                <p className="mt-3 max-w-xl text-base leading-7 text-text-light-muted">
+                  If you&apos;re shipping AI under PR review and you want
+                  the harness pattern in your stack — or you just want to
+                  ask questions — let&apos;s talk.
+                </p>
+              </div>
+              <div className="col-span-12 self-center lg:col-span-5">
+                <div className="flex flex-wrap gap-3">
+                  <Button arrow href="/contact">
+                    Get in Touch
+                  </Button>
+                  <Button href="/ai" variant="ghost">
+                    See live demos
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <ChapterRail
+        sections={[
+          { id: "hierarchy", index: "01", label: "Hierarchy" },
+          { id: "capabilities", index: "02", label: "Capabilities" },
+          { id: "products", index: "03", label: "Products" },
+          { id: "workflow", index: "04", label: "Workflow" },
+          { id: "closing", index: "05", label: "Talk to me" },
+        ]}
+      />
     </main>
   );
 }
