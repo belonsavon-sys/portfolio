@@ -1,6 +1,6 @@
 import { OG_CONTENT_TYPE, OG_SIZE, renderOgCard } from "@/components/og-card";
 
-export const alt = "Pierre Belon Savon — AI Engineer";
+export const alt = "AI · what I build — Pierre Belon Savon";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 export const runtime = "edge";
@@ -8,9 +8,9 @@ export const runtime = "edge";
 export default function OpenGraphImage() {
   return renderOgCard({
     description:
-      "The hotel I was hired to supervise now runs on AI systems I built. Co-architect of Atlas at Blackdoor.",
-    eyebrow: "AI Engineer · Trilingual · Ocean Shores, WA",
-    footer: ["Atlas · Blackdoor", "EN · ES · IT"],
+      "Multi-agent harnesses and automation, wired into the workflows you already run. Live demos, case studies, and the Atlas portfolio.",
+    eyebrow: "/ai · what I build",
+    footer: ["Atlas · Blackdoor", "Live demos", "Case studies"],
     headline: "I build AI that ships.",
   });
 }
