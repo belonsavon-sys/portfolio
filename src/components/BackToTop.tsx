@@ -1,19 +1,41 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+/**
+ * Back-to-top button. The conic ring around the button is now
+ * SCROLL-DRIVEN — fills from 0° to 360° as the user scrolls the
+ * page. Reads as "you are X% through" while serving its primary
+ * job (scroll to top).
+ */
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
+  const ringRef = useRef<HTMLSpanElement | null>(null);
   const reduce = useReducedMotion();
 
   useEffect(() => {
     function onScroll() {
+      const max = Math.max(
+        1,
+        document.documentElement.scrollHeight - window.innerHeight,
+      );
+      const progress = Math.min(1, Math.max(0, window.scrollY / max));
       setVisible(window.scrollY > 1200);
+      if (ringRef.current) {
+        ringRef.current.style.setProperty(
+          "--ring-fill",
+          `${Math.round(progress * 360)}deg`,
+        );
+      }
     }
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   function scrollTop() {
@@ -37,19 +59,22 @@ export function BackToTop() {
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           type="button"
         >
-          {/* Spinning ring */}
+          {/* Scroll-progress ring — conic gradient fills clockwise
+              from 0° to <ring-fill>°, where <ring-fill> tracks the
+              user's scroll position on the page. */}
           <span
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 rounded-full"
+            ref={ringRef}
             style={{
               background:
-                "conic-gradient(from var(--ring-angle, 0deg), rgba(41,110,214,0.3), transparent 40%, rgba(41,110,214,0.6) 100%)",
-              animation: "ring-rotate 8s linear infinite",
-              padding: "1px",
+                "conic-gradient(rgba(41,110,214,0.85) 0deg, rgba(41,110,214,0.85) var(--ring-fill, 0deg), rgba(41,110,214,0.12) var(--ring-fill, 0deg), rgba(41,110,214,0.12) 360deg)",
+              padding: "1.5px",
               WebkitMask:
                 "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
               WebkitMaskComposite: "xor",
               maskComposite: "exclude",
+              transition: "background 200ms ease",
             }}
           />
           <svg
