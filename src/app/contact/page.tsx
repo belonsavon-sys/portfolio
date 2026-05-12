@@ -57,6 +57,37 @@ const contactLinks: ContactCardConfig[] = [
 
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+const engagementTypes = [
+  {
+    description:
+      "Senior AI Engineer / Founding Engineer roles. Remote-first. I'll commit deeply to one team's mission.",
+    fit: "Long-term · Mission alignment",
+    label: "Full-time role",
+    shape: "Permanent",
+  },
+  {
+    description:
+      "End-to-end product builds — automation systems, chatbots, agent harnesses. Idea to deployed.",
+    fit: "Scoped · 4–12 weeks",
+    label: "Freelance build",
+    shape: "Project",
+  },
+  {
+    description:
+      "Agent harness design, AI strategy for ops-heavy businesses. I review your architecture, suggest the cuts.",
+    fit: "1–2 day intensive · Async follow-up",
+    label: "Advisory",
+    shape: "Consult",
+  },
+  {
+    description:
+      "Pair with your team on a hard problem. Same loop I run at Blackdoor — research, build, ship under PR review.",
+    fit: "Embedded · 2–6 weeks",
+    label: "Co-build",
+    shape: "Pairing",
+  },
+];
+
 const pipelineSteps = [
   {
     body: "Within 24 hours. I confirm the scope, ask any clarifying questions, and propose a time to talk if there's a fit.",
@@ -397,7 +428,81 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Trailing spacer — iters 185–186 add engagements + availability. */}
+      {/* ENGAGEMENTS — datasheet of commitment shapes Pierre takes on.
+          Mono header (~/engagements · 04 shapes) + indexed rows.
+          Distinct from /ai's services (those are WHAT I build);
+          this answers HOW we work together. */}
+      <section className="relative mt-24" id="engagements">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              03 · Engagement shapes
+            </span>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <h2
+              className="font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              }}
+            >
+              How we work together.
+            </h2>
+          </div>
+
+          <div className="mt-10 overflow-hidden rounded-xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.55)] backdrop-blur-sm">
+            <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+              <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+              <span>~/engagements</span>
+              <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.20)]" />
+              <span className="text-text-dark-muted">
+                {engagementTypes.length} shapes
+              </span>
+            </div>
+            <ul className="grid divide-y divide-[rgba(91,155,244,0.14)] md:grid-cols-2 md:divide-x md:divide-y-0">
+              {engagementTypes.map((engagement, index) => (
+                <li
+                  className="group relative px-6 py-7 transition-colors duration-200 hover:bg-[rgba(91,155,244,0.06)] sm:px-7 sm:py-8"
+                  key={engagement.label}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-0 top-7 h-[calc(100%-3.5rem)] w-0.5 bg-accent-light/45"
+                  />
+                  <p className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                    <span className="text-text-dark-muted/60">//</span>
+                    <span>
+                      {String(index + 1).padStart(2, "0")} · {engagement.shape}
+                    </span>
+                    <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.16)]" />
+                  </p>
+
+                  <h3
+                    className="mt-4 font-semibold tracking-tight text-text-dark transition-colors duration-300 group-hover:text-accent-light"
+                    style={{
+                      fontSize: "clamp(1.5rem, 3.2vw, 2.1rem)",
+                      letterSpacing: "-0.03em",
+                      lineHeight: 1.04,
+                    }}
+                  >
+                    {engagement.label}
+                  </h3>
+                  <p className="mt-3 text-base leading-7 text-text-dark-muted">
+                    {engagement.description}
+                  </p>
+                  <p className="mt-5 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light/70">
+                    <span aria-hidden="true">→</span>
+                    {engagement.fit}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Trailing spacer — iter-186 adds availability. */}
       <div className="h-24" aria-hidden="true" />
     </main>
   );
