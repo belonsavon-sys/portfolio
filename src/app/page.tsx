@@ -302,98 +302,132 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
     <section className="relative overflow-hidden" ref={heroRef}>
       <CursorHalo />
 
-
       {/* Floating accent labels — desktop-only decoration */}
       <FloatingHeroLabels />
 
       <motion.div
-        className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-7xl flex-col items-center justify-center px-4 py-24 text-center sm:px-6 sm:py-28 lg:px-8"
+        className="relative mx-auto grid min-h-[calc(100vh-72px)] w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24"
         style={reduce ? undefined : { opacity: heroOpacity, y: heroY }}
       >
+        {/* TOP STRIP — editorial kicker pinned to the top-left margin */}
         <motion.div
+          className="col-span-12 flex flex-wrap items-center gap-3 self-start"
+          {...fadeUp(0.04)}
+        >
+          <LiveStatusBadge label="Currently shipping · Atlas v3" />
+          <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+            01 / Welcome
+          </span>
+        </motion.div>
+
+        {/* LEFT — oversized typographic name + tagline + CTAs (cols 1–7 on lg) */}
+        <div className="col-span-12 self-center lg:col-span-7">
+          {/* Greeting (rotates EN · ES · IT) */}
+          <motion.p
+            className="font-mono text-base font-medium tracking-tight text-text-light/55 sm:text-lg"
+            {...fadeUp(0.1)}
+          >
+            <GreetingRotator />
+          </motion.p>
+
+          {/* MASSIVE name — stacked across 3 lines, hard-bound left, breaks the grid on lg */}
+          <h1
+            className="mt-2 font-semibold text-text-light"
+            style={{
+              fontSize: "clamp(3rem, 12vw, 10.5rem)",
+              letterSpacing: "-0.055em",
+              lineHeight: 0.86,
+            }}
+          >
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.18} duration={0.85}>
+                Pierre
+              </SplitText>
+            </span>
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.36} duration={0.85}>
+                Belon
+              </SplitText>
+            </span>
+            <span className="gradient-shift block">
+              <SplitText charDelay={0.025} delay={0.52} duration={0.85}>
+                Savon.
+              </SplitText>
+            </span>
+          </h1>
+
+          {/* Mono kicker right below the name — editorial role tag */}
+          <motion.div
+            className="mt-8 flex items-center gap-3"
+            {...fadeUp(0.36)}
+          >
+            <span
+              aria-hidden="true"
+              className="h-px w-10 origin-left bg-accent"
+            />
+            <span className="font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
+              AI for operations-heavy businesses
+            </span>
+          </motion.div>
+
+          {/* Description */}
+          <motion.p
+            className="mt-6 max-w-2xl text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9"
+            {...fadeUp(0.42)}
+          >
+            The hotel I was hired to supervise now runs on AI systems I built.
+            At Blackdoor, I co-architect Atlas — a multi-level agent harness
+            shipping real products end-to-end.
+          </motion.p>
+
+          {/* CTAs */}
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            {[
+              <Button
+                arrow
+                className="!px-8 !py-4 !text-base"
+                href="/ai"
+                key="see-work"
+              >
+                See the work
+              </Button>,
+              <Button
+                className="!px-8 !py-4 !text-base"
+                href="/resume"
+                key="read-resume"
+                variant="ghost"
+              >
+                Read the résumé
+              </Button>,
+            ].map((cta, index) => (
+              <motion.div
+                animate={reduce ? undefined : { opacity: 1, y: 0 }}
+                initial={reduce ? false : { opacity: 0, y: 18 }}
+                key={cta.key}
+                transition={{
+                  delay: 0.5 + index * 0.1,
+                  duration: 0.55,
+                  ease: easeOut,
+                }}
+              >
+                {cta}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT — avatar, justified to the right edge on lg (cols 8–12) */}
+        <motion.div
+          className="col-span-12 flex justify-center self-center lg:col-span-5 lg:justify-end"
           style={reduce ? undefined : { scale: avatarScale, y: avatarY }}
         >
           <HeroAvatarFrame onClick={onOpenAbout} src="/avatar-photo.png" />
         </motion.div>
 
-        <motion.div {...fadeUp(0.06)}>
-          <LiveStatusBadge label="Currently shipping · Atlas v3" />
-        </motion.div>
-
-        <motion.h1
-          className="mt-8 flex flex-col items-center gap-2 text-text-light"
-          {...fadeUp(0.08)}
-        >
-          <span className="font-mono text-2xl font-medium tracking-tight text-text-light/70 sm:text-3xl lg:text-4xl">
-            <GreetingRotator />
-          </span>
-          <span className="hero-display gradient-shift font-semibold">
-            <SplitText charDelay={0.035} delay={0.15} duration={0.85}>
-              Pierre Belon Savon
-            </SplitText>
-          </span>
-        </motion.h1>
-
+        {/* METRIC RIBBON — full-width, left-aligned, 01/02/03 editorial numbering */}
         <motion.div
-          aria-hidden="true"
-          animate={{ scaleX: 1 }}
-          className="mt-8 h-[3px] w-32 origin-center rounded-full bg-gradient-to-r from-transparent via-accent to-transparent"
-          initial={reduce ? { scaleX: 1 } : { scaleX: 0 }}
-          transition={{ delay: 0.55, duration: 0.55, ease: "easeOut" }}
-        />
-
-        <motion.p
-          className="mt-6 font-mono text-xs uppercase tracking-[0.28em] text-accent"
-          {...fadeUp(0.16)}
-        >
-          AI for operations-heavy businesses
-        </motion.p>
-
-        <motion.p
-          className="mt-6 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-2xl sm:leading-9"
-          {...fadeUp(0.22)}
-        >
-          The hotel I was hired to supervise now runs on AI systems I built.
-          At Blackdoor, I co-architect Atlas — a multi-level agent harness
-          shipping real products end-to-end.
-        </motion.p>
-
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-          {[
-            <Button
-              arrow
-              className="!px-8 !py-4 !text-base"
-              href="/ai"
-              key="see-work"
-            >
-              See the work
-            </Button>,
-            <Button
-              className="!px-8 !py-4 !text-base"
-              href="/resume"
-              key="read-resume"
-              variant="ghost"
-            >
-              Read the résumé
-            </Button>,
-          ].map((cta, index) => (
-            <motion.div
-              animate={reduce ? undefined : { opacity: 1, y: 0 }}
-              initial={reduce ? false : { opacity: 0, y: 18 }}
-              key={cta.key}
-              transition={{
-                delay: 0.32 + index * 0.1,
-                duration: 0.55,
-                ease: easeOut,
-              }}
-            >
-              {cta}
-            </motion.div>
-          ))}
-        </div>
-
-        <motion.div
-          className="mt-16 grid w-full max-w-4xl gap-4 sm:grid-cols-3"
+          className="col-span-12 mt-6 grid gap-x-6 gap-y-8 border-t border-border-light pt-10 sm:grid-cols-3"
           style={
             reduce ? undefined : { opacity: bottomZoneOpacity, y: bottomZoneY }
           }
@@ -401,43 +435,46 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           {heroMetrics.map((m, index) => (
             <motion.div
               animate={reduce ? undefined : { opacity: 1, y: 0 }}
+              className="text-left"
               initial={reduce ? false : { opacity: 0, y: 24 }}
               key={m.label}
               transition={{
-                delay: 0.44 + index * 0.1,
+                delay: 0.62 + index * 0.1,
                 duration: 0.6,
                 ease: easeOut,
               }}
             >
-              <LightGlassCard
-                className="group relative px-5 py-5 text-left"
-                hoverable={false}
+              <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+                {`0${index + 1}`} · {m.label}
+              </p>
+              <p className="mt-3 font-semibold tracking-tight text-text-light"
+                 style={{
+                   fontSize: "clamp(2rem, 4.5vw, 3.25rem)",
+                   letterSpacing: "-0.035em",
+                   lineHeight: 1,
+                 }}
               >
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-                  {m.label}
-                </p>
-                <p className="mt-3 text-2xl font-semibold tracking-tight text-text-light sm:text-3xl">
-                  {m.valuePrefix ? (
-                    <span className="text-text-light/40 text-base sm:text-lg font-mono">
-                      {m.valuePrefix}
-                    </span>
-                  ) : null}
-                  <AnimatedCounter
-                    delay={index * 0.1}
-                    suffix={m.suffix}
-                    to={m.to}
-                  />
-                </p>
-                <p className="mt-2 text-xs leading-5 text-text-light-muted">
-                  {m.context}
-                </p>
-              </LightGlassCard>
+                {m.valuePrefix ? (
+                  <span className="font-mono text-base text-text-light/40 sm:text-lg">
+                    {m.valuePrefix}
+                  </span>
+                ) : null}
+                <AnimatedCounter
+                  delay={index * 0.1}
+                  suffix={m.suffix}
+                  to={m.to}
+                />
+              </p>
+              <p className="mt-3 text-xs leading-5 text-text-light-muted">
+                {m.context}
+              </p>
             </motion.div>
           ))}
         </motion.div>
 
+        {/* CHIP STRIP — left-aligned */}
         <motion.div
-          className="mt-16 flex flex-wrap items-center justify-center gap-2.5"
+          className="col-span-12 flex flex-wrap items-center gap-2.5"
           style={
             reduce ? undefined : { opacity: bottomZoneOpacity, y: bottomZoneY }
           }
@@ -453,7 +490,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               initial={reduce ? false : { opacity: 0, y: 12 }}
               key={role}
               transition={{
-                delay: 0.55 + index * 0.08,
+                delay: 0.92 + index * 0.08,
                 duration: 0.55,
                 ease: easeOut,
               }}
@@ -464,17 +501,18 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           ))}
         </motion.div>
 
+        {/* SCROLL CUE — left-aligned, anchored to lower-left margin */}
         <motion.a
           aria-label="Scroll to live status"
-          className="group/cue mt-20 hidden flex-col items-center gap-3 sm:flex"
+          className="group/cue col-span-12 hidden flex-row items-center gap-3 self-end sm:flex"
           href="#work"
-          {...fadeUp(0.7)}
+          {...fadeUp(1.1)}
         >
+          <span className="relative h-px w-10 overflow-hidden bg-gradient-to-r from-border-light via-accent to-transparent transition-colors duration-200 group-hover/cue:via-accent">
+            <span className="scroll-cue-dot absolute left-0 top-1/2 h-px w-2 -translate-y-1/2 bg-accent" />
+          </span>
           <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-text-light-muted/60 transition-colors duration-200 group-hover/cue:text-accent">
             Scroll
-          </span>
-          <span className="relative h-10 w-px overflow-hidden bg-gradient-to-b from-transparent via-border-light to-transparent transition-colors duration-200 group-hover/cue:via-accent">
-            <span className="scroll-cue-dot absolute left-1/2 top-0 h-2 w-px -translate-x-1/2 bg-accent" />
           </span>
         </motion.a>
       </motion.div>
