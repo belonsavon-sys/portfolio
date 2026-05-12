@@ -90,7 +90,9 @@ const projects: ProjectEntry[] = [
     ],
     name: "Workout App",
     scope: "End-to-end, personal",
+    shipped: "2025",
     stack: ["Next.js", "React", "Supabase", "Vercel"],
+    status: "active",
   },
   {
     bullets: [
@@ -99,7 +101,9 @@ const projects: ProjectEntry[] = [
     ],
     name: "Personal Budgeting App",
     scope: "End-to-end, personal",
+    shipped: "2025",
     stack: ["Next.js", "Supabase", "AI advisor"],
+    status: "active",
   },
   {
     bullets: [
@@ -107,7 +111,9 @@ const projects: ProjectEntry[] = [
     ],
     name: "Daily Market & News Automation",
     scope: "Personal",
+    shipped: "2024",
     stack: ["ChatGPT", "Google Calendar API"],
+    status: "active",
   },
 ];
 
@@ -164,6 +170,89 @@ const languages = ["English", "Spanish", "Italian"];
 
 const easeOutCurve = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+/**
+ * Years between Apr 2024 (Pierre's first AI-shipping role) and now.
+ * Rounded to one decimal so the figure ticks forward each month.
+ */
+function yearsBuilding(): string {
+  const start = new Date("2024-04-01T00:00:00Z").getTime();
+  const diffYears = (Date.now() - start) / (365.25 * 24 * 60 * 60 * 1000);
+  return diffYears.toFixed(1);
+}
+
+/**
+ * Bold-emphasize metric-bearing substrings inside an Experience or
+ * Project bullet. Recruiters scan bullets quickly — the numbers
+ * are the proof, so they get visual weight.
+ *
+ * Matched patterns:
+ *   - "48 hours", "3 minutes", "20 min", "6 months"
+ *   - "100+ pages", "6 staff", "3 products"
+ *   - "top 10%", "5-star"
+ *   - "<3 min", "98%"
+ *   - "Error-free", "Travelers' Choice", "Premier"
+ */
+function highlightMetrics(text: string): React.ReactNode[] {
+  const patterns = [
+    // Time durations and counts with units.
+    /\b\d+(?:\.\d+)?\s*(?:hours?|hrs?|minutes?|mins?|months?|seconds?|secs?|weeks?|days?|years?)\b/gi,
+    // Counts with a "+" suffix or counts with units like staff/pages.
+    /\b\d+\+?\s*(?:pages?|staff|products?|properties|reviews?|companies?|projects?|languages?)\b/gi,
+    // Standalone percentages or ratings.
+    /\b(?:top\s+)?\d+(?:\.\d+)?%|\b\d+-star|\d+\/\d+/gi,
+    // Headline brand markers earned at ThePrivateHotels.
+    /\b(?:Airbnb Guest Favorites?|Travelers' Choice(?:\s+Award)?|VRBO Premier(?: Partner)?)\b/g,
+    // Punctual qualitative wins.
+    /\bError-free\b/g,
+    // Money-like values.
+    /\$\d[\d,]*(?:\.\d+)?\b/g,
+    // Generic "<X min" / "<X hours" patterns.
+    /<\s*\d+(?:\.\d+)?\s*(?:hours?|hrs?|minutes?|mins?|s)\b/gi,
+  ];
+
+  // Build a flat list of match ranges, dedupe overlaps by keeping
+  // the earliest match per index.
+  type Range = { end: number; start: number };
+  const ranges: Range[] = [];
+  for (const pattern of patterns) {
+    pattern.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    while ((m = pattern.exec(text)) !== null) {
+      ranges.push({ end: m.index + m[0].length, start: m.index });
+      if (m[0].length === 0) pattern.lastIndex += 1;
+    }
+  }
+  ranges.sort((a, b) => a.start - b.start || b.end - a.end);
+  const merged: Range[] = [];
+  for (const r of ranges) {
+    const last = merged[merged.length - 1];
+    if (last && r.start < last.end) continue;
+    merged.push(r);
+  }
+
+  if (merged.length === 0) return [text];
+
+  const out: React.ReactNode[] = [];
+  let cursor = 0;
+  for (let i = 0; i < merged.length; i += 1) {
+    const range = merged[i];
+    if (range.start > cursor) {
+      out.push(text.slice(cursor, range.start));
+    }
+    out.push(
+      <strong
+        className="font-semibold text-text-light"
+        key={`m-${range.start}`}
+      >
+        {text.slice(range.start, range.end)}
+      </strong>,
+    );
+    cursor = range.end;
+  }
+  if (cursor < text.length) out.push(text.slice(cursor));
+  return out;
+}
+
 type ExperienceEntry = {
   bullets: string[];
   company: string;
@@ -179,7 +268,9 @@ type ProjectEntry = {
   bullets: string[];
   name: string;
   scope: string;
+  shipped: string;
   stack: string[];
+  status: "active" | "archived";
 };
 
 export default function ResumePage() {
@@ -236,9 +327,68 @@ export default function ResumePage() {
               >
                 Download Resume
               </Button>
+              <button
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-border-light bg-bg-light-2 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light-muted transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent no-print"
+                onClick={() => {
+                  if (typeof window !== "undefined") window.print();
+                }}
+                type="button"
+              >
+                <span aria-hidden="true" className="text-accent/70">
+                  ⌥
+                </span>
+                Print clean (browser)
+              </button>
               <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
                 PDF · One page · Recruiter-ready
               </p>
+            </motion.div>
+
+            {/* CAREER SNAPSHOT — live "building since" + key roll-ups. */}
+            <motion.div className="mt-8" {...asideEntry(0.18)}>
+              <DatasheetCard slug="~/career" meta="At a glance">
+                <ul className="grid">
+                  {[
+                    {
+                      key: "Building since",
+                      live: true,
+                      value: `${yearsBuilding()} yrs · Apr 2024`,
+                    },
+                    {
+                      key: "Roles now",
+                      live: false,
+                      value: "2 · Co-founder + Ops",
+                    },
+                    { key: "Languages", live: false, value: "EN · ES · IT" },
+                    { key: "Live products", live: false, value: "3 via Atlas" },
+                  ].map((row, index) => (
+                    <li
+                      className="flex items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                      key={row.key}
+                    >
+                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-mono text-[12.5px] leading-6 text-text-light-muted">
+                        {row.key}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="ml-auto h-px flex-1 bg-border-light"
+                      />
+                      <span className="inline-flex items-center gap-1.5 font-mono text-[12.5px] font-semibold leading-6 text-text-light">
+                        {row.live ? (
+                          <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+                            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                            <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                          </span>
+                        ) : null}
+                        {row.value}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </DatasheetCard>
             </motion.div>
 
             {/* CONTACT DATASHEET — mirrors the Technical Skills aesthetic:
@@ -538,9 +688,12 @@ function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
                 {String(index + 1).padStart(2, "0")} · Role
               </span>
               {entry.featured ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-[rgba(41,110,214,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-                  <span className="h-1 w-1 rounded-full bg-accent" />
-                  Now
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-result-green/40 bg-[rgba(16,185,129,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-result-green">
+                  <span className="relative inline-flex h-1.5 w-1.5">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                    <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                  </span>
+                  Now · Active
                 </span>
               ) : null}
             </div>
@@ -591,7 +744,7 @@ function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
                     &gt;
                   </span>
                   <span className="text-[13.5px] leading-7 text-text-light-muted sm:text-sm">
-                    {bullet}
+                    {highlightMetrics(bullet)}
                   </span>
                 </motion.li>
               ))}
@@ -724,6 +877,22 @@ function ProjectLedger({ entries }: { entries: ProjectEntry[] }) {
 
           <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
             <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              Status
+            </p>
+            <p className="mt-2 inline-flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-text-light">
+              {entry.status === "active" ? (
+                <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                  <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                </span>
+              ) : (
+                <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-text-light-muted" />
+              )}
+              {entry.status === "active" ? "Active" : "Archived"}
+              <span aria-hidden="true" className="text-text-light-muted/60">·</span>
+              <span className="text-text-light-muted">Shipped {entry.shipped}</span>
+            </p>
+            <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
               Scope
             </p>
             <p className="mt-2 text-sm leading-6 text-text-light">
