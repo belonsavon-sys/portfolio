@@ -9,6 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import {
+  AboutModal,
   AnimatedCounter,
   BentoStack,
   Button,
@@ -153,9 +154,32 @@ const detailedMetrics = [
 ];
 
 export default function Home() {
+  const [aboutOpen, setAboutOpen] = useState(false);
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
-      <Hero onOpenAbout={scrollToAbout} />
+      <Hero onOpenAbout={() => setAboutOpen(true)} />
+
+      {/* About reveal — fires from the HeroAvatarFrame click. Reuses
+          the AboutModal that lived as dead code until this iter. */}
+      <AboutModal
+        onClose={() => setAboutOpen(false)}
+        open={aboutOpen}
+        title="I ship what others would plan."
+      >
+        {aboutParagraphs.map((paragraph, index) => (
+          <p
+            className={
+              index === 0
+                ? "text-lg font-medium text-text-light sm:text-xl"
+                : undefined
+            }
+            key={paragraph}
+          >
+            {paragraph}
+          </p>
+        ))}
+      </AboutModal>
+
 
       <LightSection className="pt-20 sm:pt-28" id="about">
         <AboutBand />
