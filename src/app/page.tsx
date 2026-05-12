@@ -228,25 +228,87 @@ function ProcessBand() {
 
 function AboutBand() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_minmax(0,1.6fr)] lg:gap-12">
+    <div>
       <SectionHeader
         description="The two-minute version. The systems came from somebody who had to make payroll, not from a slide deck."
         eyebrow="About"
         size="md"
         title="I ship what others would plan."
       />
-      <div className="grid gap-5 text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
-        {aboutParagraphs.map((paragraph, index) => (
-          <p
-            className={
-              index === 0
-                ? "text-xl font-medium leading-8 text-text-light sm:text-2xl sm:leading-9"
-                : undefined
-            }
-            key={paragraph}
+
+      {/* PULL QUOTE — first paragraph becomes the editorial centerpiece.
+          Same display-typography treatment used on the page heroes;
+          the rest of the about copy reads as supporting prose underneath. */}
+      <figure className="mt-14 grid gap-10 lg:grid-cols-12 lg:gap-12">
+        <blockquote className="col-span-12 lg:col-span-8">
+          <span
+            aria-hidden="true"
+            className="block select-none font-bold leading-none text-accent/15"
+            style={{
+              fontSize: "clamp(5rem, 12vw, 11rem)",
+              letterSpacing: "-0.08em",
+              marginBottom: "-1.5rem",
+            }}
           >
-            {paragraph}
+            &ldquo;
+          </span>
+          <p
+            className="font-semibold tracking-tight text-text-light"
+            style={{
+              fontSize: "clamp(1.75rem, 4vw, 3rem)",
+              letterSpacing: "-0.035em",
+              lineHeight: 1.05,
+            }}
+          >
+            {aboutParagraphs[0]}
           </p>
+          <figcaption className="mt-8 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.32em] text-accent">
+            <span aria-hidden="true" className="h-px w-8 bg-accent" />
+            Pierre · in his own words
+          </figcaption>
+        </blockquote>
+
+        {/* FIELD NOTES — small datasheet sidebar pinned next to the
+            pull quote. Same ~/slug · meta pattern used everywhere. */}
+        <aside className="col-span-12 lg:col-span-4">
+          <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+              <span>~/about</span>
+              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+              <span className="text-text-light-muted">Field notes</span>
+            </div>
+            <ul className="grid">
+              {[
+                { key: "Role", value: "AI Engineer · Co-founder" },
+                { key: "At", value: "Blackdoor + ThePrivateHotels" },
+                { key: "Voice", value: "EN · ES · IT" },
+                { key: "Base", value: "Ocean Shores, WA" },
+              ].map((row, index) => (
+                <li
+                  className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                  key={row.key}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")} {row.key}
+                  </span>
+                  <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
+                    {row.value}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+      </figure>
+
+      {/* SUPPORTING PROSE — remaining paragraphs as body copy under
+          the pull quote. Constrained width so the line length stays
+          readable. */}
+      <div className="mt-12 grid gap-5 text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8 lg:max-w-3xl">
+        {aboutParagraphs.slice(1).map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
         ))}
       </div>
     </div>
