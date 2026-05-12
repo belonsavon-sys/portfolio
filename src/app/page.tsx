@@ -209,10 +209,76 @@ const detailedMetrics: DetailedMetric[] = [
   },
 ];
 
+// schema.org ItemList of Pierre's Selected Work — gives search
+// engines a structured catalog of the 4 projects shown on the
+// home page Work band. Mirrors the SelectedWork component data;
+// only the home page emits this LD (the component renders the
+// same projects in HTML).
+const selectedWorkLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      item: {
+        "@type": "CreativeWork",
+        about: "AI guest communications chatbot trained on company data",
+        creator: { "@type": "Person", name: "Pierre Belon Savon" },
+        datePublished: "2024",
+        name: "Guest Communications Chatbot",
+        publisher: { "@type": "Organization", name: "ThePrivateHotels" },
+      },
+      position: 1,
+    },
+    {
+      "@type": "ListItem",
+      item: {
+        "@type": "CreativeWork",
+        about: "100+ page operations manual digitized into a QA inspection system",
+        creator: { "@type": "Person", name: "Pierre Belon Savon" },
+        datePublished: "2024",
+        name: "Manual → Auditable QA System",
+        publisher: { "@type": "Organization", name: "ThePrivateHotels" },
+      },
+      position: 2,
+    },
+    {
+      "@type": "ListItem",
+      item: {
+        "@type": "SoftwareApplication",
+        about: "Multi-level autonomous agent harness shipping real products",
+        applicationCategory: "DeveloperApplication",
+        creator: { "@type": "Organization", name: "Blackdoor" },
+        datePublished: "2025",
+        name: "Atlas — Agent Architecture",
+      },
+      position: 3,
+    },
+    {
+      "@type": "ListItem",
+      item: {
+        "@type": "CreativeWork",
+        about: "Zapier + Guesty + Twilio orchestration replacing manual coordination",
+        creator: { "@type": "Person", name: "Pierre Belon Savon" },
+        datePublished: "2024",
+        name: "Connected Automation Layer",
+        publisher: { "@type": "Organization", name: "ThePrivateHotels" },
+      },
+      position: 4,
+    },
+  ],
+  name: "Selected Work — Pierre Belon Savon",
+  numberOfItems: 4,
+};
+
 export default function Home() {
   const [aboutOpen, setAboutOpen] = useState(false);
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
+      <script
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(selectedWorkLd) }}
+        type="application/ld+json"
+      />
       <Hero onOpenAbout={() => setAboutOpen(true)} />
 
       {/* About reveal — fires from the HeroAvatarFrame click. Reuses
