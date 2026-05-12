@@ -1,5 +1,44 @@
 import { AtlasHierarchy, ParallaxGhost } from "@/components";
 
+const CAPABILITIES = [
+  {
+    detail:
+      "Reads briefs, pulls source docs, drafts specs before any code lands. Spec research is a separate PR; implementation is its own.",
+    label: "Research",
+    role: "First pass",
+  },
+  {
+    detail:
+      "Field agents pick tickets, write tests + code locally, run them, and only file a PR when the local suite is green.",
+    label: "Build",
+    role: "Implementation",
+  },
+  {
+    detail:
+      "PRs include the spec, the diff, and an auto-generated commit history. CI runs Vercel previews. Humans hit merge.",
+    label: "Ship",
+    role: "PR-driven",
+  },
+  {
+    detail:
+      "Every decision is governed. The audit log records which agent made what choice, on what input, with what model.",
+    label: "Govern",
+    role: "Audit trail",
+  },
+  {
+    detail:
+      "Atlas reads its own production logs, surfaces incidents to manager agents, and proposes follow-up tickets autonomously.",
+    label: "Operate",
+    role: "Self-monitoring",
+  },
+  {
+    detail:
+      "Same harness powers Blackdoor's three products AND the hotel ops chatbot at ThePrivateHotels. One codepath, two deployments.",
+    label: "Reuse",
+    role: "Cross-deploy",
+  },
+];
+
 const ATLAS_LAYERS = [
   {
     badge: "01",
@@ -155,7 +194,62 @@ export default function AtlasPage() {
         <AtlasHierarchy layers={ATLAS_LAYERS} />
       </AtlasSection>
 
-      {/* Trailing spacer — iters 236–238 inject sections here. */}
+      {/* 02 · CAPABILITIES */}
+      <AtlasSection
+        chapter="02"
+        eyebrow="Capabilities"
+        id="capabilities"
+        title="What it does."
+      >
+        <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+          <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+            <span>~/capabilities</span>
+            <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+            <span className="text-text-light-muted">
+              {CAPABILITIES.length} signals
+            </span>
+          </div>
+          <ul className="grid divide-y divide-border-light md:grid-cols-2 md:divide-x md:divide-y-0">
+            {CAPABILITIES.map((entry, index) => (
+              <li
+                className="group relative px-6 py-6 transition-colors duration-200 hover:bg-[rgba(41,110,214,0.04)] sm:px-7 sm:py-7"
+                key={entry.label}
+              >
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-0 top-6 h-[calc(100%-3rem)] w-0.5 bg-accent/50"
+                />
+                <p className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <span className="text-text-light-muted/60">//</span>
+                  <span>
+                    {String(index + 1).padStart(2, "0")} · {entry.role}
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="h-px flex-1 bg-[rgba(41,110,214,0.18)]"
+                  />
+                </p>
+                <h3
+                  className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+                  style={{
+                    fontSize: "clamp(1.5rem, 3vw, 2rem)",
+                    letterSpacing: "-0.03em",
+                    lineHeight: 1.04,
+                  }}
+                >
+                  {entry.label}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-text-light-muted sm:text-base sm:leading-7">
+                  {entry.detail}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </AtlasSection>
+
+      {/* Trailing spacer — iters 237–238 inject sections here. */}
       <div className="h-24" aria-hidden="true" />
     </main>
   );
