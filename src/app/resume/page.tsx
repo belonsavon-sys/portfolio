@@ -146,7 +146,7 @@ const education = [
   },
 ];
 
-const languages = ["English (native)", "Spanish (native)", "Italian (native)"];
+const languages = ["English", "Spanish", "Italian"];
 
 export default function ResumePage() {
   return (
@@ -251,7 +251,12 @@ export default function ResumePage() {
             </div>
 
             <div className="mt-8 border-t border-border-light pt-6">
-              <h2 className="text-lg font-semibold">Languages</h2>
+              <div className="flex items-baseline justify-between gap-3">
+                <h2 className="text-lg font-semibold">Languages</h2>
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                  All native
+                </p>
+              </div>
               <ul className="mt-4 grid gap-2 text-sm text-text-light-muted">
                 {languages.map((language) => (
                   <li key={language}>{language}</li>
