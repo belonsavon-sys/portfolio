@@ -24,6 +24,27 @@ const navItems: Array<{ chapter: string; href: string; label: string }> = [
   { chapter: "05", href: "/contact", label: "Get in Touch" },
 ];
 
+const moreNavItems: Array<{ chapter: string; description: string; href: string; label: string }> = [
+  {
+    chapter: "06",
+    description: "What I'm doing this week",
+    href: "/now",
+    label: "Now",
+  },
+  {
+    chapter: "07",
+    description: "Stack with reasons",
+    href: "/uses",
+    label: "Uses",
+  },
+  {
+    chapter: "08",
+    description: "The multi-agent harness",
+    href: "/atlas",
+    label: "Atlas",
+  },
+];
+
 type HeaderLink = {
   Icon: (props: { className?: string }) => React.ReactNode;
   href: string;
@@ -65,8 +86,36 @@ function isActive(currentPath: string, navHref: string) {
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const [scrolled, setScrolled] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const reduce = useReducedMotion();
   const navRef = useRef<HTMLElement>(null);
+  const moreRef = useRef<HTMLDivElement>(null);
+
+  // Close the More flyout on outside click or Escape.
+  useEffect(() => {
+    if (!moreOpen) return;
+    function onClick(event: MouseEvent) {
+      if (!moreRef.current) return;
+      if (event.target instanceof Node && moreRef.current.contains(event.target)) {
+        return;
+      }
+      setMoreOpen(false);
+    }
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setMoreOpen(false);
+    }
+    window.addEventListener("click", onClick);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("click", onClick);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [moreOpen]);
+
+  // Close the More flyout on route change.
+  useEffect(() => {
+    setMoreOpen(false);
+  }, [pathname]);
 
   // Scroll-driven backdrop saturation + blur ramp on the nav pill.
   // Maps scrollY [0, 600] -> blur [4px, 14px] and saturate [1, 1.5].
@@ -161,6 +210,87 @@ export function SiteHeader() {
                 <Icon className="h-4 w-4 transition-transform duration-200 ease-out group-hover/icon:-translate-y-0.5" />
               </a>
             ))}
+          </div>
+
+          {/* MORE pill — surfaces the secondary routes (/now, /uses,
+              /atlas) that don't fit in the primary 5-item nav. */}
+          <span
+            aria-hidden="true"
+            className="mx-1 hidden h-6 w-px bg-border-light sm:inline-block"
+          />
+          <div className="relative hidden sm:block" ref={moreRef}>
+            <button
+              aria-expanded={moreOpen}
+              aria-haspopup="menu"
+              aria-label="More routes"
+              className={`flex h-9 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-text-light transition-colors duration-150 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
+                moreOpen ? "text-accent" : ""
+              }`}
+              onClick={() => setMoreOpen((v) => !v)}
+              type="button"
+            >
+              <span>More</span>
+              <svg
+                aria-hidden="true"
+                className={`h-3 w-3 transition-transform duration-200 ${moreOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </button>
+
+            {moreOpen ? (
+              <div
+                aria-label="Secondary routes"
+                className="absolute right-0 top-full z-50 mt-3 w-72 overflow-hidden rounded-xl border border-border-light bg-white shadow-[0_24px_72px_-24px_rgba(15,23,42,0.35)]"
+                role="menu"
+              >
+                <ul className="grid">
+                  {moreNavItems.map((item) => {
+                    const active = isActive(pathname, item.href);
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          aria-current={active ? "page" : undefined}
+                          className={`group/more flex items-baseline gap-3 border-t border-border-light px-4 py-3 transition-colors duration-200 first:border-t-0 hover:bg-[rgba(41,110,214,0.06)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-accent ${
+                            active ? "bg-[rgba(41,110,214,0.06)]" : ""
+                          }`}
+                          href={item.href}
+                          role="menuitem"
+                        >
+                          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                            {item.chapter}
+                          </span>
+                          <span className="flex-1">
+                            <span
+                              className={`block text-sm font-semibold transition-colors duration-200 ${
+                                active ? "text-accent-deep" : "text-text-light group-hover/more:text-accent-deep"
+                              }`}
+                            >
+                              {item.label}
+                            </span>
+                            <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                              {item.description}
+                            </span>
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            className="text-accent-light/70 transition-transform duration-200 group-hover/more:translate-x-0.5"
+                          >
+                            →
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ) : null}
           </div>
 
           {/* ⌘K palette opener — sits at the right end of the nav
