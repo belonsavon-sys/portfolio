@@ -1,6 +1,12 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { useRef } from "react";
 
 type Work = {
   context: string;
@@ -93,16 +99,37 @@ const statusMeta: Record<
 
 export function SelectedWork() {
   const reduce = useReducedMotion();
+  const listRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-tied scatter on exit: cards zig-zag — odd indices drift left,
+  // even indices drift right, all fade out as the section approaches
+  // the next one (BeyondTheCodeBand).
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end start"],
+    target: listRef,
+  });
+  const exitOpacity = useTransform(scrollYProgress, [0.6, 0.95], [1, 0]);
+  const exitLeft = useTransform(scrollYProgress, [0.6, 1], [0, -90]);
+  const exitRight = useTransform(scrollYProgress, [0.6, 1], [0, 90]);
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 lg:gap-5">
+    <div
+      className="grid gap-4 md:grid-cols-2 lg:grid-cols-1 lg:gap-5"
+      ref={listRef}
+    >
       {works.map((work, index) => {
         const meta = statusMeta[work.status];
+        const exitX = index % 2 === 0 ? exitLeft : exitRight;
         return (
-          <motion.article
-            className="group relative flex flex-col gap-6 overflow-hidden rounded-3xl border border-border-light bg-white/75 p-7 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_28px_56px_-22px_rgba(41,110,214,0.22)] sm:p-8"
-            initial={reduce ? false : { opacity: 0, y: 18 }}
+          <motion.div
             key={work.title}
+            style={
+              reduce ? undefined : { opacity: exitOpacity, x: exitX }
+            }
+          >
+          <motion.article
+            className="group relative flex h-full flex-col gap-6 overflow-hidden rounded-3xl border border-border-light bg-white/75 p-7 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_28px_56px_-22px_rgba(41,110,214,0.22)] sm:p-8"
+            initial={reduce ? false : { opacity: 0, y: 18 }}
             transition={{
               delay: index * 0.06,
               duration: 0.7,
@@ -215,6 +242,7 @@ export function SelectedWork() {
               ))}
             </div>
           </motion.article>
+          </motion.div>
         );
       })}
     </div>
