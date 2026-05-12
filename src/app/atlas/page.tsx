@@ -1,4 +1,9 @@
-import { AtlasHierarchy, ParallaxGhost } from "@/components";
+import {
+  AtlasGallery,
+  AtlasHierarchy,
+  LiveStatusBadge,
+  ParallaxGhost,
+} from "@/components";
 
 const CAPABILITIES = [
   {
@@ -249,7 +254,24 @@ export default function AtlasPage() {
         </div>
       </AtlasSection>
 
-      {/* Trailing spacer — iters 237–238 inject sections here. */}
+      {/* 03 · PRODUCTS */}
+      <AtlasSection
+        chapter="03"
+        eyebrow="Products"
+        id="products"
+        title="What Atlas has shipped."
+      >
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          <LiveStatusBadge label="3 products · in motion" />
+          <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+          <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-light-muted">
+            Built end-to-end · human PR review on every change
+          </p>
+        </div>
+        <AtlasGallery />
+      </AtlasSection>
+
+      {/* Trailing spacer — iter 238 injects how-it-ships + closing. */}
       <div className="h-24" aria-hidden="true" />
     </main>
   );
