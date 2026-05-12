@@ -36,9 +36,9 @@ export function SiteFooter() {
   return (
     <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
       <ParallaxBackdrop>
-        <div className="absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
-        <div className="absolute bottom-[-8rem] right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/14 blur-3xl" />
-        <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/14 blur-3xl" />
+        <div className="orb-drift-a absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
+        <div className="orb-drift-b absolute bottom-[-8rem] right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/14 blur-3xl" />
+        <div className="orb-drift-c absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/14 blur-3xl" />
       </ParallaxBackdrop>
 
       {/* Giant ghost text "LET'S TALK" — parallax-drifted, opacity-ramped */}

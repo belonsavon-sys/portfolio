@@ -358,6 +358,31 @@ a {
   }
 }
 
+/* Idle "breathing" drift for big blur orbs sitting behind hero sections.
+   Adds a slow translate so the bg has a heartbeat even when no one is
+   scrolling. Three variant durations + offsets so multiple orbs in the
+   same scene don't beat in lockstep. */
+@keyframes orb-drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(18px, -22px) scale(1.04); }
+}
+@keyframes orb-drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-24px, 16px) scale(0.96); }
+}
+@keyframes orb-drift-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(14px, 20px) scale(1.03); }
+}
+.orb-drift-a { animation: orb-drift-a 16s ease-in-out infinite; }
+.orb-drift-b { animation: orb-drift-b 19s ease-in-out infinite; }
+.orb-drift-c { animation: orb-drift-c 22s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .orb-drift-a,
+  .orb-drift-b,
+  .orb-drift-c { animation: none; }
+}
+
 .marquee-track {
   animation: marquee 32s linear infinite;
   will-change: transform;
