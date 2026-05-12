@@ -90,6 +90,81 @@ const CHAPTERS: ChapterShortcut[] = [
   },
 ];
 
+type DeepAnchor = {
+  description: string;
+  href: string;
+  title: string;
+};
+
+/**
+ * Hand-picked deep links — anchors inside chapters that are
+ * worth jumping to directly. Rendered as a second list below
+ * the primary 9 chapters in the ⌘K palette, filtered by the
+ * same query. No keyboard shortcut on these; click or Enter only.
+ */
+const DEEP_ANCHORS: DeepAnchor[] = [
+  {
+    description: "3 live products built end-to-end",
+    href: "/atlas#products",
+    title: "Atlas products",
+  },
+  {
+    description: "Research · Build · Ship · Govern · Operate · Reuse",
+    href: "/atlas#capabilities",
+    title: "Capabilities",
+  },
+  {
+    description: "How it ships — brief → spec → build → ship → operate",
+    href: "/atlas#workflow",
+    title: "Atlas workflow",
+  },
+  {
+    description: "Live commits, what just shipped",
+    href: "/now#shipped",
+    title: "Recent ships",
+  },
+  {
+    description: "Claude · Codex · Perplexity · MCP",
+    href: "/uses#ai-stack",
+    title: "AI stack",
+  },
+  {
+    description: "Vercel · GitHub · Supabase",
+    href: "/uses#infra",
+    title: "Infrastructure",
+  },
+  {
+    description: "Hotel comms · QA system",
+    href: "/ai#built-and-shipped",
+    title: "Built & shipped",
+  },
+  {
+    description: "Local AI · Atlas runtime",
+    href: "/ai#demos",
+    title: "Live demos",
+  },
+  {
+    description: "The company behind Atlas",
+    href: "/business#blackdoor",
+    title: "Blackdoor",
+  },
+  {
+    description: "Chaos → auditable systems",
+    href: "/business#process",
+    title: "Process design",
+  },
+  {
+    description: "Quick intake form",
+    href: "/contact#send",
+    title: "Send a message",
+  },
+  {
+    description: "The four cuts behind the build",
+    href: "/colophon#principles",
+    title: "Principles",
+  },
+];
+
 const META_SHORTCUTS: { key: string; label: string }[] = [
   { key: "⌘K", label: "Toggle palette" },
   { key: "?", label: "Toggle palette" },
@@ -127,6 +202,20 @@ export function KeyboardNav() {
         c.title.toLowerCase().includes(q) ||
         c.description.toLowerCase().includes(q) ||
         c.href.toLowerCase().includes(q),
+    );
+  }, [query]);
+
+  // Same filter against the deep-anchors list. With an empty query
+  // the palette shows everything; with a query both lists narrow
+  // together so the user can find any section in one keystroke.
+  const visibleAnchors = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return DEEP_ANCHORS;
+    return DEEP_ANCHORS.filter(
+      (a) =>
+        a.title.toLowerCase().includes(q) ||
+        a.description.toLowerCase().includes(q) ||
+        a.href.toLowerCase().includes(q),
     );
   }, [query]);
 
@@ -240,7 +329,9 @@ export function KeyboardNav() {
   }, [router, helpOpen]);
 
   function jumpToTopResult() {
-    const top = visibleChapters[0];
+    // Prefer a chapter match; fall back to the first deep anchor so
+    // queries like "products" or "demos" still jump on Enter.
+    const top = visibleChapters[0] ?? visibleAnchors[0];
     if (!top) return;
     setHelpOpen(false);
     router.push(top.href);
@@ -315,13 +406,17 @@ export function KeyboardNav() {
                 value={query}
               />
               <span className="hidden font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted sm:inline">
-                {visibleChapters.length} / {CHAPTERS.length}
+                {visibleChapters.length + visibleAnchors.length} /{" "}
+                {CHAPTERS.length + DEEP_ANCHORS.length}
               </span>
             </div>
 
             {/* CHAPTER CARDS — filtered by query. Empty state shows
-                "no matches" instead of rendering nothing. */}
-            {visibleChapters.length === 0 ? (
+                "no matches" instead of rendering nothing. The empty
+                state only fires when BOTH the chapters list and the
+                deep-anchors list come up empty — otherwise the deep
+                anchors below stand in for the chapter results. */}
+            {visibleChapters.length === 0 && visibleAnchors.length === 0 ? (
               <div className="relative px-6 py-10 text-center font-mono text-sm text-text-dark-muted sm:px-8 sm:py-12">
                 <p>
                   No routes match{" "}
@@ -332,7 +427,7 @@ export function KeyboardNav() {
                   Uses.
                 </p>
               </div>
-            ) : (
+            ) : visibleChapters.length === 0 ? null : (
               <ol className="relative grid divide-y divide-[rgba(91,155,244,0.14)]">
                 {visibleChapters.map((chapter, index) => (
                   <li key={chapter.key}>
@@ -397,6 +492,59 @@ export function KeyboardNav() {
                 ))}
               </ol>
             )}
+
+            {/* DEEP LINKS — secondary list of in-page anchors. Same
+                filter as the chapter list; rendered with a smaller row
+                density and no keyboard shortcut. */}
+            {visibleAnchors.length > 0 ? (
+              <div className="relative border-t border-[rgba(91,155,244,0.14)]">
+                <div className="flex items-center gap-3 bg-[rgba(91,155,244,0.04)] px-6 py-2.5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light sm:px-8">
+                  <span aria-hidden="true">↳</span>
+                  <span>Deep links</span>
+                  <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.16)]" />
+                  <span className="text-text-dark-muted">
+                    {visibleAnchors.length} / {DEEP_ANCHORS.length}
+                  </span>
+                </div>
+                <ol className="grid divide-y divide-[rgba(91,155,244,0.12)]">
+                  {visibleAnchors.map((anchor, index) => (
+                    <li key={anchor.href}>
+                      <button
+                        className={`group relative grid w-full grid-cols-12 items-center gap-x-4 px-6 py-2.5 text-left transition-colors duration-200 hover:bg-[rgba(91,155,244,0.06)] focus-visible:bg-[rgba(91,155,244,0.08)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-4px] focus-visible:outline-accent sm:px-8 sm:py-3 ${
+                          index === 0 &&
+                          visibleChapters.length === 0 &&
+                          query.trim().length > 0
+                            ? "bg-[rgba(91,155,244,0.05)]"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          setHelpOpen(false);
+                          router.push(anchor.href);
+                        }}
+                        type="button"
+                      >
+                        <span className="col-span-9 flex flex-wrap items-baseline gap-x-3 gap-y-0 sm:col-span-10">
+                          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light/70">
+                            ↳
+                          </span>
+                          <span className="font-semibold text-text-dark transition-colors duration-200 group-hover:text-accent-light">
+                            {anchor.title}
+                          </span>
+                          <span className="hidden font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted sm:inline">
+                            {anchor.description}
+                          </span>
+                        </span>
+                        <span className="col-span-3 flex items-center justify-end gap-2 sm:col-span-2">
+                          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+                            {anchor.href}
+                          </span>
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ) : null}
 
             {/* META FOOTER */}
             <div className="relative flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[rgba(91,155,244,0.14)] bg-[rgba(91,155,244,0.04)] px-6 py-4 sm:px-8">
