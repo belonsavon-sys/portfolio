@@ -1,18 +1,15 @@
 "use client";
 
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import { useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 import { BrandLogo } from "./BrandLogo";
 
-type StackItem = { label: string; name: Parameters<typeof BrandLogo>[0]["name"] };
+type StackItem = {
+  label: string;
+  name: Parameters<typeof BrandLogo>[0]["name"];
+};
 
 type StackCategory = {
-  accent: string;
   eyebrow: string;
   items: StackItem[];
   title: string;
@@ -20,7 +17,6 @@ type StackCategory = {
 
 const categories: StackCategory[] = [
   {
-    accent: "from-accent-deep via-accent to-accent-light",
     eyebrow: "01",
     items: [
       { label: "Claude", name: "claude" },
@@ -33,7 +29,6 @@ const categories: StackCategory[] = [
     title: "AI & Automation",
   },
   {
-    accent: "from-accent to-accent-light",
     eyebrow: "02",
     items: [
       { label: "TypeScript", name: "typescript" },
@@ -44,7 +39,6 @@ const categories: StackCategory[] = [
     title: "Frontend",
   },
   {
-    accent: "from-accent-deep to-accent",
     eyebrow: "03",
     items: [
       { label: "Node.js", name: "node" },
@@ -55,7 +49,6 @@ const categories: StackCategory[] = [
     title: "Backend & DB",
   },
   {
-    accent: "from-accent-light to-accent",
     eyebrow: "04",
     items: [
       { label: "Flutter", name: "flutter" },
@@ -64,7 +57,6 @@ const categories: StackCategory[] = [
     title: "Mobile",
   },
   {
-    accent: "from-accent to-accent-deep",
     eyebrow: "05",
     items: [
       { label: "Vercel", name: "vercel" },
@@ -74,7 +66,6 @@ const categories: StackCategory[] = [
     title: "Infra & APIs",
   },
   {
-    accent: "from-accent-light to-accent-deep",
     eyebrow: "06",
     items: [
       { label: "VS Code", name: "vscode" },
@@ -88,132 +79,118 @@ const categories: StackCategory[] = [
 
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+/**
+ * Tool wall — each category is a horizontal row: editorial label on
+ * the left, large interactive brand-logo grid on the right. Hovering
+ * a logo enlarges it and surfaces its name in an inline tooltip.
+ *
+ * Replaces the previous bento-grid magazine cards. Reads as one
+ * cohesive spec sheet rather than six decorative cards.
+ */
 export function BentoStack() {
   const reduce = useReducedMotion();
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  // Magazine-style asymmetric grid for 6 categories on a 12-col base.
-  // AI hero card spans wide; mobile is compact; design closes the spread.
-  const spans = [
-    "lg:col-span-7",
-    "lg:col-span-5",
-    "lg:col-span-4",
-    "lg:col-span-3",
-    "lg:col-span-5",
-    "lg:col-span-12",
-  ];
-
-  // Scroll-tied scatter on exit: each card drifts in its own direction
-  // when the section scrolls past, so the grid disassembles rather than
-  // fading flat. Direction matches the card's column position in the
-  // magazine layout (left half → left, right half → right, mid-small →
-  // up, full-width bottom → down).
-  const { scrollYProgress } = useScroll({
-    offset: ["start start", "end start"],
-    target: gridRef,
-  });
-  const exitOpacity = useTransform(scrollYProgress, [0.55, 0.95], [1, 0]);
-  const exitLeft = useTransform(scrollYProgress, [0.55, 1], [0, -110]);
-  const exitRight = useTransform(scrollYProgress, [0.55, 1], [0, 110]);
-  const exitUp = useTransform(scrollYProgress, [0.55, 1], [0, -70]);
-  const exitDown = useTransform(scrollYProgress, [0.55, 1], [0, 70]);
-
-  // One scatter vector per card index (0..5).
-  const scatterX = [exitLeft, exitRight, exitLeft, undefined, exitRight, undefined];
-  const scatterY = [undefined, undefined, undefined, exitUp, undefined, exitDown];
 
   return (
-    <div
-      className="grid gap-5 md:grid-cols-2 lg:grid-cols-12 lg:gap-6"
-      ref={gridRef}
-    >
+    <div className="grid divide-y divide-border-light border-y border-border-light">
       {categories.map((category, categoryIndex) => (
         <motion.div
-          className={spans[categoryIndex] ?? ""}
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          className="grid grid-cols-12 items-baseline gap-x-6 gap-y-6 py-10 sm:py-12"
+          initial={reduce ? false : { opacity: 0, y: 24 }}
           key={category.title}
-          style={
-            reduce
-              ? undefined
-              : {
-                  opacity: exitOpacity,
-                  x: scatterX[categoryIndex],
-                  y: scatterY[categoryIndex],
-                }
-          }
-        >
-        <motion.article
-          className={`group/cat relative h-full overflow-hidden rounded-3xl border border-border-light bg-white/70 p-7 backdrop-blur-md transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-accent/45 hover:shadow-[0_24px_48px_-20px_rgba(41,110,214,0.25)] sm:p-8`}
-          initial={reduce ? false : { opacity: 0, y: 16 }}
           transition={{
-            delay: categoryIndex * 0.06,
-            duration: 0.7,
+            delay: categoryIndex * 0.04,
+            duration: 0.55,
             ease: easeOut,
           }}
-          viewport={{ amount: 0.3, once: true }}
+          viewport={{ amount: 0.25, once: true }}
           whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
         >
-          {/* Numbered eyebrow row */}
-          <div className="relative flex items-baseline justify-between gap-4">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+          {/* LEFT — editorial label */}
+          <div className="col-span-12 lg:col-span-4">
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
               {category.eyebrow}
-            </span>
-            <span className="font-mono text-[10px] tabular-nums uppercase tracking-[0.24em] text-text-light-muted">
+            </p>
+            <h3
+              className="mt-2 font-semibold tracking-tight text-text-light"
+              style={{
+                fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)",
+                letterSpacing: "-0.025em",
+                lineHeight: 1.05,
+              }}
+            >
+              {category.title}
+            </h3>
+            <p className="mt-2 font-mono text-[10px] tabular-nums uppercase tracking-[0.22em] text-text-light-muted">
               {category.items.length}{" "}
               {category.items.length === 1 ? "tool" : "tools"}
-            </span>
+            </p>
           </div>
 
-          {/* Display title */}
-          <h3
-            className="relative mt-3 font-semibold tracking-tight text-text-light"
-            style={{
-              fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
-              letterSpacing: "-0.03em",
-              lineHeight: 1.05,
-            }}
-          >
-            {category.title}
-          </h3>
-
-          <motion.span
-            aria-hidden="true"
-            className={`relative mt-5 block h-px w-3/5 origin-left bg-gradient-to-r transition-[width] duration-500 ease-out group-hover/cat:w-full ${category.accent}`}
-            initial={reduce ? false : { scaleX: 0 }}
-            transition={{
-              delay: categoryIndex * 0.06 + 0.25,
-              duration: 0.9,
-              ease: easeOut,
-            }}
-            viewport={{ amount: 0.4, once: true }}
-            whileInView={reduce ? undefined : { scaleX: 1 }}
-          />
-
-          <ul className="relative mt-6 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3">
+          {/* RIGHT — logo wall */}
+          <ul className="col-span-12 flex flex-wrap items-center gap-3 lg:col-span-8 lg:justify-end">
             {category.items.map((item, itemIndex) => (
-              <motion.li
-                className="group/item flex items-center gap-2 text-text-light"
-                initial={reduce ? false : { opacity: 0, x: -6 }}
+              <ToolTile
+                delay={categoryIndex * 0.04 + itemIndex * 0.03}
+                item={item}
                 key={item.label}
-                transition={{
-                  delay: categoryIndex * 0.06 + 0.35 + itemIndex * 0.04,
-                  duration: 0.5,
-                  ease: easeOut,
-                }}
-                viewport={{ amount: 0.3, once: true }}
-                whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
-              >
-                <span className="shrink-0 text-text-light-muted/70 transition-[transform,color] duration-300 group-hover/item:scale-110 group-hover/item:text-accent">
-                  <BrandLogo name={item.name} size={22} />
-                </span>
-                <span className="text-sm font-medium transition-colors duration-200 group-hover/item:text-accent-deep">
-                  {item.label}
-                </span>
-              </motion.li>
+                reduce={!!reduce}
+              />
             ))}
           </ul>
-        </motion.article>
         </motion.div>
       ))}
     </div>
+  );
+}
+
+function ToolTile({
+  delay,
+  item,
+  reduce,
+}: {
+  delay: number;
+  item: StackItem;
+  reduce: boolean;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <motion.li
+      animate={reduce ? undefined : { opacity: 1, scale: 1 }}
+      className="relative"
+      initial={reduce ? false : { opacity: 0, scale: 0.94 }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      transition={{ delay, duration: 0.5, ease: easeOut }}
+      viewport={{ amount: 0.25, once: true }}
+      whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
+    >
+      <button
+        aria-label={item.label}
+        className="group relative flex h-16 w-16 items-center justify-center rounded-xl border border-border-light bg-white/70 backdrop-blur-md transition-[transform,border-color,box-shadow,background] duration-300 hover:-translate-y-1 hover:border-accent/55 hover:bg-white hover:shadow-[0_18px_36px_-18px_rgba(41,110,214,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-20 sm:w-20"
+        onFocus={() => setHovered(true)}
+        onBlur={() => setHovered(false)}
+        type="button"
+      >
+        <BrandLogo
+          className="text-text-light-muted transition-colors duration-300 group-hover:text-accent"
+          name={item.name}
+          size={32}
+        />
+      </button>
+
+      {/* Tooltip — appears above the tile on hover/focus */}
+      <motion.span
+        animate={{
+          opacity: hovered && !reduce ? 1 : 0,
+          y: hovered && !reduce ? -6 : 0,
+        }}
+        className="pointer-events-none absolute bottom-full left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md border border-accent/30 bg-bg-light px-2 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
+        transition={{ duration: 0.2, ease: easeOut }}
+      >
+        {item.label}
+      </motion.span>
+    </motion.li>
   );
 }
