@@ -129,23 +129,36 @@ export default function ContactPage() {
             Open to remote roles and freelance projects. Replies inside 24 hours.
           </motion.p>
 
-          {/* Quick stats strip */}
-          <motion.div
-            className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted"
-            {...fadeUp(0.24)}
-          >
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent-light">→</span> Remote
-            </span>
-            <span aria-hidden="true" className="h-3 w-px bg-[rgba(91,155,244,0.25)]" />
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent-light">→</span> EN · ES · IT
-            </span>
-            <span aria-hidden="true" className="h-3 w-px bg-[rgba(91,155,244,0.25)]" />
-            <span className="inline-flex items-center gap-2">
-              <span className="text-accent-light">→</span> Ocean Shores, WA
-            </span>
-          </motion.div>
+          {/* Quick stats strip — each fact pill staggers in */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted">
+            {["Remote", "EN · ES · IT", "Ocean Shores, WA"].map(
+              (stat, index, arr) => (
+                <span
+                  className="inline-flex items-center gap-x-6"
+                  key={stat}
+                >
+                  <motion.span
+                    animate={reduce ? undefined : { opacity: 1, y: 0 }}
+                    className="inline-flex items-center gap-2"
+                    initial={reduce ? false : { opacity: 0, y: 8 }}
+                    transition={{
+                      delay: 0.24 + index * 0.08,
+                      duration: 0.45,
+                      ease: easeOut,
+                    }}
+                  >
+                    <span className="text-accent-light">→</span> {stat}
+                  </motion.span>
+                  {index < arr.length - 1 ? (
+                    <span
+                      aria-hidden="true"
+                      className="h-3 w-px bg-[rgba(91,155,244,0.25)]"
+                    />
+                  ) : null}
+                </span>
+              ),
+            )}
+          </div>
 
           <motion.div className="mt-16 w-full" {...fadeUp(0.3)}>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
