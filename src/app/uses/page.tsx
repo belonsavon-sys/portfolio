@@ -7,6 +7,37 @@ type StackEntry = {
   tags: string[];
 };
 
+const EDITOR_STACK: StackEntry[] = [
+  {
+    detail:
+      "Primary editor. Configured for TypeScript + Tailwind + Next.js. Same window I keep open for code review, terminal, and AI sidecars.",
+    name: "VS Code",
+    role: "Primary editor",
+    tags: ["TypeScript", "Tailwind", "Next.js"],
+  },
+  {
+    detail:
+      "Where the Atlas harness actually lives. Multi-agent code sessions that spin up Claude + Codex side-by-side and route work through them automatically.",
+    name: "Antigravity",
+    role: "Harness IDE",
+    tags: ["Atlas", "Multi-agent", "PR-driven"],
+  },
+  {
+    detail:
+      "Used for fast single-file edits where the agent picks up context aggressively. Great when I want one tool to read the whole repo before suggesting.",
+    name: "Cursor",
+    role: "Single-file edits",
+    tags: ["Tab-complete", "Repo context"],
+  },
+  {
+    detail:
+      "Design surface for layout prototypes before they hit React. Variables + component states map cleanly to Tailwind tokens.",
+    name: "Figma",
+    role: "Design + tokens",
+    tags: ["Variables", "Components"],
+  },
+];
+
 const AI_STACK: StackEntry[] = [
   {
     detail:
@@ -176,7 +207,16 @@ export default function UsesPage() {
         title="What the harness runs on."
       />
 
-      {/* CLOSING placeholder — iters 203–205 inject sections here. */}
+      {/* 02 · EDITOR / IDE */}
+      <UsesStackSection
+        chapter="02"
+        eyebrow="Editor / IDE"
+        entries={EDITOR_STACK}
+        slug="~/editor"
+        title="Where the code gets written."
+      />
+
+      {/* CLOSING placeholder — iters 204–205 inject sections here. */}
       <section className="relative pb-24 pt-16">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-8">
