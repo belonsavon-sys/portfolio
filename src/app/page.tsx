@@ -730,61 +730,91 @@ function BeyondTheCodeBand() {
 }
 
 function BeyondTheCode() {
-  const reduce = useReducedMotion();
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Scatter on scroll-out: the two portraits split outward as you scroll
-  // past the dark band. Quote stays anchored.
-  const { scrollYProgress } = useScroll({
-    offset: ["start start", "end start"],
-    target: sectionRef,
-  });
-  const exitOpacity = useTransform(scrollYProgress, [0.55, 0.95], [1, 0]);
-  const exitLeft = useTransform(scrollYProgress, [0.55, 1], [0, -100]);
-  const exitRight = useTransform(scrollYProgress, [0.55, 1], [0, 100]);
-
   return (
-    <div ref={sectionRef}>
-      <SectionHeader
-        align="center"
-        description="The habit of taking problems to mastery before executing runs through everything I do — from agent harness design to the accounting books I keep."
-        eyebrow="Beyond the code"
-        title="More than engineering."
-        tone="dark"
-      />
-
-      <div className="mx-auto mt-16 grid max-w-3xl gap-8 sm:grid-cols-2 sm:gap-10">
-        <motion.div
-          style={reduce ? undefined : { opacity: exitOpacity, x: exitLeft }}
-        >
-          <Portrait
-            caption="Hotel ops · hands-on"
-            fallbackMeta="Save public/about-guitar.png to replace this placeholder."
-            fallbackTitle="Photo 1"
-            imgAlt="Pierre smiling on the job at the hotel"
-            imgSrc="/about-guitar.png"
-            revealDelay={0}
-            tag="On-shift"
-            title="Enjoying every part of the job"
-          />
-        </motion.div>
-        <motion.div
-          style={reduce ? undefined : { opacity: exitOpacity, x: exitRight }}
-        >
-          <Portrait
-            caption="Leadership retreat · 2024"
-            fallbackMeta="Save public/about-hawaii.png to replace this placeholder."
-            fallbackTitle="Photo 2"
-            imgAlt="Pierre at the Hawaii leadership retreat"
-            imgSrc="/about-hawaii.png"
-            revealDelay={0.18}
-            tag="Hawaii"
-            title="The room where strategy gets made"
-          />
-        </motion.div>
+    <div className="grid grid-cols-12 gap-x-6 gap-y-12 lg:gap-x-8">
+      {/* TOP — small editorial eyebrow */}
+      <div className="col-span-12 flex flex-wrap items-center gap-4">
+        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+          B-side · beyond the code
+        </span>
+        <span aria-hidden="true" className="h-px w-12 bg-accent-light/40" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted">
+          03 / Welcome
+        </span>
       </div>
 
-      <ScrollProgressQuote />
+      {/* LEFT — the manifesto. Huge typographic quote dominates the band. */}
+      <div className="col-span-12 lg:col-span-8">
+        <h2
+          className="font-semibold leading-[0.92] tracking-tight text-text-dark"
+          style={{
+            fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+            letterSpacing: "-0.045em",
+          }}
+        >
+          More than
+          <br />
+          <span className="bg-gradient-to-r from-text-dark via-accent-light to-text-dark bg-clip-text text-transparent">
+            engineering.
+          </span>
+        </h2>
+
+        <ScrollProgressQuote />
+
+        {/* Personal-spec strip — three field notes that ground the
+            manifesto in concrete touchstones. */}
+        <ul className="mt-12 grid gap-x-8 gap-y-6 border-t border-accent-light/20 pt-8 sm:grid-cols-3">
+          {[
+            {
+              label: "Mode",
+              value: "Mastery before execute",
+            },
+            {
+              label: "Pair",
+              value: "Solo or with AI",
+            },
+            {
+              label: "Voice",
+              value: "EN · ES · IT",
+            },
+          ].map((field) => (
+            <li key={field.label}>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                {field.label}
+              </p>
+              <p className="mt-2 text-base font-medium text-text-dark sm:text-lg">
+                {field.value}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* RIGHT — photos as taped-up field-note polaroids, tilted */}
+      <div className="col-span-12 flex flex-row items-start justify-center gap-6 lg:col-span-4 lg:flex-col lg:items-end lg:gap-8">
+        <FieldNote
+          caption="Hotel ops · hands-on"
+          fallbackMeta="Save public/about-guitar.png to replace this placeholder."
+          fallbackTitle="Photo 1"
+          imgAlt="Pierre smiling on the job at the hotel"
+          imgSrc="/about-guitar.png"
+          revealDelay={0}
+          rotateDeg={-3}
+          tag="On-shift"
+          title="Enjoying every part of the job"
+        />
+        <FieldNote
+          caption="Leadership retreat · 2024"
+          fallbackMeta="Save public/about-hawaii.png to replace this placeholder."
+          fallbackTitle="Photo 2"
+          imgAlt="Pierre at the Hawaii leadership retreat"
+          imgSrc="/about-hawaii.png"
+          revealDelay={0.18}
+          rotateDeg={2.5}
+          tag="Hawaii"
+          title="The room where strategy gets made"
+        />
+      </div>
     </div>
   );
 }
@@ -952,6 +982,73 @@ function Portrait({
         <p className="mt-1 text-sm text-text-dark-muted">{caption}</p>
       </motion.figcaption>
     </figure>
+  );
+}
+
+function FieldNote({
+  caption,
+  fallbackMeta,
+  fallbackTitle,
+  imgAlt,
+  imgSrc,
+  revealDelay = 0,
+  rotateDeg,
+  tag,
+  title,
+}: {
+  caption: string;
+  fallbackMeta: string;
+  fallbackTitle: string;
+  imgAlt: string;
+  imgSrc: string;
+  revealDelay?: number;
+  rotateDeg: number;
+  tag: string;
+  title: string;
+}) {
+  const reduce = useReducedMotion();
+  return (
+    <motion.figure
+      className="relative flex w-44 flex-col gap-2 sm:w-52 lg:w-60"
+      initial={
+        reduce ? false : { opacity: 0, rotate: 0, y: 18 }
+      }
+      style={{ transformOrigin: "top center" }}
+      transition={{
+        delay: revealDelay,
+        duration: 0.75,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      viewport={{ amount: 0.3, once: true }}
+      whileInView={
+        reduce ? undefined : { opacity: 1, rotate: rotateDeg, y: 0 }
+      }
+    >
+      {/* Taped-up pin — small accent square anchored above the photo */}
+      <span
+        aria-hidden="true"
+        className="absolute left-1/2 top-[-10px] z-10 h-3 w-8 -translate-x-1/2 rounded-sm bg-accent-light/40 shadow-[0_2px_6px_rgba(0,0,0,0.25)]"
+      />
+      <div className="overflow-hidden rounded-lg border border-accent-light/15 bg-bg-light p-2 shadow-[0_18px_36px_-18px_rgba(0,0,0,0.55)]">
+        <div className="aspect-[4/5] overflow-hidden rounded">
+          <PhotoSlot
+            alt={imgAlt}
+            className="h-full w-full"
+            fallbackMeta={fallbackMeta}
+            fallbackTitle={fallbackTitle}
+            fit="cover"
+            src={imgSrc}
+          />
+        </div>
+        <figcaption className="mt-2 px-1 pb-1">
+          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-accent">
+            {tag}
+          </p>
+          <p className="mt-1 text-xs font-semibold text-text-light">{title}</p>
+          <p className="mt-0.5 text-[11px] text-text-light-muted">{caption}</p>
+        </figcaption>
+      </div>
+    </motion.figure>
   );
 }
 
