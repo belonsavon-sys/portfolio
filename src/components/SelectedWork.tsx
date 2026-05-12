@@ -129,9 +129,12 @@ export function SelectedWork() {
   // First work expanded by default so users see real content immediately.
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
 
+  const liveCount = works.filter((w) => w.status === "live").length;
+
   return (
-    <ol className="grid divide-y divide-border-light border-y border-border-light">
-      {works.map((work, index) => {
+    <>
+      <ol className="grid divide-y divide-border-light border-y border-border-light">
+        {works.map((work, index) => {
         const isOpen = expandedIndex === index;
         const meta = statusMeta[work.status];
         return (
@@ -319,6 +322,33 @@ export function SelectedWork() {
           </li>
         );
       })}
-    </ol>
+      </ol>
+
+      {/* CLOSING — anchor on the proof reel. "N of M · live now"
+          stat + CTA to the deeper case studies. */}
+      <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border-light pt-6">
+        <p className="inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+          <span className="relative inline-flex h-1.5 w-1.5">
+            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+            <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+          </span>
+          <span>
+            {works.length} of {works.length} · {liveCount} live now
+          </span>
+        </p>
+        <a
+          className="group/all inline-flex items-center gap-2 rounded-full border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent"
+          href="/ai#built-and-shipped"
+        >
+          <span>/ai · all case studies</span>
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover/all:translate-x-0.5"
+          >
+            →
+          </span>
+        </a>
+      </div>
+    </>
   );
 }
