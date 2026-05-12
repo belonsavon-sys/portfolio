@@ -154,7 +154,7 @@ export function AboutModal({
 
             <div className="relative mt-7 flex flex-wrap items-center gap-2">
               {[
-                "Trilingual · EN · ES · IT",
+                "EN · ES · IT",
                 "Ocean Shores, WA",
                 "Co-founder · Blackdoor",
               ].map((chip) => (

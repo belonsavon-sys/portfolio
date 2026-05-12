@@ -176,7 +176,7 @@ function FloatingHeroLabels() {
         "left-[4%] bottom-[16%] -rotate-3 sm:left-[7%] sm:bottom-[20%] lg:left-[8%] lg:bottom-[28%]",
       opacity: opBL,
       parallaxY: yMid,
-      text: "Trilingual · EN · ES · IT",
+      text: "EN · ES · IT",
     },
     {
       className:
