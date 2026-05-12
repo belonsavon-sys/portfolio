@@ -171,6 +171,16 @@ const languages = ["English", "Spanish", "Italian"];
 const easeOutCurve = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 /**
+ * Years between Apr 2024 (Pierre's first AI-shipping role) and now.
+ * Rounded to one decimal so the figure ticks forward each month.
+ */
+function yearsBuilding(): string {
+  const start = new Date("2024-04-01T00:00:00Z").getTime();
+  const diffYears = (Date.now() - start) / (365.25 * 24 * 60 * 60 * 1000);
+  return diffYears.toFixed(1);
+}
+
+/**
  * Bold-emphasize metric-bearing substrings inside an Experience or
  * Project bullet. Recruiters scan bullets quickly — the numbers
  * are the proof, so they get visual weight.
@@ -332,6 +342,53 @@ export default function ResumePage() {
               <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
                 PDF · One page · Recruiter-ready
               </p>
+            </motion.div>
+
+            {/* CAREER SNAPSHOT — live "building since" + key roll-ups. */}
+            <motion.div className="mt-8" {...asideEntry(0.18)}>
+              <DatasheetCard slug="~/career" meta="At a glance">
+                <ul className="grid">
+                  {[
+                    {
+                      key: "Building since",
+                      live: true,
+                      value: `${yearsBuilding()} yrs · Apr 2024`,
+                    },
+                    {
+                      key: "Roles now",
+                      live: false,
+                      value: "2 · Co-founder + Ops",
+                    },
+                    { key: "Languages", live: false, value: "EN · ES · IT" },
+                    { key: "Live products", live: false, value: "3 via Atlas" },
+                  ].map((row, index) => (
+                    <li
+                      className="flex items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                      key={row.key}
+                    >
+                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-mono text-[12.5px] leading-6 text-text-light-muted">
+                        {row.key}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="ml-auto h-px flex-1 bg-border-light"
+                      />
+                      <span className="inline-flex items-center gap-1.5 font-mono text-[12.5px] font-semibold leading-6 text-text-light">
+                        {row.live ? (
+                          <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+                            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                            <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                          </span>
+                        ) : null}
+                        {row.value}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </DatasheetCard>
             </motion.div>
 
             {/* CONTACT DATASHEET — mirrors the Technical Skills aesthetic:
