@@ -100,6 +100,11 @@ export function SiteHeader() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
+        {/* Header live-shipped mini-pill — pulled to the right
+            margin on lg+. Pulls from NEXT_PUBLIC_BUILD_TIME +
+            NEXT_PUBLIC_BUILD_SHA so the header carries a small
+            "shipped X · sha" pulse on every page. */}
+        <HeaderLiveShipped />
         {/* CENTERED NAV PILL — backdrop blur + saturation ramp tied to scrollY */}
         <motion.nav
           aria-label="Primary"
@@ -183,6 +188,57 @@ export function SiteHeader() {
         </motion.nav>
       </motion.div>
     </header>
+  );
+}
+
+/**
+ * Compact live-shipped mini-pill that sits on the right margin of
+ * the header on lg+ breakpoints. Mirrors the home hero badge but
+ * tighter — just "shipped X · sha" with the green pulse.
+ */
+function HeaderLiveShipped() {
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+  const buildSha = process.env.NEXT_PUBLIC_BUILD_SHA;
+  const [now, setNow] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!buildTime) return;
+    setNow(Date.now());
+    const id = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, [buildTime]);
+
+  if (!buildTime || !buildSha) return null;
+
+  const buildDate = new Date(buildTime);
+  const seconds = now
+    ? Math.max(0, Math.round((now - buildDate.getTime()) / 1000))
+    : 0;
+  const relative =
+    seconds < 60
+      ? "just now"
+      : seconds < 3600
+        ? `${Math.round(seconds / 60)} min ago`
+        : seconds < 86_400
+          ? `${Math.round(seconds / 3600)} hr ago`
+          : `${Math.round(seconds / 86_400)} d ago`;
+
+  return (
+    <span
+      aria-label={`Last shipped ${relative}, commit ${buildSha}`}
+      className="pointer-events-auto absolute right-0 hidden items-center gap-2 rounded-full border border-result-green/40 bg-white/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-sm backdrop-blur-md xl:inline-flex"
+      title={`Last shipped ${relative} · commit ${buildSha}`}
+    >
+      <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+        <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+        <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+      </span>
+      <span>
+        Shipped <span className="text-text-light-muted">{relative}</span>
+      </span>
+      <span aria-hidden="true" className="text-text-light-muted/60">·</span>
+      <span className="text-accent">{buildSha.slice(0, 7)}</span>
+    </span>
   );
 }
 
