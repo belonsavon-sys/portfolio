@@ -57,6 +57,33 @@ const contactLinks: ContactCardConfig[] = [
 
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+const availabilityStats = [
+  {
+    detail: "Lead AI R&D · Atlas multi-agent harness shipping under PR review.",
+    label: "Engaged",
+    live: false,
+    value: "Blackdoor · Atlas v3",
+  },
+  {
+    detail: "Hotel operations supervisor — guest comms, QA system, automation.",
+    label: "Engaged",
+    live: false,
+    value: "ThePrivateHotels",
+  },
+  {
+    detail: "Open for one new freelance build this quarter. Q2 2026.",
+    label: "Open slot",
+    live: true,
+    value: "1 · this quarter",
+  },
+  {
+    detail: "Always taking advisory + consult calls. 30-min intro is free.",
+    label: "Always open",
+    live: true,
+    value: "Advisory · consults",
+  },
+];
+
 const engagementTypes = [
   {
     description:
@@ -502,8 +529,141 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Trailing spacer — iter-186 adds availability. */}
-      <div className="h-24" aria-hidden="true" />
+      {/* AVAILABILITY — capacity snapshot. Reads like a status board:
+          where I am this quarter, what's open, what's on hold. */}
+      <section className="relative mt-24" id="availability">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              04 · Availability
+            </span>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <h2
+              className="font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              }}
+            >
+              Where I am this quarter.
+            </h2>
+          </div>
+
+          <div className="mt-10 grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-8">
+            {availabilityStats.map((stat, index) => (
+              <motion.div
+                animate={reduce ? undefined : { opacity: 1, y: 0 }}
+                className="col-span-12 border-l-2 border-accent-light/40 pl-6 sm:col-span-6 lg:col-span-3"
+                initial={reduce ? false : { opacity: 0, y: 18 }}
+                key={stat.label}
+                transition={{
+                  delay: index * 0.06,
+                  duration: 0.5,
+                  ease: easeOut,
+                }}
+                viewport={{ amount: 0.3, once: true }}
+                whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+              >
+                <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                  <span className="text-text-dark-muted/60">//</span>
+                  {String(index + 1).padStart(2, "0")} {stat.label}
+                </p>
+                <p
+                  className="mt-3 font-semibold tracking-tight text-text-dark"
+                  style={{
+                    fontSize: "clamp(1.5rem, 3.2vw, 2.1rem)",
+                    letterSpacing: "-0.03em",
+                    lineHeight: 1.05,
+                  }}
+                >
+                  {stat.live ? (
+                    <span className="inline-flex items-center gap-2.5">
+                      <span className="relative inline-flex h-2.5 w-2.5">
+                        <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                        <span className="relative inline-block h-2.5 w-2.5 rounded-full bg-result-green" />
+                      </span>
+                      <span>{stat.value}</span>
+                    </span>
+                  ) : (
+                    stat.value
+                  )}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-text-dark-muted">
+                  {stat.detail}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CLOSING BAND — editorial outro that points back to /ai and
+          /resume so users who landed on /contact via a deep link
+          can still discover the proof-of-work. */}
+      <section className="relative mt-24 pb-24" id="closing">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-3xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.5)] p-8 backdrop-blur-sm sm:p-12">
+            <div className="grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-8">
+              <div className="col-span-12 lg:col-span-8">
+                <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light">
+                  05 · Before you send
+                </p>
+                <h3
+                  className="mt-3 font-semibold tracking-tight text-text-dark"
+                  style={{
+                    fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                    letterSpacing: "-0.04em",
+                    lineHeight: 0.98,
+                  }}
+                >
+                  Want to see what I&apos;ve
+                  <br />
+                  <span className="gradient-shift-dark">already shipped</span>
+                  <span className="text-accent-light">?</span>
+                </h3>
+              </div>
+              <div className="col-span-12 self-end lg:col-span-4">
+                <ul className="grid gap-3 font-mono text-sm text-text-dark-muted">
+                  <li className="flex items-baseline gap-3">
+                    <span aria-hidden="true" className="text-accent-light">
+                      →
+                    </span>
+                    <a
+                      className="link-underline inline-block transition-colors hover:text-text-dark"
+                      href="/ai"
+                    >
+                      /ai · multi-agent harnesses, case studies, demos
+                    </a>
+                  </li>
+                  <li className="flex items-baseline gap-3">
+                    <span aria-hidden="true" className="text-accent-light">
+                      →
+                    </span>
+                    <a
+                      className="link-underline inline-block transition-colors hover:text-text-dark"
+                      href="/business"
+                    >
+                      /business · how the systems run in production
+                    </a>
+                  </li>
+                  <li className="flex items-baseline gap-3">
+                    <span aria-hidden="true" className="text-accent-light">
+                      →
+                    </span>
+                    <a
+                      className="link-underline inline-block transition-colors hover:text-text-dark"
+                      href="/resume"
+                    >
+                      /resume · the receipts, one page, PDF-ready
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
