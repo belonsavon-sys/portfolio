@@ -7,6 +7,7 @@ import {
   ConsoleSignature,
   KeyboardNav,
   PageTransition,
+  PrecisionCursor,
   ScrollProgress,
   SiteHeader,
 } from "@/components";
@@ -102,6 +103,7 @@ export default function RootLayout({
           Skip to content →
         </a>
         <ScrollProgress />
+        <PrecisionCursor />
         <SiteHeader />
         <div id="main-content">
           <PageTransition>{children}</PageTransition>

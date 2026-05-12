@@ -55,6 +55,7 @@ export type { MarqueeBandProps } from "./MarqueeBand";
 export { NowReading } from "./NowReading";
 export type { NowReadingProps, NowReadingSection } from "./NowReading";
 export { PageTransition } from "./PageTransition";
+export { PrecisionCursor } from "./PrecisionCursor";
 export { RoleEntry } from "./RoleEntry";
 export type { RoleEntryProps } from "./RoleEntry";
 export { ParallaxBackdrop } from "./ParallaxBackdrop";
