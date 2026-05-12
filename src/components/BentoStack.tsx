@@ -7,6 +7,7 @@ import { BrandLogo } from "./BrandLogo";
 type StackItem = {
   label: string;
   name: Parameters<typeof BrandLogo>[0]["name"];
+  primary?: boolean;
 };
 
 type StackCategory = {
@@ -21,7 +22,7 @@ const categories: StackCategory[] = [
     eyebrow: "01",
     href: "/uses#ai-stack",
     items: [
-      { label: "Claude", name: "claude" },
+      { label: "Claude", name: "claude", primary: true },
       { label: "Codex", name: "codex" },
       { label: "ChatGPT", name: "chatgpt" },
       { label: "MCP", name: "mcp" },
@@ -36,7 +37,7 @@ const categories: StackCategory[] = [
     items: [
       { label: "TypeScript", name: "typescript" },
       { label: "React", name: "react" },
-      { label: "Next.js", name: "nextjs" },
+      { label: "Next.js", name: "nextjs", primary: true },
       { label: "Tailwind", name: "tailwind" },
     ],
     title: "Frontend",
@@ -47,7 +48,7 @@ const categories: StackCategory[] = [
     items: [
       { label: "Node.js", name: "node" },
       { label: "Express", name: "express" },
-      { label: "Supabase", name: "supabase" },
+      { label: "Supabase", name: "supabase", primary: true },
       { label: "MySQL", name: "mysql" },
     ],
     title: "Backend & DB",
@@ -56,7 +57,7 @@ const categories: StackCategory[] = [
     eyebrow: "04",
     href: "/uses",
     items: [
-      { label: "Flutter", name: "flutter" },
+      { label: "Flutter", name: "flutter", primary: true },
       { label: "Kotlin", name: "kotlin" },
     ],
     title: "Mobile",
@@ -65,7 +66,7 @@ const categories: StackCategory[] = [
     eyebrow: "05",
     href: "/uses#infra",
     items: [
-      { label: "Vercel", name: "vercel" },
+      { label: "Vercel", name: "vercel", primary: true },
       { label: "GitHub", name: "github" },
       { label: "Twilio", name: "twilio" },
     ],
@@ -75,7 +76,7 @@ const categories: StackCategory[] = [
     eyebrow: "06",
     href: "/uses#editor",
     items: [
-      { label: "VS Code", name: "vscode" },
+      { label: "VS Code", name: "vscode", primary: true },
       { label: "Cursor", name: "cursor" },
       { label: "Figma", name: "figma" },
       { label: "Framer", name: "framer" },
@@ -189,17 +190,32 @@ function ToolTile({
       whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
     >
       <button
-        aria-label={item.label}
-        className="group relative flex h-16 w-16 items-center justify-center rounded-xl border border-border-light bg-white/70 backdrop-blur-md transition-[transform,border-color,box-shadow,background] duration-300 hover:-translate-y-1 hover:border-accent/55 hover:bg-white hover:shadow-[0_18px_36px_-18px_rgba(41,110,214,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-20 sm:w-20"
+        aria-label={item.primary ? `${item.label} · primary` : item.label}
+        className={`group relative flex h-16 w-16 items-center justify-center rounded-xl border bg-white/70 backdrop-blur-md transition-[transform,border-color,box-shadow,background] duration-300 hover:-translate-y-1 hover:border-accent/55 hover:bg-white hover:shadow-[0_18px_36px_-18px_rgba(41,110,214,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-20 sm:w-20 ${
+          item.primary
+            ? "border-accent/45 shadow-[0_8px_24px_-12px_rgba(41,110,214,0.35)]"
+            : "border-border-light"
+        }`}
         onFocus={() => setHovered(true)}
         onBlur={() => setHovered(false)}
         type="button"
       >
         <BrandLogo
-          className="text-text-light-muted transition-colors duration-300 group-hover:text-accent"
+          className={`transition-colors duration-300 group-hover:text-accent ${
+            item.primary ? "text-accent" : "text-text-light-muted"
+          }`}
           name={item.name}
           size={32}
         />
+        {item.primary ? (
+          <span
+            aria-hidden="true"
+            className="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded-full border border-accent bg-bg-light font-mono text-[10px] font-semibold text-accent shadow-[0_2px_6px_-2px_rgba(41,110,214,0.55)]"
+            title="Primary in this category"
+          >
+            ★
+          </span>
+        ) : null}
       </button>
 
       {/* Tooltip — appears above the tile on hover/focus */}
