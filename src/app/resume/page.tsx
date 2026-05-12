@@ -274,7 +274,9 @@ function ResumeHero() {
   return (
     <section className="relative overflow-hidden">
       <ParallaxBackdrop>
-        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-accent/25 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2">
+          <div className="orb-drift-a h-full w-full rounded-full bg-accent/50 blur-3xl" />
+        </div>
       </ParallaxBackdrop>
 
       {/* Ghost watermark */}

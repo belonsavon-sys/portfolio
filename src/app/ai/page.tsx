@@ -391,7 +391,9 @@ function DemoSection({
   return (
     <section className="relative overflow-hidden bg-bg-dark py-20 text-text-dark sm:py-24">
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2">
+          <div className="orb-drift-a h-full w-full rounded-full bg-accent/32 blur-3xl" />
+        </div>
       </div>
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader

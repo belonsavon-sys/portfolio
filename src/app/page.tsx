@@ -448,7 +448,7 @@ function MetricsBand() {
       {/* Ambient corner glow on the left side */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-32 -top-24 -z-10 h-72 w-72 rounded-full bg-accent/15 blur-3xl"
+        className="orb-drift-b pointer-events-none absolute -left-32 -top-24 -z-10 h-72 w-72 rounded-full bg-accent/30 blur-3xl"
       />
       <SectionHeader
         description="Six numbers from systems still running today — each one measured against the manual workflow it replaced."
@@ -507,9 +507,11 @@ function BeyondTheCodeBand() {
       id="beyond"
     >
       <ParallaxBackdrop>
-        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-accent/18 blur-3xl" />
-        <div className="absolute bottom-[-8rem] right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/14 blur-3xl" />
-        <div className="absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/12 blur-3xl" />
+        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2">
+          <div className="orb-drift-a h-full w-full rounded-full bg-accent/35 blur-3xl" />
+        </div>
+        <div className="orb-drift-b absolute bottom-[-8rem] right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/30 blur-3xl" />
+        <div className="orb-drift-c absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/28 blur-3xl" />
       </ParallaxBackdrop>
 
       {!reduce ? (
