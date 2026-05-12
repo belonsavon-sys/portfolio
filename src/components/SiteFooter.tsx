@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "./Button";
+import { LastShipped } from "./LastShipped";
 import { LiveStatusBadge } from "./LiveStatusBadge";
 import { ParallaxGhost } from "./ParallaxGhost";
 import {
@@ -154,8 +155,9 @@ export function SiteFooter() {
             </ul>
           </div>
         </div>
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-[rgba(41,110,214,0.12)] pt-6 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-[rgba(41,110,214,0.12)] pt-6 sm:flex-row sm:gap-3">
           <p className="text-xs text-text-dark-muted">© 2026 Pierre Belon Savon</p>
+          <LastShipped />
           <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dark-muted">
             Press{" "}
             <kbd className="mx-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-md border border-accent/40 bg-[rgba(41,110,214,0.15)] px-1 text-[10px] font-semibold text-accent-light">
