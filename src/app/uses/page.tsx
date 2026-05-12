@@ -7,6 +7,51 @@ type StackEntry = {
   tags: string[];
 };
 
+const INFRA_STACK: StackEntry[] = [
+  {
+    detail:
+      "Default deploy target. Fluid Compute + Next.js App Router + preview URLs on every PR. Build time live-shipped badge on the home hero comes straight from Vercel build vars.",
+    name: "Vercel",
+    role: "Deploy · Preview · Edge",
+    tags: ["Next.js", "Fluid Compute", "Preview URLs"],
+  },
+  {
+    detail:
+      "Every change ships through a PR. Branch naming convention is claude/iter-NNN-<slug>. Auto-merge after Vercel checks pass.",
+    name: "GitHub",
+    role: "VCS · PR workflow",
+    tags: ["Branch protection", "Auto-merge", "Reviews"],
+  },
+  {
+    detail:
+      "Postgres + auth + storage for personal projects (budget app, workout tracker). Row-level security configured by default.",
+    name: "Supabase",
+    role: "DB · Auth · Storage",
+    tags: ["Postgres", "RLS", "Edge functions"],
+  },
+  {
+    detail:
+      "Glue layer for hospitality automation. Guest message in → triggers Zapier → routes through Guesty / Twilio. Replaces multi-hour manual coordination loops.",
+    name: "Zapier",
+    role: "Automation glue",
+    tags: ["Guesty", "Twilio", "Triggers"],
+  },
+  {
+    detail:
+      "Self-hosted automation runner when Zapier hits its ceiling on data volume or custom logic.",
+    name: "n8n",
+    role: "Self-hosted automation",
+    tags: ["Self-hosted", "Webhooks"],
+  },
+  {
+    detail:
+      "API ↔ guest flow for hotel ops. Booking sync, message routing, calendar pushes.",
+    name: "Guesty API",
+    role: "Hotel ops backbone",
+    tags: ["Bookings", "Messaging", "Pricing"],
+  },
+];
+
 const EDITOR_STACK: StackEntry[] = [
   {
     detail:
@@ -216,7 +261,16 @@ export default function UsesPage() {
         title="Where the code gets written."
       />
 
-      {/* CLOSING placeholder — iters 204–205 inject sections here. */}
+      {/* 03 · INFRA */}
+      <UsesStackSection
+        chapter="03"
+        eyebrow="Infrastructure"
+        entries={INFRA_STACK}
+        slug="~/infra"
+        title="Where it ships and runs."
+      />
+
+      {/* CLOSING placeholder — iter-205 injects ~/hardware here. */}
       <section className="relative pb-24 pt-16">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-8">
