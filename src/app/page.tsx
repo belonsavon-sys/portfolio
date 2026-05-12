@@ -400,6 +400,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
 }
 
 function MetricsBand() {
+  const reduce = useReducedMotion();
   return (
     <div className="relative grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
       {/* Ambient corner glow on the left side */}
@@ -408,7 +409,7 @@ function MetricsBand() {
         className="pointer-events-none absolute -left-32 -top-24 -z-10 h-72 w-72 rounded-full bg-accent/15 blur-3xl"
       />
       <SectionHeader
-        description="Faster responses, clearer operations, systems people actually use every day."
+        description="Six numbers from systems still running today — each one measured against the manual workflow it replaced."
         eyebrow="Outcomes"
         size="md"
         title="Shipped to production. Measured by what changed."
@@ -431,9 +432,21 @@ function MetricsBand() {
               >
                 <AnimatedCounter suffix={metric.suffix} to={metric.to} />
               </p>
-              <span
+              <motion.span
                 aria-hidden="true"
                 className="mt-4 block h-px w-12 origin-left bg-accent/40 transition-transform duration-500 group-hover:scale-x-[2]"
+                initial={
+                  reduce ? false : { clipPath: "inset(0 100% 0 0)" }
+                }
+                transition={{
+                  delay: 0.22 + index * 0.05,
+                  duration: 0.75,
+                  ease: easeOut,
+                }}
+                viewport={{ amount: 0.3, once: true }}
+                whileInView={
+                  reduce ? undefined : { clipPath: "inset(0 0 0 0)" }
+                }
               />
             </div>
           </ScrollReveal>
