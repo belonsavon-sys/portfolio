@@ -21,6 +21,9 @@ type ButtonBaseProps = {
   arrow?: boolean;
   children: ReactNode;
   className?: string;
+  /** Render a down-pointing arrow that nudges on hover. Useful for
+   *  download CTAs. Mutually exclusive with `arrow`. */
+  downArrow?: boolean;
   variant?: ButtonVariant;
 };
 
@@ -132,6 +135,7 @@ export function Button(props: ButtonProps) {
     arrow = false,
     children,
     className,
+    downArrow = false,
     variant = "primary",
     ...rest
   } = props;
@@ -151,14 +155,15 @@ export function Button(props: ButtonProps) {
   };
 
   const isGhost = variant === "ghost" || variant === "ghostDark";
-  const label = arrow ? (
-    <>
-      {children}
-      <ButtonArrow />
-    </>
-  ) : (
-    children
-  );
+  const label =
+    arrow || downArrow ? (
+      <>
+        {children}
+        {downArrow ? <ButtonDownArrow /> : <ButtonArrow />}
+      </>
+    ) : (
+      children
+    );
   const inner = isGhost ? (
     <>
       <span aria-hidden="true" className="btn-fill" />
@@ -245,6 +250,28 @@ function ButtonArrow() {
       >
         <path d="M5 12h14" />
         <path d="m13 5 7 7-7 7" />
+      </svg>
+    </span>
+  );
+}
+
+function ButtonDownArrow() {
+  return (
+    <span
+      aria-hidden="true"
+      className="ml-2 inline-flex h-[1em] w-[1em] items-center justify-center overflow-hidden"
+    >
+      <svg
+        className="h-[0.85em] w-[0.85em] -translate-y-[1px] transition-transform duration-300 ease-out group-hover/btn:translate-y-[3px] motion-reduce:transition-none motion-reduce:group-hover/btn:translate-y-0"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M12 5v14" />
+        <path d="m5 13 7 7 7-7" />
       </svg>
     </span>
   );

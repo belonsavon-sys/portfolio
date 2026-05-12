@@ -217,9 +217,10 @@ export default function ResumePage() {
             <Button
               className="w-full !py-4 !text-base"
               download
+              downArrow
               href="/pierre-belon-savon-resume.pdf"
             >
-              Download Resume ↓
+              Download Resume
             </Button>
 
             <div className="mt-8 border-t border-border-light pt-6">
