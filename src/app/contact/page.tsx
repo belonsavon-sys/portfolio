@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ParallaxGhost } from "@/components";
+import { ChapterRail, ParallaxGhost } from "@/components";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -664,6 +664,20 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      {/* CHAPTER RAIL — floating right-margin nav for the five
+          /contact sections (methods → pipeline → engagements →
+          availability → closing). Same component the home and
+          resume pages use. */}
+      <ChapterRail
+        sections={[
+          { id: "methods", index: "01", label: "Reach me" },
+          { id: "pipeline", index: "02", label: "What happens next" },
+          { id: "engagements", index: "03", label: "Engagements" },
+          { id: "availability", index: "04", label: "Availability" },
+          { id: "closing", index: "05", label: "Before you send" },
+        ]}
+      />
     </main>
   );
 }
