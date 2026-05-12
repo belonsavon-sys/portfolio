@@ -205,17 +205,52 @@ export default function ResumePage() {
               </ResumeSection>
 
               <ResumeSection title="Technical Skills">
-                <div className="grid gap-6 md:grid-cols-2">
-                  {skillGroups.map((group) => (
-                    <div key={group.title}>
-                      <h3 className="font-semibold">{group.title}</h3>
-                      <ul className="mt-3 grid gap-2 text-sm leading-6 text-text-light-muted">
-                        {group.items.map((item) => (
-                          <li key={item}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+                {/* Datasheet — engineering spec-sheet aesthetic: mono
+                    everything, terminal-style >  prefixes, accent
+                    vertical rule on each block. */}
+                <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+                  <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+                    <span>~/stack</span>
+                    <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+                    <span className="text-text-light-muted">
+                      {skillGroups.length} categories
+                    </span>
+                  </div>
+                  <div className="grid divide-y divide-border-light md:grid-cols-2 md:divide-x md:divide-y-0">
+                    {skillGroups.map((group, groupIndex) => (
+                      <div
+                        className="relative px-5 py-5 transition-colors duration-200 hover:bg-[rgba(41,110,214,0.04)]"
+                        key={group.title}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute left-0 top-5 h-[calc(100%-2.5rem)] w-0.5 bg-accent/50"
+                        />
+                        <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+                          <span className="text-text-light-muted/60">// </span>
+                          {String(groupIndex + 1).padStart(2, "0")}{" "}
+                          {group.title}
+                        </p>
+                        <ul className="mt-3 grid gap-1.5">
+                          {group.items.map((item) => (
+                            <li
+                              className="flex items-start gap-2 font-mono text-[12.5px] leading-6 text-text-light-muted"
+                              key={item}
+                            >
+                              <span
+                                aria-hidden="true"
+                                className="mt-1 shrink-0 text-accent/70"
+                              >
+                                &gt;
+                              </span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </ResumeSection>
 
