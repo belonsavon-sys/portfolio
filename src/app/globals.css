@@ -322,6 +322,38 @@ a {
   }
 }
 
+/* :target arrival pulse — when a URL hash matches an element id
+   (ChapterRail / command palette / footer links), the target
+   briefly glows with an accent ring. Pure CSS, no JS needed. */
+@keyframes target-pulse {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(41, 110, 214, 0),
+      0 0 0 0 rgba(91, 155, 244, 0);
+  }
+  20% {
+    box-shadow:
+      0 0 0 4px rgba(41, 110, 214, 0.18),
+      0 0 28px 6px rgba(91, 155, 244, 0.22);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(41, 110, 214, 0),
+      0 0 0 0 rgba(91, 155, 244, 0);
+  }
+}
+
+:target {
+  animation: target-pulse 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :target {
+    animation: none;
+  }
+}
+
 @keyframes scroll-cue {
   0% {
     transform: translateY(0);
