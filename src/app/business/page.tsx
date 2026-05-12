@@ -16,7 +16,7 @@ import {
 import type { ReactNode } from "react";
 
 const processOutcomes = [
-  "Manual → digital, trackable, auditable",
+  "Manual workflows turned into auditable digital systems",
   "Consistent standards across every property and shift",
   "Accountability built into the workflow, not bolted on afterward",
 ];
@@ -34,7 +34,7 @@ const trainingOutcomes = [
 ];
 
 const blackdoorOutcomes = [
-  "Architected and shipped agentic systems — not slideware",
+  "Architected and shipped Atlas — not slideware",
   "Multi-agent pipelines running across two live businesses",
   "Co-founded Blackdoor — I ship at owner-pace",
 ];
@@ -179,7 +179,7 @@ function BlackdoorSection() {
     <div className="grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
       <div>
         <SectionHeader
-          description="Blackdoor is the holding company I co-founded with Ryder in 2025. We develop and operate agentic companies across entertainment, SaaS, robotics, and AI."
+          description="Blackdoor is the holding company I co-founded with Ryder in 2025. Our products are built and shipped end-to-end by Atlas — our autonomous agent harness — in place of a human dev team."
           eyebrow="Blackdoor operations"
           size="md"
           title="Building the company that builds companies."
