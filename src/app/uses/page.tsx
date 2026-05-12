@@ -1,5 +1,50 @@
 import { Button, ParallaxGhost } from "@/components";
 
+type StackEntry = {
+  detail: string;
+  name: string;
+  role: string;
+  tags: string[];
+};
+
+const AI_STACK: StackEntry[] = [
+  {
+    detail:
+      "Spec research before implementation. Multi-day projects via /loop. Code review on every PR. Default first-choice for anything that touches reasoning.",
+    name: "Claude",
+    role: "Reasoning · Code · Specs",
+    tags: ["Claude Code", "Anthropic API", "MCP"],
+  },
+  {
+    detail:
+      "Boilerplate generation, multi-file edits inside VS Code. Strong for repetitive scaffolding the harness then verifies.",
+    name: "Codex",
+    role: "Code generation",
+    tags: ["VS Code", "Cursor", "Pair-programming"],
+  },
+  {
+    detail:
+      "Long-form research, source citations, real-time web for fast-moving topics. Often the first call before opening a doc.",
+    name: "Perplexity",
+    role: "Research · Citations",
+    tags: ["Live web", "Sourced"],
+  },
+  {
+    detail:
+      "Quick utility model — name suggestions, copy variants, one-shot prompts where I don't need a reasoning chain.",
+    name: "ChatGPT",
+    role: "Utility · One-shot",
+    tags: ["OpenAI API"],
+  },
+  {
+    detail:
+      "The connective tissue between Claude and every external tool. Custom MCP servers expose Notion, Gmail, Spotify, Supabase, Vercel.",
+    name: "MCP",
+    role: "Agent ↔ tool bridge",
+    tags: ["Custom servers", "Anthropic spec", "Public + private"],
+  },
+];
+
 const PHILOSOPHY = [
   {
     detail: "Mastery before execute — research deeply, then ship cleanly.",
@@ -122,7 +167,16 @@ export default function UsesPage() {
         </div>
       </section>
 
-      {/* CLOSING placeholder — iters 202–205 inject sections here. */}
+      {/* 01 · AI STACK */}
+      <UsesStackSection
+        chapter="01"
+        eyebrow="AI stack"
+        entries={AI_STACK}
+        slug="~/ai-stack"
+        title="What the harness runs on."
+      />
+
+      {/* CLOSING placeholder — iters 203–205 inject sections here. */}
       <section className="relative pb-24 pt-16">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-8">
@@ -159,6 +213,105 @@ export default function UsesPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+/**
+ * Editorial stack datasheet. Each block (~/ai-stack, ~/editor,
+ * ~/infra, ~/hardware) reuses this shape: terminal header + 2-col
+ * grid of tool entries, each entry having a chapter mark + name +
+ * role + usage note + relationship tags. Reads as one continuous
+ * uses.tech-style dossier across all 4 blocks.
+ */
+function UsesStackSection({
+  chapter,
+  entries,
+  eyebrow,
+  slug,
+  title,
+}: {
+  chapter: string;
+  entries: StackEntry[];
+  eyebrow: string;
+  slug: string;
+  title: string;
+}) {
+  return (
+    <section className="relative mt-16 sm:mt-20">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+            {chapter} · {eyebrow}
+          </span>
+          <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
+          <h2
+            className="font-semibold tracking-tight text-text-light"
+            style={{
+              fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+              letterSpacing: "-0.035em",
+              lineHeight: 1,
+            }}
+          >
+            {title}
+          </h2>
+        </div>
+
+        <div className="mt-10 overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+          <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+            <span>{slug}</span>
+            <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+            <span className="text-text-light-muted">
+              {entries.length} entries
+            </span>
+          </div>
+          <ul className="grid divide-y divide-border-light md:grid-cols-2 md:divide-x md:divide-y-0">
+            {entries.map((entry, index) => (
+              <li
+                className="group relative px-6 py-7 transition-colors duration-200 hover:bg-[rgba(41,110,214,0.04)] sm:px-7 sm:py-8"
+                key={entry.name}
+              >
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-0 top-7 h-[calc(100%-3.5rem)] w-0.5 bg-accent/50"
+                />
+                <p className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <span className="text-text-light-muted/60">//</span>
+                  <span>
+                    {String(index + 1).padStart(2, "0")} · {entry.role}
+                  </span>
+                  <span aria-hidden="true" className="h-px flex-1 bg-[rgba(41,110,214,0.18)]" />
+                </p>
+
+                <h3
+                  className="mt-4 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+                  style={{
+                    fontSize: "clamp(1.5rem, 3.2vw, 2.1rem)",
+                    letterSpacing: "-0.03em",
+                    lineHeight: 1.04,
+                  }}
+                >
+                  {entry.name}
+                </h3>
+                <p className="mt-3 text-sm leading-6 text-text-light-muted sm:text-base sm:leading-7">
+                  {entry.detail}
+                </p>
+                <ul className="mt-5 flex flex-wrap gap-1.5">
+                  {entry.tags.map((tag) => (
+                    <li
+                      className="inline-flex items-center rounded-md border border-border-light bg-bg-light px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted"
+                      key={tag}
+                    >
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
   );
 }
 
