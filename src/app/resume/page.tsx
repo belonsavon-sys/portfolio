@@ -31,8 +31,8 @@ const professionalSummary =
 const experience = [
   {
     bullets: [
-      "Co-founded a holding company developing and operating agentic companies across entertainment, SaaS, robotics, and AI.",
-      "Designed and built Atlas, a multi-level autonomous agent harness connecting subscription AI models, local models, API models, and any external tool via API, MCP, or OAuth.",
+      "Co-founded the holding company. Products are built and shipped end-to-end by an autonomous agent harness, in place of a human dev team.",
+      "Designed and built Atlas — a multi-level autonomous agent harness that connects any AI model to any external tool through MCP or OAuth.",
       "Atlas orchestrates a full company hierarchy: CEO agent to C-suite agents, manager agents, and field agents.",
       "Atlas has shipped a game app, a budget web app, and an agent-augmented project management system.",
       "Lead AI R&D — agent harness architecture, backend systems, on-device + cloud deployment.",
@@ -52,7 +52,7 @@ const experience = [
       "Progressed from Finance Data Entry Assistant and part-time Housekeeper to Hotel Operations Supervisor.",
       "Built and deployed a guest communications chatbot trained on curated company data — drafts replies in Smarttask, human-reviewed before send.",
       "Cut response time from up to 48 hours to under 3 minutes, saving 15-20 minutes of drafting per message.",
-      "Digitized a 100+ page property operations manual into a trackable, quantifiable digital inspection system.",
+      "Digitized the property's 100+ page operations manual into a room-by-room QA inspection system with trackable scores.",
       "Automated hotel workflows using Zapier, Guesty API, and Twilio API, replacing multi-hour manual coordination loops.",
       "Supervised a team of 6, authored room-by-room SOPs and inspection checklists, trained staff on every tool I deployed.",
       "Processed customer invoices, bills, and expenses in QuickBooks for 6 months — error-free record.",
