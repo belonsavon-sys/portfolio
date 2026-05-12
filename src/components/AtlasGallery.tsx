@@ -15,7 +15,7 @@ type AtlasProduct = {
 const products: AtlasProduct[] = [
   {
     description:
-      "End-to-end mini party game. Atlas wrote the gameplay loop, the UI, the scoring system. Co-developed by agents under human review.",
+      "End-to-end mini party game. Atlas built the whole thing — gameplay to scoring — under human review.",
     gradient: "linear-gradient(135deg, #1A4E9C 0%, #5B9BF4 100%)",
     imageSrc: "/atlas-game.png",
     status: "shipped",
@@ -33,7 +33,7 @@ const products: AtlasProduct[] = [
   },
   {
     description:
-      "Project management surface where field agents pick up work, file PRs, and update the board. Currently powering Atlas's own roadmap.",
+      "Project management surface where field agents pick up work and file PRs against the board. Currently powering Atlas's own roadmap.",
     gradient: "linear-gradient(135deg, #111827 0%, #1A4E9C 50%, #296ED6 100%)",
     imageSrc: "/atlas-pm.png",
     status: "internal",
