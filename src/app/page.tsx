@@ -126,45 +126,56 @@ function FloatingHeroLabels() {
   const reduce = useReducedMotion();
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // Each label drifts at a different parallax speed inside the hero's
-  // own scroll window. As the hero passes through view (start end -> end start),
-  // scrollYProgress 0→1 maps to per-label y offsets.
+  // Single scroll window for the whole hero (start of element meeting
+  // viewport bottom -> end of element meeting viewport top). Each label
+  // takes a different slice for parallax depth + a different fade-out
+  // band so they stagger out as the hero exits.
   const { scrollYProgress } = useScroll({
     offset: ["start end", "end start"],
     target: wrapperRef,
   });
-  // Different "depths" — slower y range = "further back", faster y range = "closer to camera"
+
+  // Per-label parallax y — slower y range = "further back".
   const ySlow = useTransform(scrollYProgress, [0, 1], [-30, 30]);
   const yMid = useTransform(scrollYProgress, [0, 1], [-60, 60]);
   const yFast = useTransform(scrollYProgress, [0, 1], [-90, 90]);
   const yVeryFast = useTransform(scrollYProgress, [0, 1], [-120, 120]);
 
+  // Per-label fade-out: labels exit over a 0.20 progress band each,
+  // staggered so the top-left label exits first and the bottom-right
+  // label exits last. (On initial load the hero is at ~0.5 progress so
+  // labels are visible at full opacity.)
+  const opTL = useTransform(scrollYProgress, [0.5, 0.7], [0.85, 0]);
+  const opTR = useTransform(scrollYProgress, [0.55, 0.75], [0.85, 0]);
+  const opBL = useTransform(scrollYProgress, [0.6, 0.8], [0.85, 0]);
+  const opBR = useTransform(scrollYProgress, [0.65, 0.85], [0.85, 0]);
+
   const labels = [
     {
       className:
         "left-[6%] top-[18%] -rotate-2 sm:left-[8%] sm:top-[22%] lg:left-[10%] lg:top-[26%]",
-      delay: 0.6,
+      opacity: opTL,
       parallaxY: ySlow,
       text: "AI Engineer",
     },
     {
       className:
         "right-[5%] top-[14%] rotate-3 sm:right-[8%] sm:top-[18%] lg:right-[9%] lg:top-[24%]",
-      delay: 0.85,
+      opacity: opTR,
       parallaxY: yFast,
       text: "Atlas · Multi-agent harness",
     },
     {
       className:
         "left-[4%] bottom-[16%] -rotate-3 sm:left-[7%] sm:bottom-[20%] lg:left-[8%] lg:bottom-[28%]",
-      delay: 1.0,
+      opacity: opBL,
       parallaxY: yMid,
       text: "Trilingual · EN · ES · IT",
     },
     {
       className:
         "right-[5%] bottom-[14%] rotate-2 sm:right-[8%] sm:bottom-[18%] lg:right-[8%] lg:bottom-[24%]",
-      delay: 1.15,
+      opacity: opBR,
       parallaxY: yVeryFast,
       text: "Co-founder · Blackdoor",
     },
@@ -178,33 +189,22 @@ function FloatingHeroLabels() {
     >
       {labels.map((label) => (
         <motion.span
-          animate={
-            reduce
-              ? { opacity: 0.85, y: 0 }
-              : {
-                  opacity: [0, 0.85],
-                }
-          }
           className={`absolute inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/65 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent backdrop-blur-md ${label.className}`}
-          initial={false}
           key={label.text}
           style={
             reduce
               ? {
                   boxShadow:
                     "0 8px 24px -10px rgba(41,110,214,0.25), 0 1px 0 0 rgba(255,255,255,0.9) inset",
+                  opacity: 0.85,
                 }
               : {
                   boxShadow:
                     "0 8px 24px -10px rgba(41,110,214,0.25), 0 1px 0 0 rgba(255,255,255,0.9) inset",
+                  opacity: label.opacity,
                   y: label.parallaxY,
                 }
           }
-          transition={{
-            delay: label.delay,
-            duration: 0.7,
-            ease: [0.16, 1, 0.3, 1],
-          }}
         >
           <span className="h-1 w-1 rounded-full bg-accent" />
           {label.text}
