@@ -704,6 +704,78 @@ function ProcessBand() {
   );
 }
 
+/**
+ * Auto-computed "N years building in production" stat — anchors the
+ * About attribution with a fact that updates itself. Anchored to
+ * 2020 (when Pierre started shipping in production); refreshes on
+ * every deploy via the rendered year.
+ */
+/**
+ * Career arc — horizontal milestone timeline. 4 dots evenly spaced
+ * along a hairline rule, each annotated with a year + one-line
+ * summary. The "Now" milestone pulses to signal it's the live one.
+ */
+function AboutCareerArc() {
+  const milestones: Array<{ live?: boolean; note: string; year: string }> = [
+    { note: "Started shipping in production", year: "2020" },
+    { note: "Took over hotel operations", year: "2022" },
+    { note: "Hotel ops fully digitized + AI-driven", year: "2024" },
+    { note: "Co-founded Blackdoor · Atlas v3", year: "2025" },
+    { live: true, note: "Shipping under PR review", year: "Now" },
+  ];
+
+  return (
+    <div className="mt-12 overflow-hidden rounded-xl border border-border-light bg-bg-light-2 p-5 sm:p-6">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+          ~/career-arc
+        </span>
+        <span aria-hidden="true" className="h-px w-8 bg-border-light" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-light-muted">
+          5 milestones · 2020 → now
+        </span>
+      </div>
+      <ol className="mt-6 grid gap-y-6 sm:grid-cols-5 sm:gap-x-3">
+        {milestones.map((m, index) => (
+          <li className="group/arc relative" key={`${m.year}-${index}`}>
+            <div className="flex items-center gap-2">
+              <span className="relative inline-flex h-2 w-2">
+                {m.live ? (
+                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                ) : null}
+                <span
+                  className={`relative inline-block h-2 w-2 rounded-full ${m.live ? "bg-result-green" : "bg-accent"}`}
+                />
+              </span>
+              <span
+                aria-hidden="true"
+                className="h-px flex-1 bg-border-light"
+              />
+            </div>
+            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+              {m.year}
+            </p>
+            <p className="mt-1 text-xs leading-5 text-text-light-muted sm:text-[12.5px]">
+              {m.note}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function AboutYearsStat() {
+  const START_YEAR = 2020;
+  const years = Math.max(1, new Date().getFullYear() - START_YEAR);
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-result-green/30 bg-result-green/5 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-result-green">
+      <span aria-hidden="true">●</span>
+      {years} years shipping in production
+    </span>
+  );
+}
+
 function AboutBand() {
   return (
     <div>
@@ -740,9 +812,12 @@ function AboutBand() {
           >
             {aboutParagraphs[0]}
           </p>
-          <figcaption className="mt-8 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.32em] text-accent">
-            <span aria-hidden="true" className="h-px w-8 bg-accent" />
-            Pierre · in his own words
+          <figcaption className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 font-mono text-xs uppercase tracking-[0.32em] text-accent">
+            <span className="inline-flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-8 bg-accent" />
+              Pierre · in his own words
+            </span>
+            <AboutYearsStat />
           </figcaption>
         </blockquote>
 
@@ -758,10 +833,30 @@ function AboutBand() {
             </div>
             <ul className="grid">
               {[
-                { key: "Role", value: "AI Engineer · Co-founder" },
-                { key: "At", value: "Blackdoor + ThePrivateHotels" },
-                { key: "Voice", value: "EN · ES · IT" },
-                { key: "Base", value: "Ocean Shores, WA" },
+                {
+                  href: "/resume",
+                  key: "Role",
+                  link: "see the cv",
+                  value: "AI Engineer · Co-founder",
+                },
+                {
+                  href: "/business#blackdoor",
+                  key: "At",
+                  link: "see Blackdoor",
+                  value: "Blackdoor + ThePrivateHotels",
+                },
+                {
+                  href: "/uses",
+                  key: "Voice",
+                  link: "see the stack",
+                  value: "EN · ES · IT",
+                },
+                {
+                  href: "/contact",
+                  key: "Base",
+                  link: "open to remote",
+                  value: "Ocean Shores, WA",
+                },
               ].map((row, index) => (
                 <li
                   className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
@@ -772,7 +867,20 @@ function AboutBand() {
                     {String(index + 1).padStart(2, "0")} {row.key}
                   </span>
                   <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
-                    {row.value}
+                    <span>{row.value}</span>
+                    <a
+                      className="group/abt mt-1 flex items-center justify-end gap-1 font-mono text-[9px] uppercase tracking-[0.22em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                      href={row.href}
+                    >
+                      <span aria-hidden="true" className="text-accent/60">↳</span>
+                      <span className="link-underline">{row.link}</span>
+                      <span
+                        aria-hidden="true"
+                        className="transition-transform duration-200 group-hover/abt:translate-x-0.5"
+                      >
+                        →
+                      </span>
+                    </a>
                   </span>
                 </li>
               ))}
@@ -781,12 +889,85 @@ function AboutBand() {
         </aside>
       </figure>
 
-      {/* SUPPORTING PROSE — remaining paragraphs as body copy under
-          the pull quote. Constrained width so the line length stays
-          readable. */}
-      <div className="mt-12 grid gap-5 text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8 lg:max-w-3xl">
-        {aboutParagraphs.slice(1).map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
+      {/* CAREER ARC — horizontal milestone strip between the field-
+          notes datasheet and the supporting-prose chapters. Reads as
+          a printed timeline: 4 dots, dated, with one-line annotations. */}
+      <AboutCareerArc />
+
+      {/* SUPPORTING PROSE — indexed chapters. The three follow-up
+          paragraphs are framed with their own eyebrows so the about
+          flows as a narrative arc rather than a wall of text. */}
+      <ol className="mt-12 grid gap-10 lg:max-w-3xl">
+        {[
+          { eyebrow: "01 · The pivot", paragraph: aboutParagraphs[1] },
+          { eyebrow: "02 · The work", paragraph: aboutParagraphs[2] },
+          { eyebrow: "03 · The thesis", paragraph: aboutParagraphs[3] },
+        ].map((chapter) => (
+          <li className="group/about" key={chapter.eyebrow}>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+                {chapter.eyebrow}
+              </span>
+              <span
+                aria-hidden="true"
+                className="h-px w-8 bg-accent/30 transition-all duration-300 group-hover/about:w-12 group-hover/about:bg-accent"
+              />
+            </div>
+            <p className="mt-3 text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+              {chapter.paragraph}
+            </p>
+          </li>
+        ))}
+      </ol>
+
+      {/* CLOSING DUAL CTA — two doors out of About:
+          → the receipts (resume) for the formal story
+          → what's shipping (now) for the latest in-flight work */}
+      <div className="mt-14 grid gap-3 sm:grid-cols-2">
+        {[
+          {
+            cta: "See the receipts",
+            eyebrow: "Want the formal story?",
+            href: "/resume",
+            meta: "/resume · curriculum",
+          },
+          {
+            cta: "See what's shipping",
+            eyebrow: "Want the latest in-flight?",
+            href: "/now",
+            meta: "/now · this week",
+          },
+        ].map((card) => (
+          <a
+            className="group/aboutcta flex items-center justify-between gap-4 rounded-2xl border border-border-light bg-bg-light-2 px-5 py-4 transition-[border-color,background] duration-200 hover:border-accent/45 hover:bg-accent/5 sm:px-6 sm:py-5"
+            href={card.href}
+            key={card.href}
+          >
+            <span className="flex flex-col gap-1">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                {card.meta}
+              </span>
+              <span className="font-mono text-[12px] uppercase tracking-[0.22em] text-text-light-muted">
+                {card.eyebrow}
+              </span>
+              <span
+                className="mt-1 font-semibold tracking-tight text-text-light transition-colors duration-200 group-hover/aboutcta:text-accent-deep"
+                style={{
+                  fontSize: "clamp(1.15rem, 2.2vw, 1.5rem)",
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.1,
+                }}
+              >
+                {card.cta}
+              </span>
+            </span>
+            <span
+              aria-hidden="true"
+              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent/40 text-accent transition-[transform,border-color,background,color] duration-300 group-hover/aboutcta:translate-x-1 group-hover/aboutcta:border-accent group-hover/aboutcta:bg-accent group-hover/aboutcta:text-bg-light"
+            >
+              →
+            </span>
+          </a>
         ))}
       </div>
     </div>
