@@ -187,6 +187,10 @@ export default function AtlasPage() {
                 ))}
               </ul>
             </div>
+
+            {/* ~/build — live build signal tied to the current
+                deploy. Mirrors the home hero "Shipped X ago" pulse. */}
+            <AtlasBuildCard />
           </div>
         </div>
       </section>
@@ -387,6 +391,75 @@ export default function AtlasPage() {
         ]}
       />
     </main>
+  );
+}
+
+/**
+ * Live build signal — sha + relative time + commit subject from
+ * the env vars captured in next.config.ts. Server-rendered, refreshes
+ * on every deploy.
+ */
+function AtlasBuildCard() {
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+  const buildSha = process.env.NEXT_PUBLIC_BUILD_SHA;
+  const subject = process.env.NEXT_PUBLIC_BUILD_COMMIT_SUBJECT;
+  if (!buildTime || !buildSha) return null;
+  const seconds = Math.max(
+    0,
+    Math.round((Date.now() - new Date(buildTime).getTime()) / 1000),
+  );
+  const relative =
+    seconds < 60
+      ? "just now"
+      : seconds < 3600
+        ? `${Math.round(seconds / 60)} min ago`
+        : seconds < 86_400
+          ? `${Math.round(seconds / 3600)} hr ago`
+          : `${Math.round(seconds / 86_400)} d ago`;
+
+  return (
+    <div className="mt-6 overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+        <span className="relative inline-flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+          <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+        </span>
+        <span>~/build</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        <span className="text-text-light-muted">Live</span>
+      </div>
+      <ul className="grid">
+        <li className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0">
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <span className="text-text-light-muted/60">// </span>
+            01 Shipped
+          </span>
+          <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
+            {relative}
+          </span>
+        </li>
+        <li className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0">
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <span className="text-text-light-muted/60">// </span>
+            02 SHA
+          </span>
+          <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
+            {buildSha.slice(0, 7)}
+          </span>
+        </li>
+        {subject ? (
+          <li className="border-t border-border-light px-5 py-3">
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="text-text-light-muted/60">// </span>
+              03 Subject
+            </span>
+            <p className="mt-1 truncate font-mono text-[12.5px] leading-6 text-text-light" title={subject}>
+              {subject}
+            </p>
+          </li>
+        ) : null}
+      </ul>
+    </div>
   );
 }
 
