@@ -249,48 +249,67 @@ function BusinessHero() {
 
 function BlackdoorSection() {
   return (
-    <div className="grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
-      <div>
-        <SectionHeader
-          description="Blackdoor is the holding company I co-founded with Ryder in 2025. Our products are built and shipped end-to-end by Atlas — our autonomous agent harness — in place of a human dev team."
-          eyebrow="Blackdoor operations"
-          size="md"
-          title="Building the company that builds companies."
-        />
-
-        <ul className="mt-8 grid gap-3">
-          {blackdoorOutcomes.map((outcome) => (
-            <li
-              className="flex items-start gap-3 text-sm leading-7 text-text-light-muted"
-              key={outcome}
-            >
-              <span
-                aria-hidden="true"
-                className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-              />
-              <span>{outcome}</span>
-            </li>
-          ))}
-        </ul>
+    <div>
+      {/* Editorial heading strip — matches the SectionShell chapter
+          treatment used by the other /business chapters. */}
+      <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
+        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+          00 · Blackdoor operations
+        </span>
+        <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
       </div>
+      <h2
+        className="mt-6 font-semibold tracking-tight text-text-light"
+        style={{
+          fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
+          letterSpacing: "-0.04em",
+          lineHeight: 0.98,
+        }}
+      >
+        Building the company that builds companies.
+      </h2>
+      <p className="mt-6 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
+        Blackdoor is the holding company I co-founded with Ryder in 2025.
+        Our products are built and shipped end-to-end by Atlas — our
+        autonomous agent harness — in place of a human dev team.
+      </p>
 
-      <div>
-        <AtlasHierarchy layers={atlasLayers} />
+      <div className="mt-12 grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
+        <div>
+          <ul className="grid gap-3">
+            {blackdoorOutcomes.map((outcome) => (
+              <li
+                className="flex items-start gap-3 text-sm leading-7 text-text-light-muted"
+                key={outcome}
+              >
+                <span
+                  aria-hidden="true"
+                  className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                />
+                <span>{outcome}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-        <div className="mt-10 grid gap-6 text-base leading-7 text-text-light-muted lg:grid-cols-2">
-          <p>
-            At Blackdoor, I lead AI R&amp;D and implementation. Atlas is a
-            multi-level autonomous agent harness — a CEO agent routes work to
-            C-suite agents (CFO, CMO), who delegate to manager and field
-            agents. Designed to build, operate, and improve software products
-            autonomously.
-          </p>
-          <p>
-            Atlas has already shipped a game app, a budget web app, and an
-            agent-augmented project management system. The same underlying
-            technology is deployed at ThePrivateHotels. We run everything
-            through GitHub PRs. Every decision is governed.
-          </p>
+        <div>
+          <AtlasHierarchy layers={atlasLayers} />
+
+          <div className="mt-10 grid gap-6 text-base leading-7 text-text-light-muted lg:grid-cols-2">
+            <p>
+              At Blackdoor, I lead AI R&amp;D and implementation. Atlas is a
+              multi-level autonomous agent harness — a CEO agent routes work
+              to C-suite agents (CFO, CMO), who delegate to manager and field
+              agents. Designed to build, operate, and improve software
+              products autonomously.
+            </p>
+            <p>
+              Atlas has already shipped a game app, a budget web app, and an
+              agent-augmented project management system. The same underlying
+              technology is deployed at ThePrivateHotels. We run everything
+              through GitHub PRs. Every decision is governed.
+            </p>
+          </div>
         </div>
       </div>
     </div>
