@@ -1,10 +1,19 @@
 import Link from "next/link";
 import { Button, ChapterRail, ParallaxGhost } from "@/components";
 
-const BUILDING = [
+type BuildingStatus = "active" | "maintaining" | "warm";
+
+const BUILDING: Array<{
+  detail: string;
+  health: BuildingStatus;
+  label: string;
+  project: string;
+  status: string;
+}> = [
   {
     detail:
       "Lead AI R&D — multi-level autonomous agent harness shipping under PR review.",
+    health: "active",
     label: "Atlas v3",
     project: "Blackdoor",
     status: "Daily",
@@ -12,6 +21,7 @@ const BUILDING = [
   {
     detail:
       "Hotel operations supervisor — guest comms, QA system, automation pipelines.",
+    health: "maintaining",
     label: "Live operations",
     project: "ThePrivateHotels",
     status: "Weekly",
@@ -19,11 +29,36 @@ const BUILDING = [
   {
     detail:
       "This portfolio. Every iteration shipped through a PR — sometimes 5 in a row.",
+    health: "active",
     label: "pierrebelonsavon.com",
     project: "Personal",
     status: "Hourly",
   },
 ];
+
+const BUILDING_STATUS_META: Record<
+  BuildingStatus,
+  { dot: string; label: string; pulse: boolean; text: string }
+> = {
+  active: {
+    dot: "bg-result-green",
+    label: "Active",
+    pulse: true,
+    text: "text-result-green",
+  },
+  maintaining: {
+    dot: "bg-accent",
+    label: "Maintaining",
+    pulse: false,
+    text: "text-accent",
+  },
+  warm: {
+    dot: "bg-text-light-muted",
+    label: "Warm",
+    pulse: false,
+    text: "text-text-light-muted",
+  },
+};
 
 const READING = [
   {
@@ -258,16 +293,37 @@ export default function NowPage() {
                 </p>
               </div>
               <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
-                  Cadence
-                </p>
-                <p className="mt-2 inline-flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-text-light">
-                  <span className="relative inline-flex h-1.5 w-1.5">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-                    <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
-                  </span>
-                  {entry.status}
-                </p>
+                {(() => {
+                  const meta = BUILDING_STATUS_META[entry.health];
+                  return (
+                    <>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        Status
+                      </p>
+                      <p
+                        className={`mt-2 inline-flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] ${meta.text}`}
+                      >
+                        <span className="relative inline-flex h-1.5 w-1.5">
+                          {meta.pulse ? (
+                            <span
+                              className={`absolute inset-0 animate-ping rounded-full ${meta.dot}/60`}
+                            />
+                          ) : null}
+                          <span
+                            className={`relative inline-block h-1.5 w-1.5 rounded-full ${meta.dot}`}
+                          />
+                        </span>
+                        {meta.label}
+                      </p>
+                      <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        Cadence
+                      </p>
+                      <p className="mt-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-text-light">
+                        {entry.status}
+                      </p>
+                    </>
+                  );
+                })()}
               </div>
               <span
                 aria-hidden="true"
