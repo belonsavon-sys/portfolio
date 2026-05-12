@@ -18,7 +18,6 @@ import {
   LightGlassCard,
   LiveStatusBadge,
   NowReading,
-  ParallaxBackdrop,
   PhotoSlot,
   ScrollReveal,
   SectionDivider,
@@ -303,16 +302,6 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
     <section className="relative overflow-hidden" ref={heroRef}>
       <CursorHalo />
 
-      <ParallaxBackdrop>
-        {/* Centered orb — outer div is sized to the orb and centered, so
-            the inner orb-drift transform doesn't fight horizontal
-            centering. */}
-        <div className="absolute -top-32 left-1/2 h-[520px] w-[520px] -translate-x-1/2">
-          <div className="orb-drift-a h-full w-full rounded-full bg-accent/55 blur-3xl" />
-        </div>
-        <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/45 blur-3xl" />
-        <div className="orb-drift-c absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent/40 blur-3xl" />
-      </ParallaxBackdrop>
 
       {/* Floating accent labels — desktop-only decoration */}
       <FloatingHeroLabels />
@@ -519,11 +508,6 @@ function MetricsBand() {
       className="relative grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]"
       ref={sectionRef}
     >
-      {/* Ambient corner glow on the left side */}
-      <div
-        aria-hidden="true"
-        className="orb-drift-b pointer-events-none absolute -left-32 -top-24 -z-10 h-72 w-72 rounded-full bg-accent/30 blur-3xl"
-      />
       <SectionHeader
         description="Six numbers from systems still running today — each one measured against the manual workflow it replaced."
         eyebrow="Outcomes"
@@ -596,13 +580,6 @@ function BeyondTheCodeBand() {
       className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-28"
       id="beyond"
     >
-      <ParallaxBackdrop>
-        <div className="absolute -top-32 left-1/2 h-[480px] w-[480px] -translate-x-1/2">
-          <div className="orb-drift-a h-full w-full rounded-full bg-accent/35 blur-3xl" />
-        </div>
-        <div className="orb-drift-b absolute bottom-[-8rem] right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/30 blur-3xl" />
-        <div className="orb-drift-c absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/28 blur-3xl" />
-      </ParallaxBackdrop>
 
       {!reduce ? (
         <motion.div

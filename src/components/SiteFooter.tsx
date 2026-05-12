@@ -4,7 +4,6 @@ import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "./Button";
 import { LiveStatusBadge } from "./LiveStatusBadge";
-import { ParallaxBackdrop } from "./ParallaxBackdrop";
 import { ParallaxGhost } from "./ParallaxGhost";
 import {
   EMAIL_DISPLAY,
@@ -35,15 +34,6 @@ export function SiteFooter() {
 
   return (
     <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-32">
-      <ParallaxBackdrop>
-        {/* Centered orb — outer div is sized to the orb and centered so
-            the inner orb-drift transform doesn't fight centering. */}
-        <div className="absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2">
-          <div className="orb-drift-a h-full w-full rounded-full bg-accent/35 blur-3xl" />
-        </div>
-        <div className="orb-drift-b absolute bottom-[-8rem] right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/30 blur-3xl" />
-        <div className="orb-drift-c absolute bottom-[-8rem] left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/28 blur-3xl" />
-      </ParallaxBackdrop>
 
       {/* Giant ghost text "LET'S TALK" — parallax-drifted, opacity-ramped */}
       <div
