@@ -632,37 +632,58 @@ function BeyondTheCodeBand() {
 }
 
 function BeyondTheCode() {
+  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Scatter on scroll-out: the two portraits split outward as you scroll
+  // past the dark band. Quote stays anchored.
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end start"],
+    target: sectionRef,
+  });
+  const exitOpacity = useTransform(scrollYProgress, [0.55, 0.95], [1, 0]);
+  const exitLeft = useTransform(scrollYProgress, [0.55, 1], [0, -100]);
+  const exitRight = useTransform(scrollYProgress, [0.55, 1], [0, 100]);
+
   return (
-    <div>
+    <div ref={sectionRef}>
       <SectionHeader
         align="center"
-        description="The habit of taking problems to mastery before executing runs through everything I do — agent architecture, accounting, music."
+        description="The habit of taking problems to mastery before executing runs through everything I do — from agent harness design to the accounting books I keep."
         eyebrow="Beyond the code"
         title="More than engineering."
         tone="dark"
       />
 
       <div className="mx-auto mt-16 grid max-w-3xl gap-8 sm:grid-cols-2 sm:gap-10">
-        <Portrait
-          caption="Hotel ops · hands-on"
-          fallbackMeta="Save public/about-guitar.png to replace this placeholder."
-          fallbackTitle="Photo 1"
-          imgAlt="Pierre smiling on the job at the hotel"
-          imgSrc="/about-guitar.png"
-          revealDelay={0}
-          tag="On-shift"
-          title="Enjoying every part of the job"
-        />
-        <Portrait
-          caption="Leadership retreat · 2024"
-          fallbackMeta="Save public/about-hawaii.png to replace this placeholder."
-          fallbackTitle="Photo 2"
-          imgAlt="Pierre at the Hawaii leadership retreat"
-          imgSrc="/about-hawaii.png"
-          revealDelay={0.18}
-          tag="Hawaii"
-          title="The room where strategy gets made"
-        />
+        <motion.div
+          style={reduce ? undefined : { opacity: exitOpacity, x: exitLeft }}
+        >
+          <Portrait
+            caption="Hotel ops · hands-on"
+            fallbackMeta="Save public/about-guitar.png to replace this placeholder."
+            fallbackTitle="Photo 1"
+            imgAlt="Pierre smiling on the job at the hotel"
+            imgSrc="/about-guitar.png"
+            revealDelay={0}
+            tag="On-shift"
+            title="Enjoying every part of the job"
+          />
+        </motion.div>
+        <motion.div
+          style={reduce ? undefined : { opacity: exitOpacity, x: exitRight }}
+        >
+          <Portrait
+            caption="Leadership retreat · 2024"
+            fallbackMeta="Save public/about-hawaii.png to replace this placeholder."
+            fallbackTitle="Photo 2"
+            imgAlt="Pierre at the Hawaii leadership retreat"
+            imgSrc="/about-hawaii.png"
+            revealDelay={0.18}
+            tag="Hawaii"
+            title="The room where strategy gets made"
+          />
+        </motion.div>
       </div>
 
       <ScrollProgressQuote />
