@@ -172,6 +172,11 @@ export default function AiPage() {
 
       <SectionDivider direction="light-to-dark" />
 
+      {/* PROGRAM HEADER — chapter slate that frames the two demos as
+          one feature program. Establishes "you are now entering the
+          theatre" before the first demo's cinematic curtain reveals. */}
+      <DemoProgramHeader />
+
       <DemoSection
         chapter="01"
         eyebrow="Demo · Local AI"
@@ -182,6 +187,10 @@ export default function AiPage() {
       >
         <LocalAiDemo />
       </DemoSection>
+
+      {/* INTERMISSION SEAM — a one-line marker between demos. Reads
+          as a credits-roll moment that signals "next feature loading". */}
+      <DemoIntermission />
 
       <DemoSection
         chapter="02"
@@ -733,6 +742,87 @@ function AtlasGallerySection() {
         <AtlasGallery />
       </div>
     </div>
+  );
+}
+
+/**
+ * Program header — sits on the dark band between the SectionDivider
+ * and the first DemoSection. Reads like a film slate: "PROGRAM ·
+ * Demos · 02 features". Tells the user the next two sections belong
+ * together as one feature program.
+ */
+function DemoProgramHeader() {
+  const reduce = useReducedMotion();
+  return (
+    <section className="relative overflow-hidden bg-bg-dark pb-10 pt-20 text-text-dark sm:pb-12 sm:pt-24">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <motion.div
+          className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.18)] pb-6"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          transition={{ duration: 0.55, ease: easeOut }}
+          viewport={{ amount: 0.4, once: true }}
+          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+        >
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+            03 · Program
+          </span>
+          <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted">
+            02 features · Run in your browser
+          </span>
+          <span aria-hidden="true" className="hidden h-px flex-1 bg-[rgba(91,155,244,0.12)] sm:block" />
+          <h2
+            className="ml-auto font-semibold tracking-tight text-text-dark"
+            style={{
+              fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+              letterSpacing: "-0.025em",
+              lineHeight: 1,
+            }}
+          >
+            Now showing<span className="text-accent-light">.</span>
+          </h2>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Intermission seam — a thin accent band between the two demos with
+ * a centered "INTERMISSION · feature 02 of 02 loading" marker. Reads
+ * as a credits-roll beat that signals the next feature.
+ */
+function DemoIntermission() {
+  const reduce = useReducedMotion();
+  return (
+    <section
+      aria-hidden="true"
+      className="relative overflow-hidden bg-bg-dark py-10 text-text-dark sm:py-12"
+    >
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-4 sm:px-6 lg:px-8">
+        <motion.span
+          className="h-px flex-1 origin-left bg-gradient-to-r from-transparent via-accent-light/50 to-transparent"
+          initial={reduce ? false : { scaleX: 0 }}
+          transition={{ duration: 0.9, ease: easeOut }}
+          viewport={{ amount: 0.5, once: true }}
+          whileInView={reduce ? undefined : { scaleX: 1 }}
+        />
+        <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(91,155,244,0.30)] bg-[rgba(15,23,42,0.6)] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light backdrop-blur">
+          <span className="relative inline-flex h-1.5 w-1.5">
+            <span className="absolute inset-0 animate-ping rounded-full bg-accent-light/60" />
+            <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-accent-light" />
+          </span>
+          Intermission · Feature 02 / 02 loading
+        </span>
+        <motion.span
+          className="h-px flex-1 origin-right bg-gradient-to-l from-transparent via-accent-light/50 to-transparent"
+          initial={reduce ? false : { scaleX: 0 }}
+          transition={{ duration: 0.9, ease: easeOut }}
+          viewport={{ amount: 0.5, once: true }}
+          whileInView={reduce ? undefined : { scaleX: 1 }}
+        />
+      </div>
+    </section>
   );
 }
 
