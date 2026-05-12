@@ -164,6 +164,79 @@ const languages = ["English", "Spanish", "Italian"];
 
 const easeOutCurve = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+/**
+ * Bold-emphasize metric-bearing substrings inside an Experience or
+ * Project bullet. Recruiters scan bullets quickly — the numbers
+ * are the proof, so they get visual weight.
+ *
+ * Matched patterns:
+ *   - "48 hours", "3 minutes", "20 min", "6 months"
+ *   - "100+ pages", "6 staff", "3 products"
+ *   - "top 10%", "5-star"
+ *   - "<3 min", "98%"
+ *   - "Error-free", "Travelers' Choice", "Premier"
+ */
+function highlightMetrics(text: string): React.ReactNode[] {
+  const patterns = [
+    // Time durations and counts with units.
+    /\b\d+(?:\.\d+)?\s*(?:hours?|hrs?|minutes?|mins?|months?|seconds?|secs?|weeks?|days?|years?)\b/gi,
+    // Counts with a "+" suffix or counts with units like staff/pages.
+    /\b\d+\+?\s*(?:pages?|staff|products?|properties|reviews?|companies?|projects?|languages?)\b/gi,
+    // Standalone percentages or ratings.
+    /\b(?:top\s+)?\d+(?:\.\d+)?%|\b\d+-star|\d+\/\d+/gi,
+    // Headline brand markers earned at ThePrivateHotels.
+    /\b(?:Airbnb Guest Favorites?|Travelers' Choice(?:\s+Award)?|VRBO Premier(?: Partner)?)\b/g,
+    // Punctual qualitative wins.
+    /\bError-free\b/g,
+    // Money-like values.
+    /\$\d[\d,]*(?:\.\d+)?\b/g,
+    // Generic "<X min" / "<X hours" patterns.
+    /<\s*\d+(?:\.\d+)?\s*(?:hours?|hrs?|minutes?|mins?|s)\b/gi,
+  ];
+
+  // Build a flat list of match ranges, dedupe overlaps by keeping
+  // the earliest match per index.
+  type Range = { end: number; start: number };
+  const ranges: Range[] = [];
+  for (const pattern of patterns) {
+    pattern.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    while ((m = pattern.exec(text)) !== null) {
+      ranges.push({ end: m.index + m[0].length, start: m.index });
+      if (m[0].length === 0) pattern.lastIndex += 1;
+    }
+  }
+  ranges.sort((a, b) => a.start - b.start || b.end - a.end);
+  const merged: Range[] = [];
+  for (const r of ranges) {
+    const last = merged[merged.length - 1];
+    if (last && r.start < last.end) continue;
+    merged.push(r);
+  }
+
+  if (merged.length === 0) return [text];
+
+  const out: React.ReactNode[] = [];
+  let cursor = 0;
+  for (let i = 0; i < merged.length; i += 1) {
+    const range = merged[i];
+    if (range.start > cursor) {
+      out.push(text.slice(cursor, range.start));
+    }
+    out.push(
+      <strong
+        className="font-semibold text-text-light"
+        key={`m-${range.start}`}
+      >
+        {text.slice(range.start, range.end)}
+      </strong>,
+    );
+    cursor = range.end;
+  }
+  if (cursor < text.length) out.push(text.slice(cursor));
+  return out;
+}
+
 type ExperienceEntry = {
   bullets: string[];
   company: string;
@@ -591,7 +664,7 @@ function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
                     &gt;
                   </span>
                   <span className="text-[13.5px] leading-7 text-text-light-muted sm:text-sm">
-                    {bullet}
+                    {highlightMetrics(bullet)}
                   </span>
                 </motion.li>
               ))}
