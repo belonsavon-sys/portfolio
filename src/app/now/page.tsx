@@ -87,22 +87,56 @@ const READING: Array<{
   },
 ];
 
-const LEARNING = [
+type LearningStatus = "exploring" | "drafting" | "blocked";
+
+const LEARNING: Array<{
+  detail: string;
+  label: string;
+  next: string;
+  status: LearningStatus;
+}> = [
   {
     detail:
       "Pushing the harness toward fewer human checkpoints without losing reviewability.",
     label: "Multi-agent orchestration patterns",
+    next: "Draft a 3-tier authority spec",
+    status: "drafting",
   },
   {
     detail:
       "Curating real conversations into RAG-quality datasets for brand-voice replies.",
     label: "Voice-trained chatbot data prep",
+    next: "Build the curation pipeline",
+    status: "exploring",
   },
   {
     detail: "Tightening cold start + cache hit rates on Vercel Fluid Compute.",
     label: "Edge-first deployment trade-offs",
+    next: "Awaiting Vercel SDK update",
+    status: "blocked",
   },
 ];
+
+const LEARNING_STATUS_META: Record<
+  LearningStatus,
+  { dot: string; label: string; text: string }
+> = {
+  blocked: {
+    dot: "bg-problem-red",
+    label: "Blocked",
+    text: "text-problem-red",
+  },
+  drafting: {
+    dot: "bg-accent",
+    label: "Drafting",
+    text: "text-accent",
+  },
+  exploring: {
+    dot: "bg-result-green",
+    label: "Exploring",
+    text: "text-result-green",
+  },
+};
 
 type ShippedEntry = {
   fullSha?: string;
@@ -393,32 +427,66 @@ export default function NowPage() {
         </div>
       </NowSection>
 
-      {/* LEARNING */}
+      {/* LEARNING — each open loop now carries a status (Exploring /
+          Drafting / Blocked) + a "next action" line. Reads as a
+          live R&D log rather than a static curiosity list. */}
       <NowSection chapter="03" eyebrow="Learning" id="learning" title="Open loops.">
         <ol className="grid divide-y divide-border-light border-y border-border-light">
-          {LEARNING.map((entry, index) => (
-            <li
-              className="grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-6 sm:py-8"
-              key={entry.label}
-            >
-              <span className="col-span-12 font-mono text-[11px] uppercase tracking-[0.32em] text-accent lg:col-span-1">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <h3
-                className="col-span-12 font-semibold tracking-tight text-text-light lg:col-span-6"
-                style={{
-                  fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
-                  letterSpacing: "-0.02em",
-                  lineHeight: 1.1,
-                }}
+          {LEARNING.map((entry, index) => {
+            const meta = LEARNING_STATUS_META[entry.status];
+            return (
+              <li
+                className="grid grid-cols-12 items-baseline gap-x-4 gap-y-3 py-7 sm:py-9"
+                key={entry.label}
               >
-                {entry.label}
-              </h3>
-              <p className="col-span-12 text-sm leading-6 text-text-light-muted lg:col-span-5 lg:text-right">
-                {entry.detail}
-              </p>
-            </li>
-          ))}
+                <span className="col-span-12 flex items-center gap-3 lg:col-span-1">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </span>
+                <div className="col-span-12 lg:col-span-7">
+                  <span
+                    className={`inline-flex items-center gap-2 rounded-full border border-current/30 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.24em] ${meta.text}`}
+                  >
+                    <span
+                      className={`relative inline-flex h-1.5 w-1.5 rounded-full ${meta.dot}`}
+                    >
+                      {entry.status === "exploring" ? (
+                        <span
+                          className={`absolute inset-0 animate-ping rounded-full ${meta.dot}/60`}
+                        />
+                      ) : null}
+                    </span>
+                    {meta.label}
+                  </span>
+                  <h3
+                    className="mt-3 font-semibold tracking-tight text-text-light"
+                    style={{
+                      fontSize: "clamp(1.1rem, 2vw, 1.4rem)",
+                      letterSpacing: "-0.02em",
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    {entry.label}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-text-light-muted">
+                    {entry.detail}
+                  </p>
+                </div>
+                <div className="col-span-12 lg:col-span-4 lg:text-right">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    Next action
+                  </p>
+                  <p className="mt-2 inline-flex items-baseline gap-2 font-mono text-[12.5px] leading-6 text-text-light">
+                    <span aria-hidden="true" className="text-accent/70">
+                      →
+                    </span>
+                    <span>{entry.next}</span>
+                  </p>
+                </div>
+              </li>
+            );
+          })}
         </ol>
       </NowSection>
 
