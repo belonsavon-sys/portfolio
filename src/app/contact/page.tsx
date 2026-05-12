@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ParallaxBackdrop } from "@/components";
+import { ParallaxBackdrop, ParallaxGhost } from "@/components";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -82,7 +82,7 @@ export default function ContactPage() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
         >
-          <span
+          <ParallaxGhost
             className="select-none font-bold leading-[0.85] tracking-tighter text-accent-light/[0.05]"
             style={{
               fontSize: "clamp(6rem, 22vw, 22rem)",
@@ -91,7 +91,7 @@ export default function ContactPage() {
             }}
           >
             HELLO
-          </span>
+          </ParallaxGhost>
         </div>
 
         <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:px-8">
