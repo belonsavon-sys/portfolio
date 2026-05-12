@@ -295,20 +295,59 @@ function BlackdoorSection() {
         <div>
           <AtlasHierarchy layers={atlasLayers} />
 
-          <div className="mt-10 grid gap-6 text-base leading-7 text-text-light-muted lg:grid-cols-2">
-            <p>
-              At Blackdoor, I lead AI R&amp;D and implementation. Atlas is a
-              multi-level autonomous agent harness — a CEO agent routes work
-              to C-suite agents (CFO, CMO), who delegate to manager and field
-              agents. Designed to build, operate, and improve software
-              products autonomously.
-            </p>
-            <p>
-              Atlas has already shipped a game app, a budget web app, and an
-              agent-augmented project management system. The same underlying
-              technology is deployed at ThePrivateHotels. We run everything
-              through GitHub PRs. Every decision is governed.
-            </p>
+          {/* Two editorial spec cards — first card explains the
+              architecture, second card shows the proof. Replaces the
+              flat side-by-side paragraph block. */}
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            <article className="relative rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-7">
+              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+                <span className="text-text-light-muted/60">// </span>
+                01 · Architecture
+              </p>
+              <h3
+                className="mt-3 font-semibold tracking-tight text-text-light"
+                style={{
+                  fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+                  letterSpacing: "-0.025em",
+                  lineHeight: 1.1,
+                }}
+              >
+                What Atlas is.
+              </h3>
+              <p className="mt-3 text-base leading-7 text-text-light-muted">
+                At Blackdoor, I lead AI R&amp;D and implementation. Atlas
+                is a multi-level autonomous agent harness — a CEO agent
+                routes work to C-suite agents (CFO, CMO), who delegate to
+                manager and field agents. Designed to build, operate, and
+                improve software products autonomously.
+              </p>
+            </article>
+
+            <article className="relative rounded-2xl border border-accent/40 bg-[rgba(41,110,214,0.04)] p-6 shadow-[0_18px_36px_-22px_rgba(41,110,214,0.25)] sm:p-7">
+              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+                <span className="text-text-light-muted/60">// </span>
+                02 · Proof
+              </p>
+              <h3
+                className="mt-3 font-semibold tracking-tight text-text-light"
+                style={{
+                  fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+                  letterSpacing: "-0.025em",
+                  lineHeight: 1.1,
+                }}
+              >
+                What Atlas has done.
+              </h3>
+              <p className="mt-3 text-base leading-7 text-text-light-muted">
+                Atlas has already shipped a game app, a budget web app, and
+                an agent-augmented project management system. The same
+                underlying technology is deployed at ThePrivateHotels. We
+                run everything through GitHub PRs.{" "}
+                <span className="font-semibold text-text-light">
+                  Every decision is governed.
+                </span>
+              </p>
+            </article>
           </div>
         </div>
       </div>
