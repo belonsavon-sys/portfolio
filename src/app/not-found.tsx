@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components";
 
@@ -98,6 +100,28 @@ export default function NotFound() {
             >
               Get in Touch
             </Button>
+            {/* Search trigger — dispatches a synthetic Cmd+K so the
+                global KeyboardNav listener opens the command palette.
+                Knowing where to go is half the recovery from a 404. */}
+            <button
+              className="group/search inline-flex h-[3.25rem] items-center gap-2 rounded-full border border-[rgba(91,155,244,0.35)] bg-[rgba(41,110,214,0.08)] px-5 font-mono text-xs uppercase tracking-[0.24em] text-accent-light transition-[border-color,background] duration-200 hover:border-accent-light hover:bg-[rgba(91,155,244,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light"
+              onClick={() => {
+                if (typeof window === "undefined") return;
+                window.dispatchEvent(
+                  new KeyboardEvent("keydown", {
+                    bubbles: true,
+                    key: "k",
+                    metaKey: true,
+                  }),
+                );
+              }}
+              type="button"
+            >
+              <span aria-hidden="true" className="text-base leading-none">⌘</span>
+              <span>K</span>
+              <span className="ml-1 text-accent-light/60">·</span>
+              <span>Search this site</span>
+            </button>
           </div>
         </div>
 
