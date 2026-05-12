@@ -90,7 +90,9 @@ const projects: ProjectEntry[] = [
     ],
     name: "Workout App",
     scope: "End-to-end, personal",
+    shipped: "2025",
     stack: ["Next.js", "React", "Supabase", "Vercel"],
+    status: "active",
   },
   {
     bullets: [
@@ -99,7 +101,9 @@ const projects: ProjectEntry[] = [
     ],
     name: "Personal Budgeting App",
     scope: "End-to-end, personal",
+    shipped: "2025",
     stack: ["Next.js", "Supabase", "AI advisor"],
+    status: "active",
   },
   {
     bullets: [
@@ -107,7 +111,9 @@ const projects: ProjectEntry[] = [
     ],
     name: "Daily Market & News Automation",
     scope: "Personal",
+    shipped: "2024",
     stack: ["ChatGPT", "Google Calendar API"],
+    status: "active",
   },
 ];
 
@@ -252,7 +258,9 @@ type ProjectEntry = {
   bullets: string[];
   name: string;
   scope: string;
+  shipped: string;
   stack: string[];
+  status: "active" | "archived";
 };
 
 export default function ResumePage() {
@@ -812,6 +820,22 @@ function ProjectLedger({ entries }: { entries: ProjectEntry[] }) {
 
           <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
             <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              Status
+            </p>
+            <p className="mt-2 inline-flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-text-light">
+              {entry.status === "active" ? (
+                <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                  <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                </span>
+              ) : (
+                <span aria-hidden="true" className="inline-block h-1.5 w-1.5 rounded-full bg-text-light-muted" />
+              )}
+              {entry.status === "active" ? "Active" : "Archived"}
+              <span aria-hidden="true" className="text-text-light-muted/60">·</span>
+              <span className="text-text-light-muted">Shipped {entry.shipped}</span>
+            </p>
+            <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
               Scope
             </p>
             <p className="mt-2 text-sm leading-6 text-text-light">
