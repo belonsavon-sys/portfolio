@@ -604,28 +604,17 @@ function MetricsBand() {
   const reduce = useReducedMotion();
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Scroll-tied scatter for the 6 metric cards on the way out of the
-  // section. Each column drifts in a different direction in the back
-  // half of progress, mirroring the hero's parting-curtain feel —
-  // column 0 lifts and drifts left, column 1 just fades, column 2
-  // drifts right.
+  // Scroll-tied exit fade for the metric rows — kept simple in the
+  // typographic redesign: rows fade out together as the section
+  // exits, no per-column scatter.
   const { scrollYProgress } = useScroll({
     offset: ["start start", "end start"],
     target: sectionRef,
   });
-  const scatterLeftX = useTransform(scrollYProgress, [0.55, 1], [0, -90]);
-  const scatterRightX = useTransform(scrollYProgress, [0.55, 1], [0, 90]);
-  const scatterOpacity = useTransform(
-    scrollYProgress,
-    [0.55, 0.95],
-    [1, 0],
-  );
+  const exitOpacity = useTransform(scrollYProgress, [0.6, 0.95], [1, 0]);
 
   return (
-    <div
-      className="relative grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]"
-      ref={sectionRef}
-    >
+    <div className="relative" ref={sectionRef}>
       <SectionHeader
         description="Six numbers from systems still running today — each one measured against the manual workflow it replaced."
         eyebrow="Outcomes"
@@ -633,60 +622,74 @@ function MetricsBand() {
         title="Shipped to production. Measured by what changed."
       />
 
-      <div className="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-        {detailedMetrics.map((metric, index) => {
-          // 3-col layout (lg): col 0,1,2 → scatter left / none / right.
-          const col = index % 3;
-          const exitX =
-            col === 0 ? scatterLeftX : col === 2 ? scatterRightX : undefined;
-          return (
-          <ScrollReveal delay={index * 0.05} direction="up" key={metric.label}>
-            <motion.div
-              style={
-                reduce
-                  ? undefined
-                  : exitX
-                    ? { opacity: scatterOpacity, x: exitX }
-                    : { opacity: scatterOpacity }
-              }
-            >
-            <div className="group relative border-l-2 border-border-light pl-5 transition-[border-color] duration-300 hover:border-accent">
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-                {metric.label}
-              </p>
-              <p
-                className="mt-3 font-bold tracking-tight text-text-light"
-                style={{
-                  fontSize: "clamp(2.5rem, 5vw, 4rem)",
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1,
-                }}
-              >
-                <AnimatedCounter suffix={metric.suffix} to={metric.to} />
-              </p>
-              <motion.span
-                aria-hidden="true"
-                className="mt-4 block h-px w-12 origin-left bg-accent/40 transition-transform duration-500 group-hover:scale-x-[2]"
-                initial={
-                  reduce ? false : { clipPath: "inset(0 100% 0 0)" }
-                }
-                transition={{
-                  delay: 0.22 + index * 0.05,
-                  duration: 0.75,
-                  ease: easeOut,
-                }}
-                viewport={{ amount: 0.3, once: true }}
-                whileInView={
-                  reduce ? undefined : { clipPath: "inset(0 0 0 0)" }
-                }
-              />
-            </div>
-            </motion.div>
-          </ScrollReveal>
-          );
-        })}
-      </div>
+      {/* Typographic showcase — each metric is a full-width row with a
+          MASSIVE number on the left and label/index on the right.
+          Reads like a spec sheet / annual report spread. */}
+      <motion.ol
+        className="mt-12 grid divide-y divide-border-light border-y border-border-light"
+        style={reduce ? undefined : { opacity: exitOpacity }}
+      >
+        {detailedMetrics.map((metric, index) => (
+          <MetricRow index={index} key={metric.label} metric={metric} />
+        ))}
+      </motion.ol>
     </div>
+  );
+}
+
+function MetricRow({
+  index,
+  metric,
+}: {
+  index: number;
+  metric: (typeof detailedMetrics)[number];
+}) {
+  const reduce = useReducedMotion();
+
+  return (
+    <motion.li
+      animate={reduce ? undefined : { opacity: 1, y: 0 }}
+      className="group relative grid grid-cols-12 items-baseline gap-4 py-8 sm:py-10 lg:py-12"
+      initial={reduce ? false : { opacity: 0, y: 24 }}
+      transition={{
+        delay: index * 0.05,
+        duration: 0.55,
+        ease: easeOut,
+      }}
+      viewport={{ amount: 0.3, once: true }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+    >
+      {/* LEFT 7 — massive number */}
+      <div className="col-span-12 lg:col-span-7">
+        <p
+          className="font-bold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+          style={{
+            fontSize: "clamp(3.5rem, 9vw, 7rem)",
+            letterSpacing: "-0.055em",
+            lineHeight: 0.88,
+          }}
+        >
+          <AnimatedCounter suffix={metric.suffix} to={metric.to} />
+        </p>
+      </div>
+
+      {/* RIGHT 5 — label + index */}
+      <div className="col-span-12 flex items-baseline gap-4 lg:col-span-5 lg:justify-end">
+        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+          {`0${index + 1}`}
+        </span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border-light lg:w-12 lg:flex-none" />
+        <p className="max-w-xs text-base font-medium leading-6 text-text-light sm:text-lg lg:text-right">
+          {metric.label}
+        </p>
+      </div>
+
+      {/* Hover accent — thin gradient line that draws across on hover */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+      />
+    </motion.li>
   );
 }
 
