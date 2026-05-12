@@ -395,24 +395,28 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           ))}
         </div>
 
-        <motion.div
-          className="mt-16 flex flex-wrap items-center justify-center gap-2.5"
-          {...fadeUp(0.55)}
-        >
+        <div className="mt-16 flex flex-wrap items-center justify-center gap-2.5">
           {[
             "EN · ES · IT",
             "Remote-first",
             "Ocean Shores, WA",
-          ].map((role) => (
-            <span
+          ].map((role, index) => (
+            <motion.span
+              animate={reduce ? undefined : { opacity: 1, y: 0 }}
               className="group inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/65 px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.22em] text-text-light backdrop-blur-md transition-[border-color,background] duration-200 hover:border-accent hover:bg-white/85"
+              initial={reduce ? false : { opacity: 0, y: 12 }}
               key={role}
+              transition={{
+                delay: 0.55 + index * 0.08,
+                duration: 0.55,
+                ease: easeOut,
+              }}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-accent" />
               {role}
-            </span>
+            </motion.span>
           ))}
-        </motion.div>
+        </div>
 
         <motion.a
           aria-label="Scroll to live status"
