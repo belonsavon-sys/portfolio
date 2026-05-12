@@ -4,7 +4,6 @@ import {
   Button,
   CursorHalo,
   IndexedDivider,
-  ParallaxBackdrop,
   ParallaxGhost,
   ScrollReveal,
   SectionDivider,
@@ -116,12 +115,6 @@ function BusinessHero() {
   return (
     <section className="relative overflow-hidden">
       <CursorHalo />
-      <ParallaxBackdrop>
-        <div className="absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2">
-          <div className="orb-drift-a h-full w-full rounded-full bg-accent/55 blur-3xl" />
-        </div>
-        <div className="orb-drift-b absolute -bottom-24 right-[-10%] h-[360px] w-[360px] rounded-full bg-accent-light/45 blur-3xl" />
-      </ParallaxBackdrop>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ParallaxBackdrop, ParallaxGhost } from "@/components";
+import { ParallaxGhost } from "@/components";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -71,13 +71,6 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-bg-dark text-text-dark">
       <section className="relative overflow-hidden">
-        <ParallaxBackdrop>
-          <div className="absolute -top-32 left-1/2 h-[620px] w-[620px] -translate-x-1/2">
-            <div className="orb-drift-a h-full w-full rounded-full bg-accent/40 blur-3xl" />
-          </div>
-          <div className="orb-drift-b absolute -bottom-32 left-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/25 blur-3xl" />
-          <div className="orb-drift-c absolute -bottom-24 right-[-10%] h-[420px] w-[420px] rounded-full bg-accent/25 blur-3xl" />
-        </ParallaxBackdrop>
 
         {/* Giant ghost watermark */}
         <div

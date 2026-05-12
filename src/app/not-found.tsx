@@ -3,16 +3,6 @@ import { Button } from "@/components";
 export default function NotFound() {
   return (
     <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-bg-dark px-4 text-text-dark">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        {/* Centered orb wrapped so the -50% centering isn't clobbered
-            by the orb-drift keyframes (same pattern as iter 141). */}
-        <div className="absolute -top-32 left-1/2 h-[560px] w-[560px] -translate-x-1/2">
-          <div className="orb-drift-a h-full w-full rounded-full bg-accent/35 blur-3xl" />
-        </div>
-        <div className="orb-drift-b absolute -bottom-32 right-[-10%] h-[420px] w-[420px] rounded-full bg-accent-light/26 blur-3xl" />
-        <div className="orb-drift-c absolute -bottom-24 left-[-10%] h-[360px] w-[360px] rounded-full bg-accent/24 blur-3xl" />
-      </div>
-
       {/* Giant ghost 404 */}
       <div
         aria-hidden="true"
