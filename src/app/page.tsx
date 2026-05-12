@@ -75,6 +75,33 @@ function HeroLiveShipped() {
   );
 }
 
+/**
+ * Latest commit subject — captured at build time via next.config.ts
+ * (VERCEL_GIT_COMMIT_MESSAGE or local git log). Renders inline next
+ * to the live-shipped badge as a mono "latest:" tag, giving the
+ * hero top strip a real "what just shipped" line.
+ *
+ * Truncated past ~64 chars so long commit messages don't break
+ * the editorial top strip layout. Hidden when no subject is set.
+ */
+function HeroLatestCommit() {
+  const subject = process.env.NEXT_PUBLIC_BUILD_COMMIT_SUBJECT;
+  if (!subject) return null;
+  const truncated = subject.length > 64 ? `${subject.slice(0, 64)}…` : subject;
+  return (
+    <span
+      aria-label="Latest commit subject"
+      className="hidden max-w-[42ch] items-center gap-2 truncate font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted lg:inline-flex"
+      title={subject}
+    >
+      <span aria-hidden="true" className="text-accent/60">
+        latest:
+      </span>
+      <span className="truncate text-text-light/70">{truncated}</span>
+    </span>
+  );
+}
+
 function formatTimeAgo(then: Date, now: number) {
   const seconds = Math.max(0, Math.round((now - then.getTime()) / 1000));
   if (seconds < 60) return "just now";
@@ -590,6 +617,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
             01 / Welcome
           </span>
+          <HeroLatestCommit />
         </motion.div>
 
         {/* LEFT — oversized typographic name + tagline + CTAs (cols 1–7 on lg) */}
