@@ -42,20 +42,38 @@ const blackdoorOutcomes = [
 ];
 
 const atlasLayers = [
-  { badge: "01", items: ["Pierre + Ryder — co-founders"], title: "Founders" },
-  { badge: "02", items: ["Atlas — multi-agent harness"], title: "Engine" },
+  {
+    badge: "01",
+    description:
+      "Two co-founders set scope. Pierre handles AI R&D and implementation; Ryder runs the business side.",
+    items: ["Pierre + Ryder — co-founders"],
+    title: "Founders",
+  },
+  {
+    badge: "02",
+    description:
+      "The multi-level autonomous harness that runs the rest. Connects any AI model to any external tool through MCP or OAuth.",
+    items: ["Atlas — multi-agent harness"],
+    title: "Engine",
+  },
   {
     badge: "03",
+    description:
+      "Strategic-tier agents that read the brief, decide direction, and route work down to managers.",
     items: ["CEO Agent", "CFO Agent", "CMO Agent"],
     title: "C-suite agents",
   },
   {
     badge: "04",
+    description:
+      "Manager agents break work into tasks; field agents pick them up, write the code, and file PRs against the board.",
     items: ["Manager agents", "Field agents"],
     title: "Execution layer",
   },
   {
     badge: "05",
+    description:
+      "Real products operating in production — game, budget tracker, agent-augmented PM. Every change shipped under human review.",
     items: ["Game app", "Budget app", "Project management"],
     title: "Shipped products",
   },

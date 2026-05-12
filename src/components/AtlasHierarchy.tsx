@@ -1,16 +1,11 @@
 "use client";
 
-import {
-  motion,
-  useMotionValueEvent,
-  useReducedMotion,
-  useScroll,
-} from "framer-motion";
-import { useRef, useState } from "react";
-import { ScrollReveal } from "./ScrollReveal";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 
 export type AtlasHierarchyLayer = {
   badge: string;
+  description?: string;
   items: string[];
   title: string;
 };
@@ -19,36 +14,23 @@ export type AtlasHierarchyProps = {
   layers: AtlasHierarchyLayer[];
 };
 
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
 /**
- * The Atlas 5-layer hierarchy with a scroll-driven scrubber: as the
- * user scrolls through the list, a sticky indicator at the top of the
- * column shows the active layer name and a 5-segment fill bar
- * progresses left-to-right.
+ * Interactive Atlas hierarchy. Left column is a stack of 5 clickable
+ * node-rows for the layers (Founders → Engine → C-suite → Execution →
+ * Shipped). Right column is a sticky detail panel that cross-fades as
+ * the active layer changes.
  *
- * scrollYProgress is scoped to the list's own ref (offset
- * ["start 75%", "end 25%"]) so the bar starts filling when the list
- * is about a quarter into view from the bottom and completes when
- * it's a quarter out the top.
+ * Selection model: hover provides a transient preview; click pins the
+ * selection. mouseleave on the column reverts to the pinned index.
  */
 export function AtlasHierarchy({ layers }: AtlasHierarchyProps) {
   const reduce = useReducedMotion();
-  const listRef = useRef<HTMLUListElement>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const { scrollYProgress } = useScroll({
-    offset: ["start 75%", "end 25%"],
-    target: listRef,
-  });
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (reduce) return;
-    // Map 0..1 → 0..layers.length-1, clamped.
-    const idx = Math.min(
-      layers.length - 1,
-      Math.max(0, Math.floor(latest * layers.length)),
-    );
-    setActiveIndex(idx);
-  });
+  const [pinnedIndex, setPinnedIndex] = useState(0);
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const activeIndex = hoverIndex ?? pinnedIndex;
+  const activeLayer = layers[activeIndex];
 
   return (
     <div>
@@ -64,80 +46,103 @@ export function AtlasHierarchy({ layers }: AtlasHierarchyProps) {
           Atlas · the engine
         </p>
         <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+          Hover · click to pin
+        </p>
       </div>
 
-      {/* SCROLL SCRUBBER — sticky strip showing active layer + progress bar */}
-      <div className="sticky top-24 z-10 mt-5 -mx-2 rounded-xl border border-border-light bg-bg-light/85 px-3 py-2.5 backdrop-blur-md sm:mx-0 sm:px-4">
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
-            {layers[activeIndex]?.badge ?? "00"}
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
-            /
-          </span>
-          <motion.span
-            animate={{ opacity: 1 }}
-            className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-light"
-            initial={{ opacity: 0.6 }}
-            key={layers[activeIndex]?.title}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {layers[activeIndex]?.title}
-          </motion.span>
-          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
-            {String(activeIndex + 1).padStart(2, "0")} / {String(layers.length).padStart(2, "0")}
-          </span>
-        </div>
-        {/* Segmented progress rail */}
-        <div className="mt-2 flex gap-1">
-          {layers.map((_, i) => (
-            <span
-              className={`h-[3px] flex-1 rounded-full transition-colors duration-300 ${
-                i <= activeIndex
-                  ? "bg-gradient-to-r from-accent-deep via-accent to-accent-light"
-                  : "bg-[rgba(41,110,214,0.18)]"
-              }`}
-              key={i}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* The hierarchy list itself */}
-      <ul className="relative mt-5 grid gap-3" ref={listRef}>
-        {/* Subtle vertical thread connecting the hierarchy levels */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute left-8 top-4 bottom-4 w-px bg-gradient-to-b from-accent/60 via-accent/25 to-transparent"
-        />
-        {layers.map((layer, index) => {
-          const active = index === activeIndex;
-          return (
-            <ScrollReveal delay={index * 0.06} direction="left" key={layer.title}>
-              <li
-                className={`group relative rounded-xl border bg-bg-light-2 p-5 transition-[border-color,box-shadow,transform] duration-300 ${
-                  active && !reduce
-                    ? "border-accent/45 shadow-[0_8px_24px_-12px_rgba(41,110,214,0.25)]"
-                    : "border-border-light hover:-translate-y-0.5 hover:border-accent/45 hover:shadow-[0_8px_24px_-12px_rgba(41,110,214,0.25)]"
-                }`}
-              >
-                <div className="flex items-baseline gap-3">
+      <div
+        className="mt-6 grid gap-6 lg:grid-cols-[1fr_340px] lg:items-start"
+        onMouseLeave={() => setHoverIndex(null)}
+      >
+        {/* LEFT — clickable / hoverable node stack */}
+        <ul className="relative grid gap-2">
+          {/* Vertical thread connecting the layers */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute left-[1.125rem] top-3 bottom-3 w-px bg-gradient-to-b from-accent/55 via-accent/25 to-transparent"
+          />
+          {layers.map((layer, index) => {
+            const isActive = index === activeIndex;
+            return (
+              <li key={layer.title}>
+                <button
+                  aria-current={index === pinnedIndex ? "true" : undefined}
+                  className={`group relative flex w-full items-center gap-3 rounded-xl border bg-bg-light-2 p-4 text-left transition-[border-color,background,box-shadow,transform] duration-300 ${
+                    isActive
+                      ? "border-accent bg-[rgba(41,110,214,0.06)] shadow-[0_12px_28px_-16px_rgba(41,110,214,0.4)]"
+                      : "border-border-light hover:border-accent/45"
+                  }`}
+                  onClick={() => setPinnedIndex(index)}
+                  onFocus={() => setHoverIndex(index)}
+                  onMouseEnter={() => setHoverIndex(index)}
+                  type="button"
+                >
+                  {/* Node circle */}
                   <span
-                    className={`relative inline-flex h-6 w-6 items-center justify-center rounded-full border font-mono text-[10px] font-semibold tracking-tight transition-colors duration-300 ${
-                      active && !reduce
-                        ? "border-accent bg-accent text-white"
+                    className={`relative z-10 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border font-mono text-[11px] font-semibold tracking-tight transition-colors duration-300 ${
+                      isActive
+                        ? "border-accent bg-accent text-white shadow-[0_0_0_4px_rgba(41,110,214,0.15)]"
                         : "border-accent/40 bg-bg-light text-accent"
                     }`}
                   >
                     {layer.badge}
                   </span>
-                  <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted transition-colors duration-200 group-hover:text-text-light">
-                    {layer.title}
+                  <div className="flex flex-1 items-center justify-between gap-3">
+                    <span
+                      className={`font-mono text-xs uppercase tracking-[0.22em] transition-colors duration-200 ${
+                        isActive
+                          ? "text-text-light"
+                          : "text-text-light-muted group-hover:text-text-light"
+                      }`}
+                    >
+                      {layer.title}
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className={`font-mono text-[10px] uppercase tracking-[0.22em] transition-colors duration-200 ${
+                        index === pinnedIndex
+                          ? "text-accent"
+                          : "text-text-light-muted/60"
+                      }`}
+                    >
+                      {index === pinnedIndex ? "Pinned" : `0${index + 1}`}
+                    </span>
+                  </div>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* RIGHT — sticky detail panel, cross-fades on active change */}
+        <aside className="lg:sticky lg:top-28">
+          <div className="overflow-hidden rounded-2xl border border-border-light bg-bg-light p-6 shadow-[0_18px_36px_-22px_rgba(41,110,214,0.18)]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
+                key={activeLayer.title}
+                transition={{ duration: 0.3, ease: easeOut }}
+              >
+                <div className="flex items-baseline gap-3">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-accent bg-accent text-[11px] font-mono font-semibold text-white">
+                    {activeLayer.badge}
                   </span>
+                  <h4 className="text-xl font-semibold tracking-tight text-text-light">
+                    {activeLayer.title}
+                  </h4>
                 </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {layer.items.map((item) => (
+
+                {activeLayer.description ? (
+                  <p className="mt-4 text-sm leading-6 text-text-light-muted">
+                    {activeLayer.description}
+                  </p>
+                ) : null}
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {activeLayer.items.map((item) => (
                     <span
                       className="inline-flex items-center rounded-md border border-accent/30 bg-[rgba(41,110,214,0.08)] px-2.5 py-1 text-sm font-medium text-text-light"
                       key={item}
@@ -146,11 +151,27 @@ export function AtlasHierarchy({ layers }: AtlasHierarchyProps) {
                     </span>
                   ))}
                 </div>
-              </li>
-            </ScrollReveal>
-          );
-        })}
-      </ul>
+
+                {/* Footer rail: position indicator */}
+                <div className="mt-6 flex items-center gap-3">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    Layer {activeIndex + 1} / {layers.length}
+                  </span>
+                  <span aria-hidden="true" className="h-px flex-1 bg-border-light">
+                    <motion.span
+                      animate={{
+                        width: `${((activeIndex + 1) / layers.length) * 100}%`,
+                      }}
+                      className="block h-full bg-gradient-to-r from-accent-deep via-accent to-accent-light"
+                      transition={{ duration: 0.4, ease: easeOut }}
+                    />
+                  </span>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }
