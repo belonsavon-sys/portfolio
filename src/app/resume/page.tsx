@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Button,
+  ChapterRail,
   ParallaxGhost,
   SplitText,
   StaggeredChipRail,
@@ -196,25 +197,25 @@ export default function ResumePage() {
       <LightSection className="pb-24 pt-4 sm:pb-32">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16 lg:items-start">
           <article className="min-w-0">
-            <ResumeSection index="00" title="Professional Summary">
+            <ResumeSection id="summary" index="00" title="Professional Summary">
               <p className="text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
                 {professionalSummary}
               </p>
             </ResumeSection>
 
-            <ResumeSection index="01" title="Experience">
+            <ResumeSection id="experience" index="01" title="Experience">
               <ExperienceLedger entries={experience} />
             </ResumeSection>
 
-            <ResumeSection index="02" title="Independent Projects">
+            <ResumeSection id="projects" index="02" title="Independent Projects">
               <ProjectLedger entries={projects} />
             </ResumeSection>
 
-            <ResumeSection index="03" title="Technical Skills">
+            <ResumeSection id="skills" index="03" title="Technical Skills">
               <SkillsDatasheet groups={skillGroups} />
             </ResumeSection>
 
-            <ResumeSection index="04" title="Education">
+            <ResumeSection id="education" index="04" title="Education">
               <EducationSpec entries={education} />
             </ResumeSection>
           </article>
@@ -332,6 +333,19 @@ export default function ResumePage() {
           </aside>
         </div>
       </LightSection>
+
+      {/* CHAPTER RAIL — floating right-margin navigation. Same
+          component the home page uses; mirrors the 5 indexed
+          ResumeSection blocks. */}
+      <ChapterRail
+        sections={[
+          { id: "summary", index: "00", label: "Summary" },
+          { id: "experience", index: "01", label: "Experience" },
+          { id: "projects", index: "02", label: "Projects" },
+          { id: "skills", index: "03", label: "Skills" },
+          { id: "education", index: "04", label: "Education" },
+        ]}
+      />
     </main>
   );
 }
@@ -454,15 +468,17 @@ function LightSection({
  */
 function ResumeSection({
   children,
+  id,
   index,
   title,
 }: {
   children: ReactNode;
+  id?: string;
   index: string;
   title: string;
 }) {
   return (
-    <section className="mt-20 first:mt-0">
+    <section className="mt-20 scroll-mt-28 first:mt-0" id={id}>
       <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
         <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
           {index} · Section
