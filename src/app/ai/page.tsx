@@ -1,3 +1,12 @@
+"use client";
+
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
+import { useRef } from "react";
 import {
   AtlasDemo,
   AtlasGallery,
@@ -242,16 +251,42 @@ function AiHero() {
 }
 
 function ServicesSection() {
+  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-tied scatter on exit, matching the pattern on /. Columns 0/1/2
+  // on xl scatter left / center / right.
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end start"],
+    target: sectionRef,
+  });
+  const exitOpacity = useTransform(scrollYProgress, [0.6, 0.95], [1, 0]);
+  const exitLeft = useTransform(scrollYProgress, [0.6, 1], [0, -90]);
+  const exitRight = useTransform(scrollYProgress, [0.6, 1], [0, 90]);
+
   return (
-    <div>
+    <div ref={sectionRef}>
       <SectionHeader eyebrow="What I build" title="From process to product." />
       <div className="mt-12 grid gap-x-10 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
-        {services.map((service, index) => (
+        {services.map((service, index) => {
+          const col = index % 3;
+          const exitX =
+            col === 0 ? exitLeft : col === 2 ? exitRight : undefined;
+          return (
           <ScrollReveal
             delay={index * 0.05}
             direction="up"
             key={service.name}
           >
+            <motion.div
+              style={
+                reduce
+                  ? undefined
+                  : exitX
+                    ? { opacity: exitOpacity, x: exitX }
+                    : { opacity: exitOpacity }
+              }
+            >
             <div className="group relative border-l border-border-light pl-5 transition-[border-color] duration-300 hover:border-accent">
               <p className="font-mono text-xs uppercase tracking-[0.22em] text-accent">
                 {service.icon}
@@ -269,8 +304,10 @@ function ServicesSection() {
                 {service.description}
               </p>
             </div>
+            </motion.div>
           </ScrollReveal>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
