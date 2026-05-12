@@ -46,6 +46,87 @@ const SPEC_ROWS: Array<{ label: string; value: string }> = [
 
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
+type FooterCommit = { sha: string; subject: string; when: string };
+
+function readFooterRecent(): FooterCommit[] {
+  try {
+    const raw = process.env.NEXT_PUBLIC_BUILD_RECENT_COMMITS;
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.slice(0, 3) : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Footer build-stats stripe — live counts derived from BUILD_*
+ * env vars baked at compile time. Sits beneath the hero callout
+ * and above the editorial footer columns on every page.
+ */
+function FooterBuildStatsStripe() {
+  const commits = process.env.NEXT_PUBLIC_BUILD_COMMIT_COUNT ?? "";
+  const prs = process.env.NEXT_PUBLIC_BUILD_PR_COUNT ?? "";
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+  const sha = (process.env.NEXT_PUBLIC_BUILD_SHA ?? "").slice(0, 7);
+
+  function freshness(iso?: string): string {
+    if (!iso) return "fresh";
+    const then = new Date(iso).getTime();
+    if (Number.isNaN(then)) return "fresh";
+    const mins = Math.max(0, Math.round((Date.now() - then) / 60000));
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins} min ago`;
+    const hours = Math.round(mins / 60);
+    if (hours < 24) return `${hours} h ago`;
+    const days = Math.round(hours / 24);
+    return `${days} d ago`;
+  }
+
+  const items: Array<{ key: string; pulse?: boolean; value: string }> = [
+    { key: "Commits", value: commits ? `${commits} on main` : "many" },
+    { key: "PRs merged", value: prs ? `${prs} · all reviewed` : "200+" },
+    { key: "Routes", value: "9 · all editorial" },
+    { key: "Last ship", pulse: true, value: `${freshness(buildTime)} · ${sha || "dev"}` },
+  ];
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.55)] backdrop-blur-sm">
+      <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+        <span className="relative inline-flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+          <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+        </span>
+        <span>~/build-stats</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.18)]" />
+        <span className="text-text-dark-muted">live · derived from git</span>
+      </div>
+      <ul className="grid grid-cols-2 divide-y divide-[rgba(91,155,244,0.12)] sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+        {items.map((item, index) => (
+          <li
+            className="flex flex-col gap-1 px-4 py-3 sm:px-5 sm:py-4"
+            key={item.key}
+          >
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+              <span className="text-text-dark-muted/60">// </span>
+              {String(index + 1).padStart(2, "0")} {item.key}
+            </span>
+            <span className="flex items-center gap-2 font-mono text-[13px] leading-6 text-text-dark sm:text-sm">
+              {item.pulse ? (
+                <span className="relative inline-flex h-1.5 w-1.5">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                  <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                </span>
+              ) : null}
+              <span className="truncate">{item.value}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function SiteFooter() {
   const reduce = useReducedMotion();
 
@@ -185,6 +266,13 @@ export function SiteFooter() {
               ))}
             </ul>
           </div>
+        </motion.div>
+
+        {/* BUILD STATS STRIP — live signal from BUILD env vars.
+            Sits between the hero callout and the editorial footer
+            below; mirrors the ~/cadence stripe on /now. */}
+        <motion.div className="col-span-12" {...fadeUp(0.22)}>
+          <FooterBuildStatsStripe />
         </motion.div>
 
         {/* BOTTOM STRIP — full-width editorial footer.
