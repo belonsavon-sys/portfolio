@@ -1,34 +1,88 @@
 import { Button, ChapterRail, ParallaxGhost } from "@/components";
 
-const STACK = [
-  { detail: "App Router · Server Components · Turbopack", label: "Next.js 16" },
-  { detail: "Atomic styling · variable axes · CSS containment", label: "Tailwind v4" },
-  { detail: "Scroll-driven animations · spring physics · layout", label: "Framer Motion" },
-  { detail: "Per-route ImageResponse cards · edge runtime", label: "next/og" },
-  { detail: "Edge hosting · preview URLs · analytics", label: "Vercel" },
-  { detail: "PR-driven · auto-merge · branch-per-iter", label: "GitHub" },
+type StackEntry = {
+  detail: string;
+  label: string;
+  link: { href: string; label: string };
+  role: string;
+  since: string;
+};
+
+const STACK: StackEntry[] = [
+  {
+    detail: "App Router · Server Components · Turbopack",
+    label: "Next.js 16",
+    link: { href: "/uses#runtime", label: "the runtime" },
+    role: "Framework",
+    since: "2026",
+  },
+  {
+    detail: "Atomic styling · variable axes · CSS containment",
+    label: "Tailwind v4",
+    link: { href: "/uses#design", label: "the design system" },
+    role: "Style",
+    since: "2026",
+  },
+  {
+    detail: "Scroll-driven animations · spring physics · layout",
+    label: "Framer Motion",
+    link: { href: "/", label: "see it on home" },
+    role: "Motion",
+    since: "2026",
+  },
+  {
+    detail: "Per-route ImageResponse cards · edge runtime",
+    label: "next/og",
+    link: { href: "/atlas/opengraph-image", label: "an OG card" },
+    role: "OG/SEO",
+    since: "2026",
+  },
+  {
+    detail: "Edge hosting · preview URLs · analytics",
+    label: "Vercel",
+    link: { href: "/uses#hosting", label: "the deploy story" },
+    role: "Hosting",
+    since: "2025",
+  },
+  {
+    detail: "PR-driven · auto-merge · branch-per-iter",
+    label: "GitHub",
+    link: { href: "/now#shipped", label: "the ship log" },
+    role: "Source",
+    since: "2024",
+  },
 ];
 
-const PRINCIPLES = [
+type Principle = {
+  detail: string;
+  label: string;
+  receipt: { href: string; label: string };
+};
+
+const PRINCIPLES: Principle[] = [
   {
     detail:
       "Every chapter / section / page on this site uses the same ~/slug · meta datasheet header, the same indexed rows, the same gradient hairline on hover. Cohesion is built, not decorated.",
     label: "One editorial language",
+    receipt: { href: "/atlas#capabilities", label: "atlas capabilities" },
   },
   {
     detail:
       "Live commit subject in the hero. Real git data on /now. ~/career years that auto-tick. The site shouldn't lie about how fresh it is.",
     label: "Honest live signals",
+    receipt: { href: "/now#shipped", label: "live ship log" },
   },
   {
     detail:
       "⌘K palette, precision cursor, chapter-slate transitions, scroll-progress ring. Top-tier interactions don't pile on — they pick one signature and ship it well.",
     label: "Signature beats novelty",
+    receipt: { href: "/", label: "open ⌘K on home" },
   },
   {
     detail:
       "JSON-LD for Person · WebSite · SoftwareApplication · ProfessionalService · ItemList. Per-route OG cards. PWA manifest. Sitemap. Recruiters' tools see the same structure humans do.",
     label: "Structured-data first",
+    receipt: { href: "/sitemap.xml", label: "the sitemap" },
   },
 ];
 
@@ -113,35 +167,7 @@ export default function ColophonPage() {
           </div>
 
           <div className="col-span-12 self-center lg:col-span-4">
-            <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-              <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
-                <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
-                <span>~/build</span>
-                <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-                <span className="text-text-light-muted">At a glance</span>
-              </div>
-              <ul className="grid">
-                {[
-                  { key: "Iterations", value: "200+ PRs" },
-                  { key: "Routes", value: "9 · all editorial" },
-                  { key: "Components", value: "40+ shared" },
-                  { key: "Stack", value: "Next.js · Tailwind · Vercel" },
-                ].map((row, index) => (
-                  <li
-                    className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
-                    key={row.key}
-                  >
-                    <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
-                      <span className="text-text-light-muted/60">// </span>
-                      {String(index + 1).padStart(2, "0")} {row.key}
-                    </span>
-                    <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
-                      {row.value}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ColophonBuildCard />
           </div>
         </div>
       </section>
@@ -156,19 +182,27 @@ export default function ColophonPage() {
         <ul className="grid divide-y divide-border-light border-y border-border-light sm:grid-cols-2 sm:divide-x">
           {STACK.map((item, index) => (
             <li
-              className="relative px-5 py-5 sm:px-7 sm:py-6"
+              className="group/stack relative px-5 py-5 sm:px-7 sm:py-6"
               key={item.label}
             >
               <span
                 aria-hidden="true"
                 className="pointer-events-none absolute left-0 top-5 h-[calc(100%-2.5rem)] w-0.5 bg-accent/50"
               />
-              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
-                <span className="text-text-light-muted/60">// </span>
-                {String(index + 1).padStart(2, "0")}
-              </p>
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+                  <span className="text-text-light-muted/60">// </span>
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                  {item.role}
+                </span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                  since {item.since}
+                </span>
+              </div>
               <h3
-                className="mt-3 font-semibold tracking-tight text-text-light"
+                className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-200 group-hover/stack:text-accent-deep"
                 style={{
                   fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
                   letterSpacing: "-0.025em",
@@ -180,6 +214,19 @@ export default function ColophonPage() {
               <p className="mt-2 text-sm leading-6 text-text-light-muted">
                 {item.detail}
               </p>
+              <a
+                className="group/stacklink mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                href={item.link.href}
+              >
+                <span aria-hidden="true" className="text-accent/70">↳</span>
+                <span className="link-underline">{item.link.label}</span>
+                <span
+                  aria-hidden="true"
+                  className="transition-transform duration-200 group-hover/stacklink:translate-x-0.5"
+                >
+                  →
+                </span>
+              </a>
             </li>
           ))}
         </ul>
@@ -211,9 +258,24 @@ export default function ColophonPage() {
               >
                 {entry.label}
               </h3>
-              <p className="col-span-12 text-base leading-7 text-text-light-muted lg:col-span-7">
-                {entry.detail}
-              </p>
+              <div className="col-span-12 lg:col-span-7">
+                <p className="text-base leading-7 text-text-light-muted">
+                  {entry.detail}
+                </p>
+                <a
+                  className="group/recpt mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.24em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                  href={entry.receipt.href}
+                >
+                  <span aria-hidden="true" className="text-accent/70">↳</span>
+                  <span className="link-underline">see it: {entry.receipt.label}</span>
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-hover/recpt:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </a>
+              </div>
             </li>
           ))}
         </ol>
@@ -260,6 +322,9 @@ export default function ColophonPage() {
             </li>
           ))}
         </ol>
+
+        {/* CADENCE — real stats from the last 10 commits */}
+        <CadenceDatasheet />
       </ColophonSection>
 
       {/* 04 · CREDITS */}
@@ -269,33 +334,122 @@ export default function ColophonPage() {
         id="credits"
         title="Standing on shoulders."
       >
-        <div className="grid gap-6 text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8 lg:grid-cols-2 lg:gap-10">
-          <p>
-            Inspired by the editorial design language of{" "}
-            <strong className="text-text-light">awwwards</strong> winners,
-            the live-data discipline of <strong className="text-text-light">nownownow.com</strong>,
-            and the developer ergonomics of <strong className="text-text-light">uses.tech</strong>.
-          </p>
-          <p>
-            Type: <strong className="text-text-light">Bricolage Grotesque</strong>{" "}
-            (display) + <strong className="text-text-light">Geist Sans / Mono</strong> (body & code).
-            Brand: a single accent blue carried through all 9 routes.
-          </p>
-          <p>
-            Built end-to-end in the open. Every iteration is a commit you
-            can read. Every design choice is reversible because the next
-            PR ships in minutes.
-          </p>
-          <p>
-            Curious about Pierre? <a className="link-underline text-text-light hover:text-accent" href="/resume">the receipts live here</a>.
-            Want to talk? <a className="link-underline text-text-light hover:text-accent" href="/contact">the door is open</a>.
-          </p>
-        </div>
+        <ul className="grid divide-y divide-border-light border-y border-border-light">
+          {[
+            {
+              detail: "The reference for editorial design language — type · grid · pacing.",
+              href: "https://www.awwwards.com",
+              role: "Design",
+              source: "awwwards",
+            },
+            {
+              detail: "Live-data discipline — sites that ship a fresh signal, not a static page.",
+              href: "https://nownownow.com",
+              role: "Now-page",
+              source: "nownownow.com",
+            },
+            {
+              detail: "Developer ergonomics — be specific about the tools that make work possible.",
+              href: "https://uses.tech",
+              role: "Tools",
+              source: "uses.tech",
+            },
+            {
+              detail: "Display typeface — variable axes for the editorial display headings.",
+              href: "https://fonts.google.com/specimen/Bricolage+Grotesque",
+              role: "Type",
+              source: "Bricolage Grotesque",
+            },
+            {
+              detail: "Body & monospace — Vercel's open-source pairing, used everywhere on this site.",
+              href: "https://vercel.com/font",
+              role: "Type",
+              source: "Geist Sans / Mono",
+            },
+          ].map((entry, index) => (
+            <li
+              className="group/cred grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-6 sm:py-8"
+              key={entry.source}
+            >
+              <span className="col-span-12 font-mono text-[11px] uppercase tracking-[0.32em] text-accent lg:col-span-1">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div className="col-span-12 flex flex-wrap items-center gap-x-3 gap-y-1 lg:col-span-4">
+                <h3
+                  className="font-semibold tracking-tight text-text-light"
+                  style={{
+                    fontSize: "clamp(1.15rem, 2.2vw, 1.4rem)",
+                    letterSpacing: "-0.02em",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {entry.source}
+                </h3>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                  {entry.role}
+                </span>
+              </div>
+              <div className="col-span-12 lg:col-span-7">
+                <p className="text-base leading-7 text-text-light-muted">
+                  {entry.detail}
+                </p>
+                <a
+                  className="group/credlink mt-2 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-colors duration-200 hover:text-accent-deep"
+                  href={entry.href}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <span aria-hidden="true" className="text-accent/70">↳</span>
+                  <span className="link-underline">visit source</span>
+                  <span
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-hover/credlink:translate-x-0.5"
+                  >
+                    ↗
+                  </span>
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-8 max-w-3xl text-base leading-7 text-text-light-muted">
+          Built end-to-end in the open. Every iteration is a commit you can
+          read.{" "}
+          <a
+            className="link-underline text-text-light hover:text-accent"
+            href="/resume"
+          >
+            Curious about Pierre?
+          </a>{" "}
+          ·{" "}
+          <a
+            className="link-underline text-text-light hover:text-accent"
+            href="/contact"
+          >
+            the door is open
+          </a>
+          .
+        </p>
       </ColophonSection>
 
       {/* CLOSING */}
       <section className="relative pb-24 pt-16">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* ACTIVE PULSE BAND — this site is not a museum piece */}
+          <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-accent/30 bg-[rgba(41,110,214,0.06)] px-5 py-3">
+            <span className="relative inline-flex h-2.5 w-2.5">
+              <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+              <span className="relative inline-block h-2.5 w-2.5 rounded-full bg-result-green" />
+            </span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              Actively shipping
+            </span>
+            <span aria-hidden="true" className="h-px flex-1 bg-accent/30" />
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-light-muted">
+              new pass every few hours · no archive page
+            </span>
+          </div>
+
           <div className="rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-8">
             <div className="grid grid-cols-12 gap-x-6 gap-y-6 lg:gap-x-8">
               <div className="col-span-12 lg:col-span-7">
@@ -337,6 +491,154 @@ export default function ColophonPage() {
         ]}
       />
     </main>
+  );
+}
+
+type RecentCommit = {
+  fullSha?: string;
+  sha: string;
+  subject: string;
+  when: string;
+};
+
+function parseRecentCommits(): RecentCommit[] {
+  try {
+    const raw = process.env.NEXT_PUBLIC_BUILD_RECENT_COMMITS;
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function CadenceDatasheet() {
+  const commits = parseRecentCommits();
+  const prMerges = commits.filter((c) =>
+    c.subject.startsWith("Merge pull request"),
+  ).length;
+  const directCommits = commits.length - prMerges;
+  const latest = commits[0];
+  const oldest = commits[commits.length - 1];
+  const range = latest && oldest ? `${oldest.when} → ${latest.when}` : "—";
+
+  const rows: Array<{ key: string; tone?: "accent" | "green"; value: string }> = [
+    {
+      key: "Last ship",
+      tone: "green",
+      value: latest ? `${latest.when} · ${latest.sha}` : "—",
+    },
+    {
+      key: "Last 10 span",
+      value: range,
+    },
+    {
+      key: "PR merges",
+      tone: "accent",
+      value: `${prMerges} of ${commits.length || 10}`,
+    },
+    {
+      key: "Direct commits",
+      value: `${directCommits} of ${commits.length || 10}`,
+    },
+  ];
+
+  return (
+    <div className="mt-10 overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+        <span className="relative inline-flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+          <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+        </span>
+        <span>~/cadence</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        <span className="text-text-light-muted">last 10 commits</span>
+      </div>
+      <ul className="grid sm:grid-cols-2 sm:divide-x sm:divide-border-light">
+        {rows.map((row, index) => (
+          <li
+            className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0 sm:[&:nth-child(2)]:border-t-0"
+            key={row.key}
+          >
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="text-text-light-muted/60">// </span>
+              {String(index + 1).padStart(2, "0")} {row.key}
+            </span>
+            <span
+              className={`text-right font-mono text-[12.5px] leading-6 ${
+                row.tone === "green"
+                  ? "text-result-green"
+                  : row.tone === "accent"
+                    ? "text-accent"
+                    : "text-text-light"
+              }`}
+            >
+              {row.value}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ColophonBuildCard() {
+  const commitCount = process.env.NEXT_PUBLIC_BUILD_COMMIT_COUNT ?? "";
+  const prCount = process.env.NEXT_PUBLIC_BUILD_PR_COUNT ?? "";
+  const sha = (process.env.NEXT_PUBLIC_BUILD_SHA ?? "").slice(0, 7);
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+
+  function shippedAgo(iso?: string): string {
+    if (!iso) return "fresh";
+    const then = new Date(iso).getTime();
+    if (Number.isNaN(then)) return "fresh";
+    const mins = Math.max(0, Math.round((Date.now() - then) / 60000));
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins} min ago`;
+    const hours = Math.round(mins / 60);
+    if (hours < 24) return `${hours} h ago`;
+    const days = Math.round(hours / 24);
+    return `${days} d ago`;
+  }
+
+  const rows: Array<{ key: string; value: string }> = [
+    {
+      key: "Commits",
+      value: commitCount ? `${commitCount} on main` : "many",
+    },
+    { key: "PRs merged", value: prCount ? `${prCount} · all reviewed` : "200+" },
+    { key: "Routes", value: "9 · all editorial" },
+    { key: "Shipped", value: `${shippedAgo(buildTime)} · ${sha || "dev"}` },
+  ];
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+        <span className="relative inline-flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+          <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+        </span>
+        <span>~/build</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        <span className="text-text-light-muted">At a glance</span>
+      </div>
+      <ul className="grid">
+        {rows.map((row, index) => (
+          <li
+            className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+            key={row.key}
+          >
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="text-text-light-muted/60">// </span>
+              {String(index + 1).padStart(2, "0")} {row.key}
+            </span>
+            <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
+              {row.value}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
