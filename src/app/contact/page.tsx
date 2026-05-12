@@ -89,108 +89,139 @@ export default function ContactPage() {
           </ParallaxGhost>
         </div>
 
-        <div className="relative mx-auto flex min-h-[calc(100vh-72px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:px-8">
-          {/* Status pill */}
+        <div className="relative mx-auto grid min-h-[calc(100vh-72px)] w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24">
+          {/* TOP STRIP — status pill + chapter mark */}
           <motion.div
-            className="inline-flex items-center gap-3 rounded-full border border-result-green/40 bg-[rgba(16,185,129,0.10)] px-4 py-1.5 backdrop-blur-md"
+            className="col-span-12 flex flex-wrap items-center gap-3 self-start"
             {...fadeUp(0)}
           >
-            <span className="relative inline-flex h-2 w-2">
-              <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-              <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+            <span className="inline-flex items-center gap-3 rounded-full border border-result-green/40 bg-[rgba(16,185,129,0.10)] px-4 py-1.5 backdrop-blur-md">
+              <span className="relative inline-flex h-2 w-2">
+                <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+              </span>
+              <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-result-green">
+                /contact · open to work
+              </span>
             </span>
-            <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-result-green">
-              /contact · open to work
+            <span aria-hidden="true" className="h-px w-12 bg-accent-light/40" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-dark-muted">
+              Reply window · 24 hrs
             </span>
           </motion.div>
 
+          {/* LEFT — massive editorial headline (cols 1–8 lg) */}
           <motion.h1
-            className="hero-display-md mt-8 font-semibold text-text-dark"
+            className="col-span-12 self-center font-semibold text-text-dark lg:col-span-8"
+            style={{
+              fontSize: "clamp(3rem, 11vw, 9.5rem)",
+              letterSpacing: "-0.055em",
+              lineHeight: 0.88,
+            }}
             {...fadeUp(0.08)}
           >
-            Ready when
-            <br />
-            <span className="bg-gradient-to-r from-text-dark via-accent-light to-accent-light bg-clip-text text-transparent">
+            <span className="block">Ready when</span>
+            <span className="block bg-gradient-to-r from-text-dark via-accent-light to-accent-light bg-clip-text text-transparent">
               you are.
             </span>
           </motion.h1>
 
-          <motion.p
-            className="mt-10 max-w-2xl text-lg leading-8 text-text-dark-muted sm:text-xl sm:leading-9"
+          {/* RIGHT — supporting prose + quick stats (cols 9–12 lg) */}
+          <motion.div
+            className="col-span-12 self-center lg:col-span-4"
             {...fadeUp(0.18)}
           >
-            Open to remote roles and freelance projects. Replies inside 24 hours.
-          </motion.p>
-
-          {/* Quick stats strip — each fact pill staggers in */}
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted">
-            {["Remote", "EN · ES · IT", "Ocean Shores, WA"].map(
-              (stat, index, arr) => (
-                <span
-                  className="inline-flex items-center gap-x-6"
-                  key={stat}
-                >
-                  <motion.span
-                    animate={reduce ? undefined : { opacity: 1, y: 0 }}
-                    className="inline-flex items-center gap-2"
-                    initial={reduce ? false : { opacity: 0, y: 8 }}
-                    transition={{
-                      delay: 0.24 + index * 0.08,
-                      duration: 0.45,
-                      ease: easeOut,
-                    }}
+            <p className="text-lg leading-8 text-text-dark-muted sm:text-xl sm:leading-9">
+              Open to remote roles and freelance projects. Replies inside
+              24 hours.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted">
+              {["Remote", "EN · ES · IT", "Ocean Shores, WA"].map(
+                (stat, index, arr) => (
+                  <span
+                    className="inline-flex items-center gap-x-6"
+                    key={stat}
                   >
-                    <span className="text-accent-light">→</span> {stat}
-                  </motion.span>
-                  {index < arr.length - 1 ? (
-                    <span
-                      aria-hidden="true"
-                      className="h-3 w-px bg-[rgba(91,155,244,0.25)]"
-                    />
-                  ) : null}
-                </span>
-              ),
-            )}
-          </div>
-
-          <motion.div className="mt-16 w-full" {...fadeUp(0.3)}>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {contactLinks.map(
-                ({ Icon, href, label, rel, target, value }, index) => (
-                  <motion.a
-                    aria-label={label}
-                    className="group flex h-full flex-col items-start gap-3 rounded-2xl border border-[rgba(41,110,214,0.25)] bg-[rgba(255,255,255,0.04)] p-5 text-left transition-colors duration-200 hover:border-accent-light/60 hover:bg-[rgba(41,110,214,0.10)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
-                    href={href}
-                    initial={reduce ? { opacity: 1 } : { opacity: 0, y: 16 }}
-                    key={label}
-                    rel={rel}
-                    target={target}
-                    transition={{
-                      delay: 0.4 + index * 0.05,
-                      duration: 0.5,
-                      ease: easeOut,
-                    }}
-                    viewport={{ amount: 0.4, once: true }}
-                    whileHover={{ y: -3 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                  >
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-[rgba(41,110,214,0.35)] bg-[rgba(41,110,214,0.10)] text-accent-light">
-                      <Icon className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent-light">
-                        {label}
-                      </p>
-                      <p className="mt-1.5 break-all text-base font-semibold text-text-dark">
-                        {value}
-                      </p>
-                    </div>
-                  </motion.a>
+                    <motion.span
+                      animate={reduce ? undefined : { opacity: 1, y: 0 }}
+                      className="inline-flex items-center gap-2"
+                      initial={reduce ? false : { opacity: 0, y: 8 }}
+                      transition={{
+                        delay: 0.24 + index * 0.08,
+                        duration: 0.45,
+                        ease: easeOut,
+                      }}
+                    >
+                      <span className="text-accent-light">→</span> {stat}
+                    </motion.span>
+                    {index < arr.length - 1 ? (
+                      <span
+                        aria-hidden="true"
+                        className="h-3 w-px bg-[rgba(91,155,244,0.25)]"
+                      />
+                    ) : null}
+                  </span>
                 ),
               )}
             </div>
           </motion.div>
 
+          {/* BOTTOM — contact links as full-width row entries */}
+          <motion.div
+            className="col-span-12 grid divide-y divide-[rgba(91,155,244,0.20)] border-y border-[rgba(91,155,244,0.20)]"
+            {...fadeUp(0.32)}
+          >
+            {contactLinks.map(
+              ({ Icon, href, label, rel, target, value }, index) => (
+                <motion.a
+                  aria-label={label}
+                  className="group flex items-center gap-4 py-5 transition-[background] duration-200 hover:bg-[rgba(91,155,244,0.06)] sm:gap-6 sm:py-6"
+                  href={href}
+                  initial={reduce ? { opacity: 1 } : { opacity: 0, y: 12 }}
+                  key={label}
+                  rel={rel}
+                  target={target}
+                  transition={{
+                    delay: 0.42 + index * 0.06,
+                    duration: 0.45,
+                    ease: easeOut,
+                  }}
+                  viewport={{ amount: 0.4, once: true }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                >
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[rgba(91,155,244,0.35)] bg-[rgba(41,110,214,0.10)] text-accent-light transition-[border-color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:border-accent-light/70 sm:h-14 sm:w-14">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </div>
+                  <div className="flex flex-1 flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-6">
+                    <span className="w-24 font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+                      {label}
+                    </span>
+                    <span
+                      className="break-all text-lg font-semibold text-text-dark transition-colors duration-200 group-hover:text-accent-light sm:text-xl"
+                    >
+                      {value}
+                    </span>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[rgba(91,155,244,0.30)] text-accent-light/70 transition-[transform,border-color,background,color] duration-300 group-hover:translate-x-1 group-hover:border-accent-light group-hover:bg-accent-light group-hover:text-bg-dark"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M5 12h14m-7-7 7 7-7 7" />
+                    </svg>
+                  </span>
+                </motion.a>
+              ),
+            )}
+          </motion.div>
         </div>
       </section>
     </main>
