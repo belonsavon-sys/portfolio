@@ -61,15 +61,44 @@ const LEARNING = [
   },
 ];
 
-const SHIPPED = [
-  { label: "FinanceSection editorial datasheet", scope: "/business" },
-  { label: "SectionShell → editorial datasheet", scope: "/business" },
-  { label: "/ai page overhaul (5 iters)", scope: "/ai" },
-  { label: "/contact intake page (5 iters)", scope: "/contact" },
-  { label: "Editorial command palette", scope: "site-wide" },
-  { label: "Site-wide precision cursor ring", scope: "site-wide" },
-  { label: "404 editorial", scope: "/404" },
+type ShippedEntry = {
+  fullSha?: string;
+  sha?: string;
+  subject: string;
+  when?: string;
+};
+
+const SHIPPED_FALLBACK: ShippedEntry[] = [
+  { subject: "FinanceSection editorial datasheet", when: "/business" },
+  { subject: "SectionShell → editorial datasheet", when: "/business" },
+  { subject: "/ai page overhaul (5 iters)", when: "/ai" },
+  { subject: "/contact intake page (5 iters)", when: "/contact" },
+  { subject: "Editorial command palette", when: "site-wide" },
+  { subject: "Site-wide precision cursor ring", when: "site-wide" },
+  { subject: "404 editorial", when: "/404" },
 ];
+
+/**
+ * Parse the build-time recent-commits JSON list. Commits that are
+ * merge commits get filtered (we want the feature commits, not the
+ * "Merge pull request" noise). Falls back to the static list when
+ * the env var is absent (Vercel builds have no git history).
+ */
+function readShipped(): ShippedEntry[] {
+  const raw = process.env.NEXT_PUBLIC_BUILD_RECENT_COMMITS;
+  if (!raw) return SHIPPED_FALLBACK;
+  try {
+    const parsed = JSON.parse(raw) as ShippedEntry[];
+    const filtered = parsed.filter(
+      (c) => c.subject && !c.subject.startsWith("Merge pull request"),
+    );
+    return filtered.length > 0 ? filtered.slice(0, 8) : SHIPPED_FALLBACK;
+  } catch {
+    return SHIPPED_FALLBACK;
+  }
+}
+
+const SHIPPED = readShipped();
 
 export const metadata = {
   description:
@@ -286,25 +315,32 @@ export default function NowPage() {
         </ol>
       </NowSection>
 
-      {/* SHIPPED — recent activity */}
-      <NowSection chapter="04" eyebrow="Recent ships" id="shipped" title="Last week's PRs.">
+      {/* SHIPPED — real recent commits captured at build time
+          (next.config.ts reads `git log -10`). Falls back to a
+          curated static list when no git history is available. */}
+      <NowSection
+        chapter="04"
+        eyebrow="Recent ships"
+        id="shipped"
+        title="Last commits, real time."
+      >
         <ol className="grid divide-y divide-border-light border-y border-border-light">
           {SHIPPED.map((entry, index) => (
             <li
               className="grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-4 sm:py-5"
-              key={entry.label}
+              key={`${entry.subject}-${index}`}
             >
               <span className="col-span-12 font-mono text-[10px] uppercase tracking-[0.32em] text-accent sm:col-span-1">
-                {String(index + 1).padStart(2, "0")}
+                {entry.sha ?? String(index + 1).padStart(2, "0")}
               </span>
               <span className="col-span-12 font-mono text-sm leading-6 text-text-light sm:col-span-8">
                 <span aria-hidden="true" className="mr-2 text-accent/70">
                   &gt;
                 </span>
-                {entry.label}
+                {entry.subject}
               </span>
               <span className="col-span-12 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light-muted sm:col-span-3 sm:text-right">
-                {entry.scope}
+                {entry.when ?? "—"}
               </span>
             </li>
           ))}

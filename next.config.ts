@@ -35,13 +35,43 @@ function readGitCommitSubject() {
   }
 }
 
+// Last N commits — subject + sha + relative time stamp. Captured at
+// build so /now can render real shipping log instead of a hardcoded
+// list. Skipped on Vercel (no git history in the build env) — Vercel
+// uses VERCEL_GIT_COMMIT_MESSAGE for the single-latest variant
+// instead.
+function readRecentCommits(limit = 10) {
+  try {
+    const raw = execSync(
+      `git log -${limit} --pretty=format:%h%x09%s%x09%ar%x09%H`,
+      { stdio: ["ignore", "pipe", "ignore"] },
+    ).toString();
+    const lines = raw.split("\n").filter(Boolean);
+    return JSON.stringify(
+      lines.map((line) => {
+        const [shortSha, subject, when, fullSha] = line.split("\t");
+        return {
+          fullSha: (fullSha ?? "").trim(),
+          sha: (shortSha ?? "").trim(),
+          subject: (subject ?? "").trim(),
+          when: (when ?? "").trim(),
+        };
+      }),
+    );
+  } catch {
+    return "[]";
+  }
+}
+
 const buildSha = readGitSha();
 const buildTime = new Date().toISOString();
 const buildCommitSubject = readGitCommitSubject();
+const buildRecentCommits = readRecentCommits();
 
 const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_BUILD_COMMIT_SUBJECT: buildCommitSubject,
+    NEXT_PUBLIC_BUILD_RECENT_COMMITS: buildRecentCommits,
     NEXT_PUBLIC_BUILD_SHA: buildSha,
     NEXT_PUBLIC_BUILD_TIME: buildTime,
   },
