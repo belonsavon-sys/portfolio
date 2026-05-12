@@ -356,37 +356,44 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           </Button>
         </motion.div>
 
-        <motion.div
-          className="mt-16 grid w-full max-w-4xl gap-4 sm:grid-cols-3"
-          {...fadeUp(0.44)}
-        >
+        <div className="mt-16 grid w-full max-w-4xl gap-4 sm:grid-cols-3">
           {heroMetrics.map((m, index) => (
-            <LightGlassCard
-              className="group relative px-5 py-5 text-left"
-              hoverable={false}
+            <motion.div
+              animate={reduce ? undefined : { opacity: 1, y: 0 }}
+              initial={reduce ? false : { opacity: 0, y: 24 }}
               key={m.label}
+              transition={{
+                delay: 0.44 + index * 0.1,
+                duration: 0.6,
+                ease: easeOut,
+              }}
             >
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-                {m.label}
-              </p>
-              <p className="mt-3 text-2xl font-semibold tracking-tight text-text-light sm:text-3xl">
-                {m.valuePrefix ? (
-                  <span className="text-text-light/40 text-base sm:text-lg font-mono">
-                    {m.valuePrefix}
-                  </span>
-                ) : null}
-                <AnimatedCounter
-                  delay={index * 0.1}
-                  suffix={m.suffix}
-                  to={m.to}
-                />
-              </p>
-              <p className="mt-2 text-xs leading-5 text-text-light-muted">
-                {m.context}
-              </p>
-            </LightGlassCard>
+              <LightGlassCard
+                className="group relative px-5 py-5 text-left"
+                hoverable={false}
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
+                  {m.label}
+                </p>
+                <p className="mt-3 text-2xl font-semibold tracking-tight text-text-light sm:text-3xl">
+                  {m.valuePrefix ? (
+                    <span className="text-text-light/40 text-base sm:text-lg font-mono">
+                      {m.valuePrefix}
+                    </span>
+                  ) : null}
+                  <AnimatedCounter
+                    delay={index * 0.1}
+                    suffix={m.suffix}
+                    to={m.to}
+                  />
+                </p>
+                <p className="mt-2 text-xs leading-5 text-text-light-muted">
+                  {m.context}
+                </p>
+              </LightGlassCard>
+            </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         <motion.div
           className="mt-16 flex flex-wrap items-center justify-center gap-2.5"
