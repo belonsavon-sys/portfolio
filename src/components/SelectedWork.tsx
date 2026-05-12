@@ -100,119 +100,121 @@ export function SelectedWork() {
         const isOpen = expandedIndex === index;
         const meta = statusMeta[work.status];
         return (
-          <li key={work.title}>
+          <li className="relative" key={work.title}>
+            {/* SINGLE-TILE TRIGGER — index + title front and center,
+                tag + status + metric on the right. Click anywhere to
+                expand. Proof (the metric) is visible BEFORE expand —
+                no more "click to find out what shipped". */}
             <button
               aria-controls={`work-panel-${index}`}
               aria-expanded={isOpen}
-              className="group flex w-full items-center gap-3 py-5 text-left transition-colors duration-200 sm:py-6"
+              className="group grid w-full grid-cols-12 items-center gap-x-4 gap-y-3 py-7 text-left transition-colors duration-200 sm:py-8"
               onClick={() => setExpandedIndex(isOpen ? null : index)}
               type="button"
             >
-              <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-                {work.index}
-              </span>
-              <span
-                aria-hidden="true"
-                className="hidden h-px w-6 bg-border-light transition-colors duration-300 group-hover:bg-accent/60 sm:inline-block"
-              />
-              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
-                {work.tag}
-              </span>
-              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-              <span
-                className={`hidden items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] sm:inline-flex ${meta.text}`}
-              >
-                <span
-                  className={`relative inline-flex h-1.5 w-1.5 rounded-full ${meta.dot}`}
-                >
-                  {work.status === "live" ? (
-                    <span
-                      className={`absolute inset-0 animate-ping rounded-full ${meta.dot} opacity-60`}
-                    />
-                  ) : null}
+              {/* LEFT 7 — chapter rail + title */}
+              <span className="col-span-12 lg:col-span-7">
+                <span className="flex items-center gap-3">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                    {work.index} · Work
+                  </span>
+                  <span aria-hidden="true" className="h-px w-8 bg-accent/40" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                    {work.tag}
+                  </span>
                 </span>
-                {meta.label}
+                <span
+                  className="mt-3 block font-semibold tracking-tight text-text-light transition-colors duration-200 group-hover:text-accent-deep"
+                  style={{
+                    fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                    letterSpacing: "-0.035em",
+                    lineHeight: 1.02,
+                  }}
+                >
+                  {work.title}
+                </span>
               </span>
-              {/* Open/close chevron */}
+
+              {/* RIGHT 5 — metric + status + expand chevron.
+                  The metric is the headline number — visible at rest
+                  so users see proof before they expand. */}
+              <span className="col-span-12 flex items-center justify-end gap-5 lg:col-span-5">
+                <span className="text-right">
+                  <span
+                    className="block font-bold leading-[1] tracking-tight text-text-light transition-colors duration-200 group-hover:text-accent-deep"
+                    style={{
+                      fontSize: "clamp(1.5rem, 3vw, 2.25rem)",
+                      letterSpacing: "-0.035em",
+                    }}
+                  >
+                    {work.metric}
+                  </span>
+                  <span className="mt-1 block font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                    {work.metricLabel}
+                  </span>
+                </span>
+
+                <span
+                  className={`hidden items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] sm:inline-flex ${meta.text}`}
+                >
+                  <span
+                    className={`relative inline-flex h-1.5 w-1.5 rounded-full ${meta.dot}`}
+                  >
+                    {work.status === "live" ? (
+                      <span
+                        className={`absolute inset-0 animate-ping rounded-full ${meta.dot} opacity-60`}
+                      />
+                    ) : null}
+                  </span>
+                  {meta.label}
+                </span>
+
+                <span
+                  aria-hidden="true"
+                  className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border transition-[transform,border-color,background] duration-300 ${
+                    isOpen
+                      ? "rotate-45 border-accent bg-accent text-white"
+                      : "border-border-light bg-bg-light text-text-light-muted group-hover:border-accent group-hover:text-accent"
+                  }`}
+                >
+                  <svg
+                    className="h-3 w-3"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                </span>
+              </span>
+
+              {/* Hover gradient hairline — matches the rest of the
+                  divided-list patterns on the site. */}
               <span
                 aria-hidden="true"
-                className={`ml-2 inline-flex h-7 w-7 items-center justify-center rounded-full border transition-[transform,border-color,background] duration-300 ${
-                  isOpen
-                    ? "rotate-45 border-accent bg-accent text-white"
-                    : "border-border-light bg-bg-light text-text-light-muted group-hover:border-accent group-hover:text-accent"
-                }`}
-              >
-                <svg
-                  className="h-3 w-3"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M12 5v14M5 12h14" />
-                </svg>
-              </span>
-            </button>
-
-            {/* Title sits between the meta row and the expanding body */}
-            <button
-              className="group block w-full text-left"
-              onClick={() => setExpandedIndex(isOpen ? null : index)}
-              type="button"
-            >
-              <h3
-                className="-mt-2 font-semibold tracking-tight text-text-light transition-colors duration-200 group-hover:text-accent-deep"
-                style={{
-                  fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)",
-                  letterSpacing: "-0.035em",
-                  lineHeight: 1.05,
-                }}
-              >
-                {work.title}
-              </h3>
+                className="pointer-events-none absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+              />
             </button>
 
             <AnimatePresence initial={false}>
               {isOpen ? (
                 <motion.div
-                  animate={reduce ? { height: "auto" } : { height: "auto", opacity: 1 }}
+                  animate={
+                    reduce
+                      ? { height: "auto" }
+                      : { height: "auto", opacity: 1 }
+                  }
                   className="overflow-hidden"
-                  exit={
-                    reduce
-                      ? { height: 0 }
-                      : { height: 0, opacity: 0 }
-                  }
+                  exit={reduce ? { height: 0 } : { height: 0, opacity: 0 }}
                   id={`work-panel-${index}`}
-                  initial={
-                    reduce
-                      ? { height: 0 }
-                      : { height: 0, opacity: 0 }
-                  }
+                  initial={reduce ? { height: 0 } : { height: 0, opacity: 0 }}
                   key="panel"
                   transition={{ duration: 0.45, ease: easeOut }}
                 >
-                  <div className="grid gap-8 pb-8 pt-6 lg:grid-cols-[minmax(0,360px)_1fr] lg:gap-12">
-                    {/* LEFT — big metric anchor */}
-                    <div>
-                      <p
-                        className="select-none font-bold leading-[0.95] tracking-tight text-accent"
-                        style={{
-                          fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
-                          letterSpacing: "-0.04em",
-                        }}
-                      >
-                        {work.metric}
-                      </p>
-                      <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.24em] text-text-light-muted">
-                        {work.metricLabel}
-                      </p>
-                      <p className="mt-1.5 font-mono text-[10px] tracking-[0.04em] text-text-light/55">
-                        <span className="text-accent/70">↳</span> {work.source}
-                      </p>
-                    </div>
-
-                    {/* RIGHT — context + tech */}
+                  <div className="grid gap-8 pb-9 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-12">
+                    {/* LEFT — context paragraph + tech chips */}
                     <div>
                       <p className="text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
                         {work.context}
@@ -227,6 +229,20 @@ export function SelectedWork() {
                           </span>
                         ))}
                       </div>
+                    </div>
+
+                    {/* RIGHT — source citation in a mono spec card */}
+                    <div className="rounded-xl border border-border-light bg-bg-light-2 p-4">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                        <span className="text-text-light-muted/60">// </span>
+                        Source
+                      </p>
+                      <p className="mt-2 inline-flex items-start gap-2 font-mono text-[12.5px] leading-6 text-text-light">
+                        <span aria-hidden="true" className="text-accent/70">
+                          ↳
+                        </span>
+                        {work.source}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
