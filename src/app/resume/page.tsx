@@ -296,7 +296,6 @@ export default function ResumePage() {
 function ResumeHero() {
   return (
     <section className="relative overflow-hidden">
-
       {/* Ghost watermark */}
       <div
         aria-hidden="true"
@@ -314,39 +313,80 @@ function ResumeHero() {
         </ParallaxGhost>
       </div>
 
-      <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8">
-        <div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
-          <span className="relative inline-flex h-2 w-2">
-            <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
-            <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24">
+        {/* TOP STRIP — status pill + accent rule + chapter marker */}
+        <div className="col-span-12 flex flex-wrap items-center gap-3">
+          <span className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
+            <span className="relative inline-flex h-2 w-2">
+              <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
+              <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
+            </span>
+            <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+              /resume · curriculum
+            </span>
           </span>
-          <p className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
-            /resume · curriculum
-          </p>
+          <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+            2026
+          </span>
         </div>
 
-        <h1 className="hero-display-md mt-8 font-semibold">
-          <SplitText charDelay={0.035} delay={0.15} duration={0.85}>
-            Pierre Belon Savon
-          </SplitText>
-        </h1>
-        <p className="mt-4 font-mono text-sm uppercase tracking-[0.28em] text-text-light-muted">
-          AI Engineer
-        </p>
+        {/* LEFT — stacked name + role + chips (cols 1–8 lg) */}
+        <div className="col-span-12 lg:col-span-8">
+          <h1
+            className="font-semibold text-text-light"
+            style={{
+              fontSize: "clamp(2.75rem, 10vw, 8.5rem)",
+              letterSpacing: "-0.055em",
+              lineHeight: 0.88,
+            }}
+          >
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.12} duration={0.85}>
+                Pierre
+              </SplitText>
+            </span>
+            <span className="block">
+              <SplitText charDelay={0.025} delay={0.28} duration={0.85}>
+                Belon
+              </SplitText>
+            </span>
+            <span className="gradient-shift block">
+              <SplitText charDelay={0.025} delay={0.42} duration={0.85}>
+                Savon.
+              </SplitText>
+            </span>
+          </h1>
 
-        <StaggeredChipRail
-          baseDelay={0.4}
-          chips={["Ocean Shores, WA", "Remote roles", "Freelance projects"]}
-        />
+          <div className="mt-8 flex items-center gap-3">
+            <span aria-hidden="true" className="h-px w-10 bg-accent" />
+            <p className="font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
+              AI Engineer · Building production systems
+            </p>
+          </div>
 
-        <div className="mt-10">
+          <div className="mt-6">
+            <StaggeredChipRail
+              baseDelay={0.5}
+              chips={["Ocean Shores, WA", "Remote roles", "Freelance projects"]}
+              className="flex flex-wrap items-center gap-2"
+            />
+          </div>
+        </div>
+
+        {/* RIGHT — Download CTA anchored to the right, top-aligned with chips (cols 9–12 lg) */}
+        <div className="col-span-12 self-end lg:col-span-4 lg:justify-self-end">
           <Button
             className="!px-8 !py-4 !text-base"
             download
+            downArrow
             href="/pierre-belon-savon-resume.pdf"
           >
-            Download Resume ↓
+            Download Resume
           </Button>
+          <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted lg:text-right">
+            PDF · One page
+          </p>
         </div>
       </div>
     </section>
