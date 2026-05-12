@@ -9,6 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import {
+  AboutModal,
   AnimatedCounter,
   BentoStack,
   Button,
@@ -122,6 +123,7 @@ function formatTimeAgo(then: Date, now: number) {
 const heroMetrics = [
   {
     context: "ThePrivateHotels · live since Apr 2024",
+    href: "/ai#built-and-shipped",
     label: "Guest reply time",
     suffix: " min",
     to: 3,
@@ -129,6 +131,7 @@ const heroMetrics = [
   },
   {
     context: "Ops manual → QA system, ThePrivateHotels",
+    href: "/business#process",
     label: "Pages digitized",
     suffix: "+",
     to: 100,
@@ -136,6 +139,7 @@ const heroMetrics = [
   },
   {
     context: "Game · Budget · Project mgmt — Blackdoor",
+    href: "/ai#atlas-portfolio",
     label: "Atlas products",
     suffix: " live",
     to: 3,
@@ -153,9 +157,32 @@ const detailedMetrics = [
 ];
 
 export default function Home() {
+  const [aboutOpen, setAboutOpen] = useState(false);
   return (
     <main className="min-h-screen bg-bg-light text-text-light">
-      <Hero onOpenAbout={scrollToAbout} />
+      <Hero onOpenAbout={() => setAboutOpen(true)} />
+
+      {/* About reveal — fires from the HeroAvatarFrame click. Reuses
+          the AboutModal that lived as dead code until this iter. */}
+      <AboutModal
+        onClose={() => setAboutOpen(false)}
+        open={aboutOpen}
+        title="I ship what others would plan."
+      >
+        {aboutParagraphs.map((paragraph, index) => (
+          <p
+            className={
+              index === 0
+                ? "text-lg font-medium text-text-light sm:text-xl"
+                : undefined
+            }
+            key={paragraph}
+          >
+            {paragraph}
+          </p>
+        ))}
+      </AboutModal>
+
 
       <LightSection className="pt-20 sm:pt-28" id="about">
         <AboutBand />
@@ -424,13 +451,23 @@ function FloatingHeroLabels() {
   const opBL = useTransform(scrollYProgress, [0.6, 0.8], [0.85, 0]);
   const opBR = useTransform(scrollYProgress, [0.65, 0.85], [0.85, 0]);
 
+  // One label is now LIVE — it picks up the short build sha so it
+  // ties to the live-shipped pulse in the top strip. The other three
+  // carry sharpened editorial copy.
+  const shortSha = process.env.NEXT_PUBLIC_BUILD_SHA
+    ? process.env.NEXT_PUBLIC_BUILD_SHA.slice(0, 7)
+    : null;
+  const liveLabel = shortSha
+    ? `Shipping · ${shortSha}`
+    : "Shipping · daily";
+
   const labels = [
     {
       className:
         "left-[6%] top-[18%] -rotate-2 sm:left-[8%] sm:top-[22%] lg:left-[10%] lg:top-[26%]",
       opacity: opTL,
       parallaxY: ySlow,
-      text: "AI Engineer",
+      text: liveLabel,
     },
     {
       className:
@@ -444,14 +481,14 @@ function FloatingHeroLabels() {
         "left-[4%] bottom-[16%] -rotate-3 sm:left-[7%] sm:bottom-[20%] lg:left-[8%] lg:bottom-[28%]",
       opacity: opBL,
       parallaxY: yMid,
-      text: "EN · ES · IT",
+      text: "Trilingual · EN · ES · IT",
     },
     {
       className:
         "right-[5%] bottom-[14%] rotate-2 sm:right-[8%] sm:bottom-[18%] lg:right-[8%] lg:bottom-[24%]",
       opacity: opBR,
       parallaxY: yVeryFast,
-      text: "Co-founder · Blackdoor",
+      text: "Co-founder · Blackdoor · 2025",
     },
   ];
 
@@ -726,6 +763,21 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               </motion.div>
             ))}
           </div>
+
+          {/* ⌘K teaser — surfaces the command palette to first-time
+              visitors without making them scroll to the footer hint. */}
+          <motion.p
+            animate={reduce ? undefined : { opacity: 1, y: 0 }}
+            className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.28em] text-text-light-muted"
+            initial={reduce ? false : { opacity: 0, y: 8 }}
+            transition={{ delay: 0.78, duration: 0.55, ease: easeOut }}
+          >
+            <span>or</span>
+            <kbd className="inline-flex h-6 min-w-[44px] items-center justify-center rounded-md border border-accent/35 bg-[rgba(41,110,214,0.08)] px-1.5 font-mono text-[11px] font-semibold text-accent">
+              ⌘K
+            </kbd>
+            <span>to jump anywhere</span>
+          </motion.p>
         </div>
 
         {/* RIGHT — avatar, justified to the right edge on lg (cols 8–12) */}
@@ -744,9 +796,10 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           }
         >
           {heroMetrics.map((m, index) => (
-            <motion.div
+            <motion.a
               animate={reduce ? undefined : { opacity: 1, y: 0 }}
-              className="text-left"
+              className="group/metric relative block text-left transition-transform duration-300 hover:-translate-y-0.5"
+              href={m.href}
               initial={reduce ? false : { opacity: 0, y: 24 }}
               key={m.label}
               transition={{
@@ -755,10 +808,16 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
                 ease: easeOut,
               }}
             >
-              <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-                {`0${index + 1}`} · {m.label}
+              <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+                <span>{`0${index + 1}`} · {m.label}</span>
+                <span
+                  aria-hidden="true"
+                  className="inline-block opacity-0 transition-[opacity,transform] duration-200 group-hover/metric:translate-x-0.5 group-hover/metric:opacity-100"
+                >
+                  →
+                </span>
               </p>
-              <p className="mt-3 font-semibold tracking-tight text-text-light"
+              <p className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover/metric:text-accent-deep"
                  style={{
                    fontSize: "clamp(2rem, 4.5vw, 3.25rem)",
                    letterSpacing: "-0.035em",
@@ -779,7 +838,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               <p className="mt-3 text-xs leading-5 text-text-light-muted">
                 {m.context}
               </p>
-            </motion.div>
+            </motion.a>
           ))}
         </motion.div>
 
@@ -812,18 +871,28 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           ))}
         </motion.div>
 
-        {/* SCROLL CUE — left-aligned, anchored to lower-left margin */}
+        {/* SCROLL CUE — left-aligned, anchored to lower-left margin.
+            Names the next section ("Next · About") instead of a vague
+            "Scroll" prompt, so first-time visitors know what's below
+            before they commit. Hover surfaces a richer preview chip. */}
         <motion.a
-          aria-label="Scroll to live status"
+          aria-label="Scroll to About"
           className="group/cue col-span-12 hidden flex-row items-center gap-3 self-end sm:flex"
-          href="#work"
+          href="#about"
           {...fadeUp(1.1)}
         >
           <span className="relative h-px w-10 overflow-hidden bg-gradient-to-r from-border-light via-accent to-transparent transition-colors duration-200 group-hover/cue:via-accent">
             <span className="scroll-cue-dot absolute left-0 top-1/2 h-px w-2 -translate-y-1/2 bg-accent" />
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-text-light-muted/60 transition-colors duration-200 group-hover/cue:text-accent">
-            Scroll
+          <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.32em] text-text-light-muted/60 transition-colors duration-200 group-hover/cue:text-accent">
+            <span aria-hidden="true" className="text-accent/70">↓</span>
+            Next · About
+            <span
+              aria-hidden="true"
+              className="hidden translate-x-[-4px] opacity-0 transition-[opacity,transform] duration-200 group-hover/cue:translate-x-0 group-hover/cue:opacity-100 sm:inline"
+            >
+              · the two-minute version
+            </span>
           </span>
         </motion.a>
       </motion.div>
