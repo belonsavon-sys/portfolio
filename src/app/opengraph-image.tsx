@@ -90,8 +90,8 @@ export default function OpenGraphImage() {
               maxWidth: 940,
             }}
           >
-            Engineering intelligent automation and full-stack applications that
-            turn complex business processes into scalable, profitable systems.
+            The hotel I was hired to supervise now runs on AI systems I built.
+            Co-architect of Atlas at Blackdoor.
           </p>
         </div>
 
