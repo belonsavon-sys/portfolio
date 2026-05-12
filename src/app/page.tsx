@@ -123,6 +123,7 @@ function formatTimeAgo(then: Date, now: number) {
 const heroMetrics = [
   {
     context: "ThePrivateHotels · live since Apr 2024",
+    href: "/ai#built-and-shipped",
     label: "Guest reply time",
     suffix: " min",
     to: 3,
@@ -130,6 +131,7 @@ const heroMetrics = [
   },
   {
     context: "Ops manual → QA system, ThePrivateHotels",
+    href: "/business#process",
     label: "Pages digitized",
     suffix: "+",
     to: 100,
@@ -137,6 +139,7 @@ const heroMetrics = [
   },
   {
     context: "Game · Budget · Project mgmt — Blackdoor",
+    href: "/ai#atlas-portfolio",
     label: "Atlas products",
     suffix: " live",
     to: 3,
@@ -778,9 +781,10 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           }
         >
           {heroMetrics.map((m, index) => (
-            <motion.div
+            <motion.a
               animate={reduce ? undefined : { opacity: 1, y: 0 }}
-              className="text-left"
+              className="group/metric relative block text-left transition-transform duration-300 hover:-translate-y-0.5"
+              href={m.href}
               initial={reduce ? false : { opacity: 0, y: 24 }}
               key={m.label}
               transition={{
@@ -789,10 +793,16 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
                 ease: easeOut,
               }}
             >
-              <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-                {`0${index + 1}`} · {m.label}
+              <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
+                <span>{`0${index + 1}`} · {m.label}</span>
+                <span
+                  aria-hidden="true"
+                  className="inline-block opacity-0 transition-[opacity,transform] duration-200 group-hover/metric:translate-x-0.5 group-hover/metric:opacity-100"
+                >
+                  →
+                </span>
               </p>
-              <p className="mt-3 font-semibold tracking-tight text-text-light"
+              <p className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover/metric:text-accent-deep"
                  style={{
                    fontSize: "clamp(2rem, 4.5vw, 3.25rem)",
                    letterSpacing: "-0.035em",
@@ -813,7 +823,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               <p className="mt-3 text-xs leading-5 text-text-light-muted">
                 {m.context}
               </p>
-            </motion.div>
+            </motion.a>
           ))}
         </motion.div>
 
