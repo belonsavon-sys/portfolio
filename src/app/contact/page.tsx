@@ -268,6 +268,9 @@ export default function ContactPage() {
         </div>
       </section>
 
+      {/* AVAILABILITY STRIPE — 4-column band between hero and form */}
+      <ContactAvailabilityStripe />
+
       {/* SEND — quick intake form. Composes a pre-filled mailto so
           the user lands in their own mail client with the message
           already drafted. Zero backend, zero spam vector. */}
@@ -693,6 +696,105 @@ export default function ContactPage() {
  * backend, no spam concerns; serves the "send me a message"
  * intent without a third-party form service.
  */
+/**
+ * Availability stripe — dark-mode 4-column band that sits between
+ * /contact's hero and the intake form. Surfaces the four signals a
+ * stranger most wants before reaching out: reply window, open slots,
+ * preferred channel, time zone. Mirrors the ~/stack and ~/cadence
+ * stripe pattern on /now and /uses.
+ */
+function ContactAvailabilityStripe() {
+  const items: Array<{
+    href?: string;
+    key: string;
+    pulse?: boolean;
+    tone?: "green" | "accent";
+    value: string;
+  }> = [
+    {
+      key: "Reply window",
+      pulse: true,
+      tone: "green",
+      value: "Inside 24 h",
+    },
+    {
+      href: "#engagements",
+      key: "Open slots",
+      tone: "accent",
+      value: "Q2 · taking",
+    },
+    {
+      href: "#methods",
+      key: "Best channel",
+      value: "Email / LinkedIn",
+    },
+    {
+      key: "Time zone",
+      value: "Pacific · UTC-08",
+    },
+  ];
+
+  return (
+    <div className="relative border-y border-[rgba(91,155,244,0.20)] bg-bg-dark-2">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center gap-3 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+          <span className="relative inline-flex h-2 w-2">
+            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+            <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+          </span>
+          <span>~/availability</span>
+          <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.20)]" />
+          <span className="text-text-dark-muted">{items.length} signals · live</span>
+        </div>
+        <ul className="grid grid-cols-2 divide-y divide-[rgba(91,155,244,0.18)] border-t border-[rgba(91,155,244,0.20)] sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+          {items.map((item, index) => {
+            const valueClass =
+              item.tone === "green"
+                ? "text-result-green"
+                : item.tone === "accent"
+                  ? "text-accent-light"
+                  : "text-text-dark";
+            const inner = (
+              <span className="flex flex-col gap-1 px-3 py-4 sm:px-5 sm:py-5">
+                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                  <span className="text-text-dark-muted/60">// </span>
+                  {String(index + 1).padStart(2, "0")} {item.key}
+                </span>
+                <span
+                  className={`flex items-center gap-2 font-mono text-[13px] leading-6 ${valueClass} sm:text-sm`}
+                >
+                  {item.pulse ? (
+                    <span className="relative inline-flex h-1.5 w-1.5">
+                      <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                      <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                    </span>
+                  ) : null}
+                  <span className="truncate">{item.value}</span>
+                </span>
+              </span>
+            );
+
+            return (
+              <li className="group/avail relative" key={item.key}>
+                {item.href ? (
+                  <a
+                    className="block transition-colors duration-200 hover:bg-[rgba(91,155,244,0.06)]"
+                    href={item.href}
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  inner
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 function ContactSendSection() {
   const [name, setName] = useState("");
   const [from, setFrom] = useState("");
