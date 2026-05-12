@@ -55,9 +55,91 @@ const contactLinks: ContactCardConfig[] = [
     : []),
 ];
 
+const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+const availabilityStats = [
+  {
+    detail: "Lead AI R&D · Atlas multi-agent harness shipping under PR review.",
+    label: "Engaged",
+    live: false,
+    value: "Blackdoor · Atlas v3",
+  },
+  {
+    detail: "Hotel operations supervisor — guest comms, QA system, automation.",
+    label: "Engaged",
+    live: false,
+    value: "ThePrivateHotels",
+  },
+  {
+    detail: "Open for one new freelance build this quarter. Q2 2026.",
+    label: "Open slot",
+    live: true,
+    value: "1 · this quarter",
+  },
+  {
+    detail: "Always taking advisory + consult calls. 30-min intro is free.",
+    label: "Always open",
+    live: true,
+    value: "Advisory · consults",
+  },
+];
+
+const engagementTypes = [
+  {
+    description:
+      "Senior AI Engineer / Founding Engineer roles. Remote-first. I'll commit deeply to one team's mission.",
+    fit: "Long-term · Mission alignment",
+    label: "Full-time role",
+    shape: "Permanent",
+  },
+  {
+    description:
+      "End-to-end product builds — automation systems, chatbots, agent harnesses. Idea to deployed.",
+    fit: "Scoped · 4–12 weeks",
+    label: "Freelance build",
+    shape: "Project",
+  },
+  {
+    description:
+      "Agent harness design, AI strategy for ops-heavy businesses. I review your architecture, suggest the cuts.",
+    fit: "1–2 day intensive · Async follow-up",
+    label: "Advisory",
+    shape: "Consult",
+  },
+  {
+    description:
+      "Pair with your team on a hard problem. Same loop I run at Blackdoor — research, build, ship under PR review.",
+    fit: "Embedded · 2–6 weeks",
+    label: "Co-build",
+    shape: "Pairing",
+  },
+];
+
+const pipelineSteps = [
+  {
+    body: "Within 24 hours. I confirm the scope, ask any clarifying questions, and propose a time to talk if there's a fit.",
+    timing: "Within 24 hrs",
+    verb: "Reply",
+  },
+  {
+    body: "A 30-min call. We talk through what you need, what's measurable, what's not. You get a written brief back the same day.",
+    timing: "Week 1",
+    verb: "Scope",
+  },
+  {
+    body: "Solo or paired with AI. Research-first. Every change ships through a PR with documentation and a clean commit history.",
+    timing: "Weeks 2+",
+    verb: "Build",
+  },
+  {
+    body: "Live in production. We measure what changed against the manual workflow it replaced. Done means measured-done.",
+    timing: "On cadence",
+    verb: "Ship",
+  },
+];
+
 export default function ContactPage() {
   const reduce = useReducedMotion();
-  const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
   const fadeUp = (delay: number) =>
     reduce
@@ -70,9 +152,11 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-bg-dark text-text-dark">
+      {/* HERO — tightened to ~80vh so the page becomes scrollable into
+          the contact methods, pipeline, engagements, and availability
+          sections that follow. */}
       <section className="relative overflow-hidden">
-
-        {/* Giant ghost watermark */}
+        {/* Giant ghost watermark — same parallax pattern as other heroes */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 flex -translate-y-1/2 justify-center overflow-hidden"
@@ -89,7 +173,7 @@ export default function ContactPage() {
           </ParallaxGhost>
         </div>
 
-        <div className="relative mx-auto grid min-h-[calc(100vh-72px)] w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24">
+        <div className="relative mx-auto grid w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-20 sm:px-6 sm:py-24 lg:gap-x-8 lg:py-28">
           {/* TOP STRIP — status pill + chapter mark */}
           <motion.div
             className="col-span-12 flex flex-wrap items-center gap-3 self-start"
@@ -106,7 +190,7 @@ export default function ContactPage() {
             </span>
             <span aria-hidden="true" className="h-px w-12 bg-accent-light/40" />
             <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-dark-muted">
-              Reply window · 24 hrs
+              Chapter 05 · Intake
             </span>
           </motion.div>
 
@@ -121,8 +205,8 @@ export default function ContactPage() {
             {...fadeUp(0.08)}
           >
             <span className="block">Ready when</span>
-            <span className="block bg-gradient-to-r from-text-dark via-accent-light to-accent-light bg-clip-text text-transparent">
-              you are.
+            <span className="gradient-shift-dark block">
+              you are<span className="text-accent-light">.</span>
             </span>
           </motion.h1>
 
@@ -166,62 +250,418 @@ export default function ContactPage() {
             </div>
           </motion.div>
 
-          {/* BOTTOM — contact links as full-width row entries */}
-          <motion.div
-            className="col-span-12 grid divide-y divide-[rgba(91,155,244,0.20)] border-y border-[rgba(91,155,244,0.20)]"
-            {...fadeUp(0.32)}
+          {/* SCROLL CUE — anchors the hero to the methods section below */}
+          <motion.a
+            aria-label="Scroll to contact methods"
+            className="group/cue col-span-12 mt-10 hidden flex-row items-center gap-3 self-end sm:flex"
+            href="#methods"
+            {...fadeUp(0.34)}
+          >
+            <span className="relative h-px w-10 overflow-hidden bg-gradient-to-r from-[rgba(91,155,244,0.2)] via-accent-light to-transparent transition-colors duration-200 group-hover/cue:via-accent-light">
+              <span className="scroll-cue-dot absolute left-0 top-1/2 h-px w-2 -translate-y-1/2 bg-accent-light" />
+            </span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-text-dark-muted transition-colors duration-200 group-hover/cue:text-accent-light">
+              Reach me
+            </span>
+          </motion.a>
+        </div>
+      </section>
+
+      {/* METHODS — temporary placeholder; iter-183 rebuilds this as
+          editorial chapter cards. For now we keep the existing
+          full-width row pattern but in a dedicated section below the
+          hero (no longer crammed into the hero grid). */}
+      <section className="relative" id="methods">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              01 · Reach me
+            </span>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <h2
+              className="font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              }}
+            >
+              Four ways in.
+            </h2>
+          </div>
+
+          {/* Methods rebuilt as editorial chapter cards — same indexed
+              row pattern used by KeyboardNav and the 404 route ledger.
+              Each card has chapter index + method + value + a magic
+              key chip (E/P/G/L) on the right to hint that the
+              KeyboardNav palette can be used too. */}
+          <motion.ol
+            className="grid divide-y divide-[rgba(91,155,244,0.18)]"
+            {...fadeUp(0)}
           >
             {contactLinks.map(
               ({ Icon, href, label, rel, target, value }, index) => (
-                <motion.a
-                  aria-label={label}
-                  className="group flex items-center gap-4 py-5 transition-[background] duration-200 hover:bg-[rgba(91,155,244,0.06)] sm:gap-6 sm:py-6"
-                  href={href}
+                <motion.li
                   initial={reduce ? { opacity: 1 } : { opacity: 0, y: 12 }}
                   key={label}
-                  rel={rel}
-                  target={target}
                   transition={{
-                    delay: 0.42 + index * 0.06,
+                    delay: 0.12 + index * 0.06,
                     duration: 0.45,
                     ease: easeOut,
                   }}
-                  viewport={{ amount: 0.4, once: true }}
+                  viewport={{ amount: 0.3, once: true }}
                   whileInView={{ opacity: 1, y: 0 }}
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[rgba(91,155,244,0.35)] bg-[rgba(41,110,214,0.10)] text-accent-light transition-[border-color,transform] duration-300 group-hover:-translate-y-0.5 group-hover:border-accent-light/70 sm:h-14 sm:w-14">
-                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </div>
-                  <div className="flex flex-1 flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-6">
-                    <span className="w-24 font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
-                      {label}
-                    </span>
-                    <span
-                      className="break-all text-lg font-semibold text-text-dark transition-colors duration-200 group-hover:text-accent-light sm:text-xl"
-                    >
-                      {value}
-                    </span>
-                  </div>
-                  <span
-                    aria-hidden="true"
-                    className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[rgba(91,155,244,0.30)] text-accent-light/70 transition-[transform,border-color,background,color] duration-300 group-hover:translate-x-1 group-hover:border-accent-light group-hover:bg-accent-light group-hover:text-bg-dark"
+                  <a
+                    aria-label={label}
+                    className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-7 transition-colors duration-200 hover:bg-[rgba(91,155,244,0.06)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light sm:py-8"
+                    href={href}
+                    rel={rel}
+                    target={target}
                   >
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M5 12h14m-7-7 7 7-7 7" />
-                    </svg>
-                  </span>
-                </motion.a>
+                    {/* LEFT 7 — chapter index, method title, value */}
+                    <span className="col-span-12 lg:col-span-7">
+                      <span className="flex items-center gap-4">
+                        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+                          {String(index + 1).padStart(2, "0")} · Method
+                        </span>
+                        <span aria-hidden="true" className="h-px w-8 bg-accent-light/40" />
+                        <span className="inline-flex h-7 w-7 items-center justify-center rounded-md border border-[rgba(91,155,244,0.30)] bg-[rgba(41,110,214,0.10)] text-accent-light">
+                          <Icon className="h-3.5 w-3.5" />
+                        </span>
+                      </span>
+                      <span
+                        className="mt-3 block font-semibold tracking-tight text-text-dark transition-colors duration-200 group-hover:text-accent-light"
+                        style={{
+                          fontSize: "clamp(1.75rem, 4.5vw, 3rem)",
+                          letterSpacing: "-0.04em",
+                          lineHeight: 0.98,
+                        }}
+                      >
+                        {label}
+                      </span>
+                      <span className="mt-3 inline-block break-all font-mono text-sm text-text-dark-muted transition-colors duration-200 group-hover:text-accent-light/80 sm:text-base">
+                        {value}
+                      </span>
+                    </span>
+
+                    {/* RIGHT 5 — magic key chip + arrow indicator */}
+                    <span className="col-span-12 flex items-end justify-end gap-4 lg:col-span-5 lg:items-center">
+                      <span className="hidden font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted sm:inline">
+                        {target === "_blank" ? "Opens in new tab" : "Direct"}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[rgba(91,155,244,0.30)] text-accent-light/70 transition-[transform,border-color,background,color] duration-300 group-hover:translate-x-1 group-hover:border-accent-light group-hover:bg-accent-light group-hover:text-bg-dark"
+                      >
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M5 12h14m-7-7 7 7-7 7" />
+                        </svg>
+                      </span>
+                    </span>
+
+                    {/* Hover gradient hairline */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+                    />
+                  </a>
+                </motion.li>
               ),
             )}
-          </motion.div>
+          </motion.ol>
+        </div>
+      </section>
+
+      {/* PIPELINE — what happens after a user reaches out. Reads like
+          the Process band on the home page (verb + body + hover
+          hairline) so the contact page extends the same "research →
+          build → ship" rhythm into the engagement itself. */}
+      <section className="relative mt-24" id="pipeline">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              02 · What happens next
+            </span>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <h2
+              className="font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              }}
+            >
+              From send to ship.
+            </h2>
+          </div>
+
+          <ol className="grid divide-y divide-[rgba(91,155,244,0.18)] border-b border-[rgba(91,155,244,0.18)]">
+            {pipelineSteps.map((step, index) => (
+              <motion.li
+                animate={reduce ? undefined : { opacity: 1, y: 0 }}
+                className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-3 py-10 sm:py-12"
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                key={step.verb}
+                transition={{
+                  delay: index * 0.06,
+                  duration: 0.55,
+                  ease: easeOut,
+                }}
+                viewport={{ amount: 0.3, once: true }}
+                whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+              >
+                {/* LEFT 8 — index + massive verb */}
+                <div className="col-span-12 lg:col-span-8">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+                    {String(index + 1).padStart(2, "0")} · {step.timing}
+                  </p>
+                  <h3
+                    className="mt-3 font-semibold tracking-tight text-text-dark transition-colors duration-300 group-hover:text-accent-light"
+                    style={{
+                      fontSize: "clamp(3rem, 8vw, 6rem)",
+                      letterSpacing: "-0.05em",
+                      lineHeight: 0.95,
+                    }}
+                  >
+                    {step.verb}
+                    <span className="text-accent-light">.</span>
+                  </h3>
+                </div>
+
+                {/* RIGHT 4 — body prose */}
+                <div className="col-span-12 lg:col-span-4">
+                  <p className="text-base leading-7 text-text-dark-muted sm:text-lg sm:leading-8">
+                    {step.body}
+                  </p>
+                </div>
+
+                {/* Hover gradient hairline */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+                />
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ENGAGEMENTS — datasheet of commitment shapes Pierre takes on.
+          Mono header (~/engagements · 04 shapes) + indexed rows.
+          Distinct from /ai's services (those are WHAT I build);
+          this answers HOW we work together. */}
+      <section className="relative mt-24" id="engagements">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              03 · Engagement shapes
+            </span>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <h2
+              className="font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              }}
+            >
+              How we work together.
+            </h2>
+          </div>
+
+          <div className="mt-10 overflow-hidden rounded-xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.55)] backdrop-blur-sm">
+            <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+              <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+              <span>~/engagements</span>
+              <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.20)]" />
+              <span className="text-text-dark-muted">
+                {engagementTypes.length} shapes
+              </span>
+            </div>
+            <ul className="grid divide-y divide-[rgba(91,155,244,0.14)] md:grid-cols-2 md:divide-x md:divide-y-0">
+              {engagementTypes.map((engagement, index) => (
+                <li
+                  className="group relative px-6 py-7 transition-colors duration-200 hover:bg-[rgba(91,155,244,0.06)] sm:px-7 sm:py-8"
+                  key={engagement.label}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-0 top-7 h-[calc(100%-3.5rem)] w-0.5 bg-accent-light/45"
+                  />
+                  <p className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                    <span className="text-text-dark-muted/60">//</span>
+                    <span>
+                      {String(index + 1).padStart(2, "0")} · {engagement.shape}
+                    </span>
+                    <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.16)]" />
+                  </p>
+
+                  <h3
+                    className="mt-4 font-semibold tracking-tight text-text-dark transition-colors duration-300 group-hover:text-accent-light"
+                    style={{
+                      fontSize: "clamp(1.5rem, 3.2vw, 2.1rem)",
+                      letterSpacing: "-0.03em",
+                      lineHeight: 1.04,
+                    }}
+                  >
+                    {engagement.label}
+                  </h3>
+                  <p className="mt-3 text-base leading-7 text-text-dark-muted">
+                    {engagement.description}
+                  </p>
+                  <p className="mt-5 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light/70">
+                    <span aria-hidden="true">→</span>
+                    {engagement.fit}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* AVAILABILITY — capacity snapshot. Reads like a status board:
+          where I am this quarter, what's open, what's on hold. */}
+      <section className="relative mt-24" id="availability">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              04 · Availability
+            </span>
+            <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+            <h2
+              className="font-semibold tracking-tight text-text-dark"
+              style={{
+                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                letterSpacing: "-0.035em",
+                lineHeight: 1,
+              }}
+            >
+              Where I am this quarter.
+            </h2>
+          </div>
+
+          <div className="mt-10 grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-8">
+            {availabilityStats.map((stat, index) => (
+              <motion.div
+                animate={reduce ? undefined : { opacity: 1, y: 0 }}
+                className="col-span-12 border-l-2 border-accent-light/40 pl-6 sm:col-span-6 lg:col-span-3"
+                initial={reduce ? false : { opacity: 0, y: 18 }}
+                key={stat.label}
+                transition={{
+                  delay: index * 0.06,
+                  duration: 0.5,
+                  ease: easeOut,
+                }}
+                viewport={{ amount: 0.3, once: true }}
+                whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+              >
+                <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                  <span className="text-text-dark-muted/60">//</span>
+                  {String(index + 1).padStart(2, "0")} {stat.label}
+                </p>
+                <p
+                  className="mt-3 font-semibold tracking-tight text-text-dark"
+                  style={{
+                    fontSize: "clamp(1.5rem, 3.2vw, 2.1rem)",
+                    letterSpacing: "-0.03em",
+                    lineHeight: 1.05,
+                  }}
+                >
+                  {stat.live ? (
+                    <span className="inline-flex items-center gap-2.5">
+                      <span className="relative inline-flex h-2.5 w-2.5">
+                        <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                        <span className="relative inline-block h-2.5 w-2.5 rounded-full bg-result-green" />
+                      </span>
+                      <span>{stat.value}</span>
+                    </span>
+                  ) : (
+                    stat.value
+                  )}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-text-dark-muted">
+                  {stat.detail}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CLOSING BAND — editorial outro that points back to /ai and
+          /resume so users who landed on /contact via a deep link
+          can still discover the proof-of-work. */}
+      <section className="relative mt-24 pb-24" id="closing">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="overflow-hidden rounded-3xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.5)] p-8 backdrop-blur-sm sm:p-12">
+            <div className="grid grid-cols-12 gap-x-6 gap-y-8 lg:gap-x-8">
+              <div className="col-span-12 lg:col-span-8">
+                <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light">
+                  05 · Before you send
+                </p>
+                <h3
+                  className="mt-3 font-semibold tracking-tight text-text-dark"
+                  style={{
+                    fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                    letterSpacing: "-0.04em",
+                    lineHeight: 0.98,
+                  }}
+                >
+                  Want to see what I&apos;ve
+                  <br />
+                  <span className="gradient-shift-dark">already shipped</span>
+                  <span className="text-accent-light">?</span>
+                </h3>
+              </div>
+              <div className="col-span-12 self-end lg:col-span-4">
+                <ul className="grid gap-3 font-mono text-sm text-text-dark-muted">
+                  <li className="flex items-baseline gap-3">
+                    <span aria-hidden="true" className="text-accent-light">
+                      →
+                    </span>
+                    <a
+                      className="link-underline inline-block transition-colors hover:text-text-dark"
+                      href="/ai"
+                    >
+                      /ai · multi-agent harnesses, case studies, demos
+                    </a>
+                  </li>
+                  <li className="flex items-baseline gap-3">
+                    <span aria-hidden="true" className="text-accent-light">
+                      →
+                    </span>
+                    <a
+                      className="link-underline inline-block transition-colors hover:text-text-dark"
+                      href="/business"
+                    >
+                      /business · how the systems run in production
+                    </a>
+                  </li>
+                  <li className="flex items-baseline gap-3">
+                    <span aria-hidden="true" className="text-accent-light">
+                      →
+                    </span>
+                    <a
+                      className="link-underline inline-block transition-colors hover:text-text-dark"
+                      href="/resume"
+                    >
+                      /resume · the receipts, one page, PDF-ready
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -306,4 +746,3 @@ function LinkedInIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-
