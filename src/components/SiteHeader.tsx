@@ -152,6 +152,34 @@ export function SiteHeader() {
               </a>
             ))}
           </div>
+
+          {/* ⌘K palette opener — sits at the right end of the nav
+              pill. Dispatches a synthetic Cmd+K keydown so the
+              global KeyboardNav listener picks it up; no React
+              state plumbing needed. */}
+          <span
+            aria-hidden="true"
+            className="mx-1 hidden h-6 w-px bg-border-light sm:inline-block"
+          />
+          <button
+            aria-label="Open command palette"
+            className="group/cmdk hidden h-9 items-center gap-1.5 rounded-full border border-accent/30 bg-[rgba(41,110,214,0.06)] px-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-[border-color,background] duration-200 hover:border-accent hover:bg-[rgba(41,110,214,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:inline-flex"
+            onClick={() => {
+              if (typeof window === "undefined") return;
+              window.dispatchEvent(
+                new KeyboardEvent("keydown", {
+                  bubbles: true,
+                  key: "k",
+                  metaKey: true,
+                }),
+              );
+            }}
+            title="Open command palette (⌘K)"
+            type="button"
+          >
+            <span className="text-base font-semibold leading-none">⌘</span>
+            <span>K</span>
+          </button>
         </motion.nav>
       </motion.div>
     </header>
