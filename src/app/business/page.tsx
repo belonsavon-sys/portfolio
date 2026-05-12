@@ -273,7 +273,7 @@ function CommunicationsSection() {
   return (
     <SectionShell
       eyebrow="Customer & guest communications"
-      heading="Replies inside three minutes, in your voice, every time."
+      heading="Replies inside three minutes, always in your voice."
       outcomes={communicationOutcomes}
     >
       <BeforeAfter
@@ -334,9 +334,9 @@ function FinanceSection() {
         />
         <p className="mt-6 text-lg leading-8 text-text-light-muted">
           Before I was building AI systems, I was keeping the books. As a
-          Finance Data Entry Assistant at ThePrivateHotels, I processed
-          customer invoices, bills, and expenses in QuickBooks for six
-          months — error-free record, first time doing it.
+          Finance Data Entry Assistant at ThePrivateHotels, I handled the
+          company&apos;s bookkeeping in QuickBooks for six months —
+          error-free record, first time doing it.
         </p>
         <p className="mt-5 text-lg leading-8 text-text-light-muted">
           I research until I have mastery. Then I execute without errors.
