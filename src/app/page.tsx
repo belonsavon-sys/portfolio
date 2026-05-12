@@ -80,6 +80,10 @@ export default function Home() {
         <AboutBand />
       </LightSection>
 
+      <LightSection className="pt-16 sm:pt-24" id="process">
+        <ProcessBand />
+      </LightSection>
+
       <LightSection className="pt-16 sm:pt-24" id="outcomes">
         <MetricsBand />
       </LightSection>
@@ -122,10 +126,11 @@ export default function Home() {
       <NowReading
         sections={[
           { id: "about", index: "01", label: "About" },
-          { id: "outcomes", index: "02", label: "Outcomes" },
-          { id: "work", index: "03", label: "Selected work" },
-          { id: "beyond", index: "04", label: "Beyond the code" },
-          { id: "stack", index: "05", label: "My stack" },
+          { id: "process", index: "02", label: "How I work" },
+          { id: "outcomes", index: "03", label: "Outcomes" },
+          { id: "work", index: "04", label: "Selected work" },
+          { id: "beyond", index: "05", label: "Beyond the code" },
+          { id: "stack", index: "06", label: "My stack" },
         ]}
       />
     </main>
@@ -137,6 +142,88 @@ function scrollToAbout() {
   const el = document.getElementById("about");
   if (!el) return;
   el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+const processSteps = [
+  {
+    body: "I take problems to mastery before I execute. The first hours go to research — docs, primary sources, working code I can read.",
+    verb: "Research",
+  },
+  {
+    body: "Solo or paired with AI, I prototype until something works. The harness writes the boring parts; I keep judgment on what ships.",
+    verb: "Build",
+  },
+  {
+    body: "Every change goes through a PR with documentation, spec, and a clean commit history. Production is the only environment that matters.",
+    verb: "Ship",
+  },
+  {
+    body: "Real numbers, real systems running. No demos that didn't survive contact with a guest, a payment, or a manager.",
+    verb: "Measure",
+  },
+];
+
+function ProcessBand() {
+  const reduce = useReducedMotion();
+  return (
+    <div>
+      <SectionHeader
+        description="The same loop runs across every project — from a hotel ops system to Atlas. Research, build, ship, measure."
+        eyebrow="How I work"
+        size="md"
+        title="The loop, four moves."
+      />
+
+      <ol className="mt-14 grid divide-y divide-border-light border-y border-border-light">
+        {processSteps.map((step, index) => (
+          <motion.li
+            animate={reduce ? undefined : { opacity: 1, y: 0 }}
+            className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-3 py-10 sm:py-12"
+            initial={reduce ? false : { opacity: 0, y: 24 }}
+            key={step.verb}
+            transition={{
+              delay: index * 0.06,
+              duration: 0.6,
+              ease: easeOut,
+            }}
+            viewport={{ amount: 0.3, once: true }}
+            whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+          >
+            {/* LEFT 8 — number + huge verb */}
+            <div className="col-span-12 lg:col-span-8">
+              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+                {`0${index + 1}`} · Step
+              </p>
+              <h3
+                className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+                style={{
+                  fontSize: "clamp(3rem, 8vw, 6rem)",
+                  letterSpacing: "-0.05em",
+                  lineHeight: 0.95,
+                }}
+              >
+                {step.verb}
+                <span className="text-accent">.</span>
+              </h3>
+            </div>
+
+            {/* RIGHT 4 — body prose */}
+            <div className="col-span-12 lg:col-span-4">
+              <p className="text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
+                {step.body}
+              </p>
+            </div>
+
+            {/* Hover accent — gradient hair-line draws under the row */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+            />
+          </motion.li>
+        ))}
+      </ol>
+    </div>
+  );
 }
 
 function AboutBand() {
