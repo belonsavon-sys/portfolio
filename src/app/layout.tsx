@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   category: "Portfolio",
   creator: "Pierre Belon Savon",
   description:
-    "AI Engineer building intelligent automation, full-stack applications, and multi-agent systems that ship to production.",
+    "AI Engineer building production systems for operations-heavy businesses. Currently running at ThePrivateHotels and Blackdoor.",
   keywords: [
     "Pierre Belon Savon",
     "AI Engineer",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   openGraph: {
     description:
-      "AI Engineer building intelligent automation, full-stack applications, and multi-agent systems that ship to production.",
+      "AI Engineer building production systems for operations-heavy businesses. Currently running at ThePrivateHotels and Blackdoor.",
     locale: "en_US",
     siteName: "Pierre Belon Savon",
     title: "Pierre Belon Savon — AI Engineer",
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     description:
-      "AI Engineer shipping intelligent automation and full-stack systems.",
+      "AI Engineer building production systems for operations-heavy businesses. Currently running at ThePrivateHotels and Blackdoor.",
     title: "Pierre Belon Savon — AI Engineer",
   },
 };
