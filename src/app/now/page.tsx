@@ -100,6 +100,30 @@ function readShipped(): ShippedEntry[] {
 
 const SHIPPED = readShipped();
 
+/**
+ * "Updated X ago" label for the ~/snapshot header. Derived from
+ * NEXT_PUBLIC_BUILD_TIME at build, so the value refreshes every
+ * deploy. Server-rendered — won't tick while the page is open, but
+ * recruiters scanning at deploy-time see fresh signal.
+ */
+function updatedLabel() {
+  const raw = process.env.NEXT_PUBLIC_BUILD_TIME;
+  if (!raw) return "Just now";
+  const then = new Date(raw).getTime();
+  const seconds = Math.max(0, Math.round((Date.now() - then) / 1000));
+  if (seconds < 60) return "Updated just now";
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `Updated ${minutes} min ago`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `Updated ${hours} hr ago`;
+  const days = Math.round(hours / 24);
+  if (days < 7) return `Updated ${days} d ago`;
+  const weeks = Math.round(days / 7);
+  if (weeks < 5) return `Updated ${weeks} wk ago`;
+  const months = Math.round(days / 30);
+  return `Updated ${months} mo ago`;
+}
+
 export const metadata = {
   description:
     "What Pierre Belon Savon is working on, reading, and learning right now. Inspired by nownownow.com.",
@@ -179,7 +203,7 @@ export default function NowPage() {
                 <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
                 <span>~/snapshot</span>
                 <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-                <span className="text-text-light-muted">May 2026</span>
+                <span className="text-text-light-muted">{updatedLabel()}</span>
               </div>
               <ul className="grid">
                 {[
