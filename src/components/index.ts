@@ -49,6 +49,8 @@ export type { LiveStatusBadgeProps } from "./LiveStatusBadge";
 export { LocalAiDemo } from "./LocalAiDemo";
 export { MarqueeBand } from "./MarqueeBand";
 export type { MarqueeBandProps } from "./MarqueeBand";
+export { NowReading } from "./NowReading";
+export type { NowReadingProps, NowReadingSection } from "./NowReading";
 export { PageTransition } from "./PageTransition";
 export { ParallaxBackdrop } from "./ParallaxBackdrop";
 export type { ParallaxBackdropProps } from "./ParallaxBackdrop";
