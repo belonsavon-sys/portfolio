@@ -84,8 +84,8 @@ export function SiteFooter() {
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <Button className="!px-8 !py-4 !text-base" href="/contact">
-            Get in Touch →
+          <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
+            Get in Touch
           </Button>
           <Button
             className="!px-8 !py-4 !text-base"

@@ -18,6 +18,7 @@ import type {
 type ButtonVariant = "primary" | "ghost" | "ghostDark";
 
 type ButtonBaseProps = {
+  arrow?: boolean;
   children: ReactNode;
   className?: string;
   variant?: ButtonVariant;
@@ -128,6 +129,7 @@ function useMagneticProps(active: boolean) {
 
 export function Button(props: ButtonProps) {
   const {
+    arrow = false,
     children,
     className,
     variant = "primary",
@@ -137,7 +139,7 @@ export function Button(props: ButtonProps) {
   const magneticProps = useMagneticProps(variant === "primary");
 
   const classes = cx(
-    "inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-semibold transition-[filter,background,border-color,color] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-60",
+    "group/btn inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-semibold transition-[filter,background,border-color,color] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-60",
     buttonVariants[variant],
     className,
   );
@@ -149,13 +151,21 @@ export function Button(props: ButtonProps) {
   };
 
   const isGhost = variant === "ghost" || variant === "ghostDark";
-  const inner = isGhost ? (
+  const label = arrow ? (
     <>
-      <span aria-hidden="true" className="btn-fill" />
-      <span className="btn-label">{children}</span>
+      {children}
+      <ButtonArrow />
     </>
   ) : (
     children
+  );
+  const inner = isGhost ? (
+    <>
+      <span aria-hidden="true" className="btn-fill" />
+      <span className="btn-label">{label}</span>
+    </>
+  ) : (
+    label
   );
 
   if ("href" in rest && rest.href) {
@@ -215,6 +225,28 @@ export function Button(props: ButtonProps) {
     >
       {inner}
     </motion.button>
+  );
+}
+
+function ButtonArrow() {
+  return (
+    <span
+      aria-hidden="true"
+      className="ml-2 inline-flex h-[1em] w-[1em] items-center justify-center overflow-hidden"
+    >
+      <svg
+        className="h-[0.85em] w-[0.85em] -translate-x-[1px] transition-transform duration-300 ease-out group-hover/btn:translate-x-[3px] motion-reduce:transition-none motion-reduce:group-hover/btn:translate-x-0"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M5 12h14" />
+        <path d="m13 5 7 7-7 7" />
+      </svg>
+    </span>
   );
 }
 

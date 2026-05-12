@@ -163,8 +163,8 @@ function BusinessHero() {
         </ScrollReveal>
         <ScrollReveal delay={0.22} direction="up">
           <div className="mt-12">
-            <Button className="!px-8 !py-4 !text-base" href="/contact">
-              Start a Conversation →
+            <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
+              Start a Conversation
             </Button>
           </div>
         </ScrollReveal>
