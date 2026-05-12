@@ -41,6 +41,7 @@ export { HeroAvatarFrame } from "./HeroAvatarFrame";
 export type { HeroAvatarFrameProps } from "./HeroAvatarFrame";
 export { IndexedDivider } from "./IndexedDivider";
 export { KeyboardNav } from "./KeyboardNav";
+export { LastShipped } from "./LastShipped";
 export type { IndexedDividerProps } from "./IndexedDivider";
 export { LightGlassCard } from "./LightGlassCard";
 export type { LightGlassCardProps } from "./LightGlassCard";
