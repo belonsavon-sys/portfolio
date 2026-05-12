@@ -85,20 +85,245 @@ function HeroLiveShipped() {
  * Truncated past ~64 chars so long commit messages don't break
  * the editorial top strip layout. Hidden when no subject is set.
  */
+/**
+ * Live local-time chip — shows the current time in Pacific (where
+ * Pierre is based) and updates every 30 seconds. Client-only to
+ * avoid SSR/CSR mismatch; renders a placeholder until mount so
+ * the hero markup is identical on the server.
+ */
+/**
+ * Rotating role tag — cycles the editorial kicker through 3 phrases
+ * with a fade swap every 3.6s. Drops to a single static phrase under
+ * prefers-reduced-motion to keep the hero accessible.
+ */
+const HERO_ROLE_PHRASES = [
+  "AI for operations-heavy businesses",
+  "Multi-agent harnesses in production",
+  "Shipping under PR review",
+];
+
+function HeroRoleTagRotator() {
+  const reduce = useReducedMotion();
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (reduce) return;
+    const id = window.setInterval(() => {
+      setIndex((i) => (i + 1) % HERO_ROLE_PHRASES.length);
+    }, 3600);
+    return () => window.clearInterval(id);
+  }, [reduce]);
+
+  return (
+    <span className="relative inline-block min-h-[1.25em] font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
+      {HERO_ROLE_PHRASES.map((phrase, i) => (
+        <motion.span
+          aria-hidden={i !== index}
+          animate={{ opacity: i === index ? 1 : 0, y: i === index ? 0 : -4 }}
+          className="absolute inset-y-0 left-0 whitespace-nowrap"
+          initial={false}
+          key={phrase}
+          transition={{ duration: reduce ? 0 : 0.4, ease: easeOut }}
+        >
+          {phrase}
+        </motion.span>
+      ))}
+      {/* Reserve width via the longest phrase rendered invisibly */}
+      <span aria-hidden="true" className="invisible whitespace-nowrap">
+        AI for operations-heavy businesses
+      </span>
+    </span>
+  );
+}
+
+function HeroLocalClockChip() {
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    tick();
+    const id = window.setInterval(tick, 30_000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const label = now
+    ? new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        hour12: true,
+        minute: "2-digit",
+        timeZone: "America/Los_Angeles",
+        timeZoneName: "short",
+      }).format(now)
+    : "Pacific time";
+
+  return (
+    <span className="group inline-flex items-center gap-2 rounded-full border border-result-green/35 bg-white/65 px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.22em] text-text-light backdrop-blur-md transition-[border-color,background] duration-200 hover:border-result-green hover:bg-white/85">
+      <span className="relative inline-flex h-1.5 w-1.5">
+        <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+        <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+      </span>
+      {label}
+    </span>
+  );
+}
+
+/**
+ * Compact ~/recent datasheet for the hero — three columns showing
+ * last ship freshness, ships in last 24h, PR merges in last 24h.
+ * Server-rendered: counts derived from BUILD_RECENT_COMMITS so the
+ * numbers reflect each deploy without runtime fetches.
+ */
+function HeroRecentDatasheet() {
+  type C = { sha: string; subject: string; when: string };
+  let recent: C[] = [];
+  try {
+    const raw = process.env.NEXT_PUBLIC_BUILD_RECENT_COMMITS;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) recent = parsed;
+    }
+  } catch {
+    recent = [];
+  }
+
+  function approxSeconds(w: string): number {
+    const m = w.match(
+      /^(\d+|a|an)\s+(second|minute|hour|day|week|month|year)s?\s+ago/i,
+    );
+    if (!m) return w.toLowerCase().includes("now") ? 0 : Infinity;
+    const n = m[1] === "a" || m[1] === "an" ? 1 : Number(m[1]);
+    const unit = m[2].toLowerCase();
+    const mult: Record<string, number> = {
+      day: 86400,
+      hour: 3600,
+      minute: 60,
+      month: 2628000,
+      second: 1,
+      week: 604800,
+      year: 31536000,
+    };
+    return n * (mult[unit] ?? Infinity);
+  }
+
+  const last = recent[0];
+  const todayShips = recent.filter(
+    (c) =>
+      !c.subject.startsWith("Merge pull request") &&
+      approxSeconds(c.when) < 86400,
+  ).length;
+  const todayPrs = recent.filter(
+    (c) =>
+      c.subject.startsWith("Merge pull request") &&
+      approxSeconds(c.when) < 86400,
+  ).length;
+
+  const rows: Array<{ key: string; pulse?: boolean; value: string }> = [
+    {
+      key: "Last ship",
+      pulse: true,
+      value: last ? `${last.when} · ${last.sha}` : "—",
+    },
+    { key: "Ships today", value: todayShips ? `${todayShips}` : "0" },
+    { key: "PRs today", value: todayPrs ? `${todayPrs}` : "0" },
+  ];
+
+  return (
+    <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+        <span className="relative inline-flex h-2 w-2">
+          <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+          <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+        </span>
+        <span>~/recent</span>
+        <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        <span className="text-text-light-muted">live · from build</span>
+      </div>
+      <ul className="grid divide-y divide-border-light sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        {rows.map((row, index) => (
+          <li
+            className="flex items-baseline justify-between gap-3 px-4 py-2.5"
+            key={row.key}
+          >
+            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="text-text-light-muted/60">// </span>
+              {String(index + 1).padStart(2, "0")} {row.key}
+            </span>
+            <span className="flex items-center gap-2 truncate text-right font-mono text-[12px] text-text-light">
+              {row.pulse ? (
+                <span className="relative inline-flex h-1.5 w-1.5">
+                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                  <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+                </span>
+              ) : null}
+              <span className="truncate">{row.value}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+type HeroRecentCommit = {
+  sha: string;
+  subject: string;
+  when: string;
+};
+
+function readHeroRecentCommits(): HeroRecentCommit[] {
+  try {
+    const raw = process.env.NEXT_PUBLIC_BUILD_RECENT_COMMITS;
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed.slice(0, 3);
+  } catch {
+    return [];
+  }
+}
+
 function HeroLatestCommit() {
   const subject = process.env.NEXT_PUBLIC_BUILD_COMMIT_SUBJECT;
   if (!subject) return null;
   const truncated = subject.length > 64 ? `${subject.slice(0, 64)}…` : subject;
+  const recent = readHeroRecentCommits();
+
   return (
     <span
       aria-label="Latest commit subject"
-      className="hidden max-w-[42ch] items-center gap-2 truncate font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted lg:inline-flex"
+      className="group/commit relative hidden max-w-[42ch] items-center gap-2 truncate font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted lg:inline-flex"
       title={subject}
     >
       <span aria-hidden="true" className="text-accent/60">
         latest:
       </span>
       <span className="truncate text-text-light/70">{truncated}</span>
+      {recent.length > 0 ? (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none invisible absolute left-0 top-full z-30 mt-2 w-[420px] -translate-y-1 rounded-xl border border-border-light bg-white/95 p-3 opacity-0 shadow-[0_18px_40px_-22px_rgba(15,23,42,0.28)] backdrop-blur transition-[opacity,transform,visibility] duration-200 group-hover/commit:visible group-hover/commit:translate-y-0 group-hover/commit:opacity-100"
+        >
+          <span className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.32em] text-accent">
+            <span className="relative inline-flex h-1.5 w-1.5">
+              <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+              <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+            </span>
+            last 3 ships
+          </span>
+          <ul className="mt-2 grid divide-y divide-border-light">
+            {recent.map((c) => (
+              <li
+                className="grid grid-cols-[auto_1fr_auto] items-baseline gap-2 py-2 font-mono text-[10px] normal-case tracking-normal"
+                key={c.sha}
+              >
+                <span className="text-accent">{c.sha}</span>
+                <span className="truncate text-text-light/80">{c.subject}</span>
+                <span className="text-text-light-muted">{c.when}</span>
+              </li>
+            ))}
+          </ul>
+        </span>
+      ) : null}
     </span>
   );
 }
@@ -850,7 +1075,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
             </motion.span>
           </h1>
 
-          {/* Mono kicker right below the name — editorial role tag */}
+          {/* Mono kicker right below the name — rotating role tag */}
           <motion.div
             className="mt-8 flex items-center gap-3"
             {...fadeUp(0.36)}
@@ -859,9 +1084,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               aria-hidden="true"
               className="h-px w-10 origin-left bg-accent"
             />
-            <span className="font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
-              AI for operations-heavy businesses
-            </span>
+            <HeroRoleTagRotator />
           </motion.div>
 
           {/* Description */}
@@ -923,6 +1146,57 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
             </kbd>
             <span>to jump anywhere</span>
           </motion.p>
+
+          {/* EXPLORE DECK — 3 high-value destinations beyond the two CTAs */}
+          <motion.ul
+            animate={reduce ? undefined : { opacity: 1, y: 0 }}
+            className="mt-8 grid gap-2.5 sm:grid-cols-3"
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            transition={{ delay: 0.84, duration: 0.55, ease: easeOut }}
+          >
+            {[
+              {
+                href: "/atlas",
+                label: "/atlas",
+                meta: "the harness",
+                teaser: "5-layer agent harness",
+              },
+              {
+                href: "/now",
+                label: "/now",
+                meta: "this week",
+                teaser: "what's shipping right now",
+              },
+              {
+                href: "/uses",
+                label: "/uses",
+                meta: "the stack",
+                teaser: "tools with reasons",
+              },
+            ].map((entry) => (
+              <li key={entry.label}>
+                <a
+                  className="group/explore flex items-center justify-between gap-3 rounded-xl border border-border-light bg-white/55 px-3.5 py-2.5 backdrop-blur-sm transition-[border-color,background] duration-200 hover:border-accent/45 hover:bg-white/85"
+                  href={entry.href}
+                >
+                  <span className="flex flex-col">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                      {entry.label} · {entry.meta}
+                    </span>
+                    <span className="mt-0.5 font-mono text-[12.5px] text-text-light">
+                      {entry.teaser}
+                    </span>
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-sm text-accent transition-transform duration-200 group-hover/explore:translate-x-0.5"
+                  >
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </motion.ul>
         </div>
 
         {/* RIGHT — avatar, justified to the right edge on lg (cols 8–12) */}
@@ -987,7 +1261,19 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           ))}
         </motion.div>
 
-        {/* CHIP STRIP — left-aligned */}
+        {/* ~/recent datasheet — compact 3-column build signal beneath
+            the metric ribbon. Server-rendered counts of recent commits
+            (today's ships, today's PRs) + last-ship freshness. */}
+        <motion.div
+          className="col-span-12"
+          style={
+            reduce ? undefined : { opacity: bottomZoneOpacity, y: bottomZoneY }
+          }
+        >
+          <HeroRecentDatasheet />
+        </motion.div>
+
+        {/* CHIP STRIP — left-aligned, last chip is a live local clock */}
         <motion.div
           className="col-span-12 flex flex-wrap items-center gap-2.5"
           style={
@@ -1014,6 +1300,13 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
               {role}
             </motion.span>
           ))}
+          <motion.span
+            animate={reduce ? undefined : { opacity: 1, y: 0 }}
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            transition={{ delay: 0.92 + 3 * 0.08, duration: 0.55, ease: easeOut }}
+          >
+            <HeroLocalClockChip />
+          </motion.span>
         </motion.div>
 
         {/* SCROLL CUE — left-aligned, anchored to lower-left margin.
