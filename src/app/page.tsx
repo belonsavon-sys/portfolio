@@ -27,7 +27,7 @@ import {
   SplitText,
   VelocityMarquee,
 } from "@/components";
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 const aboutParagraphs = [
   "I'm an engineer who learned to ship by automating the business I was hired to run.",
@@ -37,6 +37,60 @@ const aboutParagraphs = [
 ];
 
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
+
+/**
+ * Live-shipped pulse — reads NEXT_PUBLIC_BUILD_TIME +
+ * NEXT_PUBLIC_BUILD_SHA captured at build time and renders them as
+ * the hero's status badge. Each redeploy advances both values, so
+ * the home page top strip feels alive instead of carrying a
+ * hardcoded "currently shipping" label. Falls back to the Atlas v3
+ * label in dev when the build vars are absent.
+ */
+function HeroLiveShipped() {
+  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+  const buildSha = process.env.NEXT_PUBLIC_BUILD_SHA;
+  const [now, setNow] = useState<number | null>(null);
+
+  // Defer relative-time formatting to the client to avoid SSR/CSR
+  // mismatch. Re-render every 30s so the "X ago" stays current.
+  useEffect(() => {
+    if (!buildTime) return;
+    setNow(Date.now());
+    const id = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, [buildTime]);
+
+  if (!buildTime) {
+    return <LiveStatusBadge label="Currently shipping · Atlas v3" />;
+  }
+
+  const buildDate = new Date(buildTime);
+  const shortSha = buildSha ? buildSha.slice(0, 7) : "dev";
+  const relativeTime = now ? formatTimeAgo(buildDate, now) : "just now";
+
+  return (
+    <LiveStatusBadge
+      label={`Shipped ${relativeTime} · ${shortSha}`}
+    />
+  );
+}
+
+function formatTimeAgo(then: Date, now: number) {
+  const seconds = Math.max(0, Math.round((now - then.getTime()) / 1000));
+  if (seconds < 60) return "just now";
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `${minutes} min ago`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours} hr ago`;
+  const days = Math.round(hours / 24);
+  if (days < 7) return `${days} d ago`;
+  const weeks = Math.round(days / 7);
+  if (weeks < 5) return `${weeks} wk ago`;
+  const months = Math.round(days / 30);
+  if (months < 12) return `${months} mo ago`;
+  const years = Math.round(days / 365);
+  return `${years} yr ago`;
+}
 
 const heroMetrics = [
   {
@@ -531,7 +585,7 @@ function Hero({ onOpenAbout }: { onOpenAbout: () => void }) {
           className="col-span-12 flex flex-wrap items-center gap-3 self-start"
           {...fadeUp(0.04)}
         >
-          <LiveStatusBadge label="Currently shipping · Atlas v3" />
+          <HeroLiveShipped />
           <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
           <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
             01 / Welcome
