@@ -249,48 +249,218 @@ function BusinessHero() {
 
 function BlackdoorSection() {
   return (
-    <div className="grid gap-10 lg:grid-cols-[400px_minmax(0,1fr)]">
-      <div>
-        <SectionHeader
-          description="Blackdoor is the holding company I co-founded with Ryder in 2025. Our products are built and shipped end-to-end by Atlas — our autonomous agent harness — in place of a human dev team."
-          eyebrow="Blackdoor operations"
-          size="md"
-          title="Building the company that builds companies."
-        />
+    <div>
+      {/* Editorial heading strip — matches the SectionShell chapter
+          treatment used by the other /business chapters. */}
+      <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
+        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+          00 · Blackdoor operations
+        </span>
+        <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
+      </div>
+      <h2
+        className="mt-6 font-semibold tracking-tight text-text-light"
+        style={{
+          fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
+          letterSpacing: "-0.04em",
+          lineHeight: 0.98,
+        }}
+      >
+        Building the company that builds companies.
+      </h2>
+      <p className="mt-6 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
+        Blackdoor is the holding company I co-founded with Ryder in 2025.
+        Our products are built and shipped end-to-end by Atlas — our
+        autonomous agent harness — in place of a human dev team.
+      </p>
 
-        <ul className="mt-8 grid gap-3">
-          {blackdoorOutcomes.map((outcome) => (
-            <li
-              className="flex items-start gap-3 text-sm leading-7 text-text-light-muted"
-              key={outcome}
-            >
-              <span
-                aria-hidden="true"
-                className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
-              />
-              <span>{outcome}</span>
-            </li>
-          ))}
-        </ul>
+      <div className="mt-12 grid gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
+        {/* ~/outcomes datasheet — same shape as the Process /
+            Communications / Training / Finance sidebars so the four
+            chapters speak one language. */}
+        <aside className="lg:sticky lg:top-24">
+          <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+              <span>~/outcomes</span>
+              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+              <span className="text-text-light-muted">
+                {blackdoorOutcomes.length} signals
+              </span>
+            </div>
+            <ul className="grid">
+              {blackdoorOutcomes.map((outcome, index) => (
+                <li
+                  className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                  key={outcome}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm leading-6 text-text-light">
+                    {outcome}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+
+        <div>
+          <AtlasHierarchy layers={atlasLayers} />
+
+          {/* ~/atlas live-status datasheet — quick "at a glance"
+              stats about Atlas before the architecture/proof spec
+              cards below. */}
+          <div className="mt-10 overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="relative inline-flex h-2 w-2">
+                <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+              </span>
+              <span>~/atlas</span>
+              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+              <span className="text-text-light-muted">Live · in motion</span>
+            </div>
+            <ul className="grid divide-y divide-border-light sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+              {[
+                { key: "Version", value: "v3" },
+                { key: "Layers", value: "5 · Founders → Shipped" },
+                { key: "Products live", value: "3" },
+                { key: "Review", value: "Human PR · 100%" },
+                { key: "Tooling", value: "Claude · Codex · MCP · GitHub" },
+                { key: "Deployed at", value: "Blackdoor · ThePrivateHotels" },
+              ].map((row, index) => (
+                <li
+                  className="grid grid-cols-[auto_1fr] items-baseline gap-3 px-5 py-3"
+                  key={row.key}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")} {row.key}
+                  </span>
+                  <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
+                    {row.value}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Two editorial spec cards — first card explains the
+              architecture, second card shows the proof. Replaces the
+              flat side-by-side paragraph block. */}
+          <div className="mt-10 grid gap-6 lg:grid-cols-2">
+            <article className="relative rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-7">
+              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+                <span className="text-text-light-muted/60">// </span>
+                01 · Architecture
+              </p>
+              <h3
+                className="mt-3 font-semibold tracking-tight text-text-light"
+                style={{
+                  fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+                  letterSpacing: "-0.025em",
+                  lineHeight: 1.1,
+                }}
+              >
+                What Atlas is.
+              </h3>
+              <p className="mt-3 text-base leading-7 text-text-light-muted">
+                At Blackdoor, I lead AI R&amp;D and implementation. Atlas
+                is a multi-level autonomous agent harness — a CEO agent
+                routes work to C-suite agents (CFO, CMO), who delegate to
+                manager and field agents. Designed to build, operate, and
+                improve software products autonomously.
+              </p>
+            </article>
+
+            <article className="relative rounded-2xl border border-accent/40 bg-[rgba(41,110,214,0.04)] p-6 shadow-[0_18px_36px_-22px_rgba(41,110,214,0.25)] sm:p-7">
+              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+                <span className="text-text-light-muted/60">// </span>
+                02 · Proof
+              </p>
+              <h3
+                className="mt-3 font-semibold tracking-tight text-text-light"
+                style={{
+                  fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+                  letterSpacing: "-0.025em",
+                  lineHeight: 1.1,
+                }}
+              >
+                What Atlas has done.
+              </h3>
+              <p className="mt-3 text-base leading-7 text-text-light-muted">
+                Atlas has already shipped a game app, a budget web app, and
+                an agent-augmented project management system. The same
+                underlying technology is deployed at ThePrivateHotels. We
+                run everything through GitHub PRs.{" "}
+                <span className="font-semibold text-text-light">
+                  Every decision is governed.
+                </span>
+              </p>
+            </article>
+          </div>
+        </div>
       </div>
 
-      <div>
-        <AtlasHierarchy layers={atlasLayers} />
-
-        <div className="mt-10 grid gap-6 text-base leading-7 text-text-light-muted lg:grid-cols-2">
-          <p>
-            At Blackdoor, I lead AI R&amp;D and implementation. Atlas is a
-            multi-level autonomous agent harness — a CEO agent routes work to
-            C-suite agents (CFO, CMO), who delegate to manager and field
-            agents. Designed to build, operate, and improve software products
-            autonomously.
-          </p>
-          <p>
-            Atlas has already shipped a game app, a budget web app, and an
-            agent-augmented project management system. The same underlying
-            technology is deployed at ThePrivateHotels. We run everything
-            through GitHub PRs. Every decision is governed.
-          </p>
+      {/* Closing band — sends readers deeper into Atlas. Cross-links
+          to /ai (live demos), /uses (the AI stack reasoning), and
+          /now (what Atlas is shipping this week). */}
+      <div className="mt-16 rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-8">
+        <div className="grid grid-cols-12 gap-x-6 gap-y-6 lg:gap-x-8">
+          <div className="col-span-12 lg:col-span-7">
+            <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+              Dig deeper
+            </p>
+            <h3
+              className="mt-3 font-semibold tracking-tight text-text-light"
+              style={{
+                fontSize: "clamp(1.5rem, 3vw, 2.1rem)",
+                letterSpacing: "-0.03em",
+                lineHeight: 1.05,
+              }}
+            >
+              See Atlas in motion.
+            </h3>
+            <p className="mt-3 max-w-xl text-base leading-7 text-text-light-muted">
+              Three doors into the engine: live demos of the harness,
+              the AI stack reasoning, and what Atlas is shipping this
+              week.
+            </p>
+          </div>
+          <div className="col-span-12 self-center lg:col-span-5">
+            <ul className="grid gap-2 font-mono text-sm text-text-light-muted">
+              <li className="flex items-baseline gap-3">
+                <span aria-hidden="true" className="text-accent">→</span>
+                <a
+                  className="link-underline inline-block transition-colors hover:text-accent"
+                  href="/ai"
+                >
+                  /ai · the harness demo + case studies
+                </a>
+              </li>
+              <li className="flex items-baseline gap-3">
+                <span aria-hidden="true" className="text-accent">→</span>
+                <a
+                  className="link-underline inline-block transition-colors hover:text-accent"
+                  href="/uses"
+                >
+                  /uses · the AI stack with reasoning
+                </a>
+              </li>
+              <li className="flex items-baseline gap-3">
+                <span aria-hidden="true" className="text-accent">→</span>
+                <a
+                  className="link-underline inline-block transition-colors hover:text-accent"
+                  href="/now"
+                >
+                  /now · what Atlas is shipping this week
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
