@@ -105,13 +105,16 @@ export function SiteHeader() {
             NEXT_PUBLIC_BUILD_SHA so the header carries a small
             "shipped X · sha" pulse on every page. */}
         <HeaderLiveShipped />
-        {/* CENTERED NAV PILL — backdrop blur + saturation ramp tied to scrollY */}
+        {/* CENTERED NAV PILL — backdrop blur + saturation ramp tied to scrollY.
+            Padding + density tighten when scrolled past 8px so the
+            header collapses into a denser compact mode as the user
+            moves through the page. */}
         <motion.nav
           aria-label="Primary"
-          className={`pointer-events-auto flex flex-wrap items-center gap-1 rounded-full border bg-white/85 p-1.5 transition-shadow duration-300 ${
+          className={`pointer-events-auto flex flex-wrap items-center gap-1 rounded-full border bg-white/85 transition-[padding,box-shadow,gap] duration-300 ${
             scrolled
-              ? "border-border-light shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]"
-              : "border-border-light/70 shadow-sm"
+              ? "border-border-light p-1 shadow-[0_8px_24px_-12px_rgba(15,23,42,0.18)]"
+              : "border-border-light/70 p-1.5 shadow-sm"
           }`}
           ref={navRef}
           style={
@@ -131,6 +134,7 @@ export function SiteHeader() {
             <NavPillItem
               active={isActive(pathname, item.href)}
               chapter={item.chapter}
+              compact={scrolled}
               href={item.href}
               key={item.href}
             >
@@ -247,11 +251,13 @@ function NavPillItem({
   active,
   chapter,
   children,
+  compact = false,
   href,
 }: {
   active: boolean;
   chapter?: string;
   children: string;
+  compact?: boolean;
   href: string;
 }) {
   return (
@@ -269,9 +275,9 @@ function NavPillItem({
         />
       ) : null}
       <span
-        className={`relative flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-150 ${
-          active ? "text-white" : "text-text-light hover:text-accent"
-        }`}
+        className={`relative flex items-center gap-1.5 font-medium transition-[color,padding,font-size] duration-200 ${
+          compact ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm"
+        } ${active ? "text-white" : "text-text-light hover:text-accent"}`}
       >
         {/* Chapter index — only visible when active, gives the
             current route a film-slate confirmation marker. */}
