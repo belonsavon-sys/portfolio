@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
 import { ChapterRail, ParallaxGhost } from "@/components";
 import {
   EMAIL_DISPLAY,
@@ -267,10 +268,13 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* METHODS — temporary placeholder; iter-183 rebuilds this as
-          editorial chapter cards. For now we keep the existing
-          full-width row pattern but in a dedicated section below the
-          hero (no longer crammed into the hero grid). */}
+      {/* SEND — quick intake form. Composes a pre-filled mailto so
+          the user lands in their own mail client with the message
+          already drafted. Zero backend, zero spam vector. */}
+      <ContactSendSection />
+
+      {/* METHODS — alternative direct channels for users who skip
+          the form. */}
       <section className="relative" id="methods">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
@@ -671,6 +675,7 @@ export default function ContactPage() {
           resume pages use. */}
       <ChapterRail
         sections={[
+          { id: "send", index: "00", label: "Send" },
           { id: "methods", index: "01", label: "Reach me" },
           { id: "pipeline", index: "02", label: "What happens next" },
           { id: "engagements", index: "03", label: "Engagements" },
@@ -679,6 +684,150 @@ export default function ContactPage() {
         ]}
       />
     </main>
+  );
+}
+
+/**
+ * Quick intake form. Builds a pre-filled mailto: link from the
+ * form inputs and routes the user to their own mail client. No
+ * backend, no spam concerns; serves the "send me a message"
+ * intent without a third-party form service.
+ */
+function ContactSendSection() {
+  const [name, setName] = useState("");
+  const [from, setFrom] = useState("");
+  const [topic, setTopic] = useState("");
+  const [message, setMessage] = useState("");
+
+  const ready = name.trim().length > 0 && message.trim().length > 0;
+
+  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const subject = topic.trim() || `Message from ${name.trim() || "your site"}`;
+    const body = [
+      `From: ${name.trim()}${from.trim() ? ` <${from.trim()}>` : ""}`,
+      "",
+      message.trim(),
+    ].join("\n");
+    const url = `${EMAIL_MAILTO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (typeof window !== "undefined") {
+      window.location.href = url;
+    }
+  }
+
+  return (
+    <section className="relative scroll-mt-28" id="send">
+      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+            00 · Send
+          </span>
+          <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
+          <h2
+            className="font-semibold tracking-tight text-text-dark"
+            style={{
+              fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+              letterSpacing: "-0.035em",
+              lineHeight: 1,
+            }}
+          >
+            Say hello.
+          </h2>
+        </div>
+
+        <form
+          className="mt-10 overflow-hidden rounded-xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.55)] backdrop-blur-sm"
+          onSubmit={onSubmit}
+        >
+          <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+            <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+            <span>~/compose</span>
+            <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.20)]" />
+            <span className="text-text-dark-muted">
+              Opens in your mail client · No backend
+            </span>
+          </div>
+
+          <div className="grid gap-x-6 gap-y-4 px-6 py-6 sm:grid-cols-2 sm:px-8 sm:py-7">
+            <label className="grid gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                <span className="text-text-dark-muted/60">// </span>
+                01 Name
+              </span>
+              <input
+                autoComplete="name"
+                className="w-full rounded-md border border-[rgba(91,155,244,0.22)] bg-bg-dark/40 px-3 py-2 font-mono text-sm text-text-dark placeholder:text-text-dark-muted/40 transition-[border-color,background] duration-200 focus:border-accent-light focus:bg-bg-dark/55 focus:outline-none"
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Pierre Sender"
+                required
+                type="text"
+                value={name}
+              />
+            </label>
+
+            <label className="grid gap-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                <span className="text-text-dark-muted/60">// </span>
+                02 Email <span className="text-text-dark-muted">· optional</span>
+              </span>
+              <input
+                autoComplete="email"
+                className="w-full rounded-md border border-[rgba(91,155,244,0.22)] bg-bg-dark/40 px-3 py-2 font-mono text-sm text-text-dark placeholder:text-text-dark-muted/40 transition-[border-color,background] duration-200 focus:border-accent-light focus:bg-bg-dark/55 focus:outline-none"
+                onChange={(e) => setFrom(e.target.value)}
+                placeholder="you@yourcompany.com"
+                type="email"
+                value={from}
+              />
+            </label>
+
+            <label className="grid gap-2 sm:col-span-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                <span className="text-text-dark-muted/60">// </span>
+                03 What it&apos;s about
+              </span>
+              <input
+                className="w-full rounded-md border border-[rgba(91,155,244,0.22)] bg-bg-dark/40 px-3 py-2 font-mono text-sm text-text-dark placeholder:text-text-dark-muted/40 transition-[border-color,background] duration-200 focus:border-accent-light focus:bg-bg-dark/55 focus:outline-none"
+                onChange={(e) => setTopic(e.target.value)}
+                placeholder="Freelance build · Advisory · Role · Just saying hi"
+                type="text"
+                value={topic}
+              />
+            </label>
+
+            <label className="grid gap-2 sm:col-span-2">
+              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                <span className="text-text-dark-muted/60">// </span>
+                04 Message
+              </span>
+              <textarea
+                className="w-full resize-y rounded-md border border-[rgba(91,155,244,0.22)] bg-bg-dark/40 px-3 py-2 font-mono text-sm leading-6 text-text-dark placeholder:text-text-dark-muted/40 transition-[border-color,background] duration-200 focus:border-accent-light focus:bg-bg-dark/55 focus:outline-none"
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Tell me what you're trying to build, the rough timeline, and how I can help."
+                required
+                rows={5}
+                value={message}
+              />
+            </label>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[rgba(91,155,244,0.14)] bg-[rgba(91,155,244,0.04)] px-6 py-4 sm:px-8">
+            <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+              Reply window · within 24 hrs
+            </p>
+            <button
+              className="group inline-flex items-center gap-3 rounded-md border border-accent-light/45 bg-[rgba(91,155,244,0.16)] px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-[0.24em] text-accent-light transition-[transform,border-color,background] duration-200 hover:-translate-y-0.5 hover:border-accent-light hover:bg-[rgba(91,155,244,0.24)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+              disabled={!ready}
+              type="submit"
+            >
+              Send via mail client
+              <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-0.5">
+                →
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
   );
 }
 
