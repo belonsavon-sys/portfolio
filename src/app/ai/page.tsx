@@ -12,6 +12,7 @@ import {
   AtlasGallery,
   BeforeAfter,
   Button,
+  ChapterRail,
   CursorHalo,
   IndexedDivider,
   LiveStatusBadge,
@@ -154,7 +155,7 @@ export default function AiPage() {
     <main className="min-h-screen bg-bg-light text-text-light">
       <AiHero />
 
-      <LightSection className="py-20 sm:py-24">
+      <LightSection className="py-20 sm:py-24" id="services">
         <ServicesSection />
       </LightSection>
 
@@ -166,7 +167,7 @@ export default function AiPage() {
 
       <IndexedDivider index="02" label="Atlas portfolio" />
 
-      <LightSection className="py-20 sm:py-24">
+      <LightSection className="py-20 sm:py-24" id="atlas-portfolio">
         <AtlasGallerySection />
       </LightSection>
 
@@ -204,6 +205,18 @@ export default function AiPage() {
       </DemoSection>
 
       <SiteFooter />
+
+      {/* CHAPTER RAIL — mirrors the IndexedDivider numbering used
+          across /ai. Services skipped (it's the first scroll target
+          right after the hero); the rail starts at Built & Shipped
+          where the IndexedDividers start. */}
+      <ChapterRail
+        sections={[
+          { id: "built-and-shipped", index: "01", label: "Built & shipped" },
+          { id: "atlas-portfolio", index: "02", label: "Atlas portfolio" },
+          { id: "demos", index: "03", label: "Demos" },
+        ]}
+      />
     </main>
   );
 }
@@ -754,7 +767,10 @@ function AtlasGallerySection() {
 function DemoProgramHeader() {
   const reduce = useReducedMotion();
   return (
-    <section className="relative overflow-hidden bg-bg-dark pb-10 pt-20 text-text-dark sm:pb-12 sm:pt-24">
+    <section
+      className="relative scroll-mt-28 overflow-hidden bg-bg-dark pb-10 pt-20 text-text-dark sm:pb-12 sm:pt-24"
+      id="demos"
+    >
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.18)] pb-6"
