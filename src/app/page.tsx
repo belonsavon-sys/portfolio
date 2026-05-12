@@ -509,30 +509,90 @@ function BeyondTheCode() {
         />
       </div>
 
-      <figure className="relative mx-auto mt-24 max-w-4xl text-center">
-        <span
-          aria-hidden="true"
-          className="select-none font-bold leading-none text-accent-light/20"
-          style={{
-            fontSize: "clamp(6rem, 14vw, 12rem)",
-            letterSpacing: "-0.08em",
-          }}
-        >
-          &ldquo;
-        </span>
-        <blockquote className="-mt-6 text-2xl font-medium leading-[1.2] text-text-dark sm:text-4xl lg:text-5xl">
-          <span className="bg-gradient-to-r from-text-dark via-accent-light to-text-dark bg-clip-text text-transparent">
-            Solo or paired with AI, I research relentlessly and finish what I
-            start.
-          </span>
-        </blockquote>
-        <figcaption className="mt-8 inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.28em] text-accent-light">
-          <span aria-hidden="true" className="h-px w-8 bg-accent-light/50" />
-          — How I work
-          <span aria-hidden="true" className="h-px w-8 bg-accent-light/50" />
-        </figcaption>
-      </figure>
+      <ScrollProgressQuote />
     </div>
+  );
+}
+
+function ScrollProgressQuote() {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLElement>(null);
+  // The quote enters reveal at "start 80%" (top edge crosses 80% viewport)
+  // and finishes by "start 20%" — so the reveal happens over the first
+  // ~60% of the quote's vertical scroll journey, well before it exits.
+  const { scrollYProgress } = useScroll({
+    offset: ["start 80%", "start 20%"],
+    target: ref,
+  });
+
+  const quote =
+    "Solo or paired with AI, I research relentlessly and finish what I start.";
+  const words = quote.split(" ");
+
+  return (
+    <figure className="relative mx-auto mt-24 max-w-4xl text-center" ref={ref}>
+      <span
+        aria-hidden="true"
+        className="select-none font-bold leading-none text-accent-light/20"
+        style={{
+          fontSize: "clamp(6rem, 14vw, 12rem)",
+          letterSpacing: "-0.08em",
+        }}
+      >
+        &ldquo;
+      </span>
+      <blockquote className="-mt-6 text-2xl font-medium leading-[1.25] text-text-dark sm:text-4xl lg:text-5xl">
+        {words.map((word, index) => (
+          <ScrollProgressWord
+            isLast={index === words.length - 1}
+            key={`${word}-${index}`}
+            progress={scrollYProgress}
+            reduce={reduce}
+            // Spread the word reveal across the first 75% of progress so
+            // every word is visible well before the quote scrolls past.
+            start={(index / words.length) * 0.75}
+            word={word}
+          />
+        ))}
+      </blockquote>
+      <figcaption className="mt-8 inline-flex items-center justify-center gap-3 font-mono text-xs uppercase tracking-[0.28em] text-accent-light">
+        <span aria-hidden="true" className="h-px w-8 bg-accent-light/50" />
+        — How I work
+        <span aria-hidden="true" className="h-px w-8 bg-accent-light/50" />
+      </figcaption>
+    </figure>
+  );
+}
+
+function ScrollProgressWord({
+  isLast,
+  progress,
+  reduce,
+  start,
+  word,
+}: {
+  isLast: boolean;
+  progress: ReturnType<typeof useScroll>["scrollYProgress"];
+  reduce: boolean | null;
+  start: number;
+  word: string;
+}) {
+  const opacity = useTransform(progress, [start, start + 0.18], [0.18, 1]);
+
+  if (reduce) {
+    return (
+      <span>
+        {word}
+        {!isLast ? " " : ""}
+      </span>
+    );
+  }
+
+  return (
+    <motion.span style={{ opacity }}>
+      {word}
+      {!isLast ? " " : ""}
+    </motion.span>
   );
 }
 
