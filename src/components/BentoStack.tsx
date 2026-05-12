@@ -7,6 +7,7 @@ import { BrandLogo } from "./BrandLogo";
 type StackItem = {
   label: string;
   name: Parameters<typeof BrandLogo>[0]["name"];
+  note?: string;
   primary?: boolean;
 };
 
@@ -22,12 +23,12 @@ const categories: StackCategory[] = [
     eyebrow: "01",
     href: "/uses#ai-stack",
     items: [
-      { label: "Claude", name: "claude", primary: true },
-      { label: "Codex", name: "codex" },
-      { label: "ChatGPT", name: "chatgpt" },
-      { label: "MCP", name: "mcp" },
-      { label: "Zapier", name: "zapier" },
-      { label: "n8n", name: "n8n" },
+      { label: "Claude", name: "claude", note: "Daily reasoning + code", primary: true },
+      { label: "Codex", name: "codex", note: "Multi-file edits" },
+      { label: "ChatGPT", name: "chatgpt", note: "Utility shots" },
+      { label: "MCP", name: "mcp", note: "Agent ↔ tool bridge" },
+      { label: "Zapier", name: "zapier", note: "Hotel ops glue" },
+      { label: "n8n", name: "n8n", note: "Self-hosted automation" },
     ],
     title: "AI & Automation",
   },
@@ -35,10 +36,10 @@ const categories: StackCategory[] = [
     eyebrow: "02",
     href: "/uses",
     items: [
-      { label: "TypeScript", name: "typescript" },
-      { label: "React", name: "react" },
-      { label: "Next.js", name: "nextjs", primary: true },
-      { label: "Tailwind", name: "tailwind" },
+      { label: "TypeScript", name: "typescript", note: "Default · everywhere" },
+      { label: "React", name: "react", note: "UI framework" },
+      { label: "Next.js", name: "nextjs", note: "App router · this site", primary: true },
+      { label: "Tailwind", name: "tailwind", note: "Atomic styles" },
     ],
     title: "Frontend",
   },
@@ -46,10 +47,10 @@ const categories: StackCategory[] = [
     eyebrow: "03",
     href: "/uses#infra",
     items: [
-      { label: "Node.js", name: "node" },
-      { label: "Express", name: "express" },
-      { label: "Supabase", name: "supabase", primary: true },
-      { label: "MySQL", name: "mysql" },
+      { label: "Node.js", name: "node", note: "API + scripts" },
+      { label: "Express", name: "express", note: "Lightweight servers" },
+      { label: "Supabase", name: "supabase", note: "Postgres + auth + RLS", primary: true },
+      { label: "MySQL", name: "mysql", note: "Legacy reads" },
     ],
     title: "Backend & DB",
   },
@@ -57,8 +58,8 @@ const categories: StackCategory[] = [
     eyebrow: "04",
     href: "/uses",
     items: [
-      { label: "Flutter", name: "flutter", primary: true },
-      { label: "Kotlin", name: "kotlin" },
+      { label: "Flutter", name: "flutter", note: "Cross-platform mobile", primary: true },
+      { label: "Kotlin", name: "kotlin", note: "KMP shared logic" },
     ],
     title: "Mobile",
   },
@@ -66,9 +67,9 @@ const categories: StackCategory[] = [
     eyebrow: "05",
     href: "/uses#infra",
     items: [
-      { label: "Vercel", name: "vercel", primary: true },
-      { label: "GitHub", name: "github" },
-      { label: "Twilio", name: "twilio" },
+      { label: "Vercel", name: "vercel", note: "This site lives here", primary: true },
+      { label: "GitHub", name: "github", note: "PR-driven workflow" },
+      { label: "Twilio", name: "twilio", note: "SMS for ops" },
     ],
     title: "Infra & APIs",
   },
@@ -76,10 +77,10 @@ const categories: StackCategory[] = [
     eyebrow: "06",
     href: "/uses#editor",
     items: [
-      { label: "VS Code", name: "vscode", primary: true },
-      { label: "Cursor", name: "cursor" },
-      { label: "Figma", name: "figma" },
-      { label: "Framer", name: "framer" },
+      { label: "VS Code", name: "vscode", note: "Daily editor", primary: true },
+      { label: "Cursor", name: "cursor", note: "Single-file AI edits" },
+      { label: "Figma", name: "figma", note: "Design + tokens" },
+      { label: "Framer", name: "framer", note: "Layout prototypes" },
     ],
     title: "Tooling & Design",
   },
@@ -218,16 +219,22 @@ function ToolTile({
         ) : null}
       </button>
 
-      {/* Tooltip — appears above the tile on hover/focus */}
+      {/* Tooltip — appears above the tile on hover/focus.
+          Carries the tool's usage note when present (iter-268). */}
       <motion.span
         animate={{
           opacity: hovered && !reduce ? 1 : 0,
           y: hovered && !reduce ? -6 : 0,
         }}
-        className="pointer-events-none absolute bottom-full left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-md border border-accent/30 bg-bg-light px-2 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
+        className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 inline-flex max-w-[220px] -translate-x-1/2 flex-col items-center gap-1 whitespace-nowrap rounded-md border border-accent/30 bg-bg-light px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
         transition={{ duration: 0.2, ease: easeOut }}
       >
-        {item.label}
+        <span className="font-semibold">{item.label}</span>
+        {item.note ? (
+          <span className="font-normal tracking-[0.18em] text-text-light-muted">
+            {item.note}
+          </span>
+        ) : null}
       </motion.span>
     </motion.li>
   );
