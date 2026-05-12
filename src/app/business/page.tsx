@@ -400,13 +400,26 @@ function TrainingSection() {
 
 function FinanceSection() {
   return (
-    <div className="grid gap-10 lg:grid-cols-[1fr_320px] lg:items-start">
+    <div className="grid gap-12 lg:grid-cols-[1fr_340px] lg:items-start">
       <div>
-        <SectionHeader
-          eyebrow="Finance & administration"
-          title="Precision behind the scenes."
-        />
-        <p className="mt-6 text-lg leading-8 text-text-light-muted">
+        {/* Editorial heading strip — matches the SectionShell chapters */}
+        <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+            04 · Finance &amp; administration
+          </span>
+          <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
+        </div>
+        <h2
+          className="mt-6 font-semibold tracking-tight text-text-light"
+          style={{
+            fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.98,
+          }}
+        >
+          Precision behind the scenes.
+        </h2>
+        <p className="mt-8 text-lg leading-8 text-text-light-muted">
           Before I was building AI systems, I was keeping the books. As a
           Finance Data Entry Assistant at ThePrivateHotels, I handled the
           company&apos;s bookkeeping in QuickBooks for six months —
@@ -418,22 +431,39 @@ function FinanceSection() {
           accounting or agent architecture.
         </p>
       </div>
-      <dl className="grid content-start gap-4 self-start">
-        {[
-          { label: "Tool", value: "QuickBooks" },
-          { label: "Duration", value: "6 months" },
-          { label: "Record", value: "Error-free" },
-        ].map((item) => (
-          <div className="border-l border-border-light pl-4" key={item.label}>
-            <dt className="font-mono text-xs uppercase tracking-[0.18em] text-text-light-muted">
-              {item.label}
-            </dt>
-            <dd className="mt-1 text-base font-semibold text-text-light">
-              {item.value}
-            </dd>
+
+      {/* ~/ledger datasheet — replaces the loose dl block. Same DNA as
+          the ~/outcomes panel used by the other /business chapters. */}
+      <aside className="self-start lg:sticky lg:top-24">
+        <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+          <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+            <span>~/ledger</span>
+            <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+            <span className="text-text-light-muted">3 signals</span>
           </div>
-        ))}
-      </dl>
+          <dl className="grid">
+            {[
+              { label: "Tool", value: "QuickBooks" },
+              { label: "Duration", value: "6 months" },
+              { label: "Record", value: "Error-free" },
+            ].map((item, index) => (
+              <div
+                className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                key={item.label}
+              >
+                <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <span className="text-text-light-muted/60">// </span>
+                  {String(index + 1).padStart(2, "0")} {item.label}
+                </dt>
+                <dd className="text-right font-mono text-[12.5px] font-semibold uppercase tracking-[0.18em] text-text-light">
+                  {item.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </aside>
     </div>
   );
 }
