@@ -428,7 +428,7 @@ function AtlasGallerySection() {
     <div>
       <SectionHeader
         badge={<LiveStatusBadge label="3 products · in motion" />}
-        description="Three products built end-to-end via the Atlas multi-agent harness. Real agents wrote the code, opened the PRs, and shipped the features under human review."
+        description="Three products built end-to-end via the Atlas multi-agent harness. The agents write the code and ship it; humans review every PR."
         eyebrow="Atlas portfolio"
         title="What Atlas has shipped."
       />
