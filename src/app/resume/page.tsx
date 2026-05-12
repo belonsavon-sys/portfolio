@@ -4,6 +4,7 @@ import {
   ParallaxGhost,
   RoleEntry,
   SplitText,
+  StaggeredChipRail,
 } from "@/components";
 import {
   EMAIL_DISPLAY,
@@ -316,19 +317,10 @@ function ResumeHero() {
           AI Engineer
         </p>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-2">
-          {["Ocean Shores, WA", "Remote roles", "Freelance projects"].map(
-            (chip) => (
-              <span
-                className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/60 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light backdrop-blur-md"
-                key={chip}
-              >
-                <span className="h-1 w-1 rounded-full bg-accent" />
-                {chip}
-              </span>
-            ),
-          )}
-        </div>
+        <StaggeredChipRail
+          baseDelay={0.4}
+          chips={["Ocean Shores, WA", "Remote roles", "Freelance projects"]}
+        />
 
         <div className="mt-10">
           <Button
