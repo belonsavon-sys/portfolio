@@ -310,6 +310,44 @@ function BlackdoorSection() {
         <div>
           <AtlasHierarchy layers={atlasLayers} />
 
+          {/* ~/atlas live-status datasheet — quick "at a glance"
+              stats about Atlas before the architecture/proof spec
+              cards below. */}
+          <div className="mt-10 overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+              <span className="relative inline-flex h-2 w-2">
+                <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
+                <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
+              </span>
+              <span>~/atlas</span>
+              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+              <span className="text-text-light-muted">Live · in motion</span>
+            </div>
+            <ul className="grid divide-y divide-border-light sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+              {[
+                { key: "Version", value: "v3" },
+                { key: "Layers", value: "5 · Founders → Shipped" },
+                { key: "Products live", value: "3" },
+                { key: "Review", value: "Human PR · 100%" },
+                { key: "Tooling", value: "Claude · Codex · MCP · GitHub" },
+                { key: "Deployed at", value: "Blackdoor · ThePrivateHotels" },
+              ].map((row, index) => (
+                <li
+                  className="grid grid-cols-[auto_1fr] items-baseline gap-3 px-5 py-3"
+                  key={row.key}
+                >
+                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                    <span className="text-text-light-muted/60">// </span>
+                    {String(index + 1).padStart(2, "0")} {row.key}
+                  </span>
+                  <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
+                    {row.value}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Two editorial spec cards — first card explains the
               architecture, second card shows the proof. Replaces the
               flat side-by-side paragraph block. */}
