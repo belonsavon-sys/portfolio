@@ -300,6 +300,7 @@ function BlackdoorSection() {
 function ProcessSection() {
   return (
     <SectionShell
+      chapter="01"
       eyebrow="Process design & digitization"
       heading="I turn chaos into auditable systems."
       outcomes={processOutcomes}
@@ -343,6 +344,7 @@ function ProcessSection() {
 function CommunicationsSection() {
   return (
     <SectionShell
+      chapter="02"
       eyebrow="Customer & guest communications"
       heading="Replies inside three minutes, always in your voice."
       outcomes={communicationOutcomes}
@@ -380,6 +382,7 @@ function CommunicationsSection() {
 function TrainingSection() {
   return (
     <SectionShell
+      chapter="03"
       eyebrow="Team leadership & training"
       heading="I build teams that can run systems I build."
       outcomes={trainingOutcomes}
@@ -435,38 +438,81 @@ function FinanceSection() {
   );
 }
 
+/**
+ * Editorial chapter shell — wraps each /business chapter (Process,
+ * Communications, Training). The IndexedDivider above each chapter
+ * shows the chapter number on its own row; this shell carries the
+ * editorial heading strip, the chapter body, and a ~/outcomes
+ * datasheet sidebar that matches the ~/now / ~/contact / ~/engagements
+ * datasheets used elsewhere on the site.
+ */
 function SectionShell({
+  chapter,
   children,
   eyebrow,
   heading,
   outcomes,
 }: {
+  chapter: string;
   children: ReactNode;
   eyebrow: string;
   heading: string;
   outcomes: string[];
 }) {
   return (
-    <div className="grid gap-12 lg:grid-cols-[1fr_320px] lg:items-start">
+    <div className="grid gap-12 lg:grid-cols-[1fr_340px] lg:items-start">
       <div>
-        <SectionHeader eyebrow={eyebrow} size="md" title={heading} />
-        <div className="mt-8">{children}</div>
+        {/* Editorial heading strip — chapter mark + accent rule + h2 */}
+        <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
+          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+            {chapter} · {eyebrow}
+          </span>
+          <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
+        </div>
+        <h2
+          className="mt-6 font-semibold tracking-tight text-text-light"
+          style={{
+            fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.98,
+          }}
+        >
+          {heading}
+        </h2>
+        <div className="mt-10">{children}</div>
       </div>
 
-      <aside className="self-start">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-          What this looks like
-        </p>
-        <ul className="mt-4 grid gap-3">
-          {outcomes.map((outcome) => (
-            <li
-              className="border-l border-border-light pl-4 text-sm font-medium leading-6"
-              key={outcome}
-            >
-              {outcome}
-            </li>
-          ))}
-        </ul>
+      {/* ~/outcomes datasheet — same DNA as the SiteFooter ~/now, the
+          /resume ~/contact + ~/languages, the 404 ~/diagnostic, the
+          /contact ~/engagements. Anchors each chapter's "what this
+          looks like" as a real spec sheet. */}
+      <aside className="self-start lg:sticky lg:top-24">
+        <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
+          <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
+            <span>~/outcomes</span>
+            <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+            <span className="text-text-light-muted">
+              {outcomes.length} signals
+            </span>
+          </div>
+          <ul className="grid">
+            {outcomes.map((outcome, index) => (
+              <li
+                className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
+                key={outcome}
+              >
+                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <span className="text-text-light-muted/60">// </span>
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="text-sm leading-6 text-text-light">
+                  {outcome}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </aside>
     </div>
   );
