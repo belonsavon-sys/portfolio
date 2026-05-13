@@ -122,6 +122,99 @@ a {
   background-size: 100% 1px;
 }
 
+/* TECHY CTA — breathing accent glow at idle, intensified glow + a
+ * top→bottom scanline sweep on hover. Designed to pair with the
+ * Button component (works alongside .btn-fill / .btn-label so it
+ * layers correctly on both primary and ghost variants).
+ *
+ * Apply via className="btn-techy" on a Button. The pseudo-element
+ * sits at z-index: 2 so it draws over both the sliding fill (z:0)
+ * and the label (z:1). */
+.btn-techy {
+  position: relative;
+  animation: btn-techy-breathe 4.5s ease-in-out infinite;
+}
+
+@keyframes btn-techy-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(41, 110, 214, 0.18),
+      0 0 20px -4px rgba(41, 110, 214, 0.28),
+      0 8px 24px -10px rgba(41, 110, 214, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(41, 110, 214, 0.32),
+      0 0 30px -2px rgba(41, 110, 214, 0.45),
+      0 14px 32px -8px rgba(41, 110, 214, 0.38);
+  }
+}
+
+.btn-techy:hover {
+  animation: none;
+  box-shadow:
+    0 0 0 1px rgba(41, 110, 214, 0.6),
+    0 0 40px 0 rgba(41, 110, 214, 0.55),
+    0 18px 44px -10px rgba(41, 110, 214, 0.42);
+}
+
+.btn-techy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(50% - 1.5px),
+    rgba(255, 255, 255, 0.55) calc(50% - 0.5px),
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0.55) calc(50% + 0.5px),
+    transparent calc(50% + 1.5px),
+    transparent 100%
+  );
+  border-radius: inherit;
+  opacity: 0;
+  transform: translateY(-105%);
+  filter: blur(0.4px);
+  z-index: 2;
+  transition: opacity 0.18s ease;
+}
+
+.btn-techy:hover::after {
+  opacity: 1;
+  animation: btn-techy-scan 0.75s ease-in-out;
+}
+
+@keyframes btn-techy-scan {
+  0% {
+    transform: translateY(-105%);
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  82% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-techy,
+  .btn-techy:hover {
+    animation: none;
+  }
+  .btn-techy::after,
+  .btn-techy:hover::after {
+    display: none;
+  }
+}
+
 /* Sliding fill — for ghost-style buttons. The button must be relative + overflow-hidden,
    and contain a child span.btn-fill. Hovering slides accent fill in from the left. */
 .btn-fill {
@@ -384,6 +477,654 @@ a {
   }
   to {
     transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* PAGE ATMOSPHERE — a soft gradient mesh that spans the full body
+ * height and scrolls with the page. The mesh itself is rendered in
+ * <PageAtmosphere /> as nine overlapping radial gradients; the only
+ * thing this keyframe does is a slow hue-rotation across the whole
+ * field so the tonal palette breathes over a 75s cycle. Anything
+ * subtler reads as static; anything faster reads as a gimmick. */
+@keyframes atmosphere-hue {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(-14deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="atmosphere-hue"] {
+    animation: none !important;
+  }
+}
+
+/* AUTO-GLITCH — a living headline effect.
+ *
+ * IDLE: every 5s the element fires two glitch bursts. Each burst is a
+ * pair of staggered "displacement frames" — tri-color chromatic offset
+ * (accent blue + magenta + result-green) plus a sub-pixel translate so
+ * the text appears to *skip* before re-settling. Sub-pixel transforms
+ * never reflow layout.
+ *
+ * HOVER: swaps to a continuous, faster, more aggressive cycle and
+ * activates the ::after scanline overlay — a 2px accent slice that
+ * scans top→bottom across the text bounding box. Combined effect reads
+ * as "system is actively chewing on this glyph."
+ *
+ * The element gets `position: relative` so the pseudo-element overlay
+ * anchors to the text's bounding box. */
+.auto-glitch {
+  position: relative;
+  animation: auto-glitch-pulse 5s steps(1) infinite;
+}
+.auto-glitch::after {
+  content: "";
+  position: absolute;
+  inset: -2px 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(50% - 1px),
+    rgba(91, 155, 244, 0.55) 50%,
+    transparent calc(50% + 1px),
+    transparent 100%
+  );
+  filter: blur(0.4px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.auto-glitch:hover {
+  animation: auto-glitch-hover 0.8s linear infinite;
+}
+.auto-glitch:hover::after {
+  opacity: 1;
+  animation: auto-glitch-scanline 0.6s linear infinite;
+}
+
+@keyframes auto-glitch-pulse {
+  0%,
+  100% {
+    text-shadow: 0 0 0 transparent;
+    transform: translate3d(0, 0, 0);
+  }
+  2% {
+    text-shadow:
+      1.5px 0 0 rgba(91, 155, 244, 0.75),
+      -1.5px 0 0 rgba(236, 72, 153, 0.7);
+    transform: translate3d(0.5px, 0, 0);
+  }
+  3.2% {
+    text-shadow:
+      -1.5px 0 0 rgba(91, 155, 244, 0.7),
+      1.5px 0 0 rgba(236, 72, 153, 0.65);
+    transform: translate3d(-0.5px, 0.5px, 0);
+  }
+  4% {
+    text-shadow: 0 0 0 transparent;
+    transform: translate3d(0, 0, 0);
+  }
+  7% {
+    text-shadow:
+      2.5px 0 0 rgba(41, 110, 214, 0.65),
+      -2.5px 0 0 rgba(16, 185, 129, 0.55);
+    transform: translate3d(0, 0.5px, 0);
+  }
+  8% {
+    text-shadow:
+      -2.5px 0 0 rgba(41, 110, 214, 0.6),
+      2.5px 0 0 rgba(236, 72, 153, 0.5);
+    transform: translate3d(0.5px, -0.5px, 0);
+  }
+  9% {
+    text-shadow: 0 0 0 transparent;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes auto-glitch-hover {
+  0%,
+  100% {
+    text-shadow:
+      3px 0 0 rgba(91, 155, 244, 0.75),
+      -3px 0 0 rgba(236, 72, 153, 0.65);
+    transform: translate3d(0, 0, 0);
+  }
+  12% {
+    text-shadow:
+      -3px 0 0 rgba(91, 155, 244, 0.7),
+      3px 0 0 rgba(16, 185, 129, 0.6);
+    transform: translate3d(0.8px, -0.5px, 0);
+  }
+  25% {
+    text-shadow:
+      2px 0 0 rgba(236, 72, 153, 0.75),
+      -2px 0 0 rgba(91, 155, 244, 0.7);
+    transform: translate3d(-0.8px, 0, 0);
+  }
+  37% {
+    text-shadow:
+      -4px 0 0 rgba(91, 155, 244, 0.7),
+      4px 0 0 rgba(236, 72, 153, 0.55);
+    transform: translate3d(0.5px, 0.5px, 0);
+  }
+  50% {
+    text-shadow:
+      1.5px 0 0 rgba(16, 185, 129, 0.6),
+      -1.5px 0 0 rgba(91, 155, 244, 0.6);
+    transform: translate3d(0, -0.5px, 0);
+  }
+  62% {
+    text-shadow:
+      -2px 0 0 rgba(91, 155, 244, 0.7),
+      2px 0 0 rgba(236, 72, 153, 0.6);
+    transform: translate3d(-0.5px, 0, 0);
+  }
+  75% {
+    text-shadow:
+      3px 0 0 rgba(91, 155, 244, 0.65),
+      -3px 0 0 rgba(16, 185, 129, 0.5);
+    transform: translate3d(0, 0.5px, 0);
+  }
+  87% {
+    text-shadow:
+      -1.5px 0 0 rgba(236, 72, 153, 0.7),
+      1.5px 0 0 rgba(91, 155, 244, 0.65);
+    transform: translate3d(0.5px, 0, 0);
+  }
+}
+
+@keyframes auto-glitch-scanline {
+  0% {
+    transform: translateY(-105%);
+  }
+  100% {
+    transform: translateY(105%);
+  }
+}
+
+/* VHS-style horizontal tear bar — a thin accent line that crosses an
+ * element, sweeping top→bottom on a slow loop. Drop a <span class="
+ * glitch-bar"> as a child of any position:relative container. */
+.glitch-bar {
+  pointer-events: none;
+  position: absolute;
+  inset-inline: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(91, 155, 244, 0.55) 30%,
+    rgba(239, 68, 68, 0.45) 50%,
+    rgba(91, 155, 244, 0.55) 70%,
+    transparent
+  );
+  filter: blur(0.5px);
+  animation: glitch-bar-sweep 7s linear infinite;
+  mix-blend-mode: screen;
+  z-index: 5;
+}
+@keyframes glitch-bar-sweep {
+  0% {
+    top: -2%;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  92% {
+    top: 102%;
+    opacity: 1;
+  }
+  100% {
+    top: 102%;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auto-glitch,
+  .auto-glitch:hover {
+    animation: none;
+    text-shadow: none;
+    transform: none;
+  }
+  .auto-glitch::after,
+  .auto-glitch:hover::after {
+    display: none;
+  }
+  .glitch-bar {
+    display: none;
+  }
+  .glitch-tear-top,
+  .glitch-tear-bottom,
+  .glitch-tear-text {
+    animation: none !important;
+  }
+  .glitch-tear-text {
+    opacity: 0;
+  }
+}
+
+/* Glitch-line title — replaces section headers. The title text is
+ * always visible. A hairline extends from the title to the right edge
+ * of the row. Every 5s the line jitters, the title gets a brief
+ * chromatic-aberration flicker, and a mono meta caption slides in
+ * from the right (pushing the line shorter to make room).
+ *
+ * Usage: <GlitchTitle chapter="03" eyebrow="Uses"
+ *           title="The tools." meta="// 14 items · paid this month" />
+ */
+.glitch-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+.glitch-title-chapter {
+  font-family: var(--font-geist-mono);
+  font-size: 11px;
+  color: rgb(41, 110, 214);
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+  animation: glitch-title-chapter 5s ease-in-out infinite;
+}
+.glitch-title-text {
+  flex-shrink: 0;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  color: rgb(15, 23, 42);
+  position: relative;
+  animation:
+    glitch-title-microflicker 5s steps(1) infinite,
+    glitch-title-xray 5s ease-in-out infinite;
+  will-change: transform, color, filter;
+}
+.glitch-title-text-dark {
+  color: rgb(245, 248, 255);
+}
+.glitch-title-line {
+  flex: 1;
+  align-self: center;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    rgba(15, 23, 42, 0.28) 0%,
+    rgba(15, 23, 42, 0.16) 65%,
+    transparent 100%
+  );
+  animation: glitch-title-line 5s ease-in-out infinite;
+  will-change: transform, background, box-shadow;
+}
+.glitch-title-line-dark {
+  background: linear-gradient(
+    to right,
+    rgba(91, 155, 244, 0.35) 0%,
+    rgba(91, 155, 244, 0.2) 65%,
+    transparent 100%
+  );
+}
+.glitch-title-meta {
+  flex: 0 0 auto;
+  align-self: center;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--font-geist-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: rgb(5, 150, 105);
+  text-shadow: 0 0 5px rgba(5, 150, 105, 0.35);
+  pointer-events: none;
+  animation: glitch-title-meta 5s ease-out infinite;
+  will-change: max-width, opacity;
+}
+.glitch-title-meta-dark {
+  color: rgb(34, 197, 94);
+  text-shadow: 0 0 6px rgba(34, 197, 94, 0.45);
+}
+
+/* Title resting state: tiny chromatic-aberration flickers mirroring
+ * the welcome hero's auto-glitch (2% / 3.2% / 7% / 8% beats). Uses
+ * steps(1) so the flickers snap rather than smear. Color stays
+ * default through this animation. */
+@keyframes glitch-title-microflicker {
+  0%,
+  4%,
+  9%,
+  100% {
+    text-shadow: 0 0 0 transparent;
+    transform: translate3d(0, 0, 0);
+  }
+  2% {
+    text-shadow:
+      1.5px 0 0 rgba(91, 155, 244, 0.7),
+      -1.5px 0 0 rgba(236, 72, 153, 0.65);
+    transform: translate3d(0.5px, 0, 0);
+  }
+  3.2% {
+    text-shadow:
+      -1.5px 0 0 rgba(91, 155, 244, 0.7),
+      1.5px 0 0 rgba(236, 72, 153, 0.65);
+    transform: translate3d(-0.5px, 0.5px, 0);
+  }
+  7% {
+    text-shadow:
+      2.5px 0 0 rgba(41, 110, 214, 0.65),
+      -2.5px 0 0 rgba(16, 185, 129, 0.55);
+    transform: translate3d(0, 0.5px, 0);
+  }
+  8% {
+    text-shadow:
+      -2.5px 0 0 rgba(41, 110, 214, 0.6),
+      2.5px 0 0 rgba(236, 72, 153, 0.5);
+    transform: translate3d(0.5px, -0.5px, 0);
+  }
+}
+
+/* Title x-ray beat: title, line, meta, and chapter all share the
+ * SAME critical transition points so the green pop is perfectly
+ * synced. Pop on at 72%, pop off at 88%. Chromatic-aberration ghosts
+ * flicker internally during the on-window. */
+@keyframes glitch-title-xray {
+  0%,
+  71%,
+  88%,
+  100% {
+    color: rgb(15, 23, 42);
+    filter: none;
+  }
+  72% {
+    color: rgb(5, 150, 105);
+    filter:
+      drop-shadow(2px 0 0 rgba(239, 68, 68, 0.45))
+      drop-shadow(-2px 0 0 rgba(91, 155, 244, 0.45))
+      drop-shadow(0 0 6px rgba(5, 150, 105, 0.3));
+  }
+  76% {
+    color: rgb(5, 150, 105);
+    filter:
+      drop-shadow(-2px 0 0 rgba(239, 68, 68, 0.45))
+      drop-shadow(2px 0 0 rgba(91, 155, 244, 0.45))
+      drop-shadow(0 0 6px rgba(5, 150, 105, 0.3));
+  }
+  82% {
+    color: rgb(5, 150, 105);
+    filter: drop-shadow(0 0 6px rgba(5, 150, 105, 0.35));
+  }
+  87% {
+    color: rgb(5, 150, 105);
+    filter: drop-shadow(0 0 6px rgba(5, 150, 105, 0.35));
+  }
+}
+
+@keyframes glitch-title-chapter {
+  0%,
+  71%,
+  88%,
+  100% {
+    color: rgb(41, 110, 214);
+    text-shadow: none;
+  }
+  72% {
+    color: rgb(5, 150, 105);
+    text-shadow: 0 0 5px rgba(5, 150, 105, 0.4);
+  }
+  87% {
+    color: rgb(5, 150, 105);
+    text-shadow: 0 0 5px rgba(5, 150, 105, 0.4);
+  }
+}
+
+@keyframes glitch-title-line {
+  0%,
+  71%,
+  88%,
+  100% {
+    transform: translateX(0);
+    background: linear-gradient(
+      to right,
+      rgba(15, 23, 42, 0.28) 0%,
+      rgba(15, 23, 42, 0.16) 65%,
+      transparent 100%
+    );
+    box-shadow: none;
+  }
+  72% {
+    transform: translateX(-2px);
+    background: linear-gradient(
+      to right,
+      rgba(5, 150, 105, 0.65) 0%,
+      rgba(5, 150, 105, 0.35) 65%,
+      transparent 100%
+    );
+    box-shadow: 0 0 5px rgba(5, 150, 105, 0.4);
+  }
+  78% {
+    transform: translateX(2px);
+    background: linear-gradient(
+      to right,
+      rgba(5, 150, 105, 0.65) 0%,
+      rgba(5, 150, 105, 0.35) 65%,
+      transparent 100%
+    );
+    box-shadow: 0 0 5px rgba(5, 150, 105, 0.4);
+  }
+  87% {
+    transform: translateX(0);
+    background: linear-gradient(
+      to right,
+      rgba(5, 150, 105, 0.5) 0%,
+      rgba(5, 150, 105, 0.25) 65%,
+      transparent 100%
+    );
+    box-shadow: 0 0 3px rgba(5, 150, 105, 0.25);
+  }
+}
+@keyframes glitch-title-meta {
+  0%,
+  71%,
+  88%,
+  100% {
+    max-width: 0;
+    opacity: 0;
+  }
+  72% {
+    max-width: 320px;
+    opacity: 1;
+  }
+  87% {
+    max-width: 320px;
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glitch-title-text,
+  .glitch-title-line,
+  .glitch-title-meta {
+    animation: none !important;
+  }
+  .glitch-title-meta {
+    display: none;
+  }
+}
+
+/* Glitch-tear divider — section break that LOOKS like a static
+ * hairline most of the time, but every 5s the line tears apart,
+ * reveals a flash of mono text in the gap, and snaps closed.
+ *
+ * Timing: 5s cycle. Closed for ~3.5s, then a 1.5s open window where
+ * the tear is visible with x-jitter and the text fades in/out.
+ */
+.glitch-tear {
+  position: relative;
+  height: 44px;
+  overflow: hidden;
+}
+.glitch-tear-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-geist-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: rgb(41, 110, 214);
+  opacity: 0;
+  animation: glitch-tear-text 5s ease-out infinite;
+  text-shadow:
+    0 0 8px rgba(41, 110, 214, 0.55),
+    0 0 2px rgba(239, 68, 68, 0.35);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+.glitch-tear-top,
+.glitch-tear-bottom {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(15, 23, 42, 0.32) 12%,
+    rgba(15, 23, 42, 0.32) 88%,
+    transparent
+  );
+  transform-origin: center;
+  will-change: transform;
+}
+.glitch-tear-top {
+  animation: glitch-tear-top 5s ease-in-out infinite;
+}
+.glitch-tear-bottom {
+  animation: glitch-tear-bottom 5s ease-in-out infinite;
+}
+@keyframes glitch-tear-top {
+  0%,
+  68%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  72% {
+    transform: translate3d(-3px, -14px, 0);
+  }
+  78% {
+    transform: translate3d(3px, -14px, 0);
+  }
+  84% {
+    transform: translate3d(-2px, -14px, 0);
+  }
+  90% {
+    transform: translate3d(0, -14px, 0);
+  }
+  96% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes glitch-tear-bottom {
+  0%,
+  68%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  72% {
+    transform: translate3d(3px, 14px, 0);
+  }
+  78% {
+    transform: translate3d(-3px, 14px, 0);
+  }
+  84% {
+    transform: translate3d(2px, 14px, 0);
+  }
+  90% {
+    transform: translate3d(0, 14px, 0);
+  }
+  96% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes glitch-tear-text {
+  0%,
+  68%,
+  98%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  73% {
+    opacity: 1;
+    transform: translateX(-3px);
+  }
+  78% {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  92% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Terminal cursor blink — used after the home hero name and any
+ * other place that needs a "live shell" caret. Sharp on/off blink. */
+@keyframes hero-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.hero-cursor {
+  display: inline-block;
+  animation: hero-cursor-blink 1.05s steps(1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cursor {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Slow vertical scanline — used as a faint terminal overlay across
+ * the home hero. A 1px-tall accent line slides top→bottom every 9s. */
+@keyframes hero-scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(2000%);
+  }
+}
+
+
+/* Home hero glass-card sheen — diagonal reflection sweep across the
+ * holographic portrait card. Subtle ambient motion; opacity stays
+ * below the photo so the face isn't obscured. */
+@keyframes hero-glass-sheen {
+  0% {
+    background-position: 200% 200%;
+  }
+  100% {
+    background-position: -100% -100%;
   }
 }
 

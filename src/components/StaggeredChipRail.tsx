@@ -30,7 +30,7 @@ export function StaggeredChipRail({
       {chips.map((chip, index) => (
         <motion.span
           animate={reduce ? undefined : { opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/60 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light backdrop-blur-md transition-[border-color,background] duration-200 hover:border-accent hover:bg-white/85"
+          className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-white/60 px-3.5 py-1.5 font-mono text-[11px] text-text-light backdrop-blur-md transition-[border-color,background] duration-200 hover:border-accent hover:bg-white/85"
           initial={reduce ? false : { opacity: 0, y: 12 }}
           key={chip}
           transition={{

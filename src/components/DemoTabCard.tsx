@@ -78,7 +78,7 @@ export function DemoTabCard({
       {/* HEADER — title on left, meta strip on right */}
       <div className="relative grid gap-6 border-b border-[rgba(41,110,214,0.18)] p-6 sm:grid-cols-[1fr_auto] sm:p-9">
         <div className="min-w-0">
-          <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light">
+          <p className="font-mono text-[10px] text-accent-light">
             Local AI · running on {badge.split(" · ").pop()?.toLowerCase()}
           </p>
           <h3 className="display-text mt-3 max-w-3xl text-text-dark">
@@ -107,16 +107,11 @@ export function DemoTabCard({
           })()}
           <div className="mt-1 flex items-center gap-2.5 rounded-lg border border-[rgba(41,110,214,0.25)] bg-bg-dark/50 px-3 py-2.5">
             <span className="relative inline-flex h-2.5 w-2.5">
-              {meta.dotPulse ? (
-                <span
-                  className={`absolute inset-0 animate-ping rounded-full ${meta.color} opacity-60`}
-                />
-              ) : null}
               <span
                 className={`relative inline-block h-2.5 w-2.5 rounded-full ${meta.color} ring-4 ${meta.ring}`}
               />
             </span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-text-dark">
+            <span className="font-mono text-[11px] text-text-dark">
               {meta.label}
             </span>
           </div>
@@ -150,12 +145,12 @@ export function DemoTabCard({
               <span className="relative">Load Model</span>
               <span
                 aria-hidden="true"
-                className="relative font-mono text-xs font-normal uppercase tracking-[0.22em] text-white/70"
+                className="relative font-mono text-xs font-normal text-white/70"
               >
                 ↩
               </span>
             </motion.button>
-            <p className="text-center font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted">
+            <p className="text-center font-mono text-[10px] text-text-dark-muted">
               First download is cached · subsequent runs are instant
             </p>
           </div>
@@ -165,7 +160,7 @@ export function DemoTabCard({
           <div className="flex min-h-[220px] flex-col items-center justify-center gap-5">
             <div className="w-full max-w-lg">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs uppercase tracking-[0.22em] text-accent-light">
+                <span className="font-mono text-xs text-accent-light">
                   Downloading model
                 </span>
                 <span className="font-mono text-sm font-semibold text-text-dark">
@@ -185,7 +180,7 @@ export function DemoTabCard({
                   className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -translate-x-full animate-[marquee_1.4s_linear_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent"
                 />
               </div>
-              <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+              <p className="mt-3 text-center font-mono text-[10px] text-text-dark-muted">
                 Streaming directly from the model registry to your browser cache
               </p>
             </div>
@@ -211,11 +206,11 @@ export function DemoTabCard({
                   howItWorksOpen ? "rotate-180" : ""
                 }`}
               />
-              <span className="font-mono text-xs uppercase tracking-[0.28em] text-text-dark-muted group-hover:text-text-dark">
+              <span className="font-mono text-xs text-text-dark-muted group-hover:text-text-dark">
                 How it works
               </span>
             </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+            <span className="font-mono text-[10px] text-accent-light">
               {howItWorksOpen ? "Hide" : "Expand"}
             </span>
           </button>
@@ -233,7 +228,7 @@ export function DemoTabCard({
 function MetaRow({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-dark-muted">
+      <p className="font-mono text-[10px] text-text-dark-muted">
         {label}
       </p>
       <p className="mt-1 font-mono text-sm font-semibold text-text-dark">

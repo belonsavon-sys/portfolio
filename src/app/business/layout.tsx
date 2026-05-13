@@ -1,9 +1,10 @@
-import type { Metadata, ReactNode } from "react";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { EMAIL_DISPLAY } from "@/components/contact-config";
 
 const title = "Business — for operators";
 const description =
-  "Not plans. Not decks. Systems running in production — built from inside the operations I was hired to run. Process · Communications · Training · Finance.";
+  "Not plans. Not decks. I build real systems from inside the operations I was hired to run — and I'm still the one running them.";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/business" },

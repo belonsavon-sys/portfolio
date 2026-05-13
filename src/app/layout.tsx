@@ -6,9 +6,10 @@ import {
   BackToTop,
   ConsoleSignature,
   KeyboardNav,
+  LightSwitch,
+  LightSwitchProvider,
+  PageAtmosphere,
   PageTransition,
-  PrecisionCursor,
-  ScrollProgress,
   SiteHeader,
 } from "@/components";
 import "./globals.css";
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
   category: "Portfolio",
   creator: "Pierre Belon Savon",
   description:
-    "AI Engineer building production systems for operations-heavy businesses. Currently running at ThePrivateHotels and Blackdoor.",
+    "I build AI for businesses that have to actually run. Most of it I shipped while running one — currently at ThePrivateHotels and Blackdoor.",
   keywords: [
     "Pierre Belon Savon",
     "AI Engineer",
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   openGraph: {
     description:
-      "AI Engineer building production systems for operations-heavy businesses. Currently running at ThePrivateHotels and Blackdoor.",
+      "I build AI for businesses that have to actually run. Most of it I shipped while running one — currently at ThePrivateHotels and Blackdoor.",
     locale: "en_US",
     siteName: "Pierre Belon Savon",
     title: "Pierre Belon Savon — AI Engineer",
@@ -79,7 +80,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     description:
-      "AI Engineer building production systems for operations-heavy businesses. Currently running at ThePrivateHotels and Blackdoor.",
+      "I build AI for businesses that have to actually run. Most of it I shipped while running one — currently at ThePrivateHotels and Blackdoor.",
     title: "Pierre Belon Savon — AI Engineer",
   },
 };
@@ -95,7 +96,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
     >
-      <body className="grain flex min-h-full flex-col">
+      <body className="grain relative flex min-h-full flex-col">
         {/* WebSite JSON-LD — sets up the canonical site identity for
             search engines. Single Person reference on /resume; this
             handles the homepage / general site context. */}
@@ -110,7 +111,7 @@ export default function RootLayout({
                 url: `${siteUrl}/resume`,
               },
               description:
-                "AI Engineer building production systems for operations-heavy businesses. Currently running at ThePrivateHotels and Blackdoor.",
+                "I build AI for businesses that have to actually run. Most of it I shipped while running one — currently at ThePrivateHotels and Blackdoor.",
               inLanguage: ["en", "es", "it"],
               name: "Pierre Belon Savon",
               publisher: {
@@ -128,15 +129,17 @@ export default function RootLayout({
         >
           Skip to content →
         </a>
-        <ScrollProgress />
-        <PrecisionCursor />
-        <SiteHeader />
-        <div id="main-content">
-          <PageTransition>{children}</PageTransition>
-        </div>
-        <BackToTop />
-        <ConsoleSignature />
-        <KeyboardNav />
+        <LightSwitchProvider>
+          <PageAtmosphere />
+          <SiteHeader />
+          <LightSwitch />
+          <div id="main-content">
+            <PageTransition>{children}</PageTransition>
+          </div>
+          <BackToTop />
+          <ConsoleSignature />
+          <KeyboardNav />
+        </LightSwitchProvider>
         <Analytics />
         <SpeedInsights />
       </body>

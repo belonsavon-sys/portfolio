@@ -6,40 +6,41 @@ import {
   Button,
   ChapterRail,
   CursorHalo,
+  GlitchTitle,
   IndexedDivider,
   ParallaxGhost,
   ScrollReveal,
   SectionDivider,
   SectionHeader,
   SiteFooter,
-  SplitText,
   Testimonial,
+  TextScramble,
 } from "@/components";
 import { useEffect } from "react";
 import type { ReactNode } from "react";
 
 const processOutcomes = [
-  "Manual workflows turned into auditable digital systems",
-  "Consistent standards across every property and shift",
-  "Accountability built into the workflow, not bolted on afterward",
+  "I turn manual workflows into auditable digital systems",
+  "I hold standards consistent across every property and shift",
+  "I build accountability into the workflow, not bolted on afterward",
 ];
 
 const communicationOutcomes = [
-  "Response times measured in minutes, not hours",
-  "Voice that stays on-brand even when staff turn over",
-  "AI drafts, people decide. Nothing autopilots.",
+  "I get response times measured in minutes, not hours",
+  "I keep the voice on-brand even when staff turn over",
+  "AI drafts, I decide. Nothing autopilots.",
 ];
 
 const trainingOutcomes = [
-  "Clear SOPs that anyone can follow",
-  "Staff trained on the tools, not just told to use them",
-  "Accountability that doesn't require you to be in the room",
+  "I write clear SOPs that anyone on the team can follow",
+  "I train staff on the tools, not just tell them to use them",
+  "I leave accountability that doesn't require me in the room",
 ];
 
 const blackdoorOutcomes = [
-  "Architected and shipped Atlas — not slideware",
-  "Multi-agent pipelines running across two live businesses",
-  "Co-founded Blackdoor — I ship at owner-pace",
+  "I architected and shipped Atlas — not slideware",
+  "I run multi-agent pipelines across two live businesses",
+  "I co-founded Blackdoor and ship at owner-pace",
 ];
 
 const atlasLayers = [
@@ -99,7 +100,9 @@ export default function BusinessPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-bg-light text-text-light">
+    <main
+      className="min-h-screen bg-bg-light text-text-light"
+    >
       <BusinessHero />
 
       {/* CHAPTERS STRIPE — 5-column overview between hero and first chapter */}
@@ -185,79 +188,68 @@ function BusinessHero() {
         <ParallaxGhost className="ghost-text select-none">OPS</ParallaxGhost>
       </div>
 
-      <div className="relative mx-auto grid min-h-[calc(100vh-72px)] w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24">
-        {/* TOP STRIP — status pill + chapter mark */}
-        <ScrollReveal className="col-span-12 self-start" direction="up">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
-              <span className="relative inline-flex h-2 w-2">
-                <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
-                <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
-              </span>
-              <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
-                /business · for operators
-              </span>
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
+        {/* TOP STRIP — centered */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pb-12">
+          <span className="inline-flex items-center gap-3 px-4 py-1.5 backdrop-blur-md">
+            <span className="relative inline-flex h-2 w-2">
+              <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
             </span>
-            <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
-              Chapter 01 / Hero
+            <span className="font-mono text-xs font-medium text-accent">
+              /business · for operators
             </span>
-          </div>
-        </ScrollReveal>
-
-        {/* LEFT — stacked massive title (cols 1–8 lg) */}
-        <div className="col-span-12 self-center lg:col-span-8">
-          <h1
-            className="font-semibold text-text-light"
-            style={{
-              fontSize: "clamp(3rem, 12vw, 10rem)",
-              letterSpacing: "-0.055em",
-              lineHeight: 0.88,
-            }}
-          >
-            <span className="block">
-              <SplitText charDelay={0.025} delay={0.16} duration={0.85}>
-                I ship
-              </SplitText>
-            </span>
-            <span className="relative inline-block">
-              <span className="gradient-shift block">
-                <SplitText charDelay={0.025} delay={0.36} duration={0.85}>
-                  AI.
-                </SplitText>
-              </span>
-              <span
-                aria-hidden="true"
-                className="absolute -bottom-3 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"
-              />
-            </span>
-          </h1>
-
-          <ScrollReveal delay={0.32} direction="up">
-            <div className="mt-10 flex items-center gap-3">
-              <span aria-hidden="true" className="h-px w-10 bg-accent" />
-              <p className="font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
-                For operators · For doers
-              </p>
-            </div>
-          </ScrollReveal>
+          </span>
+          <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
+          <span className="font-mono text-[11px] text-text-light-muted">
+            Chapter 01 / Hero
+          </span>
         </div>
 
-        {/* RIGHT — subtitle + CTA (cols 9–12 lg) */}
-        <div className="col-span-12 self-end lg:col-span-4 lg:self-center">
-          <ScrollReveal delay={0.4} direction="up">
-            <p className="text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
-              Not plans. Not decks. Systems running in production —
-              built from inside the operations I was hired to run.
-            </p>
-          </ScrollReveal>
-          <ScrollReveal delay={0.5} direction="up">
-            <div className="mt-8">
-              <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
-                Start a Conversation
-              </Button>
-            </div>
-          </ScrollReveal>
+        {/* TITLE — centered, single line, welcome-style glitch */}
+        <h1
+          className="auto-glitch whitespace-nowrap text-center font-semibold text-text-light"
+          style={{
+            fontSize: "clamp(2.5rem, 10vw, 7.5rem)",
+            letterSpacing: "-0.045em",
+            lineHeight: 0.95,
+          }}
+        >
+          <span className="relative inline-block">
+            <span className="gradient-shift inline-block">
+              <TextScramble
+                durationMs={1400}
+                stepMs={55}
+                text="I ship AI."
+              />
+            </span>
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-3 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"
+            />
+          </span>
+          <span
+            aria-hidden="true"
+            className="hero-cursor ml-2 -translate-y-[0.1em] align-middle bg-accent"
+            style={{
+              display: "inline-block",
+              height: "0.85em",
+              width: "0.08em",
+            }}
+          />
+        </h1>
+
+        {/* CENTERED INTRO */}
+        <p className="mx-auto mt-12 max-w-3xl text-center text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
+          Not plans. Not decks. Real systems I built from inside the
+          operations I was hired to run — and I&apos;m still the one
+          running them.
+        </p>
+
+        {/* CENTERED CTA */}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <Button arrow className="!px-8 !py-4 !text-base" href="/resume#contact">
+            Let&apos;s talk
+          </Button>
         </div>
       </div>
     </section>
@@ -311,9 +303,8 @@ function BusinessChaptersStripe() {
   return (
     <div className="relative border-y border-border-light bg-bg-light-2">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-3 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+        <div className="flex items-center gap-3 py-3 font-mono text-[10px] text-accent">
           <span className="relative inline-flex h-2 w-2">
-            <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
             <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
           </span>
           <span>~/chapters</span>
@@ -330,7 +321,7 @@ function BusinessChaptersStripe() {
                 href={ch.anchor}
               >
                 <span className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <span className="font-mono text-[10px] text-accent">
                     <span className="text-text-light-muted/60">// </span>
                     {ch.index} {ch.label}
                   </span>
@@ -359,7 +350,7 @@ function BlackdoorSection() {
       {/* Editorial heading strip — matches the SectionShell chapter
           treatment used by the other /business chapters. */}
       <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
-        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+        <span className="font-mono text-[11px] text-accent">
           00 · Blackdoor operations
         </span>
         <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
@@ -375,9 +366,10 @@ function BlackdoorSection() {
         Building the company that builds companies.
       </h2>
       <p className="mt-6 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
-        Blackdoor is the holding company I co-founded with Ryder in 2025.
-        Our products are built and shipped end-to-end by Atlas — our
-        autonomous agent harness — in place of a human dev team.
+        Blackdoor is the holding company I co-founded with Ryder in
+        2025. Our products are built and shipped end-to-end by Atlas —
+        the autonomous agent harness I architected — in place of a
+        human dev team.
       </p>
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
@@ -386,7 +378,7 @@ function BlackdoorSection() {
             chapters speak one language. */}
         <aside className="lg:sticky lg:top-24">
           <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
               <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
               <span>~/outcomes</span>
               <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
@@ -400,7 +392,7 @@ function BlackdoorSection() {
                   className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
                   key={outcome}
                 >
-                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <span className="font-mono text-[10px] text-accent">
                     <span className="text-text-light-muted/60">// </span>
                     {String(index + 1).padStart(2, "0")}
                   </span>
@@ -420,9 +412,8 @@ function BlackdoorSection() {
               stats about Atlas before the architecture/proof spec
               cards below. */}
           <div className="mt-10 overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
               <span className="relative inline-flex h-2 w-2">
-                <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
                 <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
               </span>
               <span>~/atlas</span>
@@ -442,7 +433,7 @@ function BlackdoorSection() {
                   className="grid grid-cols-[auto_1fr] items-baseline gap-3 px-5 py-3"
                   key={row.key}
                 >
-                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <span className="font-mono text-[10px] text-accent">
                     <span className="text-text-light-muted/60">// </span>
                     {String(index + 1).padStart(2, "0")} {row.key}
                   </span>
@@ -459,7 +450,7 @@ function BlackdoorSection() {
               flat side-by-side paragraph block. */}
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             <article className="relative rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-7">
-              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+              <p className="font-mono text-[10px] text-accent">
                 <span className="text-text-light-muted/60">// </span>
                 01 · Architecture
               </p>
@@ -474,16 +465,17 @@ function BlackdoorSection() {
                 What Atlas is.
               </h3>
               <p className="mt-3 text-base leading-7 text-text-light-muted">
-                At Blackdoor, I lead AI R&amp;D and implementation. Atlas
-                is a multi-level autonomous agent harness — a CEO agent
-                routes work to C-suite agents (CFO, CMO), who delegate to
-                manager and field agents. Designed to build, operate, and
-                improve software products autonomously.
+                At Blackdoor I lead AI R&amp;D and implementation. I
+                built Atlas as a multi-level autonomous harness — a CEO
+                agent routes work to C-suite agents (CFO, CMO) who
+                delegate to manager and field agents. I designed it to
+                build, operate, and improve software products without
+                needing me at every step.
               </p>
             </article>
 
             <article className="relative rounded-2xl border border-accent/40 bg-[rgba(41,110,214,0.04)] p-6 shadow-[0_18px_36px_-22px_rgba(41,110,214,0.25)] sm:p-7">
-              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+              <p className="font-mono text-[10px] text-accent">
                 <span className="text-text-light-muted/60">// </span>
                 02 · Proof
               </p>
@@ -498,10 +490,10 @@ function BlackdoorSection() {
                 What Atlas has done.
               </h3>
               <p className="mt-3 text-base leading-7 text-text-light-muted">
-                Atlas has already shipped a game app, a budget web app, and
-                an agent-augmented project management system. The same
-                underlying technology is deployed at ThePrivateHotels. We
-                run everything through GitHub PRs.{" "}
+                Atlas has already shipped a game app, a budget web app,
+                and an agent-augmented project management system. The
+                same tech is deployed in the hotel I run. Everything
+                ships through GitHub PRs I review.{" "}
                 <span className="font-semibold text-text-light">
                   Every decision is governed.
                 </span>
@@ -517,7 +509,7 @@ function BlackdoorSection() {
       <div className="mt-16 rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-8">
         <div className="grid grid-cols-12 gap-x-6 gap-y-6 lg:gap-x-8">
           <div className="col-span-12 lg:col-span-7">
-            <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+            <p className="font-mono text-[10px] text-accent">
               Dig deeper
             </p>
             <h3
@@ -531,9 +523,9 @@ function BlackdoorSection() {
               See Atlas in motion.
             </h3>
             <p className="mt-3 max-w-xl text-base leading-7 text-text-light-muted">
-              Three doors into the engine: live demos of the harness,
-              the AI stack reasoning, and what Atlas is shipping this
-              week.
+              Three doors into the engine I built — live demos of the
+              harness, the AI stack reasoning, and what Atlas is
+              shipping for me this week.
             </p>
           </div>
           <div className="col-span-12 self-center lg:col-span-5">
@@ -542,7 +534,7 @@ function BlackdoorSection() {
                 <span aria-hidden="true" className="text-accent">→</span>
                 <a
                   className="link-underline inline-block transition-colors hover:text-accent"
-                  href="/ai"
+                  href="/lab#demos"
                 >
                   /ai · the harness demo + case studies
                 </a>
@@ -551,7 +543,7 @@ function BlackdoorSection() {
                 <span aria-hidden="true" className="text-accent">→</span>
                 <a
                   className="link-underline inline-block transition-colors hover:text-accent"
-                  href="/uses"
+                  href="/lab#uses"
                 >
                   /uses · the AI stack with reasoning
                 </a>
@@ -560,7 +552,7 @@ function BlackdoorSection() {
                 <span aria-hidden="true" className="text-accent">→</span>
                 <a
                   className="link-underline inline-block transition-colors hover:text-accent"
-                  href="/now"
+                  href="/lab#now"
                 >
                   /now · what Atlas is shipping this week
                 </a>
@@ -579,6 +571,7 @@ function ProcessSection() {
       chapter="01"
       eyebrow="Process design & digitization"
       heading="I turn chaos into auditable systems."
+      meta="// digitized 100+ pages"
       outcomes={processOutcomes}
     >
       <BeforeAfter
@@ -623,6 +616,7 @@ function CommunicationsSection() {
       chapter="02"
       eyebrow="Customer & guest communications"
       heading="Replies inside three minutes, always in your voice."
+      meta="// 48 hrs → under 3 min"
       outcomes={communicationOutcomes}
     >
       <BeforeAfter
@@ -661,6 +655,7 @@ function TrainingSection() {
       chapter="03"
       eyebrow="Team leadership & training"
       heading="I build teams that can run systems I build."
+      meta="// 6 staff · 2 teams"
       outcomes={trainingOutcomes}
     >
       <p className="text-lg leading-8 text-text-light-muted">
@@ -680,7 +675,7 @@ function FinanceSection() {
       <div>
         {/* Editorial heading strip — matches the SectionShell chapters */}
         <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
-          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+          <span className="font-mono text-[11px] text-accent">
             04 · Finance &amp; administration
           </span>
           <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
@@ -712,7 +707,7 @@ function FinanceSection() {
           the ~/outcomes panel used by the other /business chapters. */}
       <aside className="self-start lg:sticky lg:top-24">
         <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-          <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
             <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
             <span>~/ledger</span>
             <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
@@ -728,11 +723,11 @@ function FinanceSection() {
                 className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
                 key={item.label}
               >
-                <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                <dt className="font-mono text-[10px] text-accent">
                   <span className="text-text-light-muted/60">// </span>
                   {String(index + 1).padStart(2, "0")} {item.label}
                 </dt>
-                <dd className="text-right font-mono text-[12.5px] font-semibold uppercase tracking-[0.18em] text-text-light">
+                <dd className="text-right font-mono text-[12.5px] font-semibold text-text-light">
                   {item.value}
                 </dd>
               </div>
@@ -757,34 +752,25 @@ function SectionShell({
   children,
   eyebrow,
   heading,
+  meta,
   outcomes,
 }: {
   chapter: string;
   children: ReactNode;
   eyebrow: string;
   heading: string;
+  meta?: string;
   outcomes: string[];
 }) {
   return (
     <div className="grid gap-12 lg:grid-cols-[1fr_340px] lg:items-start">
       <div>
-        {/* Editorial heading strip — chapter mark + accent rule + h2 */}
-        <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
-          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
-            {chapter} · {eyebrow}
-          </span>
-          <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
-        </div>
-        <h2
-          className="mt-6 font-semibold tracking-tight text-text-light"
-          style={{
-            fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
-            letterSpacing: "-0.04em",
-            lineHeight: 0.98,
-          }}
-        >
-          {heading}
-        </h2>
+        <GlitchTitle
+          chapter={chapter}
+          eyebrow={eyebrow}
+          meta={meta}
+          title={heading}
+        />
         <div className="mt-10">{children}</div>
       </div>
 
@@ -794,7 +780,7 @@ function SectionShell({
           looks like" as a real spec sheet. */}
       <aside className="self-start lg:sticky lg:top-24">
         <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-          <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+          <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
             <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
             <span>~/outcomes</span>
             <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
@@ -808,7 +794,7 @@ function SectionShell({
                 className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
                 key={outcome}
               >
-                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                <span className="font-mono text-[10px] text-accent">
                   <span className="text-text-light-muted/60">// </span>
                   {String(index + 1).padStart(2, "0")}
                 </span>

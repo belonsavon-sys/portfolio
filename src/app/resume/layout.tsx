@@ -1,4 +1,5 @@
-import type { Metadata, ReactNode } from "react";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import {
   EMAIL_DISPLAY,
   GITHUB_URL,
@@ -7,7 +8,7 @@ import {
 
 const title = "Résumé — curriculum";
 const description =
-  "AI engineer who learned to ship by automating the hotel he was hired to supervise. Co-founder of Blackdoor, co-architect of Atlas. Trilingual EN · ES · IT.";
+  "I learned to ship by automating the hotel I was hired to supervise. Co-founder of Blackdoor, co-architect of Atlas. EN · ES · IT.";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/resume" },

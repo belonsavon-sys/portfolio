@@ -113,7 +113,7 @@ export function AtlasGallery() {
 
       {/* PROGRESS RAIL — chapter indicator + clickable dots */}
       <div className="mt-8 flex items-center gap-4">
-        <span className="font-mono text-[11px] tabular-nums uppercase tracking-[0.28em] text-accent-light">
+        <span className="font-mono text-[11px] tabular-nums text-accent-light">
           {`0${activeIndex + 1}`} / {`0${products.length}`}
         </span>
         <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.18)]">
@@ -149,7 +149,7 @@ export function AtlasGallery() {
       {/* SWIPE HINT — appears only when the first tile is active */}
       <motion.p
         animate={{ opacity: activeIndex === 0 ? 1 : 0 }}
-        className="pointer-events-none absolute right-4 top-4 hidden font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light/70 sm:right-6 sm:block lg:right-8"
+        className="pointer-events-none absolute right-4 top-4 hidden font-mono text-[10px] text-accent-light/70 sm:right-6 sm:block lg:right-8"
         transition={{ duration: 0.4, ease: easeOut }}
       >
         Swipe →
@@ -199,15 +199,15 @@ function Tile({
 
       {/* TOP META row — chapter index · tag · status */}
       <div className="relative z-10 flex items-center gap-3 text-text-dark">
-        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+        <span className="font-mono text-[11px] text-accent-light">
           {`0${index + 1}`} / {`0${total}`}
         </span>
         <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.30)]" />
-        <span className="rounded-md border border-[rgba(91,155,244,0.40)] bg-[rgba(91,155,244,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+        <span className="rounded-md border border-[rgba(91,155,244,0.40)] bg-[rgba(91,155,244,0.10)] px-2 py-0.5 font-mono text-[10px] text-accent-light">
           {product.tag}
         </span>
         <span
-          className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] ${
+          className={`inline-flex items-center gap-1.5 font-mono text-[10px] ${
             product.status === "shipped"
               ? "text-result-green"
               : "text-text-dark-muted"
@@ -245,12 +245,12 @@ function Tile({
       <div className="relative z-10 mt-auto flex flex-col gap-3">
         <div className="flex items-center gap-3">
           <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.25)]" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light/80">
+          <span className="font-mono text-[10px] text-accent-light/80">
             Built end-to-end by Atlas
           </span>
         </div>
         <a
-          className="group/prod inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.24em] text-accent-light transition-colors duration-200 hover:text-text-dark"
+          className="group/prod inline-flex items-center gap-1.5 font-mono text-[10px] text-accent-light transition-colors duration-200 hover:text-text-dark"
           href={product.link.href}
         >
           <span aria-hidden="true" className="text-accent-light/70">↳</span>

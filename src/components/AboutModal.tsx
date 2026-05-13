@@ -123,13 +123,13 @@ export function AboutModal({
             transition={{ duration: 0.5, ease: easeOut }}
           >
             {/* TERMINAL HEADER — same ~/slug · meta pattern */}
-            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
               <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
               <span>~/about</span>
               <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
               <button
                 aria-label="Close about"
-                className="rounded-md border border-border-light bg-bg-light/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted transition-colors hover:border-accent hover:text-accent"
+                className="rounded-md border border-border-light bg-bg-light/80 px-2 py-0.5 font-mono text-[10px] text-text-light-muted transition-colors hover:border-accent hover:text-accent"
                 onClick={onClose}
                 type="button"
               >
@@ -139,7 +139,7 @@ export function AboutModal({
 
             {/* HEADLINE STRIP */}
             <div className="border-b border-border-light px-7 py-7 sm:px-8 sm:py-8">
-              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              <p className="font-mono text-[11px] text-accent">
                 Pierre · in his own words
               </p>
               <h2
@@ -161,7 +161,7 @@ export function AboutModal({
                   className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-7 py-3 first:border-t-0 sm:px-8"
                   key={row.label}
                 >
-                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <span className="font-mono text-[10px] text-accent">
                     <span className="text-text-light-muted/60">// </span>
                     {String(index + 1).padStart(2, "0")} {row.label}
                   </span>
@@ -181,15 +181,15 @@ export function AboutModal({
 
             {/* CTAs — push to /ai (work) or /contact (talk) */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border-light bg-bg-light-2/60 px-7 py-5 sm:px-8">
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+              <p className="font-mono text-[10px] text-text-light-muted">
                 Want to dig deeper?
               </p>
               <div className="flex flex-wrap items-center gap-3">
-                <Button arrow href="/ai" onClick={onClose}>
-                  See the work
+                <Button arrow href="/lab#demos" onClick={onClose}>
+                  See what I&apos;ve built
                 </Button>
-                <Button href="/contact" onClick={onClose} variant="ghost">
-                  Get in Touch
+                <Button href="/resume#contact" onClick={onClose} variant="ghost">
+                  Let&apos;s talk
                 </Button>
               </div>
             </div>

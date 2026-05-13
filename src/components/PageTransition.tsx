@@ -21,7 +21,11 @@ type RouteMeta = {
 
 const ROUTES: Record<string, RouteMeta> = {
   "/": { chapter: "01", subtitle: "/ · welcome", title: "Welcome" },
-  "/ai": { chapter: "02", subtitle: "/ai · what I build", title: "AI" },
+  "/atlas": {
+    chapter: "02",
+    subtitle: "/atlas · the multi-agent harness",
+    title: "Atlas",
+  },
   "/business": {
     chapter: "03",
     subtitle: "/business · for operators",
@@ -29,13 +33,13 @@ const ROUTES: Record<string, RouteMeta> = {
   },
   "/resume": {
     chapter: "04",
-    subtitle: "/resume · curriculum",
+    subtitle: "/resume · curriculum + contact",
     title: "Résumé",
   },
-  "/contact": {
+  "/lab": {
     chapter: "05",
-    subtitle: "/contact · open to work",
-    title: "Contact",
+    subtitle: "/lab · what i'm shipping + tools + colophon",
+    title: "The Lab",
   },
 };
 
@@ -143,7 +147,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
               }}
             >
               {/* TOP — mono eyebrow */}
-              <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+              <p className="font-mono text-[11px] text-accent-light">
                 <span aria-hidden="true" className="text-accent">
                   →
                 </span>{" "}
@@ -164,7 +168,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
               </h2>
 
               {/* BOTTOM — mono subtitle + chapter index rail */}
-              <div className="mt-8 flex items-center gap-3 font-mono text-xs uppercase tracking-[0.32em] text-text-dark-muted">
+              <div className="mt-8 flex items-center gap-3 font-mono text-xs text-text-dark-muted">
                 <span aria-hidden="true" className="h-px w-10 bg-accent-light" />
                 <span className="text-accent-light">
                   {slate.meta.subtitle}

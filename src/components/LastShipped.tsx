@@ -31,21 +31,16 @@ export function LastShipped() {
 
   return (
     <span
-      className="inline-flex items-center gap-2 rounded-full border border-result-green/30 bg-[rgba(16,185,129,0.08)] px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] text-result-green backdrop-blur-md"
+      className="inline-flex items-baseline gap-2 font-mono text-[12px] text-result-green"
       title={`Built ${buildDate.toLocaleString()} · commit ${buildSha}`}
     >
-      <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
-        <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-        <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+      <span>last shipped {now ? timeAgo(buildDate, now) : "…"}</span>
+      <span aria-hidden="true" className="not-italic text-result-green/40">
+        —
       </span>
-      <span>
-        Last shipped <span className="text-result-green/70">·</span>{" "}
-        {now ? timeAgo(buildDate, now) : "…"}
+      <span className="not-italic tabular-nums text-result-green/85">
+        {shortSha}
       </span>
-      <span aria-hidden="true" className="text-result-green/40">
-        /
-      </span>
-      <span className="text-result-green/80">{shortSha}</span>
     </span>
   );
 }

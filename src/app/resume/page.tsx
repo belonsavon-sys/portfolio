@@ -4,9 +4,11 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   Button,
   ChapterRail,
+  GlitchTitle,
   ParallaxGhost,
-  SplitText,
+  SiteFooter,
   StaggeredChipRail,
+  TextScramble,
 } from "@/components";
 import {
   EMAIL_DISPLAY,
@@ -34,19 +36,19 @@ const contactItems = [
 ];
 
 const professionalSummary =
-  "AI engineer who learned to ship by automating the hotel I was hired to supervise. Co-founded Blackdoor in 2025 and co-architect Atlas — a multi-level agent harness shipping real apps under human review. Bridges live operations (hospitality, finance) and AI engineering. Trilingual EN · ES · IT.";
+  "I learned to ship by automating the hotel I was hired to supervise. In 2025 I co-founded Blackdoor and co-architected Atlas — the multi-level agent harness that ships our real apps under human PR review. I work the seam between live operations (hospitality, finance) and AI engineering. I speak EN · ES · IT.";
 
 const experience: ExperienceEntry[] = [
   {
     bullets: [
-      "Co-founded the holding company. Products are built and shipped end-to-end by an autonomous agent harness, in place of a human dev team.",
-      "Designed and built Atlas — a multi-level autonomous agent harness that connects any AI model to any external tool through MCP or OAuth.",
-      "Atlas orchestrates a full company hierarchy: CEO agent to C-suite agents, manager agents, and field agents.",
-      "Atlas has shipped a game app, a budget web app, and an agent-augmented project management system.",
-      "Lead AI R&D — agent harness architecture, backend systems, on-device + cloud deployment.",
-      "Every change ships through a GitHub PR with documentation + spec research filed before the implementation sprint.",
-      "Tooling: Claude, Codex, Perplexity, Antigravity, Cursor, VS Code, GitHub.",
-      "Same underlying tech now running in production at ThePrivateHotels.",
+      "I co-founded the holding company. Our products ship end-to-end through an autonomous agent harness — no human dev team.",
+      "I designed and built Atlas — a multi-level autonomous agent harness that connects any AI model to any external tool through MCP or OAuth.",
+      "I had Atlas orchestrate a full company hierarchy: CEO agent down to C-suite agents, manager agents, and field agents.",
+      "I've shipped a game app, a budget web app, and an agent-augmented project management system through Atlas.",
+      "I lead AI R&D — harness architecture, backend systems, on-device + cloud deployment.",
+      "I make every change ship through a GitHub PR with documentation + spec research filed before the implementation sprint.",
+      "Tooling I use: Claude, Codex, Perplexity, Antigravity, Cursor, VS Code, GitHub.",
+      "I have the same underlying tech now running in production at ThePrivateHotels.",
     ],
     company: "Blackdoor",
     featured: true,
@@ -55,38 +57,38 @@ const experience: ExperienceEntry[] = [
     receipts: { href: "/atlas", label: "/atlas · the harness in depth" },
     role: "Co-founder & President",
     summary:
-      "Co-architecting Atlas — the multi-agent harness that ships our products under human review.",
+      "I co-architect Atlas — the multi-agent harness that ships our products under my review.",
   },
   {
     bullets: [
-      "Progressed from Finance Data Entry Assistant and part-time Housekeeper to Hotel Operations Supervisor.",
-      "Built and deployed a guest communications chatbot trained on curated company data — drafts replies in Smarttask, human-reviewed before send.",
-      "Cut response time from up to 48 hours to under 3 minutes, saving 15-20 minutes of drafting per message.",
-      "Digitized the property's 100+ page operations manual into a room-by-room QA inspection system with trackable scores.",
-      "Automated hotel workflows using Zapier, Guesty API, and Twilio API, replacing multi-hour manual coordination loops.",
-      "Supervised a team of 6, authored room-by-room SOPs and inspection checklists, trained staff on every tool I deployed.",
-      "Processed customer invoices, bills, and expenses in QuickBooks for 6 months — error-free record.",
-      "Contributed to Airbnb Guest Favorites top 10%, Booking.com Travelers' Choice Award, VRBO Premier Partner status.",
-      "Attended leadership meetings and a company leadership retreat in Hawaii.",
+      "I progressed from Finance Data Entry Assistant and part-time Housekeeper to Hotel Operations Supervisor.",
+      "I built and deployed a guest communications chatbot trained on our curated company data — it drafts replies in Smarttask and I review before send.",
+      "I cut response time from up to 48 hours down to under 3 minutes, saving 15–20 minutes of drafting per message.",
+      "I digitized the property's 100+ page operations manual into a room-by-room QA inspection system with trackable scores.",
+      "I automated hotel workflows with Zapier, the Guesty API, and the Twilio API, replacing multi-hour manual coordination loops.",
+      "I supervised a team of 6, authored room-by-room SOPs and inspection checklists, and trained everyone on every tool I deployed.",
+      "I handled customer invoices, bills, and expenses in QuickBooks for 6 months — error-free record.",
+      "My work contributed to Airbnb Guest Favorites top 10%, Booking.com Travelers' Choice Award, and VRBO Premier Partner status.",
+      "I attended leadership meetings and a company leadership retreat in Hawaii.",
     ],
     company: "ThePrivateHotels",
     location: "Ocean Shores, WA",
     period: "Apr 2024 – Present",
     receipts: {
-      href: "/ai#built-and-shipped",
-      label: "/ai · case studies + receipts",
+      href: "/lab#demos",
+      label: "/lab · demos + receipts",
     },
     role: "Hotel Operations Supervisor",
     summary:
-      "Took a 100+ page manual and a 48-hour reply lag — left a digital QA system and 3-minute responses.",
+      "I walked into a 100+ page manual and a 48-hour reply lag, and I left behind a digital QA system and 3-minute responses.",
   },
 ];
 
 const projects: ProjectEntry[] = [
   {
     bullets: [
-      "Personal workout tracker. Replaced the paid subscription fitness apps I used to use.",
-      "Stack: Next.js, React, Supabase, Vercel — built with Codex and Claude in VS Code and Antigravity.",
+      "I built my own workout tracker and replaced the paid subscription fitness apps I used to use.",
+      "Stack: Next.js, React, Supabase, Vercel — I built it pairing Codex and Claude in VS Code and Antigravity.",
     ],
     name: "Workout App",
     scope: "End-to-end, personal",
@@ -96,8 +98,8 @@ const projects: ProjectEntry[] = [
   },
   {
     bullets: [
-      "Budgeting app with a built-in AI advisor that reads your full transaction history and answers in plain language.",
-      "Stack: Next.js, React, Supabase, Vercel — built with Codex and Claude.",
+      "I built a budgeting app with an AI advisor I wired up to read my full transaction history and answer in plain language.",
+      "Stack: Next.js, React, Supabase, Vercel — I built it with Codex and Claude.",
     ],
     name: "Personal Budgeting App",
     scope: "End-to-end, personal",
@@ -107,7 +109,7 @@ const projects: ProjectEntry[] = [
   },
   {
     bullets: [
-      "Built an automated daily pipeline: ChatGPT-powered web searches for investment research and company news, synced to Google Calendar alongside bills and reminders.",
+      "I built myself an automated daily pipeline: ChatGPT-powered web searches for investment research and company news, synced into my Google Calendar alongside bills and reminders.",
     ],
     name: "Daily Market & News Automation",
     scope: "Personal",
@@ -285,7 +287,9 @@ export default function ResumePage() {
         };
 
   return (
-    <main className="min-h-screen bg-bg-light text-text-light">
+    <main
+      className="min-h-screen bg-bg-light text-text-light"
+    >
       <ResumeHero />
 
       {/* Body — editorial dossier. No card wrapper, no boxed feel.
@@ -294,26 +298,110 @@ export default function ResumePage() {
       <LightSection className="pb-24 pt-4 sm:pb-32">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-16 lg:items-start">
           <article className="min-w-0">
-            <ResumeSection id="summary" index="00" title="Professional Summary">
+            <ResumeSection
+              id="summary"
+              index="00"
+              meta="// 6 years building · trilingual"
+              title="Professional Summary"
+            >
               <p className="text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
                 {professionalSummary}
               </p>
             </ResumeSection>
 
-            <ResumeSection id="experience" index="01" title="Experience">
+            <ResumeSection
+              id="experience"
+              index="01"
+              meta="// 2 roles · both current"
+              title="Experience"
+            >
               <ExperienceLedger entries={experience} />
             </ResumeSection>
 
-            <ResumeSection id="projects" index="02" title="Independent Projects">
+            <ResumeSection
+              id="projects"
+              index="02"
+              meta="// 3 active · personal"
+              title="Independent Projects"
+            >
               <ProjectLedger entries={projects} />
             </ResumeSection>
 
-            <ResumeSection id="skills" index="03" title="Technical Skills">
+            <ResumeSection
+              id="skills"
+              index="03"
+              meta="// 4 categories"
+              title="Technical Skills"
+            >
               <SkillsDatasheet groups={skillGroups} />
             </ResumeSection>
 
-            <ResumeSection id="education" index="04" title="Education">
+            <ResumeSection
+              id="education"
+              index="04"
+              meta="// IBM cert · in progress"
+              title="Education"
+            >
               <EducationSpec entries={education} />
+            </ResumeSection>
+
+            <ResumeSection
+              id="contact"
+              index="05"
+              meta="// 4 channels · I reply"
+              title="Contact"
+            >
+              <p className="text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
+                Open to AI engineering roles, co-founding conversations, and
+                advisory engagements. Best route is email — every message
+                gets a real reply within 48 hours.
+              </p>
+
+              <ol className="mt-10 grid divide-y divide-border-light border-y border-border-light">
+                {contactItems.map((item, index) => (
+                  <li
+                    className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-7 sm:py-8"
+                    key={item.label}
+                  >
+                    <a
+                      className="contents focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      href={item.href}
+                      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      target={item.href.startsWith("http") ? "_blank" : undefined}
+                    >
+                      <span className="col-span-12 flex items-center gap-3 lg:col-span-3">
+                        <span className="font-mono text-[11px] text-accent">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="font-mono text-[11px] text-text-light-muted">
+                          — {item.label.toLowerCase()}
+                        </span>
+                      </span>
+                      <span className="col-span-12 lg:col-span-9">
+                        <span
+                          className="block font-semibold tracking-tight text-text-light transition-colors duration-200 group-hover:text-accent-deep"
+                          style={{
+                            fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
+                            letterSpacing: "-0.025em",
+                            lineHeight: 1.1,
+                          }}
+                        >
+                          {item.value}
+                        </span>
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ol>
+
+              <p className="mt-10 font-mono text-[11px] leading-6 text-text-light-muted">
+                // currently based in Washington · open to remote and
+                relocation · timezone PT
+              </p>
             </ResumeSection>
           </article>
 
@@ -325,10 +413,10 @@ export default function ResumePage() {
                 downArrow
                 href="/pierre-belon-savon-resume.pdf"
               >
-                Download Resume
+                Download my résumé
               </Button>
               <button
-                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-border-light bg-bg-light-2 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light-muted transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent no-print"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-border-light bg-bg-light-2 px-4 py-3 font-mono text-[11px] text-text-light-muted transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent no-print"
                 onClick={() => {
                   if (typeof window !== "undefined") window.print();
                 }}
@@ -339,7 +427,7 @@ export default function ResumePage() {
                 </span>
                 Print clean (browser)
               </button>
-              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+              <p className="mt-3 font-mono text-[10px] text-text-light-muted">
                 PDF · One page · Recruiter-ready
               </p>
             </motion.div>
@@ -366,7 +454,7 @@ export default function ResumePage() {
                       className="flex items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
                       key={row.key}
                     >
-                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                      <span className="font-mono text-[10px] text-accent">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span className="font-mono text-[12.5px] leading-6 text-text-light-muted">
@@ -379,7 +467,6 @@ export default function ResumePage() {
                       <span className="inline-flex items-center gap-1.5 font-mono text-[12.5px] font-semibold leading-6 text-text-light">
                         {row.live ? (
                           <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
-                            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
                             <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
                           </span>
                         ) : null}
@@ -404,7 +491,7 @@ export default function ResumePage() {
                       className="group/row relative border-t border-border-light px-5 py-4 transition-colors duration-200 first:border-t-0 hover:bg-[rgba(41,110,214,0.04)]"
                       key={item.label}
                     >
-                      <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                      <p className="font-mono text-[10px] text-accent">
                         <span className="text-text-light-muted/60">// </span>
                         {item.label}
                       </p>
@@ -434,7 +521,7 @@ export default function ResumePage() {
                       className="flex items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
                       key={language}
                     >
-                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                      <span className="font-mono text-[10px] text-accent">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span className="font-mono text-[12.5px] leading-6 text-text-light">
@@ -444,7 +531,7 @@ export default function ResumePage() {
                         aria-hidden="true"
                         className="ml-auto h-px flex-1 bg-border-light"
                       />
-                      <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
+                      <span className="font-mono text-[10px] text-text-light-muted">
                         Native
                       </span>
                     </li>
@@ -468,7 +555,7 @@ export default function ResumePage() {
                       className="flex items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
                       key={stat.label}
                     >
-                      <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                      <span className="font-mono text-[10px] text-accent">
                         {String(index + 1).padStart(2, "0")}
                       </span>
                       <span className="font-mono text-[12.5px] leading-6 text-text-light-muted">
@@ -502,6 +589,8 @@ export default function ResumePage() {
           { id: "education", index: "04", label: "Education" },
         ]}
       />
+
+      <SiteFooter />
     </main>
   );
 }
@@ -525,75 +614,85 @@ function ResumeHero() {
         </ParallaxGhost>
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:gap-x-8 lg:py-24">
-        <div className="col-span-12 flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-white/65 px-4 py-1.5 backdrop-blur-md">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:py-28">
+        {/* TOP STRIP — centered */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pb-12">
+          <span className="inline-flex items-center gap-3 px-4 py-1.5 backdrop-blur-md">
             <span className="relative inline-flex h-2 w-2">
-              <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
               <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
             </span>
-            <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-accent">
+            <span className="font-mono text-xs font-medium text-accent">
               /resume · curriculum
             </span>
           </span>
           <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
-          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
+          <span className="font-mono text-[11px] text-text-light-muted">
             2026
           </span>
         </div>
 
-        <div className="col-span-12 lg:col-span-8">
-          <h1
-            className="font-semibold text-text-light"
-            style={{
-              fontSize: "clamp(2.75rem, 10vw, 8.5rem)",
-              letterSpacing: "-0.055em",
-              lineHeight: 0.88,
-            }}
-          >
-            <span className="block">
-              <SplitText charDelay={0.025} delay={0.12} duration={0.85}>
-                Pierre
-              </SplitText>
+        {/* TITLE — centered, single line, welcome-style glitch */}
+        <h1
+          className="auto-glitch whitespace-nowrap text-center font-semibold text-text-light"
+          style={{
+            fontSize: "clamp(2rem, 7.5vw, 6rem)",
+            letterSpacing: "-0.045em",
+            lineHeight: 0.95,
+          }}
+        >
+          <span className="relative inline-block">
+            <span className="gradient-shift inline-block">
+              <TextScramble
+                durationMs={1400}
+                stepMs={55}
+                text="Pierre Belon Savon."
+              />
             </span>
-            <span className="block">
-              <SplitText charDelay={0.025} delay={0.28} duration={0.85}>
-                Belon
-              </SplitText>
-            </span>
-            <span className="gradient-shift block">
-              <SplitText charDelay={0.025} delay={0.42} duration={0.85}>
-                Savon.
-              </SplitText>
-            </span>
-          </h1>
-
-          <div className="mt-8 flex items-center gap-3">
-            <span aria-hidden="true" className="h-px w-10 bg-accent" />
-            <p className="font-mono text-xs uppercase tracking-[0.32em] text-accent sm:text-sm">
-              AI Engineer · Building production systems
-            </p>
-          </div>
-
-          <div className="mt-6">
-            <StaggeredChipRail
-              baseDelay={0.5}
-              chips={["Ocean Shores, WA", "Remote roles", "Freelance projects"]}
-              className="flex flex-wrap items-center gap-2"
+            <span
+              aria-hidden="true"
+              className="absolute -bottom-3 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"
             />
-          </div>
+          </span>
+          <span
+            aria-hidden="true"
+            className="hero-cursor ml-2 -translate-y-[0.1em] align-middle bg-accent"
+            style={{
+              display: "inline-block",
+              height: "0.85em",
+              width: "0.08em",
+            }}
+          />
+        </h1>
+
+        {/* CENTERED SUBTITLE */}
+        <div className="mx-auto mt-10 flex items-center justify-center gap-3">
+          <span aria-hidden="true" className="h-px w-10 bg-accent" />
+          <p className="font-mono text-xs text-accent sm:text-sm">
+            AI Engineer · Building production systems
+          </p>
+          <span aria-hidden="true" className="h-px w-10 bg-accent" />
         </div>
 
-        <div className="col-span-12 self-end lg:col-span-4 lg:justify-self-end">
+        {/* CENTERED CHIP RAIL */}
+        <div className="mt-6 flex justify-center">
+          <StaggeredChipRail
+            baseDelay={0.5}
+            chips={["Ocean Shores, WA", "Remote roles", "Freelance projects"]}
+            className="flex flex-wrap items-center justify-center gap-2"
+          />
+        </div>
+
+        {/* CENTERED DOWNLOAD */}
+        <div className="mt-10 flex flex-col items-center gap-3">
           <Button
             className="!px-8 !py-4 !text-base"
             download
             downArrow
             href="/pierre-belon-savon-resume.pdf"
           >
-            Download Resume
+            Download my résumé
           </Button>
-          <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted lg:text-right">
+          <p className="font-mono text-[10px] text-text-light-muted">
             PDF · One page
           </p>
         </div>
@@ -626,31 +725,18 @@ function ResumeSection({
   children,
   id,
   index,
+  meta,
   title,
 }: {
   children: ReactNode;
   id?: string;
   index: string;
+  meta?: string;
   title: string;
 }) {
   return (
     <section className="mt-20 scroll-mt-28 first:mt-0" id={id}>
-      <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
-        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
-          {index} · Section
-        </span>
-        <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
-        <h2
-          className="font-semibold tracking-tight text-text-light"
-          style={{
-            fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-            letterSpacing: "-0.035em",
-            lineHeight: 1,
-          }}
-        >
-          {title}
-        </h2>
-      </div>
+      <GlitchTitle chapter={index} meta={meta} title={title} />
       <div className="mt-10">{children}</div>
     </section>
   );
@@ -684,13 +770,12 @@ function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
           {/* LEFT 7 — index + company display + summary + bullets */}
           <div className="col-span-12 lg:col-span-7">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+              <span className="font-mono text-[11px] text-accent">
                 {String(index + 1).padStart(2, "0")} · Role
               </span>
               {entry.featured ? (
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-result-green/40 bg-[rgba(16,185,129,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-result-green">
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 font-mono text-[10px] text-result-green">
                   <span className="relative inline-flex h-1.5 w-1.5">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
                     <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
                   </span>
                   Now · Active
@@ -755,7 +840,7 @@ function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
           <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
             <dl className="grid gap-5">
               <div>
-                <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                <dt className="font-mono text-[10px] text-accent">
                   Role
                 </dt>
                 <dd className="mt-2 text-base font-semibold leading-6 text-text-light sm:text-lg">
@@ -763,24 +848,24 @@ function ExperienceLedger({ entries }: { entries: ExperienceEntry[] }) {
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                <dt className="font-mono text-[10px] text-accent">
                   Period
                 </dt>
-                <dd className="mt-2 font-mono text-[12.5px] uppercase tracking-[0.16em] text-text-light">
+                <dd className="mt-2 font-mono text-[12.5px] text-text-light">
                   {entry.period}
                 </dd>
               </div>
               <div>
-                <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                <dt className="font-mono text-[10px] text-accent">
                   Location
                 </dt>
-                <dd className="mt-2 font-mono text-[12.5px] uppercase tracking-[0.16em] text-text-light">
+                <dd className="mt-2 font-mono text-[12.5px] text-text-light">
                   {entry.location}
                 </dd>
               </div>
               {entry.receipts ? (
                 <div>
-                  <dt className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                  <dt className="font-mono text-[10px] text-accent">
                     Receipts
                   </dt>
                   <dd className="mt-2">
@@ -843,7 +928,7 @@ function ProjectLedger({ entries }: { entries: ProjectEntry[] }) {
           whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
         >
           <div className="col-span-12 lg:col-span-7">
-            <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+            <p className="font-mono text-[11px] text-accent">
               {String(index + 1).padStart(2, "0")} · Project
             </p>
             <h3
@@ -876,13 +961,12 @@ function ProjectLedger({ entries }: { entries: ProjectEntry[] }) {
           </div>
 
           <div className="col-span-12 lg:col-span-5 lg:border-l lg:border-border-light lg:pl-8">
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <p className="font-mono text-[10px] text-accent">
               Status
             </p>
-            <p className="mt-2 inline-flex items-center gap-2 font-mono text-sm font-semibold uppercase tracking-[0.18em] text-text-light">
+            <p className="mt-2 inline-flex items-center gap-2 font-mono text-sm font-semibold text-text-light">
               {entry.status === "active" ? (
                 <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
-                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
                   <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
                 </span>
               ) : (
@@ -892,19 +976,19 @@ function ProjectLedger({ entries }: { entries: ProjectEntry[] }) {
               <span aria-hidden="true" className="text-text-light-muted/60">·</span>
               <span className="text-text-light-muted">Shipped {entry.shipped}</span>
             </p>
-            <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <p className="mt-5 font-mono text-[10px] text-accent">
               Scope
             </p>
             <p className="mt-2 text-sm leading-6 text-text-light">
               {entry.scope}
             </p>
-            <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+            <p className="mt-5 font-mono text-[10px] text-accent">
               Stack
             </p>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               {entry.stack.map((tech) => (
                 <li
-                  className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-light-muted"
+                  className="inline-flex items-center rounded-md border border-border-light bg-bg-light-2 px-2 py-0.5 font-mono text-[10px] text-text-light-muted"
                   key={tech}
                 >
                   {tech}
@@ -935,7 +1019,7 @@ function SkillsDatasheet({
 }) {
   return (
     <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
         <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
         <span>~/stack</span>
         <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
@@ -951,7 +1035,7 @@ function SkillsDatasheet({
               aria-hidden="true"
               className="pointer-events-none absolute left-0 top-5 h-[calc(100%-2.5rem)] w-0.5 bg-accent/50"
             />
-            <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent">
+            <p className="font-mono text-[10px] text-accent">
               <span className="text-text-light-muted/60">// </span>
               {String(groupIndex + 1).padStart(2, "0")} {group.title}
             </p>
@@ -991,7 +1075,7 @@ function EducationSpec({
           key={entry.program}
         >
           <div className="col-span-12 flex items-baseline gap-3 lg:col-span-2">
-            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent">
+            <span className="font-mono text-[11px] text-accent">
               {String(index + 1).padStart(2, "0")}
             </span>
             <span
@@ -1006,7 +1090,7 @@ function EducationSpec({
             <p className="mt-1 text-sm text-text-light-muted">{entry.status}</p>
           </div>
           <div className="col-span-12 lg:col-span-3 lg:text-right">
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-light-muted">
+            <p className="font-mono text-[11px] text-text-light-muted">
               {entry.meta}
             </p>
           </div>
@@ -1032,7 +1116,7 @@ function DatasheetCard({
 }) {
   return (
     <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+      <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
         <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
         <span>{slug}</span>
         <span aria-hidden="true" className="h-px flex-1 bg-border-light" />

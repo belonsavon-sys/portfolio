@@ -4,15 +4,13 @@ import { useEffect } from "react";
 
 type PierreApi = {
   about: () => void;
-  ai: () => void;
   atlas: () => void;
   business: () => void;
   contact: () => void;
   help: () => void;
   home: () => void;
-  now: () => void;
+  lab: () => void;
   resume: () => void;
-  uses: () => void;
 };
 
 declare global {
@@ -75,17 +73,13 @@ export function ConsoleSignature() {
         const el = document.getElementById("about");
         el?.scrollIntoView({ behavior: "smooth", block: "start" });
       },
-      ai() {
-        logRoute("AI", "/ai", "Demos, case studies, Atlas portfolio.");
-        go("/ai");
-      },
       atlas() {
         logRoute(
           "Atlas",
-          "/business#blackdoor",
+          "/atlas",
           "Multi-agent harness · Blackdoor's engine.",
         );
-        go("/business#blackdoor");
+        go("/atlas");
       },
       business() {
         logRoute(
@@ -98,23 +92,21 @@ export function ConsoleSignature() {
       contact() {
         logRoute(
           "Contact",
-          "/contact",
-          "Methods · pipeline · engagements · availability.",
+          "/resume#contact",
+          "Email · phone · GitHub · LinkedIn.",
         );
-        go("/contact");
+        go("/resume#contact");
       },
       help() {
         console.log(
           "%cpierre.* commands\n%c" +
             "  pierre.home()      — back to the opener\n" +
             "  pierre.about()     — scroll to About on the home page\n" +
-            "  pierre.ai()        — see the demos + case studies\n" +
+            "  pierre.atlas()     — the multi-agent harness\n" +
             "  pierre.business()  — how it runs in production\n" +
             "  pierre.resume()    — the receipts, one page, PDF-ready\n" +
-            "  pierre.contact()   — methods, pipeline, availability\n" +
-            "  pierre.now()       — what I'm doing this week\n" +
-            "  pierre.uses()      — stack with reasons\n" +
-            "  pierre.atlas()     — the multi-agent harness\n" +
+            "  pierre.lab()       — what i'm shipping, using, building\n" +
+            "  pierre.contact()   — reach me\n" +
             "  pierre.help()      — this menu",
           "color:#296ed6;font-size:13px;font-weight:700;font-family:ui-sans-serif",
           "color:#0f172a;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.6",
@@ -124,25 +116,17 @@ export function ConsoleSignature() {
         logRoute("Home", "/", "The opener.");
         go("/");
       },
-      now() {
+      lab() {
         logRoute(
-          "Now",
-          "/now",
-          "Building · Reading · Learning · Recent ships · What's next.",
+          "Lab",
+          "/lab",
+          "What I'm shipping · demos · stack · how it's built.",
         );
-        go("/now");
+        go("/lab");
       },
       resume() {
-        logRoute("Resume", "/resume", "The receipts, one page, PDF-ready.");
+        logRoute("Resume", "/resume", "The receipts + contact, one page.");
         go("/resume");
-      },
-      uses() {
-        logRoute(
-          "Uses",
-          "/uses",
-          "AI stack · editor · infra · hardware — with reasons.",
-        );
-        go("/uses");
       },
     };
 

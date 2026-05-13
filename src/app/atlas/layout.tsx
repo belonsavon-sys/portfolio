@@ -1,8 +1,9 @@
-import type { Metadata, ReactNode } from "react";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 const title = "Atlas — the multi-agent harness";
 const description =
-  "A five-layer autonomous agent harness shipping real products at Blackdoor. Architecture · capabilities · live products · how it ships.";
+  "Atlas is the five-layer autonomous agent harness I co-architect at Blackdoor. Three products live, every change shipped through a human PR review.";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/atlas" },

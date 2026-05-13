@@ -18,38 +18,13 @@ import {
 
 const navItems: Array<{ chapter: string; href: string; label: string }> = [
   { chapter: "01", href: "/", label: "Welcome" },
-  { chapter: "02", href: "/ai", label: "AI" },
+  { chapter: "02", href: "/atlas", label: "Atlas" },
   { chapter: "03", href: "/business", label: "Business" },
   { chapter: "04", href: "/resume", label: "Resume" },
-  { chapter: "05", href: "/contact", label: "Get in Touch" },
+  { chapter: "05", href: "/lab", label: "The Lab" },
 ];
 
-const moreNavItems: Array<{ chapter: string; description: string; href: string; label: string }> = [
-  {
-    chapter: "06",
-    description: "What I'm doing this week",
-    href: "/now",
-    label: "Now",
-  },
-  {
-    chapter: "07",
-    description: "Stack with reasons",
-    href: "/uses",
-    label: "Uses",
-  },
-  {
-    chapter: "08",
-    description: "The multi-agent harness",
-    href: "/atlas",
-    label: "Atlas",
-  },
-  {
-    chapter: "09",
-    description: "How this site is built",
-    href: "/colophon",
-    label: "Colophon",
-  },
-];
+const moreNavItems: Array<{ chapter: string; description: string; href: string; label: string }> = [];
 
 type HeaderLink = {
   Icon: (props: { className?: string }) => React.ReactNode;
@@ -146,7 +121,9 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full px-3 pt-3 sm:px-6 sm:pt-4">
+    <header
+      className="sticky top-0 z-50 w-full px-3 pt-3 sm:px-6 sm:pt-4"
+    >
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-24 bg-gradient-to-b from-white/80 via-white/40 to-transparent backdrop-blur-[2px]" />
 
       <motion.div
@@ -155,11 +132,6 @@ export function SiteHeader() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Header live-shipped mini-pill — pulled to the right
-            margin on lg+. Pulls from NEXT_PUBLIC_BUILD_TIME +
-            NEXT_PUBLIC_BUILD_SHA so the header carries a small
-            "shipped X · sha" pulse on every page. */}
-        <HeaderLiveShipped />
         {/* CENTERED NAV PILL — backdrop blur + saturation ramp tied to scrollY.
             Padding + density tighten when scrolled past 8px so the
             header collapses into a denser compact mode as the user
@@ -218,13 +190,13 @@ export function SiteHeader() {
             ))}
           </div>
 
-          {/* MORE pill — surfaces the secondary routes (/now, /uses,
-              /atlas) that don't fit in the primary 5-item nav. */}
-          <span
+          {/* MORE pill — kept for forward extensibility but currently
+              the consolidated 5-route nav above covers everything. */}
+          {moreNavItems.length > 0 ? <span
             aria-hidden="true"
             className="mx-1 hidden h-6 w-px bg-border-light sm:inline-block"
-          />
-          <div className="relative hidden sm:block" ref={moreRef}>
+          /> : null}
+          <div className={`relative ${moreNavItems.length > 0 ? "hidden sm:block" : "hidden"}`} ref={moreRef}>
             <button
               aria-expanded={moreOpen}
               aria-haspopup="menu"
@@ -256,6 +228,9 @@ export function SiteHeader() {
                 className="absolute right-0 top-full z-50 mt-3 w-72 overflow-hidden rounded-xl border border-border-light bg-white shadow-[0_24px_72px_-24px_rgba(15,23,42,0.35)]"
                 role="menu"
               >
+                <div className="border-b border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[12px] text-accent">
+                  <span className="not-italic text-accent-deep">$</span> ls /more
+                </div>
                 <ul className="grid">
                   {moreNavItems.map((item) => {
                     const active = isActive(pathname, item.href);
@@ -269,19 +244,21 @@ export function SiteHeader() {
                           href={item.href}
                           role="menuitem"
                         >
-                          <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent">
+                          <span className="font-mono text-[12px] tabular-nums text-accent">
                             {item.chapter}
                           </span>
                           <span className="flex-1">
                             <span
-                              className={`block text-sm font-semibold transition-colors duration-200 ${
-                                active ? "text-accent-deep" : "text-text-light group-hover/more:text-accent-deep"
+                              className={`block font-mono text-sm font-semibold transition-colors duration-200 ${
+                                active
+                                  ? "text-accent-deep"
+                                  : "text-text-light group-hover/more:text-accent-deep"
                               }`}
                             >
-                              {item.label}
+                              ~{item.href}
                             </span>
-                            <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
-                              {item.description}
+                            <span className="mt-0.5 block font-mono text-[12px] text-text-light-muted">
+                              {item.description.toLowerCase()}
                             </span>
                           </span>
                           <span
@@ -309,7 +286,7 @@ export function SiteHeader() {
           />
           <button
             aria-label="Open command palette"
-            className="group/cmdk hidden h-9 items-center gap-1.5 rounded-full border border-accent/30 bg-[rgba(41,110,214,0.06)] px-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-[border-color,background] duration-200 hover:border-accent hover:bg-[rgba(41,110,214,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:inline-flex"
+            className="group/cmdk hidden h-9 items-center gap-1 rounded-full border border-accent/30 bg-[rgba(41,110,214,0.06)] px-2.5 font-mono text-[12px] text-accent transition-[border-color,background] duration-200 hover:border-accent hover:bg-[rgba(41,110,214,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:inline-flex"
             onClick={() => {
               if (typeof window === "undefined") return;
               window.dispatchEvent(
@@ -367,18 +344,16 @@ function HeaderLiveShipped() {
   return (
     <span
       aria-label={`Last shipped ${relative}, commit ${buildSha}`}
-      className="pointer-events-auto absolute right-0 hidden items-center gap-2 rounded-full border border-result-green/40 bg-white/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-sm backdrop-blur-md xl:inline-flex"
+      className="pointer-events-auto absolute right-0 hidden items-baseline gap-2 font-mono text-[12px] text-text-light-muted xl:inline-flex"
       title={`Last shipped ${relative} · commit ${buildSha}`}
     >
-      <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
-        <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-        <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
+      <span className="text-result-green">shipped {relative}</span>
+      <span aria-hidden="true" className="not-italic text-text-light-muted/40">
+        —
       </span>
-      <span>
-        Shipped <span className="text-text-light-muted">{relative}</span>
+      <span className="not-italic tabular-nums text-accent">
+        {buildSha.slice(0, 7)}
       </span>
-      <span aria-hidden="true" className="text-text-light-muted/60">·</span>
-      <span className="text-accent">{buildSha.slice(0, 7)}</span>
     </span>
   );
 }
@@ -420,7 +395,7 @@ function NavPillItem({
         {chapter && active ? (
           <span
             aria-hidden="true"
-            className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/65"
+            className="font-mono text-[11px] text-white/65"
           >
             {chapter}
           </span>

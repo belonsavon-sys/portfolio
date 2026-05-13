@@ -64,7 +64,7 @@ export function PhotoSlot({
                 <span className="h-2 w-2 rounded-full bg-accent" />
                 <span className="h-2 w-2 rounded-full bg-accent-light" />
               </div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.24em] text-text-dark-muted">
+              <span className="font-mono text-[10px] text-text-dark-muted">
                 Placeholder
               </span>
             </div>
@@ -86,7 +86,7 @@ export function PhotoSlot({
             </div>
             {/* Bottom meta */}
             <div className="relative">
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+              <p className="font-mono text-[10px] text-accent-light">
                 {fallbackTitle}
               </p>
               <p className="mt-1 text-xs leading-5 text-text-dark-muted">

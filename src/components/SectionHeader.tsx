@@ -76,7 +76,7 @@ export function SectionHeader({
 
         <motion.p
           className={cx(
-            "font-mono text-xs font-medium uppercase tracking-[0.24em] sm:text-sm",
+            "font-mono text-xs font-medium sm:text-sm",
             eyebrowColor,
           )}
           variants={{
