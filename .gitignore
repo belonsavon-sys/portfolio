@@ -73,3 +73,6 @@ coverage/
 
 # Claude Code session state
 .claude/
+
+# playwright local artifacts
+.playwright-mcp/

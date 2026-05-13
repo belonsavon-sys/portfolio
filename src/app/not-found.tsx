@@ -5,14 +5,10 @@ import { Button } from "@/components";
 
 const ROUTES = [
   { description: "The opener", href: "/", label: "Welcome" },
-  { description: "What I build", href: "/ai", label: "AI" },
-  { description: "For operators", href: "/business", label: "Business" },
-  { description: "The receipts", href: "/resume", label: "Résumé" },
-  { description: "Open to work", href: "/contact", label: "Contact" },
-  { description: "What's shipping this week", href: "/now", label: "Now" },
-  { description: "Tools with reasons", href: "/uses", label: "Uses" },
   { description: "The harness", href: "/atlas", label: "Atlas" },
-  { description: "How this is built", href: "/colophon", label: "Colophon" },
+  { description: "For operators", href: "/business", label: "Business" },
+  { description: "The receipts · contact at the bottom", href: "/resume", label: "Résumé" },
+  { description: "What I'm shipping, using, and how this is built", href: "/lab", label: "The Lab" },
 ];
 
 const DIAGNOSTIC = [
@@ -38,7 +34,9 @@ function readRecentShips(): RecentShip[] {
 
 export default function NotFound() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-bg-dark text-text-dark">
+    <main
+      className="relative min-h-screen overflow-hidden bg-bg-dark text-text-dark"
+    >
       {/* Giant ghost 404 — same parallax watermark used across page heroes */}
       <div
         aria-hidden="true"
@@ -63,15 +61,14 @@ export default function NotFound() {
         <div className="col-span-12 flex flex-wrap items-center gap-3 self-start">
           <span className="inline-flex items-center gap-3 rounded-full border border-problem-red/40 bg-[rgba(239,68,68,0.10)] px-4 py-1.5 backdrop-blur-md">
             <span className="relative inline-flex h-2 w-2">
-              <span className="absolute inset-0 animate-ping rounded-full bg-problem-red/60" />
               <span className="relative inline-block h-2 w-2 rounded-full bg-problem-red" />
             </span>
-            <span className="font-mono text-xs font-medium uppercase tracking-[0.28em] text-problem-red">
+            <span className="font-mono text-xs font-medium text-problem-red">
               404 · route not found
             </span>
           </span>
           <span aria-hidden="true" className="h-px w-12 bg-accent-light/40" />
-          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-dark-muted">
+          <span className="font-mono text-[11px] text-text-dark-muted">
             Chapter 404 / Off-route
           </span>
         </div>
@@ -96,7 +93,7 @@ export default function NotFound() {
 
           <div className="mt-8 flex items-center gap-3">
             <span aria-hidden="true" className="h-px w-10 bg-accent-light" />
-            <p className="font-mono text-xs uppercase tracking-[0.32em] text-accent-light sm:text-sm">
+            <p className="font-mono text-xs text-accent-light sm:text-sm">
               The route you typed isn&apos;t live (yet)
             </p>
           </div>
@@ -109,20 +106,20 @@ export default function NotFound() {
 
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Button arrow className="!px-8 !py-4 !text-base" href="/">
-              Back to Welcome
+              Back to my intro
             </Button>
             <Button
               className="!px-8 !py-4 !text-base"
-              href="/contact"
+              href="/resume#contact"
               variant="ghostDark"
             >
-              Get in Touch
+              Let&apos;s talk
             </Button>
             {/* Search trigger — dispatches a synthetic Cmd+K so the
                 global KeyboardNav listener opens the command palette.
                 Knowing where to go is half the recovery from a 404. */}
             <button
-              className="group/search inline-flex h-[3.25rem] items-center gap-2 rounded-full border border-[rgba(91,155,244,0.35)] bg-[rgba(41,110,214,0.08)] px-5 font-mono text-xs uppercase tracking-[0.24em] text-accent-light transition-[border-color,background] duration-200 hover:border-accent-light hover:bg-[rgba(91,155,244,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light"
+              className="group/search inline-flex h-[3.25rem] items-center gap-2 rounded-full border border-[rgba(91,155,244,0.35)] bg-[rgba(41,110,214,0.08)] px-5 font-mono text-xs text-accent-light transition-[border-color,background] duration-200 hover:border-accent-light hover:bg-[rgba(91,155,244,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light"
               onClick={() => {
                 if (typeof window === "undefined") return;
                 window.dispatchEvent(
@@ -149,7 +146,7 @@ export default function NotFound() {
             rather than an apology. */}
         <div className="col-span-12 self-center lg:col-span-4">
           <div className="overflow-hidden rounded-xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.55)] backdrop-blur-sm">
-            <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+            <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] text-accent-light">
               <span className="inline-flex h-2 w-2 rounded-full bg-problem-red" />
               <span>~/diagnostic</span>
               <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.20)]" />
@@ -161,7 +158,7 @@ export default function NotFound() {
                   className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-[rgba(91,155,244,0.12)] px-5 py-3 first:border-t-0"
                   key={row.key}
                 >
-                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+                  <span className="font-mono text-[10px] text-accent-light">
                     <span className="text-text-dark-muted/60">// </span>
                     {String(index + 1).padStart(2, "0")} {row.key}
                   </span>
@@ -179,7 +176,7 @@ export default function NotFound() {
             that matches the home page's editorial divided lists. */}
         <div className="col-span-12 mt-4">
           <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
-            <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
+            <span className="font-mono text-[11px] text-accent-light">
               06 · Detour
             </span>
             <span aria-hidden="true" className="h-px w-10 bg-accent-light/40" />
@@ -202,7 +199,7 @@ export default function NotFound() {
                   className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-2 py-6 transition-colors duration-200 hover:bg-[rgba(91,155,244,0.06)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light sm:py-7"
                   href={route.href}
                 >
-                  <span className="col-span-2 font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light sm:col-span-1">
+                  <span className="col-span-2 font-mono text-[11px] text-accent-light sm:col-span-1">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <span
@@ -215,7 +212,7 @@ export default function NotFound() {
                   >
                     {route.label}
                   </span>
-                  <span className="col-span-12 font-mono text-xs uppercase tracking-[0.28em] text-text-dark-muted sm:col-span-4">
+                  <span className="col-span-12 font-mono text-xs text-text-dark-muted sm:col-span-4">
                     {route.description}
                   </span>
                   <span className="col-span-3 flex justify-end sm:col-span-1">
@@ -267,7 +264,7 @@ function NotFoundLiveShips() {
   return (
     <div className="col-span-12 mt-12">
       <div className="flex flex-wrap items-baseline gap-4 border-b border-[rgba(91,155,244,0.20)] pb-5">
-        <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-result-green">
+        <span className="font-mono text-[11px] text-result-green">
           07 · Proof
         </span>
         <span aria-hidden="true" className="h-px w-10 bg-result-green/40" />
@@ -283,9 +280,8 @@ function NotFoundLiveShips() {
         </h2>
       </div>
       <div className="mt-6 overflow-hidden rounded-xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.55)] backdrop-blur-sm">
-        <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-result-green">
+        <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] text-result-green">
           <span className="relative inline-flex h-2 w-2">
-            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
             <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
           </span>
           <span>~/last-3-ships</span>
@@ -298,14 +294,14 @@ function NotFoundLiveShips() {
               className="grid grid-cols-[auto_1fr_auto] items-baseline gap-3 px-5 py-3"
               key={commit.sha}
             >
-              <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+              <span className="font-mono text-[10px] text-accent-light">
                 <span className="text-text-dark-muted/60">// </span>
                 {String(index + 1).padStart(2, "0")} {commit.sha}
               </span>
               <span className="truncate font-mono text-[12.5px] leading-6 text-text-dark">
                 {commit.subject}
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+              <span className="font-mono text-[10px] text-text-dark-muted">
                 {commit.when}
               </span>
             </li>

@@ -349,7 +349,9 @@ export function AtlasDemo() {
         : "text-text-dark-muted";
 
   return (
-    <div className="mt-10">
+    <div
+      className="mt-10"
+    >
       {/* CONTROL DECK — cinematic header */}
       <div className="relative overflow-hidden rounded-3xl border border-[rgba(41,110,214,0.28)] bg-gradient-to-br from-bg-dark-2 to-bg-dark p-6 backdrop-blur-md sm:p-8">
         {/* Ambient corner glow */}
@@ -365,12 +367,12 @@ export function AtlasDemo() {
         {/* TOP ROW — runtime label + status pill + step counter */}
         <div className="relative flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] uppercase tracking-[0.32em] text-accent-light">
+            <span className="font-mono text-[10px] text-accent-light">
               Atlas · Live runtime
             </span>
             <span aria-hidden="true" className="h-px w-10 bg-accent-light/50" />
             <span
-              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] ${
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 font-mono text-[11px] ${
                 status === "running"
                   ? "border-accent-light/40 bg-[rgba(91,155,244,0.10)] text-accent-light"
                   : status === "complete"
@@ -379,9 +381,6 @@ export function AtlasDemo() {
               } ${statusTone}`}
             >
               <span className="relative inline-flex h-2 w-2">
-                {status === "running" ? (
-                  <span className="absolute inset-0 animate-ping rounded-full bg-accent-light/60" />
-                ) : null}
                 <span
                   className={`relative inline-block h-2 w-2 rounded-full ${
                     status === "running"
@@ -395,7 +394,7 @@ export function AtlasDemo() {
               {statusLabel}
             </span>
           </div>
-          <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.24em] text-text-dark-muted">
+          <div className="flex items-center gap-3 font-mono text-[11px] text-text-dark-muted">
             <span>
               Step{" "}
               <span className="text-text-dark">
@@ -428,7 +427,7 @@ export function AtlasDemo() {
         {/* PROMPT + CONTROLS */}
         <div className="relative mt-7 grid gap-3 lg:grid-cols-[1fr_auto_auto_auto] lg:items-end">
           <label className="grid gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+            <span className="font-mono text-[10px] text-accent-light">
               Prompt
             </span>
             <input
@@ -460,7 +459,7 @@ export function AtlasDemo() {
         ) : null}
         {liveSummary ? (
           <p className="relative mt-3 rounded-lg border border-accent/30 bg-[rgba(41,110,214,0.08)] px-3 py-2 text-xs text-text-dark">
-            <span className="font-mono uppercase tracking-[0.18em] text-accent-light">
+            <span className="font-mono text-accent-light">
               Live ·{" "}
             </span>
             {liveSummary}
@@ -551,12 +550,12 @@ function AtlasPanel({
     <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2/85 p-5 backdrop-blur-md transition-[border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-accent/45">
       <div className="flex items-center justify-between">
         <span
-          className={`inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.28em] ${accent}`}
+          className={`inline-flex items-center gap-1.5 font-mono text-[10px] ${accent}`}
         >
           {icon}
           {eyebrow}
         </span>
-        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+        <span className="font-mono text-[10px] text-text-dark-muted">
           {subtitle}
         </span>
       </div>
@@ -638,7 +637,7 @@ function BoardIcon({ className }: { className?: string }) {
 function DatabaseTable({ rows }: { rows: DatabaseRow[] }) {
   return (
     <div className="mt-5 overflow-hidden rounded-xl border border-[rgba(41,110,214,0.25)] bg-bg-dark-2">
-      <div className="grid grid-cols-[1fr_70px_80px] border-b border-[rgba(41,110,214,0.18)] bg-bg-dark/40 px-4 py-2.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent-light">
+      <div className="grid grid-cols-[1fr_70px_80px] border-b border-[rgba(41,110,214,0.18)] bg-bg-dark/40 px-4 py-2.5 font-mono text-[10px] text-accent-light">
         <span>row · id</span>
         <span>owner</span>
         <span>state</span>
@@ -672,10 +671,10 @@ function DatabaseTable({ rows }: { rows: DatabaseRow[] }) {
                   />
                   <span className="truncate text-text-dark">{row.id}</span>
                 </span>
-                <span className="uppercase tracking-[0.18em] text-accent-light">
+                <span className="text-accent-light">
                   {row.owner}
                 </span>
-                <span className="uppercase tracking-[0.18em]">
+                <span className="">
                   {row.state}
                 </span>
               </motion.div>
@@ -723,7 +722,7 @@ function TaskBoard({ tasks }: { tasks: TaskItem[] }) {
                     <p className="text-sm font-semibold text-text-dark">
                       {task.title}
                     </p>
-                    <p className="mt-1 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+                    <p className="mt-1 flex items-center gap-1.5 font-mono text-[10px] text-text-dark-muted">
                       <span className="rounded border border-[rgba(41,110,214,0.3)] bg-bg-dark/50 px-1.5 py-0.5 text-accent-light">
                         {task.agent}
                       </span>
@@ -731,7 +730,7 @@ function TaskBoard({ tasks }: { tasks: TaskItem[] }) {
                     </p>
                   </div>
                   <span
-                    className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border ${meta.border} ${meta.bg} px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] ${meta.text}`}
+                    className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border ${meta.border} ${meta.bg} px-2 py-0.5 font-mono text-[10px] ${meta.text}`}
                   >
                     <span>{meta.marker}</span>
                     {meta.label}

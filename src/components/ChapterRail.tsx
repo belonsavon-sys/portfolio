@@ -80,11 +80,12 @@ export function ChapterRail({ sections }: ChapterRailProps) {
       aria-label="Page chapters"
       className="pointer-events-none fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
     >
-      <ul className="pointer-events-auto relative flex flex-col gap-5">
-        {/* Vertical spine — connects the dots */}
+      <ul className="pointer-events-auto relative flex flex-col gap-4">
+        {/* Vertical spine — gradient-fade ends so the rail reads as a
+            station line rather than a hard rule. Centered on the dots. */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute left-[7px] top-2 bottom-2 w-px bg-border-light"
+          className="pointer-events-none absolute bottom-3 left-[11px] top-3 w-px bg-gradient-to-b from-transparent via-border-light to-transparent"
         />
         {sections.map((section) => {
           const isActive = section.id === activeId;
@@ -97,33 +98,40 @@ export function ChapterRail({ sections }: ChapterRailProps) {
                 onClick={() => scrollTo(section.id)}
                 type="button"
               >
-                {/* Inline label — appears on hover or when this section is active */}
+                {/* Inline label — bracket-framed when active, muted on
+                    hover when inactive. */}
                 <span
-                  className={`whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.28em] transition-[opacity,transform] duration-300 ${
+                  className={`whitespace-nowrap font-mono text-[12px] transition-[opacity,transform] duration-300 ${
                     isActive
-                      ? "translate-x-0 text-accent opacity-100"
-                      : "translate-x-1 text-text-light-muted opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
+                      ? "translate-x-0 opacity-100"
+                      : "translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100"
                   }`}
                 >
-                  <span className="text-text-light-muted/60">{section.index}</span>
-                  <span className="ml-1.5">{section.label}</span>
+                  {isActive ? (
+                    <span className="font-semibold text-text-light">
+                      — {section.label.toLowerCase()}
+                    </span>
+                  ) : (
+                    <span className="text-text-light-muted">
+                      {section.label.toLowerCase()}
+                    </span>
+                  )}
                 </span>
 
-                {/* Dot */}
+                {/* Station — numbered circular badge. Index lives inside
+                    the dot like atomic numbers on the Stack section. */}
                 <motion.span
-                  animate={
-                    reduce
-                      ? undefined
-                      : { scale: isActive ? 1.4 : 1 }
-                  }
+                  animate={reduce ? undefined : { scale: isActive ? 1.08 : 1 }}
                   aria-hidden="true"
-                  className={`relative inline-flex h-[14px] w-[14px] items-center justify-center rounded-full border transition-colors duration-300 ${
+                  className={`relative inline-flex h-[22px] w-[22px] items-center justify-center rounded-full border font-mono text-[9.5px] font-semibold tabular-nums tracking-tighter transition-colors duration-300 ${
                     isActive
-                      ? "border-accent bg-accent shadow-[0_0_0_4px_rgba(41,110,214,0.18)]"
-                      : "border-border-light bg-bg-light group-hover:border-accent/60"
+                      ? "border-accent bg-accent text-text-dark shadow-[0_0_0_4px_rgba(41,110,214,0.18),0_0_22px_-2px_rgba(41,110,214,0.55)]"
+                      : "border-border-light bg-bg-light text-text-light-muted/85 group-hover:border-accent/55 group-hover:text-accent"
                   }`}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                />
+                >
+                  <span className="relative">{section.index}</span>
+                </motion.span>
               </button>
             </li>
           );

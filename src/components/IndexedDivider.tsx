@@ -58,7 +58,7 @@ export function IndexedDivider({
       >
         <motion.span
           className={cx(
-            "inline-flex items-center justify-center rounded-md border px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.32em]",
+            "inline-flex items-center justify-center rounded-md border px-2 py-0.5 font-mono text-[11px] ",
             dark
               ? "border-accent-light/40 bg-[rgba(91,155,244,0.10)] text-accent-light"
               : "border-accent/30 bg-[rgba(41,110,214,0.08)] text-accent",
@@ -77,7 +77,7 @@ export function IndexedDivider({
         {label ? (
           <motion.span
             className={cx(
-              "font-mono text-[10px] uppercase tracking-[0.28em]",
+              "font-mono text-[10px] ",
               dark ? "text-text-dark-muted" : "text-text-light-muted",
             )}
             variants={{

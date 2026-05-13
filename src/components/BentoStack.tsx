@@ -25,7 +25,12 @@ const categories: StackCategory[] = [
     frequency: "Daily · all 6 tools",
     href: "/uses#ai-stack",
     items: [
-      { label: "Claude", name: "claude", note: "Daily reasoning + code", primary: true },
+      {
+        label: "Claude",
+        name: "claude",
+        note: "Daily reasoning + code",
+        primary: true,
+      },
       { label: "Codex", name: "codex", note: "Multi-file edits" },
       { label: "ChatGPT", name: "chatgpt", note: "Utility shots" },
       { label: "MCP", name: "mcp", note: "Agent ↔ tool bridge" },
@@ -37,11 +42,20 @@ const categories: StackCategory[] = [
   {
     eyebrow: "02",
     frequency: "Daily · this site + apps",
-    href: "/uses",
+    href: "/lab#uses",
     items: [
-      { label: "TypeScript", name: "typescript", note: "Default · everywhere" },
+      {
+        label: "TypeScript",
+        name: "typescript",
+        note: "Default · everywhere",
+      },
       { label: "React", name: "react", note: "UI framework" },
-      { label: "Next.js", name: "nextjs", note: "App router · this site", primary: true },
+      {
+        label: "Next.js",
+        name: "nextjs",
+        note: "App router · this site",
+        primary: true,
+      },
       { label: "Tailwind", name: "tailwind", note: "Atomic styles" },
     ],
     title: "Frontend",
@@ -53,7 +67,12 @@ const categories: StackCategory[] = [
     items: [
       { label: "Node.js", name: "node", note: "API + scripts" },
       { label: "Express", name: "express", note: "Lightweight servers" },
-      { label: "Supabase", name: "supabase", note: "Postgres + auth + RLS", primary: true },
+      {
+        label: "Supabase",
+        name: "supabase",
+        note: "Postgres + auth + RLS",
+        primary: true,
+      },
       { label: "MySQL", name: "mysql", note: "Legacy reads" },
     ],
     title: "Backend & DB",
@@ -61,9 +80,14 @@ const categories: StackCategory[] = [
   {
     eyebrow: "04",
     frequency: "Project-based",
-    href: "/uses",
+    href: "/lab#uses",
     items: [
-      { label: "Flutter", name: "flutter", note: "Cross-platform mobile", primary: true },
+      {
+        label: "Flutter",
+        name: "flutter",
+        note: "Cross-platform mobile",
+        primary: true,
+      },
       { label: "Kotlin", name: "kotlin", note: "KMP shared logic" },
     ],
     title: "Mobile",
@@ -73,7 +97,12 @@ const categories: StackCategory[] = [
     frequency: "Daily · CI + deploys",
     href: "/uses#infra",
     items: [
-      { label: "Vercel", name: "vercel", note: "This site lives here", primary: true },
+      {
+        label: "Vercel",
+        name: "vercel",
+        note: "This site lives here",
+        primary: true,
+      },
       { label: "GitHub", name: "github", note: "PR-driven workflow" },
       { label: "Twilio", name: "twilio", note: "SMS for ops" },
     ],
@@ -96,117 +125,132 @@ const categories: StackCategory[] = [
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 /**
- * Tool wall — each category is a horizontal row: editorial label on
- * the left, large interactive brand-logo grid on the right. Hovering
- * a logo enlarges it and surfaces its name in an inline tooltip.
- *
- * Replaces the previous bento-grid magazine cards. Reads as one
- * cohesive spec sheet rather than six decorative cards.
+ * Periodic-table-style element grid. Each tool is a square cell with
+ * an atomic number (top-left), the brand logo (center), the tool
+ * label (bottom), and a primary-star indicator (top-right corner)
+ * where applicable. Categories are rendered as labeled rows above
+ * their cell clusters. Replaces the prior text-heavy 4/8 split (left
+ * spec lines + right logo wall), which read as engineering chrome.
  */
 export function BentoStack() {
   const reduce = useReducedMotion();
 
+  // Pre-compute running atomic numbers across all categories so each
+  // element has a unique 01..N identifier.
+  let counter = 0;
+  const rows = categories.map((category) => {
+    const cells = category.items.map((item) => ({
+      atomic: ++counter,
+      item,
+    }));
+    return { category, cells };
+  });
+
   return (
-    <div className="grid divide-y divide-border-light border-y border-border-light">
-      {categories.map((category, categoryIndex) => (
-        <motion.div
-          animate={reduce ? undefined : { opacity: 1, y: 0 }}
-          className="grid grid-cols-12 items-baseline gap-x-6 gap-y-6 py-10 sm:py-12"
-          initial={reduce ? false : { opacity: 0, y: 24 }}
+    <div className="relative space-y-9 sm:space-y-11">
+      {rows.map(({ category, cells }, ci) => (
+        <CategoryGroup
+          category={category}
+          cells={cells}
+          ci={ci}
           key={category.title}
-          transition={{
-            delay: categoryIndex * 0.04,
-            duration: 0.55,
-            ease: easeOut,
-          }}
-          viewport={{ amount: 0.25, once: true }}
-          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-        >
-          {/* LEFT — editorial label */}
-          <div className="col-span-12 lg:col-span-4">
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent">
-              {category.eyebrow}
-            </p>
-            <h3
-              className="mt-2 font-semibold tracking-tight text-text-light"
-              style={{
-                fontSize: "clamp(1.5rem, 2.5vw, 2.25rem)",
-                letterSpacing: "-0.025em",
-                lineHeight: 1.05,
-              }}
-            >
-              {category.title}
-            </h3>
-            <p className="mt-2 font-mono text-[10px] tabular-nums uppercase tracking-[0.22em] text-text-light-muted">
-              {category.items.length}{" "}
-              {category.items.length === 1 ? "tool" : "tools"}
-            </p>
-            <p className="mt-1 inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light-muted">
-              <span aria-hidden="true" className="relative inline-flex h-1.5 w-1.5">
-                <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-                <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
-              </span>
-              {category.frequency}
-            </p>
-            {category.href ? (
-              <a
-                className="group/cat mt-4 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent transition-colors duration-200 hover:text-accent-deep"
-                href={category.href}
-              >
-                <span aria-hidden="true" className="text-accent/70">↳</span>
-                <span className="link-underline">Why these</span>
-                <span
-                  aria-hidden="true"
-                  className="transition-transform duration-200 group-hover/cat:translate-x-0.5"
-                >
-                  →
-                </span>
-              </a>
-            ) : null}
-          </div>
-
-          {/* RIGHT — logo wall */}
-          <ul className="col-span-12 flex flex-wrap items-center gap-3 lg:col-span-8 lg:justify-end">
-            {category.items.map((item, itemIndex) => (
-              <ToolTile
-                delay={categoryIndex * 0.04 + itemIndex * 0.03}
-                item={item}
-                key={item.label}
-                reduce={!!reduce}
-              />
-            ))}
-          </ul>
-        </motion.div>
+          reduce={!!reduce}
+        />
       ))}
-
-      {/* CLOSING — points readers to /uses for the deeper "stack
-          with reasons" treatment of each category. */}
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border-light pt-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-light-muted">
-          07 · Stack with reasons
-        </p>
-        <a
-          className="group/usesnav inline-flex items-center gap-2 rounded-full border border-border-light bg-bg-light-2 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-text-light transition-[border-color,background,color] duration-200 hover:border-accent hover:bg-white hover:text-accent"
-          href="/uses"
-        >
-          <span>/uses · why each tool</span>
-          <span
-            aria-hidden="true"
-            className="transition-transform duration-200 group-hover/usesnav:translate-x-0.5"
-          >
-            →
-          </span>
-        </a>
-      </div>
     </div>
   );
 }
 
-function ToolTile({
+function CategoryGroup({
+  category,
+  cells,
+  ci,
+  reduce,
+}: {
+  category: StackCategory;
+  cells: { atomic: number; item: StackItem }[];
+  ci: number;
+  reduce: boolean;
+}) {
+  const primaryLabel = category.items.find((i) => i.primary)?.label;
+
+  return (
+    <motion.section
+      animate={reduce ? undefined : { opacity: 1, y: 0 }}
+      initial={reduce ? false : { opacity: 0, y: 20 }}
+      transition={{ delay: ci * 0.05, duration: 0.55, ease: easeOut }}
+      viewport={{ amount: 0.2, once: true }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+    >
+      {/* Caption line — editorial, no caps tracking, no ping */}
+      <div className="mb-3.5 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[12px] text-text-light-muted sm:mb-4">
+        <span className="not-italic tabular-nums text-accent">
+          {category.eyebrow}
+        </span>
+        <span
+          aria-hidden="true"
+          className="hidden h-px w-6 bg-accent/30 sm:inline-block"
+        />
+        <span className="font-semibold text-text-light">
+          {category.title}
+        </span>
+        <span aria-hidden="true" className="text-text-light-muted/40">
+          —
+        </span>
+        <span>{category.frequency}</span>
+        {primaryLabel ? (
+          <>
+            <span aria-hidden="true" className="text-text-light-muted/40">
+              ·
+            </span>
+            <span>
+              primary <span className="text-accent">{primaryLabel}</span>
+            </span>
+          </>
+        ) : null}
+        {category.href ? (
+          <a
+            className="group/cat ml-auto inline-flex items-baseline gap-1.5 text-accent transition-colors duration-200 hover:text-accent-deep"
+            href={category.href}
+          >
+            <span aria-hidden="true" className="not-italic text-accent/70">
+              ↳
+            </span>
+            <span className="link-underline">why these</span>
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-200 group-hover/cat:translate-x-0.5"
+            >
+              →
+            </span>
+          </a>
+        ) : null}
+      </div>
+
+      {/* Element cells — flex-wrap so rows pack left without empty
+          grid tracks when an item count doesn't divide evenly. */}
+      <ul className="flex flex-wrap gap-2 sm:gap-2.5">
+        {cells.map(({ atomic, item }, ii) => (
+          <ElementCell
+            atomic={atomic}
+            delay={ci * 0.05 + ii * 0.03}
+            item={item}
+            key={item.label}
+            reduce={reduce}
+          />
+        ))}
+      </ul>
+    </motion.section>
+  );
+}
+
+function ElementCell({
+  atomic,
   delay,
   item,
   reduce,
 }: {
+  atomic: number;
   delay: number;
   item: StackItem;
   reduce: boolean;
@@ -216,32 +260,47 @@ function ToolTile({
   return (
     <motion.li
       animate={reduce ? undefined : { opacity: 1, scale: 1 }}
-      className="relative"
-      initial={reduce ? false : { opacity: 0, scale: 0.94 }}
+      className="relative w-[104px] sm:w-[120px] md:w-[128px] lg:w-[136px]"
+      initial={reduce ? false : { opacity: 0, scale: 0.92 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      transition={{ delay, duration: 0.5, ease: easeOut }}
+      transition={{ delay, duration: 0.45, ease: easeOut }}
       viewport={{ amount: 0.25, once: true }}
       whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
     >
       <button
         aria-label={item.primary ? `${item.label} · primary` : item.label}
-        className={`group relative flex h-16 w-16 items-center justify-center rounded-xl border bg-white/70 backdrop-blur-md transition-[transform,border-color,box-shadow,background] duration-300 hover:-translate-y-1 hover:border-accent/55 hover:bg-white hover:shadow-[0_18px_36px_-18px_rgba(41,110,214,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:h-20 sm:w-20 ${
+        className={`group relative flex aspect-square w-full flex-col justify-between rounded-lg border bg-white/70 p-2 backdrop-blur-md transition-[transform,border-color,box-shadow,background] duration-300 hover:-translate-y-1 hover:border-accent/55 hover:bg-white hover:shadow-[0_18px_36px_-18px_rgba(41,110,214,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:p-2.5 ${
           item.primary
-            ? "border-accent/45 shadow-[0_8px_24px_-12px_rgba(41,110,214,0.35)]"
+            ? "border-accent/45 shadow-[0_10px_28px_-14px_rgba(41,110,214,0.35)]"
             : "border-border-light"
         }`}
-        onFocus={() => setHovered(true)}
         onBlur={() => setHovered(false)}
+        onFocus={() => setHovered(true)}
         type="button"
       >
-        <BrandLogo
-          className={`transition-colors duration-300 group-hover:text-accent ${
-            item.primary ? "text-accent" : "text-text-light-muted"
-          }`}
-          name={item.name}
-          size={32}
-        />
+        {/* atomic number */}
+        <span className="self-start font-mono text-[9px] tabular-nums text-text-light-muted/85">
+          {String(atomic).padStart(2, "0")}
+        </span>
+
+        {/* logo */}
+        <span className="flex flex-1 items-center justify-center">
+          <BrandLogo
+            className={`transition-colors duration-300 group-hover:text-accent ${
+              item.primary ? "text-accent" : "text-text-light-muted"
+            }`}
+            name={item.name}
+            size={34}
+          />
+        </span>
+
+        {/* element label */}
+        <span className="block w-full truncate text-center font-mono text-[9.5px] text-text-light-muted">
+          {item.label}
+        </span>
+
+        {/* primary indicator — top-right star */}
         {item.primary ? (
           <span
             aria-hidden="true"
@@ -253,14 +312,13 @@ function ToolTile({
         ) : null}
       </button>
 
-      {/* Tooltip — appears above the tile on hover/focus.
-          Carries the tool's usage note when present (iter-268). */}
+      {/* Tooltip — surfaces the usage note on hover/focus. */}
       <motion.span
         animate={{
           opacity: hovered && !reduce ? 1 : 0,
           y: hovered && !reduce ? -6 : 0,
         }}
-        className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 inline-flex max-w-[220px] -translate-x-1/2 flex-col items-center gap-1 whitespace-nowrap rounded-md border border-accent/30 bg-bg-light px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.22em] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
+        className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 inline-flex max-w-[220px] -translate-x-1/2 flex-col items-center gap-1 whitespace-nowrap rounded-md border border-accent/30 bg-bg-light px-2.5 py-1.5 font-mono text-[10px] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
         transition={{ duration: 0.2, ease: easeOut }}
       >
         <span className="font-semibold">{item.label}</span>

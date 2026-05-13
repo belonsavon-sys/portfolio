@@ -6,14 +6,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 const routes: Record<string, string> = {
   "1": "/",
-  "2": "/ai",
+  "2": "/atlas",
   "3": "/business",
   "4": "/resume",
-  "5": "/contact",
-  "6": "/now",
-  "7": "/uses",
-  "8": "/atlas",
-  "9": "/colophon",
+  "5": "/lab",
 };
 
 type ChapterShortcut = {
@@ -34,10 +30,10 @@ const CHAPTERS: ChapterShortcut[] = [
   },
   {
     chapter: "02",
-    description: "/ai · what I build",
-    href: "/ai",
+    description: "/atlas · the multi-agent harness",
+    href: "/atlas",
     key: "2",
-    title: "AI",
+    title: "Atlas",
   },
   {
     chapter: "03",
@@ -48,45 +44,17 @@ const CHAPTERS: ChapterShortcut[] = [
   },
   {
     chapter: "04",
-    description: "/resume · curriculum",
+    description: "/resume · curriculum + contact",
     href: "/resume",
     key: "4",
     title: "Résumé",
   },
   {
     chapter: "05",
-    description: "/contact · open to work",
-    href: "/contact",
+    description: "/lab · what i'm shipping + tools + colophon",
+    href: "/lab",
     key: "5",
-    title: "Contact",
-  },
-  {
-    chapter: "06",
-    description: "/now · what I'm doing",
-    href: "/now",
-    key: "6",
-    title: "Now",
-  },
-  {
-    chapter: "07",
-    description: "/uses · stack with reasons",
-    href: "/uses",
-    key: "7",
-    title: "Uses",
-  },
-  {
-    chapter: "08",
-    description: "/atlas · the multi-agent harness",
-    href: "/atlas",
-    key: "8",
-    title: "Atlas",
-  },
-  {
-    chapter: "09",
-    description: "/colophon · how this is built",
-    href: "/colophon",
-    key: "9",
-    title: "Colophon",
+    title: "The Lab",
   },
 ];
 
@@ -120,28 +88,23 @@ const DEEP_ANCHORS: DeepAnchor[] = [
   },
   {
     description: "Live commits, what just shipped",
-    href: "/now#shipped",
-    title: "Recent ships",
+    href: "/lab#now",
+    title: "Now shipping",
   },
   {
-    description: "Claude · Codex · Perplexity · MCP",
-    href: "/uses#ai-stack",
-    title: "AI stack",
-  },
-  {
-    description: "Vercel · GitHub · Supabase",
-    href: "/uses#infra",
-    title: "Infrastructure",
-  },
-  {
-    description: "Hotel comms · QA system",
-    href: "/ai#built-and-shipped",
-    title: "Built & shipped",
-  },
-  {
-    description: "Local AI · Atlas runtime",
-    href: "/ai#demos",
+    description: "Local ML demos in your browser",
+    href: "/lab#demos",
     title: "Live demos",
+  },
+  {
+    description: "Claude · Codex · MCP · Vercel · Supabase",
+    href: "/lab#uses",
+    title: "The stack",
+  },
+  {
+    description: "How this site is built",
+    href: "/lab#colophon",
+    title: "Colophon",
   },
   {
     description: "The company behind Atlas",
@@ -154,14 +117,9 @@ const DEEP_ANCHORS: DeepAnchor[] = [
     title: "Process design",
   },
   {
-    description: "Quick intake form",
-    href: "/contact#send",
-    title: "Send a message",
-  },
-  {
-    description: "The four cuts behind the build",
-    href: "/colophon#principles",
-    title: "Principles",
+    description: "Email · phone · GitHub · LinkedIn",
+    href: "/resume#contact",
+    title: "Reach me",
   },
 ];
 
@@ -350,7 +308,7 @@ export function KeyboardNav() {
         >
           <motion.div
             animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
-            className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-[rgba(91,155,244,0.22)] bg-bg-dark-2 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)]"
+            className="relative flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-[rgba(91,155,244,0.22)] bg-bg-dark-2 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)]"
             exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 8 }}
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 8 }}
             onClick={(e) => e.stopPropagation()}
@@ -411,11 +369,11 @@ export function KeyboardNav() {
               </span>
             </div>
 
-            {/* CHAPTER CARDS — filtered by query. Empty state shows
-                "no matches" instead of rendering nothing. The empty
-                state only fires when BOTH the chapters list and the
-                deep-anchors list come up empty — otherwise the deep
-                anchors below stand in for the chapter results. */}
+            {/* SCROLLABLE BODY — chapters + deep links + empty state.
+                Wrapped in a flex-1 overflow-y-auto region so the modal
+                can be max-h: 85vh and the middle scrolls while the
+                header / search input / meta footer stay pinned. */}
+            <div className="relative flex-1 overflow-y-auto">
             {visibleChapters.length === 0 && visibleAnchors.length === 0 ? (
               <div className="relative px-6 py-10 text-center font-mono text-sm text-text-dark-muted sm:px-8 sm:py-12">
                 <p>
@@ -545,6 +503,8 @@ export function KeyboardNav() {
                 </ol>
               </div>
             ) : null}
+            </div>
+            {/* /scrollable body */}
 
             {/* META FOOTER */}
             <div className="relative flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-[rgba(91,155,244,0.14)] bg-[rgba(91,155,244,0.04)] px-6 py-4 sm:px-8">

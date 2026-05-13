@@ -100,7 +100,7 @@ function SideColumn({
           editorial chapter cards used elsewhere on the site. */}
       <div className="relative flex items-center gap-3">
         <span
-          className={`font-mono text-[11px] uppercase tracking-[0.32em] ${
+          className={`font-mono text-[11px] ${
             isAfter ? "text-accent" : "text-text-light-muted"
           }`}
         >
@@ -112,7 +112,6 @@ function SideColumn({
         />
         {isAfter ? (
           <span className="relative inline-flex h-1.5 w-1.5">
-            <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
             <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-accent" />
           </span>
         ) : null}
@@ -194,7 +193,6 @@ function Connector(): ReactNode {
         aria-hidden="true"
         className="absolute right-[-3px] top-1/2 inline-flex h-2 w-2 -translate-y-1/2"
       >
-        <span className="absolute inset-0 animate-ping rounded-full bg-accent/60" />
         <span className="relative inline-block h-2 w-2 rounded-full bg-accent" />
       </span>
     </div>

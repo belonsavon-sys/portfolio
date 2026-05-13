@@ -110,6 +110,19 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_BUILD_SHA: buildSha,
     NEXT_PUBLIC_BUILD_TIME: buildTime,
   },
+  // Consolidated route map (May 2026). The five routes below were
+  // merged into /lab (craft/process) and /resume (contact). Permanent
+  // redirects so search engines update; bookmarks land on the right
+  // anchor.
+  async redirects() {
+    return [
+      { source: "/now", destination: "/lab#now", permanent: true },
+      { source: "/ai", destination: "/lab#demos", permanent: true },
+      { source: "/uses", destination: "/lab#uses", permanent: true },
+      { source: "/colophon", destination: "/lab#colophon", permanent: true },
+      { source: "/contact", destination: "/resume#contact", permanent: true },
+    ];
+  },
   turbopack: {
     root: process.cwd(),
   },

@@ -140,7 +140,10 @@ export function Button(props: ButtonProps) {
     ...rest
   } = props;
 
-  const magneticProps = useMagneticProps(variant === "primary");
+  // Magnetic cursor-follow disabled site-wide — the CTAs no longer
+  // chase the pointer. The hook stays in the file in case we want to
+  // bring it back per-variant later.
+  const magneticProps = useMagneticProps(false);
 
   const classes = cx(
     "group/btn inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-semibold transition-[filter,background,border-color,color] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-60",

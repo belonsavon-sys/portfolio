@@ -220,15 +220,16 @@ export function LocalAiDemo() {
   }, []);
 
   return (
-    <div className="mt-10">
+    <div
+      className="mt-10"
+    >
       {/* HARDWARE BAR — wide, glassy, monospace */}
       <div className="mb-8 grid gap-3 rounded-2xl border border-[rgba(41,110,214,0.22)] bg-bg-dark-2/70 p-4 backdrop-blur-md sm:grid-cols-[1fr_auto] sm:items-center sm:gap-6 sm:p-5">
         <div className="flex flex-wrap items-center gap-4">
           <span className="relative inline-flex h-2.5 w-2.5">
-            <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
             <span className="relative inline-block h-2.5 w-2.5 rounded-full bg-result-green ring-4 ring-result-green/20" />
           </span>
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-text-dark">
+          <p className="font-mono text-[11px] text-text-dark">
             {device === "webgpu"
               ? "WebGPU detected · GPU-accelerated"
               : device === "wasm"
@@ -236,7 +237,7 @@ export function LocalAiDemo() {
                 : "Detecting hardware…"}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-1 font-mono text-[10px] uppercase tracking-[0.24em] text-text-dark-muted">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-1 font-mono text-[10px] text-text-dark-muted">
           <span className="inline-flex items-center gap-1.5">
             <span className="text-accent-light">●</span> On-device
           </span>
@@ -418,12 +419,12 @@ function ImageClassificationRunner({ pipe }: { pipe: TransformersPipeline }) {
       {/* DROP ZONE / PREVIEW */}
       <div>
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+          <span className="font-mono text-[11px] text-accent-light">
             Input · image
           </span>
           {imageUrl ? (
             <button
-              className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted transition-colors hover:text-accent-light"
+              className="font-mono text-[10px] text-text-dark-muted transition-colors hover:text-accent-light"
               onClick={() => {
                 setImageUrl(null);
                 setResults([]);
@@ -472,7 +473,7 @@ function ImageClassificationRunner({ pipe }: { pipe: TransformersPipeline }) {
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(41,110,214,0.4)] bg-[rgba(41,110,214,0.10)] text-accent-light">
                 <UploadIcon className="h-6 w-6" />
               </span>
-              <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-dark">
+              <p className="font-mono text-xs text-text-dark">
                 Drop an image or click to browse
               </p>
               <p className="max-w-xs text-xs text-text-dark-muted">
@@ -486,11 +487,11 @@ function ImageClassificationRunner({ pipe }: { pipe: TransformersPipeline }) {
       {/* RESULTS */}
       <div>
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+          <span className="font-mono text-[11px] text-accent-light">
             Output · top 5 predictions
           </span>
           {latency != null ? (
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-result-green">
+            <span className="font-mono text-[10px] text-result-green">
               {Math.round(latency)} ms
             </span>
           ) : null}
@@ -545,7 +546,7 @@ function ImageClassificationRunner({ pipe }: { pipe: TransformersPipeline }) {
           </ul>
         ) : (
           <div className="mt-4 flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-[rgba(41,110,214,0.2)] bg-bg-dark/30 text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted">
+            <p className="font-mono text-xs text-text-dark-muted">
               Awaiting input ·{"  "}drop an image to classify
             </p>
           </div>
@@ -614,10 +615,10 @@ function LlmChatRunner({ pipe }: { pipe: TransformersPipeline }) {
       {/* PROMPT INPUT */}
       <div>
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+          <span className="font-mono text-[11px] text-accent-light">
             Prompt · system
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+          <span className="font-mono text-[10px] text-text-dark-muted">
             {prompt.length} chars
           </span>
         </div>
@@ -631,12 +632,12 @@ function LlmChatRunner({ pipe }: { pipe: TransformersPipeline }) {
           />
           <div className="flex items-center justify-between gap-3 border-t border-[rgba(41,110,214,0.2)] bg-bg-dark-2/40 px-4 py-2.5">
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+              <span className="font-mono text-[10px] text-text-dark-muted">
                 Try:
               </span>
               {chatSuggestions.map((s, i) => (
                 <button
-                  className="rounded-full border border-[rgba(41,110,214,0.3)] bg-bg-dark/60 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-text-dark-muted transition-colors hover:border-accent hover:text-accent-light"
+                  className="rounded-full border border-[rgba(41,110,214,0.3)] bg-bg-dark/60 px-2.5 py-0.5 font-mono text-[10px] text-text-dark-muted transition-colors hover:border-accent hover:text-accent-light"
                   key={i}
                   onClick={() => setPrompt(s)}
                   type="button"
@@ -670,11 +671,11 @@ function LlmChatRunner({ pipe }: { pipe: TransformersPipeline }) {
             className="absolute left-4 top-4 h-3 w-3 border-l border-t border-accent-light/70"
           />
           <div className="ml-5 flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+            <span className="font-mono text-[11px] text-accent-light">
               Output · assistant
             </span>
             {latency != null && tokenCount != null ? (
-              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-result-green">
+              <span className="font-mono text-[10px] text-result-green">
                 {Math.round(latency)} ms · ~{tokenCount} tokens
               </span>
             ) : null}
@@ -699,7 +700,7 @@ function LlmChatRunner({ pipe }: { pipe: TransformersPipeline }) {
         </motion.div>
       ) : (
         <div className="flex min-h-[120px] items-center justify-center rounded-2xl border border-dashed border-[rgba(41,110,214,0.2)] bg-bg-dark/30 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted">
+          <p className="font-mono text-xs text-text-dark-muted">
             Press Generate to run the model in your browser
           </p>
         </div>
@@ -882,12 +883,11 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
             </div>
           ) : (
             <>
-              <div className="absolute left-3 top-3 z-10 inline-flex items-center gap-2 rounded-full border border-result-green/40 bg-bg-dark/70 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-result-green backdrop-blur-md">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-result-green" />
-                Live · 2 fps
+              <div className="absolute left-3 top-3 z-10 inline-flex items-center gap-2 font-mono text-[12px] text-result-green">
+                live — 2 fps
               </div>
               <button
-                className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-md border border-[rgba(255,255,255,0.2)] bg-bg-dark/80 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark transition-colors hover:border-problem-red/50 hover:text-problem-red"
+                className="absolute bottom-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-md border border-[rgba(255,255,255,0.2)] bg-bg-dark/80 px-2.5 py-1 font-mono text-[10px] text-text-dark transition-colors hover:border-problem-red/50 hover:text-problem-red"
                 onClick={stop}
                 type="button"
               >
@@ -901,7 +901,7 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
         {/* PREDICTION PANEL */}
         <div className="flex flex-col justify-between gap-4 rounded-2xl border border-[rgba(41,110,214,0.25)] bg-gradient-to-br from-bg-dark-2 to-bg-dark p-5">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
+            <p className="font-mono text-[10px] text-accent-light">
               Recognized · gesture
             </p>
             <p className="mt-3 text-3xl font-semibold leading-tight text-text-dark sm:text-4xl">
@@ -917,7 +917,7 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   />
                 </div>
-                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.22em] text-accent-light">
+                <p className="mt-2 font-mono text-[11px] text-accent-light">
                   {Math.round(topMatch.score * 100)}% confidence
                 </p>
               </>
@@ -927,7 +927,7 @@ function ComputerVisionRunner({ pipe }: { pipe: TransformersPipeline }) {
               </p>
             )}
           </div>
-          <p className="rounded-lg border border-[rgba(41,110,214,0.18)] bg-bg-dark/50 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-text-dark-muted">
+          <p className="rounded-lg border border-[rgba(41,110,214,0.18)] bg-bg-dark/50 px-3 py-2 font-mono text-[10px] text-text-dark-muted">
             Zero-shot CLIP · frames processed locally
           </p>
         </div>
@@ -991,12 +991,12 @@ function SpeechToTextRunner({ pipe }: { pipe: TransformersPipeline }) {
       {/* INPUT BLOCK */}
       <div>
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+          <span className="font-mono text-[11px] text-accent-light">
             Input · audio
           </span>
           {fileName ? (
             <button
-              className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted transition-colors hover:text-accent-light"
+              className="font-mono text-[10px] text-text-dark-muted transition-colors hover:text-accent-light"
               onClick={() => {
                 setAudioUrl(null);
                 setFileName(null);
@@ -1044,7 +1044,7 @@ function SpeechToTextRunner({ pipe }: { pipe: TransformersPipeline }) {
                   <p className="truncate font-mono text-sm text-text-dark">
                     {fileName}
                   </p>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+                  <p className="font-mono text-[10px] text-text-dark-muted">
                     Audio file · processed locally
                   </p>
                 </div>
@@ -1079,7 +1079,7 @@ function SpeechToTextRunner({ pipe }: { pipe: TransformersPipeline }) {
               <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[rgba(41,110,214,0.4)] bg-[rgba(41,110,214,0.10)] text-accent-light">
                 <MicIconLarge className="h-6 w-6" />
               </span>
-              <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-dark">
+              <p className="font-mono text-xs text-text-dark">
                 Drop an audio file or click to browse
               </p>
               <p className="max-w-xs text-xs text-text-dark-muted">
@@ -1103,11 +1103,11 @@ function SpeechToTextRunner({ pipe }: { pipe: TransformersPipeline }) {
             className="absolute left-4 top-4 h-3 w-3 border-l border-t border-accent-light/70"
           />
           <div className="ml-5 flex items-center justify-between">
-            <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+            <span className="font-mono text-[11px] text-accent-light">
               Transcript · Whisper
             </span>
             {latency != null ? (
-              <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-result-green">
+              <span className="font-mono text-[10px] text-result-green">
                 {Math.round(latency)} ms
               </span>
             ) : null}
@@ -1219,10 +1219,10 @@ function SemanticSearchRunner({ pipe }: { pipe: TransformersPipeline }) {
       {/* QUERY BAR */}
       <div>
         <div className="flex items-center justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+          <span className="font-mono text-[11px] text-accent-light">
             Query · semantic
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+          <span className="font-mono text-[10px] text-text-dark-muted">
             {SEARCH_DATASET.length} rows indexed
           </span>
         </div>
@@ -1247,7 +1247,7 @@ function SemanticSearchRunner({ pipe }: { pipe: TransformersPipeline }) {
             </Button>
           </div>
           <div className="flex flex-wrap items-center gap-1.5 border-t border-[rgba(41,110,214,0.2)] bg-bg-dark-2/40 px-4 py-2.5">
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+            <span className="font-mono text-[10px] text-text-dark-muted">
               Try:
             </span>
             {searchSuggestions.map((s) => (
@@ -1266,13 +1266,13 @@ function SemanticSearchRunner({ pipe }: { pipe: TransformersPipeline }) {
 
       {/* DATASET PREVIEW (collapsed visualization) */}
       <div>
-        <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+        <p className="font-mono text-[11px] text-accent-light">
           Dataset · mock hospitality ops rows
         </p>
         <div className="mt-3 flex flex-wrap gap-1.5">
           {SEARCH_DATASET.map((row, i) => (
             <span
-              className="rounded-md border border-[rgba(41,110,214,0.2)] bg-bg-dark/40 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted"
+              className="rounded-md border border-[rgba(41,110,214,0.2)] bg-bg-dark/40 px-2.5 py-1 font-mono text-[10px] text-text-dark-muted"
               key={i}
               title={row}
             >
@@ -1285,7 +1285,7 @@ function SemanticSearchRunner({ pipe }: { pipe: TransformersPipeline }) {
       {/* RESULTS */}
       {results.length > 0 ? (
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+          <p className="font-mono text-[11px] text-accent-light">
             Ranked results · top {results.length}
           </p>
           <ol className="mt-3 grid gap-2">
@@ -1302,7 +1302,7 @@ function SemanticSearchRunner({ pipe }: { pipe: TransformersPipeline }) {
                 }}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-mono text-[11px] uppercase tracking-[0.28em] text-accent-light">
+                  <span className="font-mono text-[11px] text-accent-light">
                     #{String(i + 1).padStart(2, "0")} · score
                   </span>
                   <span className="font-mono text-sm font-semibold text-accent-light">
@@ -1328,7 +1328,7 @@ function SemanticSearchRunner({ pipe }: { pipe: TransformersPipeline }) {
         </div>
       ) : !running ? (
         <div className="flex min-h-[120px] items-center justify-center rounded-2xl border border-dashed border-[rgba(41,110,214,0.2)] bg-bg-dark/30 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-dark-muted">
+          <p className="font-mono text-xs text-text-dark-muted">
             Press search to embed your query and rank the dataset
           </p>
         </div>

@@ -4,7 +4,7 @@
 
 **AI Engineer · Ocean Shores, WA · Trilingual EN / ES / IT**
 
-Engineering intelligent automation and full-stack applications that turn complex business processes into scalable, profitable systems.
+I build AI for businesses that have to actually run. Most of it I shipped while running one.
 
 [**Live site →**](https://portfolio-psi-six-hz0jclbxci.vercel.app)
 
@@ -25,8 +25,13 @@ Engineering intelligent automation and full-stack applications that turn complex
 </p>
 
 <p align="center">
-  <img src="./docs/screenshot-ai.png" alt="/ai — I build AI that ships." width="49%" />
+  <img src="./docs/screenshot-atlas.png" alt="/atlas — A harness that ships." width="49%" />
   <img src="./docs/screenshot-business.png" alt="/business — I ship AI." width="49%" />
+</p>
+
+<p align="center">
+  <img src="./docs/screenshot-lab.png" alt="/lab — The Lab" width="49%" />
+  <img src="./docs/screenshot-resume.png" alt="/resume — Pierre Belon Savon resume" width="49%" />
 </p>
 
 ---
@@ -35,16 +40,17 @@ Engineering intelligent automation and full-stack applications that turn complex
 
 | Route | Purpose | Highlights |
 |------|---------|------------|
-| `/` | Welcome | Trilingual greeting rotator, glitch-title section heads, animated counters, bento stack with real brand SVGs, live commit ticker |
-| `/ai` | AI showcase | Atlas product gallery, BrowserAI-style Demo 1 (5 tabs running locally via WebGPU), Demo 2 calling Anthropic in real time |
-| `/atlas` | Atlas deep-dive | Multi-agent harness — architecture, hierarchy, live demo |
-| `/business` | Business case | Blackdoor + Atlas leads, before/after diagrams with big-number focal points, finance precision card |
-| `/resume` | Resume | Full resume on-page, `Download Resume ↓` PDF, B&W print stylesheet |
-| `/lab` | Lab | Experiments, motion sketches, work-in-progress |
+| `/` | Welcome | GlitchTitle hero, last-shipped ticker, commit ticker, hero avatar |
+| `/atlas` | Atlas deep-dive | Multi-agent harness — five layers, three products live, live Anthropic demo |
+| `/business` | Business case | Bento grid of operator-facing capabilities, before/after diagrams, finance precision card |
+| `/resume` | Resume | Full resume on-page, `Download my résumé ↓` PDF, B&W print stylesheet |
+| `/lab` | The Lab | What I'm shipping right now, demos in-browser, tools I pay for, how I built this site — one scroll instead of four routes |
 
 ---
 
 ## Live AI demos
+
+Both demos surface on `/atlas`.
 
 **Demo 1 — five tasks running on your device, zero cloud:**
 
@@ -66,9 +72,9 @@ Models load via `@huggingface/transformers`, run on WebGPU when available, fall 
 
 | Layer | Choice |
 |-------|--------|
-| Framework | Next.js 16 (App Router) · React 19 · TypeScript |
+| Framework | Next.js 16 (App Router, Turbopack) · React 19 · TypeScript |
 | Styling | Tailwind CSS v4 + CSS variables for design tokens |
-| Animation | Framer Motion + custom CSS keyframes (glitch, scramble, light-switch) |
+| Animation | Framer Motion + custom CSS keyframes (glitch, scramble, page-atmosphere, light-switch) |
 | Local AI | `@huggingface/transformers` (WebGPU + WASM fallback) |
 | Live AI | `@anthropic-ai/sdk` (Atlas demo only, server route) |
 | Brand logos | `simple-icons` |
@@ -95,6 +101,19 @@ npm run dev
 ```
 
 Without an API key, the Atlas demo falls back to its scripted simulation.
+
+---
+
+## Design notes
+
+The site has a single visual signature:
+
+- **GlitchTitle** — section headers sit dark, flicker subtly at rest, and pop deep-emerald x-ray on a 5s heartbeat. All four animations share 71→72 on / 87→88 off keyframes.
+- **PageAtmosphere** — a soft radial glow behind every page, drifting on a slow loop.
+- **TextScramble + cursor** — hero copy scrambles in on first paint.
+- **LightSwitch** — top-right toggle that swaps the atmosphere palette.
+
+Each route adds one per-page wow beat on top of the shared layer.
 
 ---
 
@@ -147,14 +166,14 @@ portfolio/
 │   │   ├── atlas/                  # Atlas deep-dive
 │   │   ├── business/
 │   │   ├── resume/
-│   │   ├── lab/                    # experiments
+│   │   ├── lab/                    # The Lab
 │   │   ├── page.tsx                # home
-│   │   ├── layout.tsx              # root + SiteHeader + Analytics
+│   │   ├── layout.tsx              # root + SiteHeader + Analytics + PageAtmosphere
 │   │   ├── globals.css
 │   │   ├── icon.tsx                # generated favicon
 │   │   ├── opengraph-image.tsx     # generated OG card
 │   │   └── not-found.tsx
-│   └── components/                 # shared primitives
+│   └── components/                 # shared primitives (GlitchTitle, TextScramble, CommitTicker, …)
 ├── AGENTS.md                       # AI agent rules
 ├── CLAUDE.md                       # Claude-specific instructions
 └── README.md

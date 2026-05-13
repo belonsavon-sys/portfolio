@@ -21,7 +21,9 @@ export function RoleEntry({ bullets, featured, meta, role }: RoleEntryProps) {
   const reduce = useReducedMotion();
 
   return (
-    <div className="group relative border-l-2 border-border-light pl-6 transition-[border-color] duration-300 hover:border-accent">
+    <div
+      className="group relative border-l-2 border-border-light pl-6 transition-[border-color] duration-300 hover:border-accent"
+    >
       {/* Timeline dot */}
       <span
         aria-hidden="true"
@@ -37,13 +39,13 @@ export function RoleEntry({ bullets, featured, meta, role }: RoleEntryProps) {
             {role}
           </h3>
           {featured ? (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-[rgba(41,110,214,0.10)] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-accent">
-              <span className="h-1 w-1 rounded-full bg-accent" />
-              Featured
+            <span className="inline-flex items-baseline gap-1.5 font-mono text-[12px] text-accent">
+              <span aria-hidden="true" className="text-accent/60">—</span>
+              featured
             </span>
           ) : null}
         </div>
-        <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-text-light-muted sm:text-right">
+        <p className="shrink-0 font-mono text-[12px] text-text-light-muted sm:text-right">
           {meta}
         </p>
       </div>

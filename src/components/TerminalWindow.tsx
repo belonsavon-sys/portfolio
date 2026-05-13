@@ -82,7 +82,7 @@ export function TerminalWindow({
           {title}
           <span className="text-accent-light">.sh</span>
         </span>
-        <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-text-dark-muted">
+        <span className="font-mono text-[10px] text-text-dark-muted">
           tty
         </span>
       </div>

@@ -17,14 +17,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: number;
   }> = [
     { changeFrequency: "weekly", path: "/", priority: 1.0 },
-    { changeFrequency: "monthly", path: "/ai", priority: 0.9 },
+    { changeFrequency: "monthly", path: "/atlas", priority: 0.9 },
     { changeFrequency: "monthly", path: "/business", priority: 0.9 },
     { changeFrequency: "monthly", path: "/resume", priority: 0.9 },
-    { changeFrequency: "weekly", path: "/contact", priority: 0.8 },
-    { changeFrequency: "daily", path: "/now", priority: 0.7 },
-    { changeFrequency: "monthly", path: "/uses", priority: 0.6 },
-    { changeFrequency: "monthly", path: "/atlas", priority: 0.7 },
-    { changeFrequency: "monthly", path: "/colophon", priority: 0.5 },
+    { changeFrequency: "weekly", path: "/lab", priority: 0.7 },
   ];
 
   return routes.map((entry) => ({

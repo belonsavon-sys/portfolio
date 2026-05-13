@@ -87,7 +87,7 @@ export function Testimonial({
         ) : null}
         {role || org ? (
           <span
-            className={`font-mono text-xs uppercase tracking-[0.18em] ${muted}`}
+            className={`font-mono text-xs ${muted}`}
           >
             {[role, org].filter(Boolean).join(" · ")}
           </span>

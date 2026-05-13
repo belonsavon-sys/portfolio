@@ -2,11 +2,11 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Button } from "./Button";
 import { LastShipped } from "./LastShipped";
-import { LiveStatusBadge } from "./LiveStatusBadge";
 import { ParallaxGhost } from "./ParallaxGhost";
-import { SplitText } from "./SplitText";
+import { TextScramble } from "./TextScramble";
 import {
   EMAIL_DISPLAY,
   EMAIL_MAILTO,
@@ -16,116 +16,36 @@ import {
   PHONE_TEL,
 } from "./contact-config";
 
-const FOOTER_LINKS: Array<{ href: string; label: string; external?: boolean }> = [
+const FOOTER_LINKS: Array<{ href: string; label: string }> = [
   { href: "/", label: "Welcome" },
-  { href: "/ai", label: "AI" },
+  { href: "/atlas", label: "Atlas" },
   { href: "/business", label: "Business" },
   { href: "/resume", label: "Resume" },
-  { href: "/contact", label: "Get in Touch" },
-  { href: "/now", label: "Now" },
-  { href: "/uses", label: "Uses" },
-  { href: "/atlas", label: "Atlas" },
-  { href: "/colophon", label: "Colophon" },
+  { href: "/lab", label: "The Lab" },
 ];
 
-const FOOTER_CONTACTS = [
-  { href: EMAIL_MAILTO, label: EMAIL_DISPLAY },
-  { href: PHONE_TEL, label: PHONE_DISPLAY },
-  { href: GITHUB_URL, label: "GitHub", external: true },
-  ...(LINKEDIN_URL ? [{ href: LINKEDIN_URL, label: "LinkedIn", external: true }] : []),
-];
-
-// Spec rail — replaces the centered dot-prefixed chip row with a mono
-// datasheet that mirrors the rest of the site's editorial language.
-const SPEC_ROWS: Array<{ label: string; value: string }> = [
-  { label: "Now", value: "Available · Replies in 24 hrs" },
-  { label: "Mode", value: "Remote · Freelance + Roles" },
-  { label: "Voice", value: "EN · ES · IT" },
-  { label: "Region", value: "Ocean Shores, WA" },
+const FOOTER_CONTACTS: Array<{
+  external?: boolean;
+  href: string;
+  kind: string;
+  label: string;
+}> = [
+  { href: EMAIL_MAILTO, kind: "Email", label: EMAIL_DISPLAY },
+  { href: PHONE_TEL, kind: "Phone", label: PHONE_DISPLAY },
+  { external: true, href: GITHUB_URL, kind: "GitHub", label: "belonsavon-sys" },
+  ...(LINKEDIN_URL
+    ? [
+        {
+          external: true,
+          href: LINKEDIN_URL,
+          kind: "LinkedIn",
+          label: "Pierre Belon Savon",
+        },
+      ]
+    : []),
 ];
 
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
-
-type FooterCommit = { sha: string; subject: string; when: string };
-
-function readFooterRecent(): FooterCommit[] {
-  try {
-    const raw = process.env.NEXT_PUBLIC_BUILD_RECENT_COMMITS;
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed.slice(0, 3) : [];
-  } catch {
-    return [];
-  }
-}
-
-/**
- * Footer build-stats stripe — live counts derived from BUILD_*
- * env vars baked at compile time. Sits beneath the hero callout
- * and above the editorial footer columns on every page.
- */
-function FooterBuildStatsStripe() {
-  const commits = process.env.NEXT_PUBLIC_BUILD_COMMIT_COUNT ?? "";
-  const prs = process.env.NEXT_PUBLIC_BUILD_PR_COUNT ?? "";
-  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
-  const sha = (process.env.NEXT_PUBLIC_BUILD_SHA ?? "").slice(0, 7);
-
-  function freshness(iso?: string): string {
-    if (!iso) return "fresh";
-    const then = new Date(iso).getTime();
-    if (Number.isNaN(then)) return "fresh";
-    const mins = Math.max(0, Math.round((Date.now() - then) / 60000));
-    if (mins < 1) return "just now";
-    if (mins < 60) return `${mins} min ago`;
-    const hours = Math.round(mins / 60);
-    if (hours < 24) return `${hours} h ago`;
-    const days = Math.round(hours / 24);
-    return `${days} d ago`;
-  }
-
-  const items: Array<{ key: string; pulse?: boolean; value: string }> = [
-    { key: "Commits", value: commits ? `${commits} on main` : "many" },
-    { key: "PRs merged", value: prs ? `${prs} · all reviewed` : "200+" },
-    { key: "Routes", value: "9 · all editorial" },
-    { key: "Last ship", pulse: true, value: `${freshness(buildTime)} · ${sha || "dev"}` },
-  ];
-
-  return (
-    <div className="overflow-hidden rounded-xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.55)] backdrop-blur-sm">
-      <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
-        <span className="relative inline-flex h-2 w-2">
-          <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-          <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
-        </span>
-        <span>~/build-stats</span>
-        <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.18)]" />
-        <span className="text-text-dark-muted">live · derived from git</span>
-      </div>
-      <ul className="grid grid-cols-2 divide-y divide-[rgba(91,155,244,0.12)] sm:grid-cols-4 sm:divide-x sm:divide-y-0">
-        {items.map((item, index) => (
-          <li
-            className="flex flex-col gap-1 px-4 py-3 sm:px-5 sm:py-4"
-            key={item.key}
-          >
-            <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
-              <span className="text-text-dark-muted/60">// </span>
-              {String(index + 1).padStart(2, "0")} {item.key}
-            </span>
-            <span className="flex items-center gap-2 font-mono text-[13px] leading-6 text-text-dark sm:text-sm">
-              {item.pulse ? (
-                <span className="relative inline-flex h-1.5 w-1.5">
-                  <span className="absolute inset-0 animate-ping rounded-full bg-result-green/60" />
-                  <span className="relative inline-block h-1.5 w-1.5 rounded-full bg-result-green" />
-                </span>
-              ) : null}
-              <span className="truncate">{item.value}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 export function SiteFooter() {
   const reduce = useReducedMotion();
@@ -142,254 +62,171 @@ export function SiteFooter() {
         };
 
   return (
-    <section className="relative overflow-hidden bg-bg-dark py-24 text-text-dark sm:py-28">
-      {/* Giant ghost "LET'S TALK" — same parallax treatment as before,
-          but moved off-center so the editorial grid breathes. */}
+    <footer
+      className="relative overflow-hidden bg-bg-dark py-16 text-text-dark sm:py-20"
+    >
+      {/* Slow VHS-style scan line for ambient life */}
+      <span aria-hidden="true" className="glitch-bar" />
+
+      {/* Big ghost watermark — TALK in stroked outline behind content */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-1/3 -z-0 flex justify-center overflow-hidden"
+        className="pointer-events-none absolute inset-x-0 top-1/4 -z-0 flex justify-center overflow-hidden"
       >
         <ParallaxGhost
           className="select-none font-bold leading-[0.85] tracking-tighter"
           style={{
-            WebkitTextStroke: "1.5px rgba(91,155,244,0.22)",
             color: "transparent",
-            fontSize: "clamp(5rem, 18vw, 18rem)",
+            fontSize: "clamp(5rem, 18vw, 16rem)",
+            WebkitTextStroke: "1.5px rgba(91,155,244,0.18)",
           }}
         >
-          LET&apos;S TALK
+          TALK.
         </ParallaxGhost>
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-7xl grid-cols-12 gap-x-6 gap-y-12 px-4 sm:px-6 lg:gap-x-8 lg:px-8">
-        {/* TOP STRIP — status pill + chapter mark.
-            Mirrors the editorial top-strip used across every page. */}
+      <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 sm:px-6 lg:px-8">
+        {/* LIVE STATUS LINE — editorial byline, no pulse */}
         <motion.div
-          className="col-span-12 flex flex-wrap items-center gap-3"
-          initial={reduce ? false : { opacity: 0, y: 16 }}
-          transition={{ duration: 0.5, ease: easeOut }}
-          viewport={{ amount: 0.4, once: true }}
-          whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+          className="flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[13px] text-accent-light"
+          {...fadeUp(0)}
         >
-          <LiveStatusBadge label="Available now · replies in 24 hrs" />
-          <span aria-hidden="true" className="h-px w-12 bg-accent-light/40" />
-          <span className="font-mono text-[11px] uppercase tracking-[0.32em] text-text-dark-muted">
-            06 / Outro
-          </span>
+          <span className="text-result-green">online</span>
+          <span aria-hidden="true" className="text-text-dark-muted/60">—</span>
+          <FooterLocalClock />
+          <span aria-hidden="true" className="text-text-dark-muted/60">—</span>
+          <span>open to work</span>
         </motion.div>
 
-        {/* LEFT — stacked massive headline (cols 1–8 lg).
-            Each line breaks intentionally, mirroring the home hero
-            name treatment. Last line catches the gradient sweep. */}
-        <motion.div className="col-span-12 lg:col-span-8" {...fadeUp(0.08)}>
-          <h2
-            className="font-semibold tracking-tight text-text-dark"
-            style={{
-              fontSize: "clamp(2.75rem, 10vw, 8.5rem)",
-              letterSpacing: "-0.055em",
-              lineHeight: 0.88,
-            }}
-          >
-            <span className="block">
-              <SplitText charDelay={0.025} delay={0.18} duration={0.85}>
-                {"Let's build"}
-              </SplitText>
-            </span>
-            <span className="block">
-              <SplitText charDelay={0.025} delay={0.36} duration={0.85}>
-                something
-              </SplitText>
-            </span>
-            <span className="gradient-shift-dark block">
-              <SplitText charDelay={0.025} delay={0.52} duration={0.85}>
-                that ships.
-              </SplitText>
-            </span>
-          </h2>
+        {/* HEADLINE — scramble + auto-glitch, big and present */}
+        <motion.h2
+          className="auto-glitch font-semibold tracking-tight text-text-dark"
+          style={{
+            fontFamily:
+              "var(--font-display), var(--font-geist-sans), system-ui, sans-serif",
+            fontSize: "clamp(2.75rem, 9vw, 6.5rem)",
+            fontVariationSettings: '"wdth" 90, "opsz" 96',
+            fontWeight: 700,
+            letterSpacing: "-0.055em",
+            lineHeight: 0.94,
+          }}
+          {...fadeUp(0.06)}
+        >
+          <TextScramble
+            durationMs={1300}
+            stepMs={50}
+            text="Let's build something."
+          />
+        </motion.h2>
 
-          {/* Sub kicker — mono accent rule + accent text */}
-          <div className="mt-8 flex items-center gap-3">
-            <span aria-hidden="true" className="h-px w-10 bg-accent-light" />
-            <p className="font-mono text-xs uppercase tracking-[0.32em] text-accent-light sm:text-sm">
-              Closing frame · let&apos;s talk
-            </p>
-          </div>
-
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-text-dark-muted sm:text-xl sm:leading-9">
-            AI automation, a full-stack build, or an agent harness —
-            available for remote roles and freelance projects.
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Button arrow className="!px-8 !py-4 !text-base" href="/contact">
-              Get in Touch
-            </Button>
-            <Button
-              className="!px-8 !py-4 !text-base"
-              href="/resume"
-              variant="ghostDark"
-            >
-              View Resume
-            </Button>
-          </div>
-        </motion.div>
-
-        {/* RIGHT — mono spec datasheet (cols 9–12 lg). Mirrors the
-            ~/now-style datasheets used on /resume. */}
+        {/* CTA pair — btn-techy adds breathing glow + hover scanline */}
         <motion.div
-          className="col-span-12 self-end lg:col-span-4"
+          className="flex flex-wrap items-center gap-3"
+          {...fadeUp(0.12)}
+        >
+          <Button
+            arrow
+            className="btn-techy !px-6 !py-3 !text-sm"
+            href="/resume#contact"
+          >
+            Let&apos;s talk
+          </Button>
+          <Button
+            className="btn-techy !px-6 !py-3 !text-sm"
+            href="/resume"
+            variant="ghostDark"
+          >
+            Read my résumé
+          </Button>
+        </motion.div>
+
+        {/* DIRECT CONTACT GRID — 2×2 chunky contact cards. Replaces the
+            prior compact pill row so each method gets a real moment. */}
+        <motion.div
+          className="grid gap-3 border-t border-[rgba(91,155,244,0.18)] pt-7 sm:grid-cols-2"
           {...fadeUp(0.18)}
         >
-          <div className="overflow-hidden rounded-xl border border-[rgba(91,155,244,0.20)] bg-[rgba(15,23,42,0.55)] backdrop-blur-sm">
-            <div className="flex items-center gap-3 border-b border-[rgba(91,155,244,0.18)] bg-[rgba(91,155,244,0.06)] px-5 py-3 font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
-              <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
-              <span>~/now</span>
-              <span aria-hidden="true" className="h-px flex-1 bg-[rgba(91,155,244,0.20)]" />
-              <span className="text-text-dark-muted">
-                {SPEC_ROWS.length} signals
-              </span>
-            </div>
-            <ul className="grid">
-              {SPEC_ROWS.map((row, index) => (
-                <li
-                  className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-[rgba(91,155,244,0.12)] px-5 py-3 first:border-t-0"
-                  key={row.label}
-                >
-                  <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
-                    <span className="text-text-dark-muted/60">// </span>
-                    {String(index + 1).padStart(2, "0")} {row.label}
-                  </span>
-                  <span className="text-right font-mono text-[12.5px] leading-6 text-text-dark">
-                    {row.value}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </motion.div>
-
-        {/* BUILD STATS STRIP — live signal from BUILD env vars.
-            Sits between the hero callout and the editorial footer
-            below; mirrors the ~/cadence stripe on /now. */}
-        <motion.div className="col-span-12" {...fadeUp(0.22)}>
-          <FooterBuildStatsStripe />
-        </motion.div>
-
-        {/* BOTTOM STRIP — full-width editorial footer.
-            Four columns of editorial signal: Name / Pages / Direct /
-            Last shipped. Replaces the generic 3-col centered footer. */}
-        <motion.footer
-          aria-label="Footer"
-          className="col-span-12 mt-8 border-t border-[rgba(91,155,244,0.20)] pt-10"
-          {...fadeUp(0.28)}
-        >
-          <div className="grid grid-cols-12 gap-x-6 gap-y-10 lg:gap-x-8">
-            <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
-                <span className="text-text-dark-muted/60">// </span>
-                Identity
-              </p>
-              <p className="mt-3 font-semibold tracking-tight text-text-dark">
-                Pierre Belon Savon
-              </p>
-              <p className="mt-1 text-sm text-text-dark-muted">
-                AI Engineer · Ocean Shores, WA
-              </p>
-            </div>
-
-            <nav
-              aria-label="Footer pages"
-              className="col-span-12 sm:col-span-6 lg:col-span-3"
+          {FOOTER_CONTACTS.map((contact) => (
+            <a
+              aria-label={`${contact.kind} — ${contact.label}`}
+              className="group/c flex items-center justify-between gap-4 rounded-lg border border-[rgba(91,155,244,0.22)] bg-[rgba(15,23,42,0.4)] px-5 py-4 transition-[border-color,background,box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:border-accent-light/55 hover:bg-[rgba(91,155,244,0.12)] hover:shadow-[0_0_0_1px_rgba(91,155,244,0.35),0_22px_44px_-20px_rgba(91,155,244,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light"
+              href={contact.href}
+              key={contact.kind}
+              rel={contact.external ? "noreferrer" : undefined}
+              target={contact.external ? "_blank" : undefined}
             >
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
-                <span className="text-text-dark-muted/60">// </span>
-                Pages
-              </p>
-              <ul className="mt-3 grid gap-2 text-sm text-text-dark-muted">
-                {FOOTER_LINKS.map((link, index) => (
-                  <li className="flex items-baseline gap-2" key={link.href}>
-                    <span
-                      aria-hidden="true"
-                      className="shrink-0 font-mono text-[10px] text-accent-light/60 tabular-nums"
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <Link
-                      className="link-underline inline-block transition-colors hover:text-text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
-                      href={link.href}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
-                <span className="text-text-dark-muted/60">// </span>
-                Direct
-              </p>
-              <ul className="mt-3 grid gap-2 text-sm text-text-dark-muted">
-                {FOOTER_CONTACTS.map((contact) => (
-                  <li className="flex items-baseline gap-2" key={contact.label}>
-                    <span
-                      aria-hidden="true"
-                      className="shrink-0 font-mono text-accent-light/70"
-                    >
-                      &gt;
-                    </span>
-                    <a
-                      className="link-underline inline-block break-words transition-colors hover:text-text-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
-                      href={contact.href}
-                      rel={contact.external ? "noreferrer" : undefined}
-                      target={contact.external ? "_blank" : undefined}
-                    >
-                      {contact.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="col-span-12 sm:col-span-6 lg:col-span-3">
-              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-accent-light">
-                <span className="text-text-dark-muted/60">// </span>
-                Last shipped
-              </p>
-              <div className="mt-3">
-                <LastShipped />
+              <div className="min-w-0">
+                <p className="font-mono text-[12px] text-accent-light/85">
+                  {contact.kind.toLowerCase()}
+                </p>
+                <p className="mt-2 truncate font-mono text-sm text-text-dark sm:text-[15px]">
+                  {contact.label}
+                </p>
               </div>
-              <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-text-dark-muted">
-                Press{" "}
-                <kbd className="mx-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-md border border-accent/40 bg-[rgba(41,110,214,0.15)] px-1 text-[10px] font-semibold text-accent-light">
-                  ?
-                </kbd>{" "}
-                for shortcuts
-              </p>
-            </div>
-          </div>
+              <span
+                aria-hidden="true"
+                className="shrink-0 font-mono text-base text-accent-light/70 transition-transform duration-200 group-hover/c:translate-x-1"
+              >
+                {contact.external ? "↗" : "→"}
+              </span>
+            </a>
+          ))}
+        </motion.div>
 
-          {/* CREDITS ROLL — final cinematic seam. A thin accent rule with
-              centered "© 2026 · END" marker, the seam the eye lands on
-              before the page truly ends. */}
-          <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-[rgba(91,155,244,0.12)] pt-6">
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-text-dark-muted">
-              © 2026 Pierre Belon Savon
-            </p>
-            <div
-              aria-hidden="true"
-              className="hidden flex-1 items-center gap-3 sm:flex"
+        {/* PAGES — single-line link row, editorial */}
+        <motion.nav
+          aria-label="Footer pages"
+          className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[13px] text-text-dark-muted"
+          {...fadeUp(0.24)}
+        >
+          {FOOTER_LINKS.map((link) => (
+            <Link
+              className="transition-colors hover:text-accent-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent-light"
+              href={link.href}
+              key={link.href}
             >
-              <span className="h-px flex-1 bg-[rgba(91,155,244,0.12)]" />
-            </div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-accent-light">
-              <span className="text-text-dark-muted/60">// </span>
-              End of feed
-            </p>
-          </div>
-        </motion.footer>
+              {link.label}
+            </Link>
+          ))}
+        </motion.nav>
+
+        {/* COPYRIGHT + Last shipped */}
+        <motion.div
+          className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-[rgba(91,155,244,0.12)] pt-6"
+          {...fadeUp(0.3)}
+        >
+          <p className="font-mono text-[12px] text-text-dark-muted">
+            © 2026 Pierre Belon Savon
+          </p>
+          <LastShipped />
+        </motion.div>
       </div>
-    </section>
+    </footer>
   );
+}
+
+/**
+ * Live local clock in the footer — Pacific time, updates every 30s.
+ * Returns a static "Pacific time" until mount to avoid SSR mismatch.
+ */
+function FooterLocalClock() {
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    const tick = () => setNow(new Date());
+    tick();
+    const id = window.setInterval(tick, 30_000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const label = now
+    ? new Intl.DateTimeFormat("en-US", {
+        hour: "numeric",
+        hour12: true,
+        minute: "2-digit",
+        timeZone: "America/Los_Angeles",
+      }).format(now) + " PT"
+    : "Pacific time";
+
+  return <span className="text-accent-light">{label}</span>;
 }
