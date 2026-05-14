@@ -5,9 +5,10 @@ import {
   Button,
   ChapterRail,
   GlitchTitle,
+  HeroSplitTitle,
   ParallaxGhost,
+  ShipFlow,
   SiteFooter,
-  TextScramble,
 } from "@/components";
 
 const ATLAS_LAYERS: AtlasHierarchyLayer[] = [
@@ -105,13 +106,7 @@ export default function AtlasPage() {
             }}
           >
             <span className="relative inline-block">
-              <span className="gradient-shift inline-block">
-                <TextScramble
-                  durationMs={1400}
-                  stepMs={55}
-                  text="A harness that ships."
-                />
-              </span>
+              <HeroSplitTitle text="A harness that ships." />
               <span
                 aria-hidden="true"
                 className="absolute -bottom-3 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"
@@ -177,134 +172,9 @@ export default function AtlasPage() {
         eyebrow="Workflow"
         id="workflow"
         meta="// brief → spec → build → ship → operate"
-        title="How it ships."
+        title="How I ship."
       >
-        <ol className="grid divide-y divide-border-light border-y border-border-light">
-          {[
-            {
-              body: "I drop a brief into Atlas. The CEO agent reads it and within minutes routes the work to the right C-suite agent (CFO for scope, CMO for voice, or both).",
-              timing: "~10 min",
-              verb: "Brief",
-            },
-            {
-              body: "A spec PR lands first — research, design choices, acceptance criteria. I review the spec before any code gets written.",
-              timing: "~1 day",
-              verb: "Spec",
-            },
-            {
-              body: "Manager agents break my approved spec into tickets. Field agents claim them, write the code, and run tests locally.",
-              timing: "per ticket",
-              verb: "Build",
-            },
-            {
-              body: "The implementation PR lands with the diff, the test results, and a Vercel preview URL. I review and merge.",
-              timing: "per PR",
-              verb: "Ship",
-            },
-            {
-              body: "Once it's live, Atlas watches the production logs. When something fires, it surfaces incidents to the manager agents and they become tickets in the same loop.",
-              timing: "always on",
-              verb: "Operate",
-            },
-          ].map((step, index) => (
-            <li
-              className="group relative grid grid-cols-12 items-baseline gap-x-4 gap-y-3 py-10 sm:py-12"
-              key={step.verb}
-            >
-              <div className="col-span-12 lg:col-span-8">
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <p className="font-mono text-[11px] text-accent">
-                    {String(index + 1).padStart(2, "0")} · Step
-                  </p>
-                  <span
-                    aria-hidden="true"
-                    className="h-px w-6 bg-border-light"
-                  />
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 font-mono text-[10px] text-accent">
-                    <span aria-hidden="true">⌛</span>
-                    {step.timing}
-                  </span>
-                </div>
-                <h3
-                  className="mt-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
-                  style={{
-                    fontSize: "clamp(3rem, 8vw, 6rem)",
-                    letterSpacing: "-0.05em",
-                    lineHeight: 0.95,
-                  }}
-                >
-                  {step.verb}
-                  <span className="text-accent">.</span>
-                </h3>
-              </div>
-              <div className="col-span-12 lg:col-span-4">
-                <p className="text-base leading-7 text-text-light-muted sm:text-lg sm:leading-8">
-                  {step.body}
-                </p>
-              </div>
-              <span
-                aria-hidden="true"
-                className="absolute inset-x-0 -bottom-px h-px origin-left scale-x-0 bg-gradient-to-r from-accent-deep via-accent to-accent-light transition-transform duration-500 ease-out group-hover:scale-x-100"
-              />
-            </li>
-          ))}
-        </ol>
-
-        {/* PROCESS LOOP DIAGRAM — visualizes the cyclical nature of the workflow */}
-        <div className="mt-12 rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-8">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <span className="font-mono text-[10px] text-accent">
-              ~/loop
-            </span>
-            <span aria-hidden="true" className="h-px w-6 bg-border-light" />
-            <span className="font-mono text-[10px] text-text-light-muted">
-              the cycle, not a line
-            </span>
-          </div>
-
-          {/* TERMINAL-STYLE DIAGRAM */}
-          <div className="mt-6 overflow-x-auto">
-            <pre className="select-none whitespace-pre font-mono text-[11px] leading-6 text-text-light-muted sm:text-xs sm:leading-7">
-              <span className="text-accent">{"  ┌──→"}</span>
-              {" brief "}
-              <span className="text-accent-light/70">{"──→"}</span>
-              {" spec "}
-              <span className="text-accent-light/70">{"──→"}</span>
-              {" build "}
-              <span className="text-accent-light/70">{"──→"}</span>
-              {" ship "}
-              <span className="text-accent-light/70">{"──→"}</span>
-              {" operate "}
-              <span className="text-accent">{"──┐"}</span>
-              {"\n"}
-              <span className="text-accent">
-                {"  │                                                                 │"}
-              </span>
-              {"\n"}
-              <span className="text-accent">
-                {"  └──────────────── incidents · learnings ←──────────────────────────┘"}
-              </span>
-            </pre>
-          </div>
-
-          <div className="mt-6 grid grid-cols-12 gap-x-6 gap-y-4">
-            <p className="col-span-12 text-sm leading-6 text-text-light-muted lg:col-span-7">
-              Atlas isn&apos;t a one-shot. Production signal — incidents,
-              latency, missing features — becomes the next brief. The harness
-              keeps looping, with humans gating every PR.
-            </p>
-            <div className="col-span-12 flex flex-wrap items-center gap-2 lg:col-span-5 lg:justify-end">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 font-mono text-[10px] text-accent">
-                <span aria-hidden="true">↻</span>
-                no waterfall
-              </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 font-mono text-[10px] text-accent">
-                <span aria-hidden="true">●</span>
-                always shipping
-              </span>
-            </div>
-          </div>
-        </div>
+        <ShipFlow />
       </AtlasSection>
 
       <ChapterRail

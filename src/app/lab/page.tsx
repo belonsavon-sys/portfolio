@@ -1,6 +1,14 @@
 "use client";
 
-import { CommitTicker, GlitchTitle, LocalAiDemo, ParallaxGhost, SiteFooter, TextScramble } from "@/components";
+import {
+  CommitTicker,
+  GlitchTitle,
+  HeroSplitTitle,
+  LocalAiDemo,
+  ParallaxGhost,
+  SiteFooter,
+  TextScramble,
+} from "@/components";
 
 // CONSOLIDATED FROM /now, /ai, /uses, /colophon
 // Consciously trimmed to one screen per section. The full source pages
@@ -283,13 +291,7 @@ function LabHero() {
           }}
         >
           <span className="relative inline-block">
-            <span className="gradient-shift inline-block">
-              <TextScramble
-                durationMs={1400}
-                stepMs={55}
-                text="The lab."
-              />
-            </span>
+            <HeroSplitTitle text="The lab." />
             <span
               aria-hidden="true"
               className="absolute -bottom-3 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"

@@ -1,7 +1,16 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { useMemo, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useMemo, useRef, useState } from "react";
+
+// Register the ScrollTrigger plugin once at module load. The SSR
+// guard prevents the registration from running during static build,
+// where `window` is undefined and the plugin's setup would throw.
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export type LayerSignatureKind =
   | "founders"
@@ -197,6 +206,99 @@ export function AtlasHierarchy({ layers }: AtlasHierarchyProps) {
   const layout = useMemo(() => buildLayout(layers), [layers]);
   const edges = useMemo(() => buildEdges(layout), [layout]);
 
+  // Datasheet rows scroll-cascade. Each <li> below the schematic
+  // assembles itself when it enters the viewport:
+  //
+  //   1. The refdes strip fades + slides up (lightest beat)
+  //   2. The title clip-paths in from the left and clears a blur —
+  //      mirrors the hero title's GSAP reveal pattern so the section
+  //      reads as one continuous design language.
+  //   3. The body paragraph fades up
+  //   4. The three KPI tiles stagger in
+  //
+  // Timeline beats overlap with negative offsets so the cascade feels
+  // brisk, not slideshow-y. `toggleActions: play none none reverse`
+  // lets the reveal play forward on scroll-down, snap back on
+  // scroll-up — so the rows greet the reader each time, instead of
+  // baking in once and staying flat for the rest of the session.
+  const datasheetRef = useRef<HTMLOListElement | null>(null);
+  useEffect(() => {
+    if (reduce) return;
+    const ol = datasheetRef.current;
+    if (!ol) return;
+
+    const ctx = gsap.context(() => {
+      const rows = Array.from(
+        ol.querySelectorAll<HTMLLIElement>("li[data-datasheet-row]"),
+      );
+
+      rows.forEach((row) => {
+        const strip = row.querySelector('[data-row-anim="strip"]');
+        const title = row.querySelector('[data-row-anim="title"]');
+        const body = row.querySelector('[data-row-anim="body"]');
+        const kpis = row.querySelectorAll('[data-row-anim="kpi"]');
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            start: "top 82%",
+            toggleActions: "play none none reverse",
+            trigger: row,
+          },
+        });
+
+        if (strip) {
+          tl.fromTo(
+            strip,
+            { opacity: 0, y: 8 },
+            { duration: 0.5, ease: "power3.out", opacity: 1, y: 0 },
+          );
+        }
+        if (title) {
+          tl.fromTo(
+            title,
+            {
+              clipPath: "inset(0 100% 0 0)",
+              filter: "blur(6px)",
+              y: 12,
+            },
+            {
+              clipPath: "inset(0 0% 0 0)",
+              duration: 0.95,
+              ease: "power3.out",
+              filter: "blur(0px)",
+              y: 0,
+            },
+            "-=0.3",
+          );
+        }
+        if (body) {
+          tl.fromTo(
+            body,
+            { opacity: 0, y: 16 },
+            { duration: 0.7, ease: "power2.out", opacity: 1, y: 0 },
+            "-=0.55",
+          );
+        }
+        if (kpis.length > 0) {
+          tl.fromTo(
+            kpis,
+            { opacity: 0, y: 18 },
+            {
+              duration: 0.55,
+              ease: "power2.out",
+              opacity: 1,
+              stagger: 0.08,
+              y: 0,
+            },
+            "-=0.45",
+          );
+        }
+      });
+    }, datasheetRef);
+
+    return () => ctx.revert();
+  }, [reduce, layout]);
+
   return (
     <div>
       {/* HEADER STRIP — minimal silkscreen */}
@@ -264,97 +366,135 @@ export function AtlasHierarchy({ layers }: AtlasHierarchyProps) {
         </svg>
       </div>
 
-      {/* Datasheet caption */}
-      <div className="mt-10 mb-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-        <span className="font-mono text-[10px] tracking-[0.2em] text-accent">
-          — DATASHEET
-        </span>
-        <span className="font-mono text-[11px] text-text-light-muted">
-          per-layer spread · 5 of 5
-        </span>
-        <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-        <span className="font-mono text-[11px] text-text-light-muted">
-          hover a row → highlight in schematic ↑
-        </span>
+      {/* Section caption — engineering datasheet header. Two mono
+          strips: title + sheet metadata. Matches the schematic's
+          silkscreen vocabulary. */}
+      <div className="mt-16 mb-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 font-mono text-[11px] text-text-light-muted">
+          <span>
+            <span className="text-accent">—</span> atlas · datasheet ·
+            layers
+          </span>
+          <span>sheets 01–05 / rev a · hover → highlight ↑</span>
+        </div>
+        <div className="mt-3 flex items-center gap-3">
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+          <span
+            className="font-semibold tracking-tight text-text-light"
+            style={{
+              fontFamily:
+                "ui-monospace, var(--font-geist-mono), monospace",
+              fontSize: "clamp(1.5rem, 2.4vw, 2.25rem)",
+              letterSpacing: "-0.025em",
+              lineHeight: 1,
+            }}
+          >
+            the layers<span className="text-accent">.</span>
+          </span>
+          <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
+        </div>
       </div>
 
-      {/* Layer legend — each row is an editorial "spread" for one
-          layer: big display title on the left, narrative in the
-          middle, and a grid of styled node cards on the right that
-          mirror the schematic above. */}
-      <ol className="overflow-hidden rounded-2xl border border-border-light bg-bg-light">
+      {/* Layer datasheet — each row is a spec-sheet entry for one
+          layer. Top strip carries the refdes that links it back to
+          the schematic. Title in mono lowercase like the engine
+          chip's `Atlas v3`. Description on the left in body sans for
+          readability. Right pane is a quiet 3-cell stat block: big
+          mono values + tiny mono labels, no live framing. */}
+      <ol className="border-y border-border-light" ref={datasheetRef}>
         {layout.map((row, i) => {
           const isActive = activeRow === i;
-          const nodes = LAYER_NODE_INFO[i] ?? [];
-          const nCols = nodes.length === 1
-            ? "grid-cols-1"
-            : nodes.length === 2
-              ? "grid-cols-2"
-              : nodes.length === 3
-                ? "grid-cols-1 sm:grid-cols-3"
-                : "grid-cols-2";
+          const telemetry = LAYER_TELEMETRY[i];
+          const refdes = LAYER_REFDES[i] ?? row.badge;
           return (
             <li
-              className={`group relative grid cursor-default grid-cols-12 gap-x-6 gap-y-5 border-border-light px-6 py-8 transition-colors duration-200 sm:px-8 sm:py-9 ${
-                i > 0 ? "border-t" : ""
-              } ${isActive ? "bg-bg-light-2" : "hover:bg-bg-light-2"}`}
+              className={`relative cursor-default border-b border-border-light px-2 py-10 transition-colors duration-300 last:border-b-0 sm:px-4 sm:py-12 ${
+                isActive ? "bg-bg-light-2/70" : "hover:bg-bg-light-2/40"
+              }`}
+              data-datasheet-row
               key={row.badge}
               onMouseEnter={() => setActiveRow(i)}
               onMouseLeave={() => setActiveRow(null)}
             >
-              {/* Accent stripe on the left edge — gradient blue → green,
-                  goes full-opacity when the row is active */}
-              <span
-                aria-hidden="true"
-                className={`absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-accent to-result-green transition-opacity duration-200 ${
-                  isActive ? "opacity-100" : "opacity-40"
-                }`}
-              />
+              {/* TOP STRIP — refdes only. */}
+              <div
+                className="font-mono text-[11px]"
+                data-row-anim="strip"
+              >
+                <span className="text-accent">
+                  <span className="text-text-light-muted">[</span>
+                  {row.badge.padStart(2, "0")}
+                  <span className="text-text-light-muted"> · </span>
+                  {refdes}
+                  <span className="text-text-light-muted">]</span>
+                </span>
+              </div>
 
-              {/* LEFT — index + big editorial title + node count */}
-              <header className="col-span-12 sm:col-span-3">
-                <div className="font-mono text-[11px] tracking-[0.15em] text-accent">
-                  {row.badge} ─── L{Number(row.badge)}
-                </div>
-                <h3
-                  className="mt-3 font-semibold tracking-tight text-text-light"
+              {/* TITLE — mono lowercase, big. Matches the engine
+                  chip's typography so the datasheet reads as a series
+                  of "chip pages." */}
+              <h4
+                className="mt-4 font-semibold tracking-tight text-text-light"
+                data-row-anim="title"
+                style={{
+                  fontFamily:
+                    "ui-monospace, var(--font-geist-mono), monospace",
+                  fontSize: "clamp(1.875rem, 3.6vw, 3rem)",
+                  letterSpacing: "-0.035em",
+                  lineHeight: 1,
+                }}
+              >
+                {row.title.toLowerCase()}
+                <span className="text-accent">.</span>
+              </h4>
+
+              <div className="mt-6 grid grid-cols-12 gap-x-8 gap-y-6">
+                {/* LEFT — body description in sans (readability) */}
+                <p
+                  className="col-span-12 text-[15px] leading-[1.7] text-text-light-muted sm:col-span-7 sm:text-[16px] sm:leading-[1.65]"
+                  data-row-anim="body"
                   style={{
-                    fontFamily: "var(--font-display), var(--font-geist-sans)",
-                    fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
-                    letterSpacing: "-0.035em",
-                    lineHeight: 0.95,
+                    fontFamily:
+                      "var(--font-geist-sans), system-ui, sans-serif",
                   }}
                 >
-                  {row.title.toLowerCase()}
-                  <span className="text-accent">.</span>
-                </h3>
-                <div className="mt-3 flex items-center gap-2 font-mono text-[10px] text-text-light-muted">
-                  <span className="inline-flex items-center gap-1">
-                    {Array.from({ length: row.nodes.length }).map((_, j) => (
-                      <span
-                        aria-hidden="true"
-                        className="h-1.5 w-1.5 rounded-full bg-accent/70"
-                        key={j}
-                      />
-                    ))}
-                  </span>
-                  <span>
-                    {row.nodes.length}{" "}
-                    {row.nodes.length === 1 ? "node" : "nodes"} · depth {i}
-                  </span>
-                </div>
-              </header>
+                  {row.description}
+                </p>
 
-              {/* MIDDLE — long-form description */}
-              <p className="col-span-12 text-sm leading-7 text-text-light-muted sm:col-span-4 sm:text-[15px] sm:leading-8">
-                {row.description}
-              </p>
-
-              {/* RIGHT — styled node cards that mirror the schematic */}
-              <div className={`col-span-12 grid ${nCols} gap-2 sm:col-span-5`}>
-                {nodes.map((n) => (
-                  <LegendNodeCard key={n.name} node={n} />
-                ))}
+                {/* RIGHT — at-a-glance numbers panel. Three tiles
+                    divided by hairlines: big mono value + a tiny mono
+                    label below. No status header, no dashboard
+                    framing — just a quiet stat block grounding each
+                    layer with concrete numbers. */}
+                {telemetry ? (
+                  <div className="col-span-12 sm:col-span-5">
+                    <div className="grid grid-cols-3 divide-x divide-border-light border-y border-border-light">
+                      {telemetry.kpis.map((kpi) => (
+                        <div
+                          className="px-3 py-4"
+                          data-row-anim="kpi"
+                          key={kpi.label}
+                        >
+                          <div
+                            className="font-bold tracking-tight text-text-light"
+                            style={{
+                              fontFamily:
+                                "ui-monospace, var(--font-geist-mono), monospace",
+                              fontSize: "clamp(1.25rem, 1.8vw, 1.75rem)",
+                              letterSpacing: "-0.02em",
+                              lineHeight: 1,
+                            }}
+                          >
+                            {kpi.value}
+                          </div>
+                          <div className="mt-2 font-mono text-[9.5px] leading-snug text-text-light-muted">
+                            {kpi.label}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </div>
             </li>
           );
@@ -522,43 +662,67 @@ function primaryFor(
   return label;
 }
 
-// ─────────────────────────────────────────────────────────────────────
-// LAYER NODE INFO — one entry per node in each layer. Drives the row
-// of small "node cards" on the right side of each legend row. Each
-// card mirrors a node in the schematic above, so the layout reads as
-// a typed spec for that layer.
-// ─────────────────────────────────────────────────────────────────────
-
-type LegendNode = {
-  initial?: string;
-  name: string;
-  status?: "live" | "core";
-  sub?: string;
+// Per-layer designator that gets stamped on the datasheet row's top
+// silkscreen strip. Mirrors the engineering vocabulary the schematic
+// uses for its components (J = connector / jack, U = chip, OUT =
+// output rail). Founders are the "input connector" to the harness;
+// engine is the main IC; c-suite/execution are auxiliary chips; the
+// products are the output rails.
+const LAYER_REFDES: Record<number, string> = {
+  0: "J1",
+  1: "U1",
+  2: "U2..U4",
+  3: "U5..U6",
+  4: "OUT1..4",
 };
 
-const LAYER_NODE_INFO: Record<number, LegendNode[]> = {
-  0: [
-    { initial: "P", name: "Pierre", sub: "AI R&D · harness" },
-    { initial: "R", name: "Ryder", sub: "business · strategy" },
-  ],
-  1: [
-    { name: "Atlas v3", status: "core", sub: "atlas-mk3 · v3.0.4" },
-  ],
-  2: [
-    { name: "CEO", sub: "reads brief · routes work" },
-    { name: "CFO", sub: "scope · capacity · budget" },
-    { name: "CMO", sub: "voice · channel · tone" },
-  ],
-  3: [
-    { name: "Managers", sub: "spec → tickets · assigns" },
-    { name: "Field agents", sub: "code · tests · PRs" },
-  ],
-  4: [
-    { name: "Game app", status: "live", sub: "shipping" },
-    { name: "Budget app", status: "live", sub: "shipping" },
-    { name: "PM system", status: "live", sub: "agent-augmented" },
-    { name: "Hotel ops", status: "live", sub: "thePrivateHotels" },
-  ],
+// ─────────────────────────────────────────────────────────────────────
+// LAYER STATS — three at-a-glance numbers per layer. No "live" framing
+// and no dashboard chrome — these are concrete facts about each layer
+// of the harness, presented as a small spec block.
+// ─────────────────────────────────────────────────────────────────────
+
+type LayerKpi = { label: string; value: string };
+type LayerTelemetry = {
+  kpis: LayerKpi[];
+};
+
+const LAYER_TELEMETRY: Record<number, LayerTelemetry> = {
+  0: {
+    kpis: [
+      { label: "humans on staff", value: "2" },
+      { label: "employees", value: "0" },
+      { label: "roles", value: "2" },
+    ],
+  },
+  1: {
+    kpis: [
+      { label: "version", value: "v3" },
+      { label: "layers managed", value: "5" },
+      { label: "products powered", value: "3" },
+    ],
+  },
+  2: {
+    kpis: [
+      { label: "agents", value: "3" },
+      { label: "tier", value: "strategic" },
+      { label: "audit log", value: "all" },
+    ],
+  },
+  3: {
+    kpis: [
+      { label: "tiers", value: "2" },
+      { label: "PR gate", value: "human-reviewed" },
+      { label: "test coverage", value: "100%" },
+    ],
+  },
+  4: {
+    kpis: [
+      { label: "apps shipped", value: "4" },
+      { label: "client-facing", value: "4 / 4" },
+      { label: "deployments", value: "per PR" },
+    ],
+  },
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -1132,115 +1296,3 @@ function CascadeDot({
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────
-// LEGEND NODE CARD — the small styled card that mirrors a schematic
-// node in the legend's right column. Variants:
-// • monogram (founders) — avatar disc + name + role
-// • core    (engine)    — dark "chip" treatment with silkscreen-style
-//                         caption and pulsing green LED
-// • live    (products)  — LIVE badge with pulsing dot
-// • default (agents)    — clean accent-bordered card
-// ─────────────────────────────────────────────────────────────────────
-
-function LegendNodeCard({ node }: { node: LegendNode }) {
-  const isCore = node.status === "core";
-  const isLive = node.status === "live";
-  const hasInitial = Boolean(node.initial);
-
-  if (hasInitial) {
-    return (
-      <div className="flex items-center gap-3 rounded-xl border border-accent/30 bg-bg-light px-3 py-3 transition-colors duration-200 hover:border-accent/60">
-        <span
-          aria-hidden="true"
-          className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-text-light font-mono text-[14px] font-bold text-bg-light-2 shadow-[0_2px_6px_rgba(15,23,42,0.18)]"
-        >
-          <span
-            aria-hidden="true"
-            className="absolute -inset-1 rounded-full bg-accent/10"
-          />
-          <span className="relative">{node.initial}</span>
-        </span>
-        <div className="min-w-0 flex-1">
-          <div className="truncate font-mono text-[13px] font-semibold text-text-light">
-            {node.name}
-          </div>
-          {node.sub ? (
-            <div className="mt-0.5 truncate font-mono text-[10px] text-text-light-muted">
-              {node.sub}
-            </div>
-          ) : null}
-        </div>
-      </div>
-    );
-  }
-
-  if (isCore) {
-    return (
-      <div
-        className="relative overflow-hidden rounded-xl border border-text-light/30 bg-text-light px-3 py-3 text-bg-light-2"
-        style={{
-          boxShadow:
-            "0 8px 20px -8px rgba(15,23,42,0.4), inset 0 0 0 1px rgba(255,255,255,0.06)",
-        }}
-      >
-        {/* Soft engine glow behind the card */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -inset-6 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.16),transparent_60%)]"
-        />
-        <div className="relative flex items-center gap-2">
-          <span className="font-mono text-[9.5px] text-text-dark-muted">
-            U1 · atlas-mk3
-          </span>
-          <span aria-hidden="true" className="h-px flex-1 bg-white/10" />
-          <span
-            aria-hidden="true"
-            className="atlas-engine-heartbeat inline-block h-2 w-2 rounded-full bg-result-green"
-            style={{
-              filter:
-                "drop-shadow(0 0 4px rgba(16,185,129,0.9)) drop-shadow(0 0 10px rgba(16,185,129,0.45))",
-            }}
-          />
-        </div>
-        <div className="relative mt-1 font-mono text-[15px] font-bold tracking-tight">
-          {node.name}
-        </div>
-        {node.sub ? (
-          <div className="relative mt-0.5 font-mono text-[10px] text-text-dark-muted">
-            {node.sub}
-          </div>
-        ) : null}
-      </div>
-    );
-  }
-
-  // default / live
-  return (
-    <div
-      className={`relative rounded-xl border bg-bg-light px-3 py-3 transition-colors duration-200 ${
-        isLive
-          ? "border-result-green/35 hover:border-result-green/70"
-          : "border-accent/30 hover:border-accent/60"
-      }`}
-    >
-      {isLive ? (
-        <span className="absolute right-2.5 top-2.5 inline-flex items-center gap-1 font-mono text-[8.5px] font-bold tracking-[0.14em] text-result-green">
-          <span
-            aria-hidden="true"
-            className="atlas-engine-heartbeat inline-block h-1.5 w-1.5 rounded-full bg-result-green"
-            style={{ filter: "drop-shadow(0 0 3px rgba(16,185,129,0.6))" }}
-          />
-          LIVE
-        </span>
-      ) : null}
-      <div className="font-mono text-[13px] font-semibold text-text-light">
-        {node.name}
-      </div>
-      {node.sub ? (
-        <div className="mt-0.5 font-mono text-[10px] text-text-light-muted">
-          {node.sub}
-        </div>
-      ) : null}
-    </div>
-  );
-}

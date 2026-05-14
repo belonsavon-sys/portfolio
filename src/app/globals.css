@@ -64,6 +64,163 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* DARK MODE — flips the four "light" tokens to their dark
+ * counterparts so every existing `bg-bg-light` / `text-text-light` /
+ * `border-border-light` reference inverts automatically. The light/
+ * dark color values stay defined in :root above; we just rebind the
+ * `--*-light` variables on the body when `.dark` is active. */
+body.dark {
+  --bg-light: var(--bg-dark);
+  --bg-light-2: var(--bg-dark-2);
+  --text-light: var(--text-dark);
+  --text-light-muted: var(--text-dark-muted);
+  --border-light: rgba(148, 163, 184, 0.16);
+  --background: var(--bg-dark);
+  --foreground: var(--text-dark);
+}
+
+/* VIEW TRANSITIONS — cinematic circular reveal originating from the
+ * rocker switch when lights toggle. The switch sets two custom
+ * properties (`--toggle-cx`, `--toggle-cy`) on :root before kicking
+ * off the view transition; the new snapshot then clips itself open
+ * from those coords, like an aperture.
+ *
+ * We disable the default cross-fade on both old and new, then drive
+ * the new snapshot with a circular clip-path expanding from the
+ * switch. Falls back gracefully — browsers without
+ * `view-transition` just see the instant swap. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Direction-aware view transition. The JS toggle sets four custom
+ * properties on the documentElement BEFORE calling
+ * startViewTransition:
+ *
+ *   • dark → light (lights ON): OLD (the dark state) sits on top and
+ *     collapses inward to a point at the switch, revealing the new
+ *     light state behind it.
+ *   • light → dark (lights OFF): NEW (the dark state) sits on top and
+ *     expands outward from the switch, sweeping over the old light
+ *     state.
+ *
+ * Either way the focal point is the rocker switch, but the optical
+ * sense flips with the direction. */
+::view-transition-old(root) {
+  z-index: var(--lights-z-old, 1);
+  animation: var(--lights-anim-old, none) 720ms
+    cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+::view-transition-new(root) {
+  z-index: var(--lights-z-new, 1);
+  animation: var(--lights-anim-new, none) 720ms
+    cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes lights-clip-reveal {
+  from {
+    clip-path: circle(
+      0% at var(--toggle-cx, 50%) var(--toggle-cy, 50%)
+    );
+  }
+  to {
+    clip-path: circle(
+      160% at var(--toggle-cx, 50%) var(--toggle-cy, 50%)
+    );
+  }
+}
+
+@keyframes lights-clip-collapse {
+  from {
+    clip-path: circle(
+      160% at var(--toggle-cx, 50%) var(--toggle-cy, 50%)
+    );
+  }
+  to {
+    clip-path: circle(
+      0% at var(--toggle-cx, 50%) var(--toggle-cy, 50%)
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root),
+  ::view-transition-old(root) {
+    animation: none;
+  }
+  body {
+    transition: none;
+  }
+}
+
+/* DARK MODE — patch the hardcoded white-tinted surfaces that don't
+ * route through the `--bg-light` token (nav pill, chapter rail,
+ * back-to-top, chip rails, hover-card popovers). Without these the
+ * panels would stay paper-white floating over a dark page and read
+ * as visual leaks. We invert them to dark-slate alphas that match
+ * the new room. */
+body.dark .bg-white\/85 {
+  background-color: rgba(17, 24, 39, 0.85);
+}
+body.dark .bg-white\/80 {
+  background-color: rgba(17, 24, 39, 0.8);
+}
+body.dark .bg-white\/70 {
+  background-color: rgba(17, 24, 39, 0.7);
+}
+body.dark .bg-white\/60 {
+  background-color: rgba(17, 24, 39, 0.6);
+}
+body.dark .bg-white\/95 {
+  background-color: rgba(17, 24, 39, 0.95);
+}
+body.dark .hover\:bg-white\/85:hover {
+  background-color: rgba(17, 24, 39, 0.92);
+}
+body.dark .hover\:bg-white:hover {
+  background-color: rgba(17, 24, 39, 1);
+}
+body.dark .bg-white {
+  background-color: rgb(17, 24, 39);
+}
+
+/* DARK MODE — section headers (GlitchTitle) stay in the green-neon
+ * "hack" state at rest instead of dropping back to slate. The
+ * chromatic-aberration pop still fires every 5s and gets a brighter
+ * flash so the rhythm reads against the green resting glow.
+ *
+ * We do this by rebinding the `--gt-*-rest*` custom properties that
+ * the keyframes already reference at their 0%/71%/88%/100% beats —
+ * no separate keyframes needed. The chapter follows the title into
+ * green so the index doesn't read as the only blue thing on screen,
+ * and the line picks up an emerald gradient + soft glow. */
+body.dark .glitch-title-text {
+  --gt-text-rest: rgb(74, 222, 128);
+  --gt-text-rest-filter: drop-shadow(0 0 7px rgba(74, 222, 128, 0.35));
+}
+body.dark .glitch-title-chapter {
+  --gt-chapter-rest: rgb(74, 222, 128);
+  --gt-chapter-rest-shadow: 0 0 6px rgba(74, 222, 128, 0.4);
+}
+body.dark .glitch-title-line {
+  --gt-line-rest-bg: linear-gradient(
+    to right,
+    rgba(74, 222, 128, 0.55) 0%,
+    rgba(74, 222, 128, 0.25) 65%,
+    transparent 100%
+  );
+  --gt-line-rest-shadow: 0 0 4px rgba(74, 222, 128, 0.35);
+}
+body.dark .glitch-title-meta {
+  color: rgb(134, 239, 172);
+  text-shadow: 0 0 8px rgba(134, 239, 172, 0.55);
 }
 
 a {
@@ -729,7 +886,9 @@ a {
 .glitch-title-chapter {
   font-family: var(--font-geist-mono);
   font-size: 11px;
-  color: rgb(41, 110, 214);
+  --gt-chapter-rest: rgb(41, 110, 214);
+  --gt-chapter-rest-shadow: none;
+  color: var(--gt-chapter-rest);
   flex-shrink: 0;
   letter-spacing: 0.04em;
   animation: glitch-title-chapter 5s ease-in-out infinite;
@@ -740,7 +899,9 @@ a {
   letter-spacing: -0.035em;
   line-height: 1;
   font-size: clamp(1.75rem, 4vw, 2.75rem);
-  color: rgb(15, 23, 42);
+  --gt-text-rest: rgb(15, 23, 42);
+  --gt-text-rest-filter: none;
+  color: var(--gt-text-rest);
   position: relative;
   animation:
     glitch-title-microflicker 5s steps(1) infinite,
@@ -748,18 +909,21 @@ a {
   will-change: transform, color, filter;
 }
 .glitch-title-text-dark {
-  color: rgb(245, 248, 255);
+  --gt-text-rest: rgb(245, 248, 255);
+  color: var(--gt-text-rest);
 }
 .glitch-title-line {
   flex: 1;
   align-self: center;
   height: 1px;
-  background: linear-gradient(
+  --gt-line-rest-bg: linear-gradient(
     to right,
     rgba(15, 23, 42, 0.28) 0%,
     rgba(15, 23, 42, 0.16) 65%,
     transparent 100%
   );
+  --gt-line-rest-shadow: none;
+  background: var(--gt-line-rest-bg);
   animation: glitch-title-line 5s ease-in-out infinite;
   will-change: transform, background, box-shadow;
 }
@@ -839,8 +1003,8 @@ a {
   71%,
   88%,
   100% {
-    color: rgb(15, 23, 42);
-    filter: none;
+    color: var(--gt-text-rest, rgb(15, 23, 42));
+    filter: var(--gt-text-rest-filter, none);
   }
   72% {
     color: rgb(5, 150, 105);
@@ -871,8 +1035,8 @@ a {
   71%,
   88%,
   100% {
-    color: rgb(41, 110, 214);
-    text-shadow: none;
+    color: var(--gt-chapter-rest, rgb(41, 110, 214));
+    text-shadow: var(--gt-chapter-rest-shadow, none);
   }
   72% {
     color: rgb(5, 150, 105);
@@ -890,13 +1054,16 @@ a {
   88%,
   100% {
     transform: translateX(0);
-    background: linear-gradient(
-      to right,
-      rgba(15, 23, 42, 0.28) 0%,
-      rgba(15, 23, 42, 0.16) 65%,
-      transparent 100%
+    background: var(
+      --gt-line-rest-bg,
+      linear-gradient(
+        to right,
+        rgba(15, 23, 42, 0.28) 0%,
+        rgba(15, 23, 42, 0.16) 65%,
+        transparent 100%
+      )
     );
-    box-shadow: none;
+    box-shadow: var(--gt-line-rest-shadow, none);
   }
   72% {
     transform: translateX(-2px);
@@ -1156,6 +1323,35 @@ a {
   .marquee-track {
     animation: none;
     transform: translateX(0);
+  }
+}
+
+/* Engine chip heartbeat — small LED in the top-right of the dark
+ * Atlas chip continuously pulses scale + opacity. Wire pulses live
+ * in the SVG via <animateMotion> (SMIL) rather than CSS, because
+ * Chromium does not currently translate SVG circles via
+ * offset-path. */
+@keyframes atlas-engine-heartbeat {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.35);
+  }
+}
+
+.atlas-engine-heartbeat {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: atlas-engine-heartbeat 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-engine-heartbeat {
+    animation: none;
   }
 }
 

@@ -7,6 +7,7 @@ import {
   ChapterRail,
   CursorHalo,
   GlitchTitle,
+  HeroSplitTitle,
   IndexedDivider,
   ParallaxGhost,
   ScrollReveal,
@@ -14,7 +15,6 @@ import {
   SectionHeader,
   SiteFooter,
   Testimonial,
-  TextScramble,
 } from "@/components";
 import { useEffect } from "react";
 import type { ReactNode } from "react";
@@ -215,13 +215,7 @@ function BusinessHero() {
           }}
         >
           <span className="relative inline-block">
-            <span className="gradient-shift inline-block">
-              <TextScramble
-                durationMs={1400}
-                stepMs={55}
-                text="I ship AI."
-              />
-            </span>
+            <HeroSplitTitle text="I ship AI." />
             <span
               aria-hidden="true"
               className="absolute -bottom-3 left-0 right-0 h-1.5 rounded-full bg-gradient-to-r from-accent-deep via-accent to-accent-light opacity-50 blur-md"
