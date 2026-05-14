@@ -10,7 +10,6 @@ import {
   HeroSplitTitle,
   IndexedDivider,
   ParallaxGhost,
-  ScrollReveal,
   SectionDivider,
   SiteFooter,
   Testimonial,

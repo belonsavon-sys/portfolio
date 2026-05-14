@@ -72,17 +72,17 @@ type DeepAnchor = {
  */
 const DEEP_ANCHORS: DeepAnchor[] = [
   {
+    description: "Schematic blueprint — 5 layers from founders to shipped products",
+    href: "/atlas#hierarchy",
+    title: "Atlas hierarchy",
+  },
+  {
     description: "3 live products built end-to-end",
     href: "/atlas#products",
     title: "Atlas products",
   },
   {
-    description: "Research · Build · Ship · Govern · Operate · Reuse",
-    href: "/atlas#capabilities",
-    title: "Capabilities",
-  },
-  {
-    description: "How it ships — brief → spec → build → ship → operate",
+    description: "How I ship — brief → spec → build → ship → operate",
     href: "/atlas#workflow",
     title: "Atlas workflow",
   },

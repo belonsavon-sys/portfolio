@@ -53,7 +53,7 @@ export function LightSwitchProvider({ children }: { children: ReactNode }) {
       if (override === "on" || override === "off") {
         const next = override === "on";
         window.localStorage.setItem(STORAGE_KEY, String(next));
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+
         setIsLightsOn(next);
         return;
       }

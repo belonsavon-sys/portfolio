@@ -309,55 +309,6 @@ export function SiteHeader() {
   );
 }
 
-/**
- * Compact live-shipped mini-pill that sits on the right margin of
- * the header on lg+ breakpoints. Mirrors the home hero badge but
- * tighter — just "shipped X · sha" with the green pulse.
- */
-function HeaderLiveShipped() {
-  const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
-  const buildSha = process.env.NEXT_PUBLIC_BUILD_SHA;
-  const [now, setNow] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!buildTime) return;
-    setNow(Date.now());
-    const id = window.setInterval(() => setNow(Date.now()), 30_000);
-    return () => window.clearInterval(id);
-  }, [buildTime]);
-
-  if (!buildTime || !buildSha) return null;
-
-  const buildDate = new Date(buildTime);
-  const seconds = now
-    ? Math.max(0, Math.round((now - buildDate.getTime()) / 1000))
-    : 0;
-  const relative =
-    seconds < 60
-      ? "just now"
-      : seconds < 3600
-        ? `${Math.round(seconds / 60)} min ago`
-        : seconds < 86_400
-          ? `${Math.round(seconds / 3600)} hr ago`
-          : `${Math.round(seconds / 86_400)} d ago`;
-
-  return (
-    <span
-      aria-label={`Last shipped ${relative}, commit ${buildSha}`}
-      className="pointer-events-auto absolute right-0 hidden items-baseline gap-2 font-mono text-[12px] text-text-light-muted xl:inline-flex"
-      title={`Last shipped ${relative} · commit ${buildSha}`}
-    >
-      <span className="text-result-green">shipped {relative}</span>
-      <span aria-hidden="true" className="not-italic text-text-light-muted/40">
-        —
-      </span>
-      <span className="not-italic tabular-nums text-accent">
-        {buildSha.slice(0, 7)}
-      </span>
-    </span>
-  );
-}
-
 function NavPillItem({
   active,
   chapter,

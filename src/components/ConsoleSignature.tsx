@@ -44,7 +44,6 @@ export function ConsoleSignature() {
     const hintStyle =
       "color:#296ed6;font-size:12px;font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,monospace";
 
-    /* eslint-disable no-console */
     console.log(
       `%cPierre Belon Savon — AI Engineer\n%cBuilds intelligent automation, full-stack apps, and multi-agent harnesses.\n%c→ hiring? say hi at belonsavon@gmail.com\n%cTry pierre.help() ↓`,
       titleStyle,
@@ -131,7 +130,7 @@ export function ConsoleSignature() {
     };
 
     window.pierre = api;
-    /* eslint-enable no-console */
+
   }, []);
 
   return null;
