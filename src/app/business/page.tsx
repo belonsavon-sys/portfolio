@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  AtlasHierarchy,
   BeforeAfter,
   Button,
   ChapterRail,
@@ -35,50 +34,6 @@ const trainingOutcomes = [
   "I leave accountability that doesn't require me in the room",
 ];
 
-const blackdoorOutcomes = [
-  "I architected and shipped Atlas — not slideware",
-  "I run multi-agent pipelines across two live businesses",
-  "I co-founded Blackdoor and ship at owner-pace",
-];
-
-const atlasLayers = [
-  {
-    badge: "01",
-    description:
-      "Two co-founders set scope. Pierre handles AI R&D and implementation; Ryder runs the business side.",
-    items: ["Pierre + Ryder — co-founders"],
-    title: "Founders",
-  },
-  {
-    badge: "02",
-    description:
-      "The multi-level autonomous harness that runs the rest. Connects any AI model to any external tool through MCP or OAuth.",
-    items: ["Atlas — multi-agent harness"],
-    title: "Engine",
-  },
-  {
-    badge: "03",
-    description:
-      "Strategic-tier agents that read the brief, decide direction, and route work down to managers.",
-    items: ["CEO Agent", "CFO Agent", "CMO Agent"],
-    title: "C-suite agents",
-  },
-  {
-    badge: "04",
-    description:
-      "Manager agents break work into tasks; field agents pick them up, write the code, and file PRs against the board.",
-    items: ["Manager agents", "Field agents"],
-    title: "Execution layer",
-  },
-  {
-    badge: "05",
-    description:
-      "Real products operating in production — game, budget tracker, agent-augmented PM. Every change shipped under human review.",
-    items: ["Game app", "Budget app", "Project management"],
-    title: "Shipped products",
-  },
-];
-
 const TESTIMONIAL_BODY: string | null = null;
 const TESTIMONIAL_AUTHOR = "";
 const TESTIMONIAL_ROLE = "";
@@ -102,12 +57,6 @@ export default function BusinessPage() {
       className="min-h-screen bg-bg-light text-text-light"
     >
       <BusinessHero />
-      {/* Chapter 01 — Blackdoor */}
-      <div className="scroll-mt-28 snap-start" id="blackdoor">
-        <LightSection className="min-h-[calc(100vh-72px)] py-20 sm:py-24">
-          <BlackdoorSection />
-        </LightSection>
-      </div>
 
       {/* Chapter 02 — Process */}
       <div className="scroll-mt-28 snap-start" id="process">
@@ -160,7 +109,6 @@ export default function BusinessPage() {
           scroll to id still lands cleanly. */}
       <ChapterRail
         sections={[
-          { id: "blackdoor", index: "00", label: "Blackdoor" },
           { id: "process", index: "01", label: "Process" },
           { id: "communications", index: "02", label: "Comms" },
           { id: "training", index: "03", label: "Training" },
@@ -241,227 +189,6 @@ function BusinessHero() {
         </div>
       </div>
     </section>
-  );
-}
-
-function BlackdoorSection() {
-  return (
-    <div>
-      {/* Editorial heading strip — matches the SectionShell chapter
-          treatment used by the other /business chapters. */}
-      <div className="flex flex-wrap items-baseline gap-4 border-b border-border-light pb-5">
-        <span className="font-mono text-[11px] text-accent">
-          00 · Blackdoor operations
-        </span>
-        <span aria-hidden="true" className="h-px w-10 bg-accent/40" />
-      </div>
-      <h2
-        className="mt-6 font-semibold tracking-tight text-text-light"
-        style={{
-          fontSize: "clamp(2rem, 4.5vw, 3.5rem)",
-          letterSpacing: "-0.04em",
-          lineHeight: 0.98,
-        }}
-      >
-        Building the company that builds companies.
-      </h2>
-      <p className="mt-6 max-w-3xl text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9">
-        Blackdoor is the holding company I co-founded with Ryder in
-        2025. Our products are built and shipped end-to-end by Atlas —
-        the autonomous agent harness I architected — in place of a
-        human dev team.
-      </p>
-
-      <div className="mt-12 grid gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
-        {/* ~/outcomes datasheet — same shape as the Process /
-            Communications / Training / Finance sidebars so the four
-            chapters speak one language. */}
-        <aside className="lg:sticky lg:top-24">
-          <div className="overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
-              <span className="inline-flex h-2 w-2 rounded-full bg-result-green" />
-              <span>~/outcomes</span>
-              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-              <span className="text-text-light-muted">
-                {blackdoorOutcomes.length} signals
-              </span>
-            </div>
-            <ul className="grid">
-              {blackdoorOutcomes.map((outcome, index) => (
-                <li
-                  className="grid grid-cols-[auto_1fr] items-baseline gap-3 border-t border-border-light px-5 py-3 first:border-t-0"
-                  key={outcome}
-                >
-                  <span className="font-mono text-[10px] text-accent">
-                    <span className="text-text-light-muted/60">// </span>
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-sm leading-6 text-text-light">
-                    {outcome}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
-
-        <div>
-          <AtlasHierarchy layers={atlasLayers} />
-
-          {/* ~/atlas live-status datasheet — quick "at a glance"
-              stats about Atlas before the architecture/proof spec
-              cards below. */}
-          <div className="mt-10 overflow-hidden rounded-xl border border-border-light bg-bg-light-2">
-            <div className="flex items-center gap-3 border-b border-border-light bg-[rgba(41,110,214,0.05)] px-5 py-3 font-mono text-[10px] text-accent">
-              <span className="relative inline-flex h-2 w-2">
-                <span className="relative inline-block h-2 w-2 rounded-full bg-result-green" />
-              </span>
-              <span>~/atlas</span>
-              <span aria-hidden="true" className="h-px flex-1 bg-border-light" />
-              <span className="text-text-light-muted">Live · in motion</span>
-            </div>
-            <ul className="grid divide-y divide-border-light sm:grid-cols-2 sm:divide-x sm:divide-y-0">
-              {[
-                { key: "Version", value: "v3" },
-                { key: "Layers", value: "5 · Founders → Shipped" },
-                { key: "Products live", value: "3" },
-                { key: "Review", value: "Human PR · 100%" },
-                { key: "Tooling", value: "Claude · Codex · MCP · GitHub" },
-                { key: "Deployed at", value: "Blackdoor · ThePrivateHotels" },
-              ].map((row, index) => (
-                <li
-                  className="grid grid-cols-[auto_1fr] items-baseline gap-3 px-5 py-3"
-                  key={row.key}
-                >
-                  <span className="font-mono text-[10px] text-accent">
-                    <span className="text-text-light-muted/60">// </span>
-                    {String(index + 1).padStart(2, "0")} {row.key}
-                  </span>
-                  <span className="text-right font-mono text-[12.5px] leading-6 text-text-light">
-                    {row.value}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Two editorial spec cards — first card explains the
-              architecture, second card shows the proof. Replaces the
-              flat side-by-side paragraph block. */}
-          <div className="mt-10 grid gap-6 lg:grid-cols-2">
-            <article className="relative rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-7">
-              <p className="font-mono text-[10px] text-accent">
-                <span className="text-text-light-muted/60">// </span>
-                01 · Architecture
-              </p>
-              <h3
-                className="mt-3 font-semibold tracking-tight text-text-light"
-                style={{
-                  fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
-                  letterSpacing: "-0.025em",
-                  lineHeight: 1.1,
-                }}
-              >
-                What Atlas is.
-              </h3>
-              <p className="mt-3 text-base leading-7 text-text-light-muted">
-                At Blackdoor I lead AI R&amp;D and implementation. I
-                built Atlas as a multi-level autonomous harness — a CEO
-                agent routes work to C-suite agents (CFO, CMO) who
-                delegate to manager and field agents. I designed it to
-                build, operate, and improve software products without
-                needing me at every step.
-              </p>
-            </article>
-
-            <article className="relative rounded-2xl border border-accent/40 bg-[rgba(41,110,214,0.04)] p-6 shadow-[0_18px_36px_-22px_rgba(41,110,214,0.25)] sm:p-7">
-              <p className="font-mono text-[10px] text-accent">
-                <span className="text-text-light-muted/60">// </span>
-                02 · Proof
-              </p>
-              <h3
-                className="mt-3 font-semibold tracking-tight text-text-light"
-                style={{
-                  fontSize: "clamp(1.25rem, 2.5vw, 1.75rem)",
-                  letterSpacing: "-0.025em",
-                  lineHeight: 1.1,
-                }}
-              >
-                What Atlas has done.
-              </h3>
-              <p className="mt-3 text-base leading-7 text-text-light-muted">
-                Atlas has already shipped a game app, a budget web app,
-                and an agent-augmented project management system. The
-                same tech is deployed in the hotel I run. Everything
-                ships through GitHub PRs I review.{" "}
-                <span className="font-semibold text-text-light">
-                  Every decision is governed.
-                </span>
-              </p>
-            </article>
-          </div>
-        </div>
-      </div>
-
-      {/* Closing band — sends readers deeper into Atlas. Cross-links
-          to /ai (live demos), /uses (the AI stack reasoning), and
-          /now (what Atlas is shipping this week). */}
-      <div className="mt-16 rounded-2xl border border-border-light bg-bg-light-2 p-6 sm:p-8">
-        <div className="grid grid-cols-12 gap-x-6 gap-y-6 lg:gap-x-8">
-          <div className="col-span-12 lg:col-span-7">
-            <p className="font-mono text-[10px] text-accent">
-              Dig deeper
-            </p>
-            <h3
-              className="mt-3 font-semibold tracking-tight text-text-light"
-              style={{
-                fontSize: "clamp(1.5rem, 3vw, 2.1rem)",
-                letterSpacing: "-0.03em",
-                lineHeight: 1.05,
-              }}
-            >
-              See Atlas in motion.
-            </h3>
-            <p className="mt-3 max-w-xl text-base leading-7 text-text-light-muted">
-              Three doors into the engine I built — live demos of the
-              harness, the AI stack reasoning, and what Atlas is
-              shipping for me this week.
-            </p>
-          </div>
-          <div className="col-span-12 self-center lg:col-span-5">
-            <ul className="grid gap-2 font-mono text-sm text-text-light-muted">
-              <li className="flex items-baseline gap-3">
-                <span aria-hidden="true" className="text-accent">→</span>
-                <a
-                  className="link-underline inline-block transition-colors hover:text-accent"
-                  href="/lab#demos"
-                >
-                  /ai · the harness demo + case studies
-                </a>
-              </li>
-              <li className="flex items-baseline gap-3">
-                <span aria-hidden="true" className="text-accent">→</span>
-                <a
-                  className="link-underline inline-block transition-colors hover:text-accent"
-                  href="/lab#uses"
-                >
-                  /uses · the AI stack with reasoning
-                </a>
-              </li>
-              <li className="flex items-baseline gap-3">
-                <span aria-hidden="true" className="text-accent">→</span>
-                <a
-                  className="link-underline inline-block transition-colors hover:text-accent"
-                  href="/lab#now"
-                >
-                  /now · what Atlas is shipping this week
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
 
