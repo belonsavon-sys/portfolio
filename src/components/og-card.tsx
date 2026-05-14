@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+ 
 import { ImageResponse } from "next/og";
 
 export const OG_SIZE = { height: 630, width: 1200 } as const;

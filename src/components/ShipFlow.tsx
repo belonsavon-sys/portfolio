@@ -137,7 +137,6 @@ export function ShipFlow() {
         >
           {(["flow", "code"] as View[]).map((v) => (
             <button
-              aria-pressed={view === v}
               aria-selected={view === v}
               className={`rounded-full px-3 py-1 font-mono text-[10.5px] transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                 view === v
