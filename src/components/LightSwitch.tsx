@@ -1,206 +1,183 @@
 "use client";
 
-import {
-  animate,
-  motion,
-  type PanInfo,
-  useMotionValue,
-  useReducedMotion,
-  useTransform,
-} from "framer-motion";
-import { useRef, useState } from "react";
+import { useReducedMotion } from "framer-motion";
+import type { MouseEvent } from "react";
 import { useLightSwitch } from "./LightSwitchContext";
 
-const PULL_THRESHOLD = 26; // px from idle that commits the toggle
-const PULL_MAX_X = 90; // hard limit on lateral swing
-const PULL_MAX_Y = 110; // hard limit on vertical stretch
-const IDLE_LENGTH = 50; // cord length at rest
-const BEAD_SIZE = 12; // bead diameter in px
-const ANCHOR_TOP = 4; // px from button top to where the cord emerges
-
 /**
- * Pull-string light switch — fixed top-left, two-axis pendulum
- * physics. Bulb fixture removed; only the cord + bead + permanent
- * "pull me ↓" tip remain. The cord hangs from a tiny ceiling anchor
- * at the very top of the viewport.
+ * PCB rocker switch — fixed top-left power toggle that replaces the
+ * old pull-cord. Styled like a real panel-mount rocker switch you'd
+ * find on a dev-board PSU: light mounting plate with four corner
+ * pads, a dark recessed rocker that tilts on click, a green LED at
+ * the top that lights when ON, and a `PWR` silkscreen at the bottom.
  *
- *   • Drag in any direction → cord bends as a cubic Bezier (control
- *     points bias toward the bead so the top stays vertical and the
- *     curve concentrates near the bottom).
- *   • Release past PULL_THRESHOLD toggles the lights; otherwise the
- *     cord springs back without changing state.
- *   • On release, dragX springs back with low damping (pendulum
- *     swing), dragY with higher damping (quick settle).
- *   • Bead color = state indicator (amber when on, slate when off).
- *   • Keyboard `L` toggles globally (handled in the provider).
- *   • Permanent "pull me ↓" caption next to the bead.
+ *   • Click → toggles lights (no drag needed)
+ *   • Rocker tilts via 3D rotateX with perspective, so the depressed
+ *     half visibly sits lower than the raised half
+ *   • LED transitions with a soft glow halo when on
+ *   • Keyboard `L` shortcut handled in the provider (unchanged)
  */
 export function LightSwitch() {
   const { isLightsOn, toggleLights } = useLightSwitch();
   const reduce = useReducedMotion();
-  const [pulling, setPulling] = useState(false);
 
-  const dragX = useMotionValue(0);
-  const dragY = useMotionValue(0);
-
-  const cordPath = useTransform([dragX, dragY], (values: number[]) => {
-    const x = values[0] ?? 0;
-    const y = Math.max(0, values[1] ?? 0);
-    const totalY = IDLE_LENGTH + y;
-    const c1x = x * 0.15;
-    const c1y = totalY * 0.4;
-    const c2x = x * 0.7;
-    const c2y = totalY * 0.78;
-    return `M 0 0 C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${x.toFixed(2)} ${totalY.toFixed(2)}`;
-  });
-
-  const beadTranslateX = useTransform(dragX, (v) => v - BEAD_SIZE / 2);
-  const beadTranslateY = useTransform(
-    dragY,
-    (v) => IDLE_LENGTH + Math.max(0, v) - BEAD_SIZE / 2,
-  );
-
-  const draggedRef = useRef(false);
-
-  function handlePanStart() {
-    if (reduce) return;
-    draggedRef.current = false;
-    setPulling(true);
-  }
-
-  function handlePan(_event: PointerEvent, info: PanInfo) {
-    if (reduce) return;
-    const x = Math.max(-PULL_MAX_X, Math.min(PULL_MAX_X, info.offset.x));
-    const y = Math.max(-15, Math.min(PULL_MAX_Y, info.offset.y));
-    dragX.set(x);
-    dragY.set(y);
-    if (Math.hypot(info.offset.x, info.offset.y) > 4) {
-      draggedRef.current = true;
-    }
-  }
-
-  function handlePanEnd(_event: PointerEvent, info: PanInfo) {
-    if (reduce) {
-      toggleLights();
-      return;
-    }
-    const wasDrag = draggedRef.current;
-    const distance = Math.hypot(info.offset.x, info.offset.y);
-    if (distance > PULL_THRESHOLD || !wasDrag) {
-      toggleLights();
-    }
-    animate(dragX, 0, {
-      damping: 6,
-      mass: 0.5,
-      stiffness: 180,
-      type: "spring",
+  // Capture the rocker's viewport center so the dark-mode view
+  // transition can clip-reveal outward from it like an aperture.
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    toggleLights({
+      cx: rect.left + rect.width / 2,
+      cy: rect.top + rect.height / 2,
     });
-    animate(dragY, 0, {
-      damping: 12,
-      mass: 0.5,
-      stiffness: 280,
-      type: "spring",
-    });
-    window.setTimeout(() => setPulling(false), 1500);
   }
-
-  // Bead materials — only piece of the switch that still flips with state.
-  const beadFill = isLightsOn
-    ? "radial-gradient(circle at 32% 30%, #fde68a 0%, #d97706 60%, #78350f 100%)"
-    : "radial-gradient(circle at 32% 30%, #cbd5e1 0%, #64748b 55%, #1e293b 100%)";
-  const beadShadow = isLightsOn
-    ? "0 1px 2.5px rgba(0,0,0,0.45), 0 0 10px rgba(217,119,6,0.45), inset 0 -1.5px 2px rgba(0,0,0,0.4), inset 1px 1px 1.5px rgba(255,255,255,0.35)"
-    : "0 1px 2.5px rgba(0,0,0,0.45), inset 0 -1.5px 2px rgba(0,0,0,0.5), inset 1px 1px 1.5px rgba(255,255,255,0.25)";
 
   return (
-    <motion.button
+    <button
       aria-label={isLightsOn ? "Turn off the lights" : "Turn on the lights"}
       aria-pressed={!isLightsOn}
-      className="group/cord pointer-events-auto fixed left-5 top-0 z-[55] hidden cursor-grab focus-visible:outline-none active:cursor-grabbing sm:block"
-      onPan={handlePan}
-      onPanEnd={handlePanEnd}
-      onPanStart={handlePanStart}
-      style={{ height: 90, touchAction: "none", width: 130 }}
+      className="pointer-events-auto fixed left-5 top-5 z-[55] hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg-light sm:block"
+      onClick={handleClick}
       title={
         isLightsOn
-          ? "Pull to dim the room (or press L)"
-          : "Pull to turn on the lights (or press L)"
+          ? "Click to dim the room (or press L)"
+          : "Click to turn on the lights (or press L)"
       }
       type="button"
     >
-      {/* CEILING ANCHOR — tiny stub where the cord emerges from "the
-          ceiling". Subtle dark plate so the cord doesn't look like
-          it's floating mid-air. */}
-      <span
-        aria-hidden="true"
-        className="absolute left-1/2 top-0 h-1 w-3 -translate-x-1/2 rounded-b-sm bg-gradient-to-b from-text-light-muted/85 to-text-light-muted/45 shadow-[0_1px_2px_rgba(15,23,42,0.18)]"
-      />
-
-      {/* CORD + BEAD STACK — wrapper rotates for idle pendulum swing
-          when not being pulled. Drag offsets translate the bead inside
-          via motion values. */}
-      <motion.div
-        animate={pulling || reduce ? { rotate: 0 } : { rotate: [-0.7, 0.7, -0.7] }}
-        className="absolute left-1/2 -translate-x-1/2"
+      {/* MOUNTING PLATE — light gray PCB-style backing */}
+      <div
+        className="relative h-[96px] w-[64px] rounded-md border border-border-light bg-bg-light-2"
         style={{
-          height: 1,
-          top: ANCHOR_TOP,
-          transformOrigin: "top center",
-          width: 1,
+          boxShadow:
+            "0 1px 2px rgba(15,23,42,0.04), 0 6px 14px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.7)",
         }}
-        transition={
-          pulling || reduce
-            ? { duration: 0 }
-            : { duration: 6.5, ease: "easeInOut", repeat: Infinity }
-        }
       >
-        <svg
+        {/* Corner mounting pads — tiny decorative screws */}
+        <span
           aria-hidden="true"
-          fill="none"
-          height="220"
-          style={{ left: -140, overflow: "visible", position: "absolute", top: -2 }}
-          viewBox="-140 -2 280 220"
-          width="280"
-        >
-          <motion.path
-            d={cordPath}
-            stroke="rgba(30, 41, 59, 0.92)"
-            strokeLinecap="round"
-            strokeWidth="2"
-          />
-          <motion.path
-            d={cordPath}
-            stroke="rgba(255,255,255,0.22)"
-            strokeLinecap="round"
-            strokeWidth="0.6"
-          />
-        </svg>
+          className="absolute left-1 top-1 h-1.5 w-1.5 rounded-full border border-border-light bg-bg-light"
+        />
+        <span
+          aria-hidden="true"
+          className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full border border-border-light bg-bg-light"
+        />
+        <span
+          aria-hidden="true"
+          className="absolute bottom-1 left-1 h-1.5 w-1.5 rounded-full border border-border-light bg-bg-light"
+        />
+        <span
+          aria-hidden="true"
+          className="absolute bottom-1 right-1 h-1.5 w-1.5 rounded-full border border-border-light bg-bg-light"
+        />
 
-        <motion.div
+        {/* LED indicator + halo at top */}
+        <div
           aria-hidden="true"
-          className="absolute left-0 top-0"
-          style={{ x: beadTranslateX, y: beadTranslateY }}
+          className="absolute left-1/2 top-3 -translate-x-1/2"
         >
+          <div className="relative">
+            <span
+              className={`absolute -inset-1 rounded-full bg-result-green/35 transition-opacity duration-300 ${
+                isLightsOn ? "opacity-100" : "opacity-0"
+              }`}
+            />
+            <span
+              className={`relative block h-2 w-2 rounded-full transition-all duration-300 ${
+                isLightsOn
+                  ? "bg-result-green shadow-[0_0_6px_rgba(16,185,129,0.95),0_0_14px_rgba(16,185,129,0.5)]"
+                  : "bg-text-light-muted/35"
+              }`}
+            />
+          </div>
+        </div>
+
+        {/* ROCKER FRAME — dark recessed well that the rocker sits in */}
+        <div
+          className="absolute left-1/2 top-[26px] -translate-x-1/2 h-[52px] w-[38px] rounded-[3px]"
+          style={{
+            background: "rgb(8, 12, 22)",
+            boxShadow:
+              "inset 0 2px 4px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.55)",
+            perspective: "180px",
+          }}
+        >
+          {/* ROCKER BODY — tilts on toggle */}
           <div
-            className="h-3 w-3 rounded-full transition-transform duration-200 group-hover/cord:scale-110 group-focus-visible/cord:scale-110"
-            style={{ background: beadFill, boxShadow: beadShadow }}
-          />
-        </motion.div>
-      </motion.div>
+            className="absolute inset-[3px] flex flex-col overflow-hidden rounded-[2px]"
+            style={{
+              background:
+                "linear-gradient(180deg, rgb(30, 41, 59) 0%, rgb(15, 23, 42) 100%)",
+              boxShadow:
+                "0 1px 2px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.04)",
+              transform: `rotateX(${isLightsOn ? -14 : 14}deg)`,
+              transformStyle: "preserve-3d",
+              transition: reduce
+                ? "none"
+                : "transform 240ms cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+          >
+            {/* TOP HALF — "I" (one/on). When ON, this half is depressed
+                (rotates back), so we shade it slightly darker. */}
+            <div
+              className="flex flex-1 items-center justify-center font-mono font-bold text-[11px]"
+              style={{
+                background: isLightsOn
+                  ? "linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.05))"
+                  : "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+                color: isLightsOn
+                  ? "rgba(248, 250, 252, 0.95)"
+                  : "rgba(148, 163, 184, 0.5)",
+                textShadow: isLightsOn
+                  ? "0 0 4px rgba(16,185,129,0.55)"
+                  : "none",
+                transition: "all 240ms cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+            >
+              I
+            </div>
 
-      {/* PERMANENT "PULL ME ↓" TIP — sits next to the bead area, softens
-          on hover so it backs off during interaction. */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute font-mono text-[9px] text-text-light-muted/75 transition-opacity duration-200 group-hover/cord:opacity-30"
-        style={{ left: "calc(50% + 12px)", top: ANCHOR_TOP + IDLE_LENGTH - 6 }}
-      >
-        pull me ↓
-      </span>
+            {/* PIVOT LINE — visible hinge between top and bottom halves */}
+            <div
+              aria-hidden="true"
+              className="h-px"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent, rgba(0,0,0,0.6) 25%, rgba(0,0,0,0.6) 75%, transparent)",
+              }}
+            />
+
+            {/* BOTTOM HALF — "O" (off). When OFF, this half is depressed. */}
+            <div
+              className="flex flex-1 items-center justify-center font-mono font-bold text-[11px]"
+              style={{
+                background: !isLightsOn
+                  ? "linear-gradient(0deg, rgba(0,0,0,0.25), rgba(0,0,0,0.05))"
+                  : "linear-gradient(0deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+                color: !isLightsOn
+                  ? "rgba(248, 250, 252, 0.95)"
+                  : "rgba(148, 163, 184, 0.45)",
+                transition: "all 240ms cubic-bezier(0.16, 1, 0.3, 1)",
+              }}
+            >
+              O
+            </div>
+          </div>
+        </div>
+
+        {/* SILKSCREEN LABEL — mono "PWR" caption at the bottom */}
+        <div
+          aria-hidden="true"
+          className="absolute bottom-[3px] left-1/2 -translate-x-1/2 font-mono text-[7.5px] tracking-[0.2em] text-text-light-muted/75"
+        >
+          PWR
+        </div>
+      </div>
 
       <span className="sr-only">
-        {isLightsOn ? "Lights are on" : "Lights are off — cursor is your flashlight"}
+        {isLightsOn
+          ? "Lights are on"
+          : "Lights are off — cursor is your flashlight"}
       </span>
-    </motion.button>
+    </button>
   );
 }

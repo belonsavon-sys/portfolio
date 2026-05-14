@@ -1,15 +1,26 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+
+// Pages where `ChapterRail` is rendered. On those pages the chapter
+// dock carries its own back-to-top button (with the same scroll-
+// progress ring), so the global BackToTop would just be a duplicate
+// floating chip. Suppress here.
+const SUPPRESSED_PATHS = new Set(["/", "/atlas", "/business", "/resume"]);
 
 /**
  * Back-to-top button. The conic ring around the button is now
  * SCROLL-DRIVEN — fills from 0° to 360° as the user scrolls the
  * page. Reads as "you are X% through" while serving its primary
  * job (scroll to top).
+ *
+ * Suppressed on pages that render `ChapterRail` (which now contains
+ * its own back-to-top button at the top of its dock).
  */
 export function BackToTop() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const ringRef = useRef<HTMLSpanElement | null>(null);
   const reduce = useReducedMotion();
@@ -45,6 +56,8 @@ export function BackToTop() {
       window.scrollTo({ behavior: "smooth", top: 0 });
     }
   }
+
+  if (SUPPRESSED_PATHS.has(pathname ?? "")) return null;
 
   return (
     <AnimatePresence>

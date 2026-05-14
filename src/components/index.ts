@@ -76,6 +76,9 @@ export type {
   SectionDividerDirection,
   SectionDividerProps,
 } from "./SectionDivider";
+export { HeroSplitTitle } from "./HeroSplitTitle";
+export type { HeroSplitTitleProps } from "./HeroSplitTitle";
+export { ShipFlow } from "./ShipFlow";
 export { SiteFooter } from "./SiteFooter";
 export { SiteHeader } from "./SiteHeader";
 export { StaggeredChipRail } from "./StaggeredChipRail";
