@@ -566,12 +566,6 @@ a {
   initial-value: 0deg;
 }
 
-@keyframes ring-rotate {
-  to {
-    --ring-angle: 360deg;
-  }
-}
-
 /* :target arrival pulse — when a URL hash matches an element id
    (ChapterRail / command palette / footer links), the target
    briefly glows with an accent ring. Pure CSS, no JS needed. */
@@ -628,15 +622,6 @@ a {
 /* Home hero commit ticker — single-direction marquee. The track is
  * rendered at double width (commit list duplicated in markup) so a
  * 50% translate produces a seamless loop. */
-@keyframes hero-ticker {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-
 /* PAGE ATMOSPHERE — a soft gradient mesh that spans the full body
  * height and scrolls with the page. The mesh itself is rendered in
  * <PageAtmosphere /> as nine overlapping radial gradients; the only
@@ -1282,18 +1267,6 @@ a {
   }
 }
 
-
-/* Home hero glass-card sheen — diagonal reflection sweep across the
- * holographic portrait card. Subtle ambient motion; opacity stays
- * below the photo so the face isn't obscured. */
-@keyframes hero-glass-sheen {
-  0% {
-    background-position: 200% 200%;
-  }
-  100% {
-    background-position: -100% -100%;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-cue-dot {

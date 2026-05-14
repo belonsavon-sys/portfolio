@@ -12,7 +12,6 @@ import {
   ParallaxGhost,
   ScrollReveal,
   SectionDivider,
-  SectionHeader,
   SiteFooter,
   Testimonial,
 } from "@/components";

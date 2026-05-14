@@ -53,13 +53,6 @@ type ButtonAsAnchorProps = ButtonBaseProps &
 
 export type ButtonProps = ButtonAsButtonProps | ButtonAsAnchorProps;
 
-export type NavPillProps = {
-  active?: boolean;
-  children: ReactNode;
-  className?: string;
-  href: string;
-};
-
 const buttonVariants: Record<ButtonVariant, string> = {
   primary: "border-transparent bg-accent text-white",
   ghost:
@@ -280,30 +273,3 @@ function ButtonDownArrow() {
   );
 }
 
-export function NavPill({
-  active = false,
-  children,
-  className,
-  href,
-}: NavPillProps) {
-  return (
-    <Link
-      aria-current={active ? "page" : undefined}
-      className="inline-flex rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-      href={href}
-    >
-      <motion.span
-        className={cx(
-          "inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition-[filter,background,color] duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
-          active ? "bg-accent text-white" : "bg-transparent text-text-light",
-          className,
-        )}
-        transition={{ duration: 0.15 }}
-        whileHover={{ filter: active ? "brightness(0.9)" : "brightness(1.1)" }}
-        whileTap={{ scale: 0.97 }}
-      >
-        {children}
-      </motion.span>
-    </Link>
-  );
-}
