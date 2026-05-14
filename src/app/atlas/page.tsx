@@ -1,11 +1,10 @@
 import {
-  AtlasGallery,
   AtlasHierarchy,
+  AtlasManifest,
   type AtlasHierarchyLayer,
   Button,
   ChapterRail,
   GlitchTitle,
-  LiveStatusBadge,
   ParallaxGhost,
   SiteFooter,
   TextScramble,
@@ -169,14 +168,7 @@ export default function AtlasPage() {
         meta="// 3 live · shipped end-to-end"
         title="What Atlas has shipped."
       >
-        <div className="mb-6 flex flex-wrap items-center gap-3">
-          <LiveStatusBadge label="3 products · in motion" />
-          <span aria-hidden="true" className="h-px w-12 bg-accent/40" />
-          <p className="font-mono text-[10px] text-text-light-muted">
-            Built end-to-end · human PR review on every change
-          </p>
-        </div>
-        <AtlasGallery />
+        <AtlasManifest />
       </AtlasSection>
 
       {/* 03 · WORKFLOW */}
