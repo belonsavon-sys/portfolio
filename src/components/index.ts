@@ -9,7 +9,7 @@ export type { AtlasHierarchyLayer, AtlasHierarchyProps } from "./AtlasHierarchy"
 export { BackToTop } from "./BackToTop";
 export { ConsoleSignature } from "./ConsoleSignature";
 export { AtlasDemo } from "./AtlasDemo";
-export { AtlasGallery } from "./AtlasGallery";
+export { AtlasManifest } from "./AtlasManifest";
 export { BeforeAfter } from "./BeforeAfter";
 export type { BeforeAfterProps, BeforeAfterSide } from "./BeforeAfter";
 export { ChapterRail } from "./ChapterRail";
