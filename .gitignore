@@ -76,3 +76,8 @@ coverage/
 
 # playwright local artifacts
 .playwright-mcp/
+
+# Stray debug screenshots at the repo root — committed shots live in docs/
+/*.png
+/*.jpeg
+/*.jpg

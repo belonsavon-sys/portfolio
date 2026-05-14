@@ -44,12 +44,22 @@ export function LightSwitchProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     try {
+      // URL-param override: `?lights=on` / `?lights=off` forces the
+      // room state on first load and persists it to localStorage. Lets
+      // a shared link, a screenshot run, or a demo open the site in a
+      // specific mode without a click.
+      const params = new URLSearchParams(window.location.search);
+      const override = params.get("lights");
+      if (override === "on" || override === "off") {
+        const next = override === "on";
+        window.localStorage.setItem(STORAGE_KEY, String(next));
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsLightsOn(next);
+        return;
+      }
+
       const stored = window.localStorage.getItem(STORAGE_KEY);
       if (stored === "true") {
-        // Hydration-from-localStorage: this is the canonical pattern
-        // for syncing client-only storage with React state. The
-        // cascading-render warning is expected and harmless here.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsLightsOn(true);
       }
     } catch {
