@@ -46,8 +46,15 @@ export function HeroSplitTitle({ text, delay = 0 }: HeroSplitTitleProps) {
     const el = ref.current;
     if (!el) return;
 
+    if (typeof window === "undefined") return;
+    // `?frozen=1` forces the resting state for screenshot capture /
+    // social previews — same effect as prefers-reduced-motion. Both
+    // skip the GSAP tween entirely so the element stays at its
+    // natural CSS rest, fully visible.
+    const frozen =
+      new URLSearchParams(window.location.search).get("frozen") === "1";
     if (
-      typeof window !== "undefined" &&
+      frozen ||
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
       return;

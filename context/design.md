@@ -1,10 +1,11 @@
 # Design System & Visual Direction
 
 ## Mode Strategy
-- **Primary mode:** Light (dominant across most of the site)
-- **Light mode style:** Sans-serif, professional, clean — no ornamentation
-- **Dark mode:** Used selectively in specific sections (not site-wide toggle)
-- **Dark mode style:** Blue accent palette, terminal monospace font, glassmorphism
+- **Primary mode:** Light — sans-serif, professional, clean. The default state on first paint.
+- **Dark mode (flashlight room):** Site-wide toggle on the PCB rocker switch (top-left) or keyboard `L`. Flips the four `--*-light` design tokens to their dark counterparts via the `body.dark` class, and triggers a direction-aware View Transitions API reveal (clip-path circle expanding outward from the switch on light→dark, collapsing inward on dark→light).
+- **Dark mode atmosphere:** The cursor becomes a lamp. A radial mask follows the pointer, revealing an X-ray schematic tile (PWR · CPU · MEM · I/O) and a brighter accent bloom. The mesh + multiply-dim overlay used in light mode are dropped (they crush already-dark pixels).
+- **Section headers in dark mode:** Sit in the green-neon "hack" visual permanently — the 5-second emerald x-ray pop becomes the resting state. Done via CSS variable rebind, not new keyframes.
+- **URL flags:** `?lights=on` / `?lights=off` open the site in a specific mode without a click. `?frozen=1` pins GSAP animations to their resting state (used for screenshot capture and OG previews).
 
 ## Color Palette (LOCKED)
 
@@ -223,37 +224,27 @@ transform: scale(0.97);
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Mode flow (light dominant, dark selective)
+### Mode flow (site-wide flashlight toggle)
 
 ```mermaid
 flowchart TB
-    Welcome["Welcome page<br/>LIGHT"]
-    AI["AI page<br/>LIGHT base"]
-    AIDark["Demo sections<br/>DARK + terminal + glassmorphism"]
-    Business["Business page<br/>LIGHT"]
-    Resume["Resume page<br/>LIGHT"]
-    Contact["Contact page<br/>LIGHT"]
+    Light["LIGHT MODE (default)<br/>--bg-light · --text-light · sans · clean"]
+    Dark["DARK MODE (flashlight room)<br/>body.dark · --*-light rebound to dark · cursor=lamp"]
 
-    Welcome --> AI
-    AI -.->|on hover or click| AIDark
-    AIDark -.->|exit demo| AI
-    AI --> Business
-    Business --> Resume
-    Resume --> Contact
+    Light -.->|rocker switch OR 'L' key<br/>NEW expands outward from switch| Dark
+    Dark -.->|rocker switch OR 'L' key<br/>OLD collapses inward to switch| Light
 
-    style Welcome fill:#fff,stroke:#333
-    style AI fill:#fff,stroke:#333
-    style AIDark fill:#0a0e27,color:#00d4ff,stroke:#00d4ff
-    style Business fill:#fff,stroke:#333
-    style Resume fill:#fff,stroke:#333
-    style Contact fill:#fff,stroke:#333
+    style Light fill:#fff,stroke:#296ed6,stroke-width:2px
+    style Dark fill:#0a0e1a,color:#74e0a0,stroke:#74e0a0,stroke-width:2px
 ```
 
+Every page lives in either mode. The transition is driven by the View Transitions API with direction-aware `clip-path: circle()` keyframes bound to `--toggle-cx` / `--toggle-cy` (the switch's viewport-center). `flushSync` inside `document.startViewTransition()` keeps the React update + `body.dark` class flip inside the snapshot window.
+
 ### Navigation
-- Clean pill/tab-style center nav (like Gerald Dixon reference)
+- Clean pill/tab-style center nav
 - No logo, no brand name, no personal name in nav
-- Right side of nav: icon links — GitHub, LinkedIn, phone, email
-- **Section labels (LOCKED):** Welcome | AI | Business | Resume | Get in Touch
+- Right side of nav: icon links — GitHub, LinkedIn, email
+- **Section labels:** Welcome | Atlas | Business | Résumé | The Lab
 
 ### Homepage — Sticky Left Sidebar (homepage only)
 - Fixed left panel while right side scrolls

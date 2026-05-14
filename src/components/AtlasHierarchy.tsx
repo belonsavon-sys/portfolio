@@ -226,6 +226,15 @@ export function AtlasHierarchy({ layers }: AtlasHierarchyProps) {
     if (reduce) return;
     const ol = datasheetRef.current;
     if (!ol) return;
+    // `?frozen=1` skips the ScrollTrigger cascade so the datasheet
+    // rows sit fully visible — same path as reduced-motion. Used for
+    // screenshot capture and shared social previews.
+    if (
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("frozen") === "1"
+    ) {
+      return;
+    }
 
     const ctx = gsap.context(() => {
       const rows = Array.from(
@@ -862,14 +871,7 @@ function Node({
       ) : null}
 
       {isEngine ? (
-        <EngineChip
-          active={active}
-          node={node}
-          primary={primary}
-          reduce={reduce}
-          x={x}
-          y={y}
-        />
+        <EngineChip node={node} primary={primary} x={x} y={y} />
       ) : kind === "founders" ? (
         <FoundersCard node={node} primary={primary} x={x} y={y} />
       ) : (
@@ -936,17 +938,13 @@ function Node({
 // ─────────────────────────────────────────────────────────────────────
 
 function EngineChip({
-  active,
   node,
   primary,
-  reduce,
   x,
   y,
 }: {
-  active: boolean;
   node: NodePos;
   primary: string;
-  reduce: boolean | null;
   x: number;
   y: number;
 }) {
