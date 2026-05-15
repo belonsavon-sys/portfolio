@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from "framer-motion";
 type Work = {
   branch: string;
   context: string;
+  cta: string;
   hash: string;
   href?: string;
   metric: string;
@@ -22,6 +23,7 @@ const works: Work[] = [
     branch: "atlas/agent-harness",
     context:
       "The multi-level autonomous agent harness I built to ship real products end-to-end.",
+    cta: "Read Atlas in depth",
     hash: "a3f8c21",
     href: "/atlas",
     metric: "3 products",
@@ -36,6 +38,7 @@ const works: Work[] = [
     branch: "privatehotels/comms",
     context:
       "An AI chatbot I trained on our company data — drafts guest replies in Smarttask, I review before send.",
+    cta: "See it in action",
     hash: "7b2d44e",
     href: "/business#communications",
     metric: "<3 min",
@@ -50,6 +53,7 @@ const works: Work[] = [
     branch: "privatehotels/ops",
     context:
       "Zapier + Guesty API + Twilio orchestration I wired up to replace the multi-hour coordination loops we used to run by hand.",
+    cta: "See the pipeline",
     hash: "5c1e9a3",
     href: "/business#communications",
     metric: "−hours",
@@ -64,6 +68,7 @@ const works: Work[] = [
     branch: "privatehotels/qa",
     context:
       "The 100+ page operations manual I digitized room-by-room into a trackable QA inspection system.",
+    cta: "See the system",
     hash: "9f4a08b",
     href: "/business#process",
     metric: "Top 10%",
@@ -242,7 +247,7 @@ function MarqueeBill({ index, work }: { index: number; work: Work }) {
 
             {/* CTA — real filled button, not a text link */}
             <span className="inline-flex items-center justify-center gap-2 self-center justify-self-end rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_22px_-10px_rgba(41,110,214,0.55)] transition-[transform,box-shadow] duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_14px_30px_-12px_rgba(41,110,214,0.7)]">
-              See the build
+              {work.cta}
               <span
                 aria-hidden="true"
                 className="transition-transform duration-200 group-hover:translate-x-1"
