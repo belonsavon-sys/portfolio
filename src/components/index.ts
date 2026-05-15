@@ -4,6 +4,8 @@ export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps } from "./AnimatedCounter";
 export { AtlasHierarchy } from "./AtlasHierarchy";
 export type { AtlasHierarchyLayer, AtlasHierarchyProps } from "./AtlasHierarchy";
+export { AtlasArchitecture } from "./AtlasArchitecture";
+export { AtlasTerminal } from "./AtlasTerminal";
 export { AvailabilityCta } from "./AvailabilityCta";
 export { BackToTop } from "./BackToTop";
 export { ConsoleSignature } from "./ConsoleSignature";
