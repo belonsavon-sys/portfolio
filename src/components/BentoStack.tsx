@@ -2,16 +2,19 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
-import { BrandLogo } from "./BrandLogo";
 
-type StackItem = {
+export type StackItem = {
   label: string;
-  name: Parameters<typeof BrandLogo>[0]["name"];
   note?: string;
   primary?: boolean;
+  /** Two-letter element symbol — drives the periodic-table cell. */
+  symbol: string;
 };
 
-type StackCategory = {
+export type StackCategory = {
+  abbr: string;
+  /** Tile background tint + accent color for this category. */
+  color: string;
   eyebrow: string;
   frequency: string;
   href?: string;
@@ -19,104 +22,87 @@ type StackCategory = {
   title: string;
 };
 
-const categories: StackCategory[] = [
+export const stackCategories: StackCategory[] = [
   {
+    abbr: "AI",
+    color: "#8b5cf6",
     eyebrow: "01",
     frequency: "Daily · all 6 tools",
     href: "/uses#ai-stack",
     items: [
-      {
-        label: "Claude",
-        name: "claude",
-        note: "Daily reasoning + code",
-        primary: true,
-      },
-      { label: "Codex", name: "codex", note: "Multi-file edits" },
-      { label: "ChatGPT", name: "chatgpt", note: "Utility shots" },
-      { label: "MCP", name: "mcp", note: "Agent ↔ tool bridge" },
-      { label: "Zapier", name: "zapier", note: "Hotel ops glue" },
-      { label: "n8n", name: "n8n", note: "Self-hosted automation" },
+      { label: "Claude", note: "Daily reasoning + code", primary: true, symbol: "Cl" },
+      { label: "Codex", note: "Multi-file edits", symbol: "Cx" },
+      { label: "ChatGPT", note: "Utility shots", symbol: "Cg" },
+      { label: "MCP", note: "Agent ↔ tool bridge", symbol: "Mc" },
+      { label: "Zapier", note: "Hotel ops glue", symbol: "Zp" },
+      { label: "n8n", note: "Self-hosted automation", symbol: "N8" },
     ],
     title: "AI & Automation",
   },
   {
+    abbr: "FE",
+    color: "#0ea5e9",
     eyebrow: "02",
     frequency: "Daily · this site + apps",
     href: "/lab#uses",
     items: [
-      {
-        label: "TypeScript",
-        name: "typescript",
-        note: "Default · everywhere",
-      },
-      { label: "React", name: "react", note: "UI framework" },
-      {
-        label: "Next.js",
-        name: "nextjs",
-        note: "App router · this site",
-        primary: true,
-      },
-      { label: "Tailwind", name: "tailwind", note: "Atomic styles" },
+      { label: "TypeScript", note: "Default · everywhere", symbol: "Ts" },
+      { label: "React", note: "UI framework", symbol: "Rc" },
+      { label: "Next.js", note: "App router · this site", primary: true, symbol: "Nx" },
+      { label: "Tailwind", note: "Atomic styles", symbol: "Tw" },
     ],
     title: "Frontend",
   },
   {
+    abbr: "BE",
+    color: "#10b981",
     eyebrow: "03",
     frequency: "Weekly · per-app",
     href: "/uses#infra",
     items: [
-      { label: "Node.js", name: "node", note: "API + scripts" },
-      { label: "Express", name: "express", note: "Lightweight servers" },
-      {
-        label: "Supabase",
-        name: "supabase",
-        note: "Postgres + auth + RLS",
-        primary: true,
-      },
-      { label: "MySQL", name: "mysql", note: "Legacy reads" },
+      { label: "Node.js", note: "API + scripts", symbol: "Nd" },
+      { label: "Express", note: "Lightweight servers", symbol: "Ex" },
+      { label: "Supabase", note: "Postgres + auth + RLS", primary: true, symbol: "Sb" },
+      { label: "MySQL", note: "Legacy reads", symbol: "Sq" },
     ],
     title: "Backend & DB",
   },
   {
+    abbr: "MB",
+    color: "#f59e0b",
     eyebrow: "04",
     frequency: "Project-based",
     href: "/lab#uses",
     items: [
-      {
-        label: "Flutter",
-        name: "flutter",
-        note: "Cross-platform mobile",
-        primary: true,
-      },
-      { label: "Kotlin", name: "kotlin", note: "KMP shared logic" },
+      { label: "Flutter", note: "Cross-platform mobile", primary: true, symbol: "Fl" },
+      { label: "Kotlin", note: "KMP shared logic", symbol: "Kt" },
     ],
     title: "Mobile",
   },
   {
+    abbr: "IN",
+    color: "#f43f5e",
     eyebrow: "05",
     frequency: "Daily · CI + deploys",
     href: "/uses#infra",
     items: [
-      {
-        label: "Vercel",
-        name: "vercel",
-        note: "This site lives here",
-        primary: true,
-      },
-      { label: "GitHub", name: "github", note: "PR-driven workflow" },
-      { label: "Twilio", name: "twilio", note: "SMS for ops" },
+      { label: "Vercel", note: "This site lives here", primary: true, symbol: "Vc" },
+      { label: "GitHub", note: "PR-driven workflow", symbol: "Gh" },
+      { label: "Twilio", note: "SMS for ops", symbol: "Tl" },
     ],
     title: "Infra & APIs",
   },
   {
+    abbr: "DT",
+    color: "#6366f1",
     eyebrow: "06",
     frequency: "Daily · primary editor",
     href: "/uses#editor",
     items: [
-      { label: "VS Code", name: "vscode", note: "Daily editor", primary: true },
-      { label: "Cursor", name: "cursor", note: "Single-file AI edits" },
-      { label: "Figma", name: "figma", note: "Design + tokens" },
-      { label: "Framer", name: "framer", note: "Layout prototypes" },
+      { label: "VS Code", note: "Daily editor", primary: true, symbol: "Vs" },
+      { label: "Cursor", note: "Single-file AI edits", symbol: "Cu" },
+      { label: "Figma", note: "Design + tokens", symbol: "Fg" },
+      { label: "Framer", note: "Layout prototypes", symbol: "Fr" },
     ],
     title: "Tooling & Design",
   },
@@ -125,20 +111,17 @@ const categories: StackCategory[] = [
 const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 /**
- * Periodic-table-style element grid. Each tool is a square cell with
- * an atomic number (top-left), the brand logo (center), the tool
- * label (bottom), and a primary-star indicator (top-right corner)
- * where applicable. Categories are rendered as labeled rows above
- * their cell clusters. Replaces the prior text-heavy 4/8 split (left
- * spec lines + right logo wall), which read as engineering chrome.
- */
+ * Stack rendered as a literal periodic-table grid. Each tool is an
+ * element tile: atomic number top-left, group abbreviation
+ * top-right, big 2-letter symbol centered, full name below. The
+ * tile's top stripe carries the category color so all 23 elements
+ * read at a glance — like a chemistry chart for "what runs this
+ * site." Rows correspond to categories; tile widths match. */
 export function BentoStack() {
   const reduce = useReducedMotion();
 
-  // Pre-compute running atomic numbers across all categories so each
-  // element has a unique 01..N identifier.
   let counter = 0;
-  const rows = categories.map((category) => {
+  const rows = stackCategories.map((category) => {
     const cells = category.items.map((item) => ({
       atomic: ++counter,
       item,
@@ -147,21 +130,43 @@ export function BentoStack() {
   });
 
   return (
-    <div className="relative space-y-9 sm:space-y-11">
-      {rows.map(({ category, cells }, ci) => (
-        <CategoryGroup
-          category={category}
-          cells={cells}
-          ci={ci}
-          key={category.title}
-          reduce={!!reduce}
-        />
-      ))}
+    <div className="relative">
+      {/* LEGEND — colored swatches mapping group abbrs to categories */}
+      <div className="mb-7 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] tracking-[0.16em] text-text-light-muted sm:mb-9">
+        <span>— groups</span>
+        {stackCategories.map((c) => (
+          <span className="inline-flex items-center gap-1.5" key={c.abbr}>
+            <span
+              aria-hidden="true"
+              className="inline-block h-2.5 w-2.5 rounded-sm"
+              style={{ background: c.color }}
+            />
+            <span className="text-text-light">{c.abbr}</span>
+            <span className="text-text-light-muted/55">
+              {c.title.toLowerCase()}
+            </span>
+          </span>
+        ))}
+      </div>
+
+      {/* GRID — one row per category. Tiles share width; each row
+          left-aligned so the irregular widths read as periodic gaps. */}
+      <div className="grid gap-3 sm:gap-3.5">
+        {rows.map(({ category, cells }, ci) => (
+          <PeriodicRow
+            category={category}
+            cells={cells}
+            ci={ci}
+            key={category.title}
+            reduce={!!reduce}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-function CategoryGroup({
+function PeriodicRow({
   category,
   cells,
   ci,
@@ -172,85 +177,59 @@ function CategoryGroup({
   ci: number;
   reduce: boolean;
 }) {
-  const primaryLabel = category.items.find((i) => i.primary)?.label;
-
   return (
-    <motion.section
+    <motion.div
       animate={reduce ? undefined : { opacity: 1, y: 0 }}
-      initial={reduce ? false : { opacity: 0, y: 20 }}
-      transition={{ delay: ci * 0.05, duration: 0.55, ease: easeOut }}
+      className="grid grid-cols-[60px_minmax(0,1fr)] items-center gap-x-4 sm:grid-cols-[88px_minmax(0,1fr)] sm:gap-x-6"
+      initial={reduce ? false : { opacity: 0, y: 12 }}
+      transition={{ delay: ci * 0.05, duration: 0.5, ease: easeOut }}
       viewport={{ amount: 0.2, once: true }}
       whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
     >
-      {/* Caption line — editorial, no caps tracking, no ping */}
-      <div className="mb-3.5 flex flex-wrap items-baseline gap-x-3 gap-y-1 font-mono text-[12px] text-text-light-muted sm:mb-4">
-        <span className="not-italic tabular-nums text-accent">
-          {category.eyebrow}
-        </span>
+      {/* Row marker — group abbr + eyebrow + colored bar */}
+      <div className="flex flex-col items-end gap-1 self-center text-right">
         <span
           aria-hidden="true"
-          className="hidden h-px w-6 bg-accent/30 sm:inline-block"
+          className="h-0.5 w-7 sm:w-10"
+          style={{ background: category.color }}
         />
-        <span className="font-semibold text-text-light">
-          {category.title}
+        <span
+          className="font-mono text-[16px] font-bold tracking-[0.05em] sm:text-[18px]"
+          style={{ color: category.color }}
+        >
+          {category.abbr}
         </span>
-        <span aria-hidden="true" className="text-text-light-muted/40">
-          —
+        <span className="hidden font-mono text-[9.5px] tracking-[0.18em] text-text-light-muted sm:block">
+          {category.eyebrow}
         </span>
-        <span>{category.frequency}</span>
-        {primaryLabel ? (
-          <>
-            <span aria-hidden="true" className="text-text-light-muted/40">
-              ·
-            </span>
-            <span>
-              primary <span className="text-accent">{primaryLabel}</span>
-            </span>
-          </>
-        ) : null}
-        {category.href ? (
-          <a
-            className="group/cat ml-auto inline-flex items-baseline gap-1.5 text-accent transition-colors duration-200 hover:text-accent-deep"
-            href={category.href}
-          >
-            <span aria-hidden="true" className="not-italic text-accent/70">
-              ↳
-            </span>
-            <span className="link-underline">why these</span>
-            <span
-              aria-hidden="true"
-              className="transition-transform duration-200 group-hover/cat:translate-x-0.5"
-            >
-              →
-            </span>
-          </a>
-        ) : null}
       </div>
 
-      {/* Element cells — flex-wrap so rows pack left without empty
-          grid tracks when an item count doesn't divide evenly. */}
+      {/* Cell row */}
       <ul className="flex flex-wrap gap-2 sm:gap-2.5">
         {cells.map(({ atomic, item }, ii) => (
           <ElementCell
             atomic={atomic}
-            delay={ci * 0.05 + ii * 0.03}
+            category={category}
+            delay={ci * 0.04 + ii * 0.025}
             item={item}
             key={item.label}
             reduce={reduce}
           />
         ))}
       </ul>
-    </motion.section>
+    </motion.div>
   );
 }
 
 function ElementCell({
   atomic,
+  category,
   delay,
   item,
   reduce,
 }: {
   atomic: number;
+  category: StackCategory;
   delay: number;
   item: StackItem;
   reduce: boolean;
@@ -260,51 +239,66 @@ function ElementCell({
   return (
     <motion.li
       animate={reduce ? undefined : { opacity: 1, scale: 1 }}
-      className="relative w-[104px] sm:w-[120px] md:w-[128px] lg:w-[136px]"
+      className="relative w-[92px] sm:w-[104px] md:w-[112px] lg:w-[120px]"
       initial={reduce ? false : { opacity: 0, scale: 0.92 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      transition={{ delay, duration: 0.45, ease: easeOut }}
+      transition={{ delay, duration: 0.4, ease: easeOut }}
       viewport={{ amount: 0.25, once: true }}
       whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
     >
       <button
         aria-label={item.primary ? `${item.label} · primary` : item.label}
-        className={`group relative flex aspect-square w-full flex-col justify-between rounded-lg border bg-white/70 p-2 backdrop-blur-md transition-[transform,border-color,box-shadow,background] duration-300 hover:-translate-y-1 hover:border-accent/55 hover:bg-white hover:shadow-[0_18px_36px_-18px_rgba(41,110,214,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:p-2.5 ${
-          item.primary
-            ? "border-accent/45 shadow-[0_10px_28px_-14px_rgba(41,110,214,0.35)]"
-            : "border-border-light"
+        className={`group relative flex aspect-square w-full flex-col overflow-hidden rounded-md border bg-bg-light p-2 text-left transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_-18px_rgba(15,23,42,0.25)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent ${
+          item.primary ? "border-text-light" : "border-border-light"
         }`}
         onBlur={() => setHovered(false)}
         onFocus={() => setHovered(true)}
+        style={{
+          boxShadow: item.primary
+            ? `inset 0 3px 0 ${category.color}`
+            : `inset 0 2px 0 ${category.color}55`,
+        }}
         type="button"
       >
-        {/* atomic number */}
-        <span className="self-start font-mono text-[9px] tabular-nums text-text-light-muted/85">
-          {String(atomic).padStart(2, "0")}
+        {/* Header row — atomic number left, group abbr right */}
+        <div className="flex items-baseline justify-between font-mono text-[9px] tabular-nums tracking-[0.05em]">
+          <span className="text-text-light-muted/85">
+            {String(atomic).padStart(2, "0")}
+          </span>
+          <span
+            className="font-bold tracking-[0.04em]"
+            style={{ color: category.color }}
+          >
+            {category.abbr}
+          </span>
+        </div>
+
+        {/* BIG SYMBOL — centered, takes most of the cell */}
+        <span
+          className="flex flex-1 items-center justify-center font-bold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
+          style={{
+            fontFamily:
+              "var(--font-display), var(--font-geist-sans), system-ui, sans-serif",
+            fontSize: "clamp(2rem, 4vw, 2.5rem)",
+            letterSpacing: "-0.04em",
+            lineHeight: 1,
+          }}
+        >
+          {item.symbol}
         </span>
 
-        {/* logo */}
-        <span className="flex flex-1 items-center justify-center">
-          <BrandLogo
-            className={`transition-colors duration-300 group-hover:text-accent ${
-              item.primary ? "text-accent" : "text-text-light-muted"
-            }`}
-            name={item.name}
-            size={34}
-          />
-        </span>
-
-        {/* element label */}
+        {/* Label */}
         <span className="block w-full truncate text-center font-mono text-[9.5px] text-text-light-muted">
           {item.label}
         </span>
 
-        {/* primary indicator — top-right star */}
+        {/* Primary indicator — top-right star */}
         {item.primary ? (
           <span
             aria-hidden="true"
-            className="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded-full border border-accent bg-bg-light font-mono text-[10px] font-semibold text-accent shadow-[0_2px_6px_-2px_rgba(41,110,214,0.55)]"
+            className="absolute right-1 top-1 inline-flex h-3.5 w-3.5 items-center justify-center rounded-full font-mono text-[8.5px] font-bold leading-none"
+            style={{ background: category.color, color: "#fff" }}
             title="Primary in this category"
           >
             ★
@@ -312,13 +306,13 @@ function ElementCell({
         ) : null}
       </button>
 
-      {/* Tooltip — surfaces the usage note on hover/focus. */}
+      {/* Tooltip */}
       <motion.span
         animate={{
           opacity: hovered && !reduce ? 1 : 0,
           y: hovered && !reduce ? -6 : 0,
         }}
-        className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 inline-flex max-w-[220px] -translate-x-1/2 flex-col items-center gap-1 whitespace-nowrap rounded-md border border-accent/30 bg-bg-light px-2.5 py-1.5 font-mono text-[10px] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
+        className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 inline-flex max-w-[220px] -translate-x-1/2 flex-col items-center gap-1 whitespace-nowrap rounded-md border border-border-light bg-bg-light px-2.5 py-1.5 font-mono text-[10px] text-text-light shadow-[0_8px_20px_-10px_rgba(15,23,42,0.4)]"
         transition={{ duration: 0.2, ease: easeOut }}
       >
         <span className="font-semibold">{item.label}</span>

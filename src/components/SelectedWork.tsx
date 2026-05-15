@@ -80,400 +80,176 @@ const easeOut = [0.16, 1, 0.3, 1] as [number, number, number, number];
 
 const STATUS = {
   internal: {
-    diffClass: "text-text-light-muted",
-    glow: "rgba(100,116,139,0.55)",
-    node: "#64748b",
+    accent: "text-text-light-muted",
+    bg: "bg-text-light-muted/15",
+    dot: "bg-text-light-muted",
+    label: "Internal",
+    ring: "ring-text-light-muted/40",
   },
   live: {
-    diffClass: "text-result-green",
-    glow: "rgba(16,185,129,0.7)",
-    node: "#10b981",
+    accent: "text-result-green",
+    bg: "bg-result-green/12",
+    dot: "bg-result-green",
+    label: "Live",
+    ring: "ring-result-green/40",
   },
   shipped: {
-    diffClass: "text-accent",
-    glow: "rgba(41,110,214,0.55)",
-    node: "#296ed6",
+    accent: "text-accent",
+    bg: "bg-accent/10",
+    dot: "bg-accent",
+    label: "Shipped",
+    ring: "ring-accent/40",
   },
 } as const;
 
-const TRACK = { 0: 26, 1: 58 } as const;
-const GUTTER_W = 84;
-
 /**
- * Selected Work — "ship.log" dialect. Deliberately departs from the
- * bento-with-massive-number pattern used by Outcomes. Renders as a
- * git-log file panel: file-tab strip, command echo, a real two-track
- * branch graph in the gutter (atlas/main + privatehotels/*),
- * diff-prefixed display titles, mono commit preamble, redacted tail.
+ * Selected Work — theatre marquee. Stack of 4 Broadway-style bills.
+ * Each bill: chasing-bulb top + bottom edges, year + status pip in
+ * the top corners, big display title centered, then a horizontal
+ * footer row with [metric badge · tech chips · CTA button] so the
+ * key info reads at a glance. Cleaner than the original star-laden
+ * "STARRING/FEATURING/BOX OFFICE" treatment — same theatre identity
+ * but with obvious labels and a real call-to-action button.
  */
 export function SelectedWork() {
-  const reduce = useReducedMotion();
-
   return (
-    <div
-      className="relative"
-    >
-      {/* outer halo */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute -inset-4 -z-10 rounded-3xl bg-accent/[0.04] blur-3xl"
-      />
-
-      {/* File-tab strip — lowercase tabs, no caps tracking */}
-      <div className="relative flex items-end gap-1">
-        <div className="relative z-10 flex items-center gap-2 rounded-t-lg border border-b-0 border-accent/30 bg-bg-light-2 px-4 py-2 font-mono text-[12px] text-text-light shadow-[0_-4px_12px_-6px_rgba(41,110,214,0.18)]">
-          <span aria-hidden="true" className="not-italic text-accent">▸</span>
-          <span>ship.log</span>
-          <span aria-hidden="true" className="ml-1 inline-block h-px w-3 bg-accent" />
-        </div>
-        <div className="relative flex items-center gap-2 rounded-t-lg border border-b-0 border-accent/15 bg-accent/[0.025] px-4 py-2 font-mono text-[12px] text-text-light-muted">
-          <span>redacted.log</span>
-        </div>
-        <div className="ml-auto hidden items-baseline gap-2 self-end pb-1 pr-1 font-mono text-[12px] text-text-light-muted sm:flex">
-          <span>head at </span>
-          <span className="not-italic tabular-nums text-accent">{works[0]!.hash}</span>
-        </div>
-      </div>
-
-      {/* Body */}
-      <div className="relative overflow-hidden rounded-b-lg rounded-tr-lg border border-accent/25 bg-bg-light-2 shadow-[0_18px_50px_-22px_rgba(41,110,214,0.30)]">
-        {/* Command echo line */}
-        <div className="relative flex items-center gap-2 border-b border-accent/15 bg-accent/[0.04] px-5 py-3 font-mono text-[11px] tracking-tight text-text-light-muted sm:px-6">
-          <span className="font-semibold text-accent">$</span>
-          <span className="min-w-0 truncate">
-            <span className="font-semibold text-text-light/90">git log</span>
-            <span className="text-text-light-muted">
-              {" "}
-              --graph --pretty=ship --since=2024 --author=pierre
-            </span>
-          </span>
-          <span className="ml-auto inline-flex shrink-0 items-baseline gap-1.5 font-mono text-[12px] text-result-green">
-            <span>4 commits, 2 still live</span>
-          </span>
-        </div>
-
-        {/* Faint scanline texture */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 bottom-0 top-12 opacity-50"
-          style={{
-            backgroundImage:
-              "linear-gradient(to bottom, transparent 0, transparent 26px, rgba(41,110,214,0.03) 27px, transparent 28px)",
-            backgroundSize: "100% 28px",
-          }}
-        />
-
-        <ol className="relative divide-y divide-accent/12">
-          {works.map((work, i) => (
-            <CommitRow
-              first={i === 0}
-              key={work.hash}
-              last={i === works.length - 1}
-              reduce={!!reduce}
-              rowIndex={i}
-              work={work}
-            />
-          ))}
-        </ol>
-
-        {/* Redacted tail — editorial caption */}
-        <div className="relative flex items-center border-t border-accent/15 bg-accent/[0.025] py-3 font-mono text-[12px]">
-          <span className="relative shrink-0" style={{ width: GUTTER_W }}>
-            <svg
-              aria-hidden="true"
-              className="absolute inset-0 h-full w-full overflow-visible"
-              preserveAspectRatio="none"
-              viewBox={`0 0 ${GUTTER_W} 100`}
-            >
-              <line
-                strokeDasharray="2 3"
-                strokeLinecap="round"
-                strokeWidth="1"
-                x1={TRACK[0]}
-                x2={TRACK[0]}
-                y1="0"
-                y2="100"
-                stroke="rgba(41,110,214,0.20)"
-              />
-            </svg>
-            <span
-              aria-hidden="true"
-              className="absolute font-mono text-base leading-none text-accent/55"
-              style={{
-                left: TRACK[0],
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              ⋮
-            </span>
-          </span>
-          <span className="text-text-light-muted">
-            earlier commits redacted — client confidentiality
-          </span>
-        </div>
-      </div>
-    </div>
+    <ol className="grid gap-7 sm:gap-9">
+      {works.map((work, i) => (
+        <MarqueeBill index={i} key={work.hash} work={work} />
+      ))}
+    </ol>
   );
 }
 
-function CommitRow({
-  first,
-  last,
-  reduce,
-  rowIndex,
-  work,
-}: {
-  first: boolean;
-  last: boolean;
-  reduce: boolean;
-  rowIndex: number;
-  work: Work;
-}) {
-  const status = STATUS[work.status];
+function MarqueeBill({ index, work }: { index: number; work: Work }) {
+  const reduce = useReducedMotion();
   const Tag = work.href ? "a" : "div";
-  const trackX = TRACK[work.track];
+  const status = STATUS[work.status];
 
   return (
     <motion.li
-      animate={reduce ? undefined : { opacity: 1, x: 0 }}
-      initial={reduce ? false : { opacity: 0, x: -10 }}
-      transition={{ delay: rowIndex * 0.08, duration: 0.55, ease: easeOut }}
+      animate={reduce ? undefined : { opacity: 1, y: 0 }}
+      initial={reduce ? false : { opacity: 0, y: 24 }}
+      transition={{ delay: index * 0.08, duration: 0.55, ease: easeOut }}
       viewport={{ amount: 0.2, once: true }}
-      whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
+      whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
     >
       <Tag
-        className="group/row relative flex min-h-[200px] items-stretch transition-colors duration-300 hover:bg-accent/[0.045] focus-visible:bg-accent/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent"
+        className="marquee-bill group block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
         href={work.href}
+        data-direction={index % 2 === 0 ? "forward" : "reverse"}
       >
-        {/* Status diff rail on the RIGHT edge (full-height, status-tinted).
-            Distinct from Outcomes' inset-y left edge bar. */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 right-0 w-[3px] opacity-55 transition-opacity duration-300 group-hover/row:opacity-100"
-          style={{
-            background: `linear-gradient(to bottom, transparent 0%, ${status.glow} 45%, ${status.glow} 55%, transparent 100%)`,
-          }}
-        />
+        {/* Bulb border — top + bottom rows of chasing lights */}
+        <span aria-hidden="true" className="marquee-bulbs marquee-bulbs-top" />
+        <span aria-hidden="true" className="marquee-bulbs marquee-bulbs-bottom" />
 
-        {/* Branch-graph gutter */}
-        <div
-          aria-hidden="true"
-          className="relative shrink-0"
-          style={{ width: GUTTER_W }}
-        >
-          <svg
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full overflow-visible"
-            preserveAspectRatio="none"
-            viewBox={`0 0 ${GUTTER_W} 100`}
-          >
-            {rowIndex === 0 ? (
-              <>
-                {/* Track A active: top → atlas node — animated draw */}
-                <motion.line
-                  initial={reduce ? false : { pathLength: 0 }}
-                  stroke="rgba(41,110,214,0.55)"
-                  strokeLinecap="round"
-                  strokeWidth="1.8"
-                  transition={{
-                    delay: 0.15,
-                    duration: 0.65,
-                    ease: easeOut,
-                  }}
-                  viewport={{ amount: 0.2, once: true }}
-                  whileInView={reduce ? undefined : { pathLength: 1 }}
-                  x1={TRACK[0]}
-                  x2={TRACK[0]}
-                  y1="0"
-                  y2="50"
-                />
-                {/* Track A continues into older history — dashed below */}
-                <motion.line
-                  initial={reduce ? false : { pathLength: 0 }}
-                  stroke="rgba(41,110,214,0.22)"
-                  strokeDasharray="2 3"
-                  strokeLinecap="round"
-                  strokeWidth="1"
-                  transition={{
-                    delay: 0.95,
-                    duration: 0.6,
-                    ease: easeOut,
-                  }}
-                  viewport={{ amount: 0.2, once: true }}
-                  whileInView={reduce ? undefined : { pathLength: 1 }}
-                  x1={TRACK[0]}
-                  x2={TRACK[0]}
-                  y1="56"
-                  y2="100"
-                />
-                {/* Fork curve A → B — draws after track A reaches the node */}
-                <motion.path
-                  d={`M ${TRACK[0]} 50 Q ${TRACK[0]} 86 ${TRACK[1]} 100`}
-                  fill="none"
-                  initial={reduce ? false : { pathLength: 0 }}
-                  stroke="rgba(41,110,214,0.55)"
-                  strokeLinecap="round"
-                  strokeWidth="1.8"
-                  transition={{
-                    delay: 0.7,
-                    duration: 0.75,
-                    ease: easeOut,
-                  }}
-                  viewport={{ amount: 0.2, once: true }}
-                  whileInView={reduce ? undefined : { pathLength: 1 }}
-                />
-              </>
-            ) : (
-              <>
-                {/* Track A continues, faded dashed */}
-                <motion.line
-                  initial={reduce ? false : { pathLength: 0 }}
-                  stroke="rgba(41,110,214,0.22)"
-                  strokeDasharray="2 3"
-                  strokeLinecap="round"
-                  strokeWidth="1"
-                  transition={{
-                    delay: rowIndex * 0.08 + 0.1,
-                    duration: 0.7,
-                    ease: easeOut,
-                  }}
-                  viewport={{ amount: 0.2, once: true }}
-                  whileInView={reduce ? undefined : { pathLength: 1 }}
-                  x1={TRACK[0]}
-                  x2={TRACK[0]}
-                  y1="0"
-                  y2="100"
-                />
-                {/* Track B vertical — animates down to (or through) the node */}
-                <motion.line
-                  initial={reduce ? false : { pathLength: 0 }}
-                  stroke="rgba(41,110,214,0.55)"
-                  strokeLinecap="round"
-                  strokeWidth="1.8"
-                  transition={{
-                    delay: rowIndex * 0.08 + 0.18,
-                    duration: 0.7,
-                    ease: easeOut,
-                  }}
-                  viewport={{ amount: 0.2, once: true }}
-                  whileInView={reduce ? undefined : { pathLength: 1 }}
-                  x1={TRACK[1]}
-                  x2={TRACK[1]}
-                  y1="0"
-                  y2={last ? 50 : 100}
-                />
-                {last ? (
-                  <motion.line
-                    initial={reduce ? false : { pathLength: 0 }}
-                    stroke="rgba(41,110,214,0.35)"
-                    strokeLinecap="round"
-                    strokeWidth="1"
-                    transition={{
-                      delay: rowIndex * 0.08 + 0.9,
-                      duration: 0.5,
-                      ease: easeOut,
-                    }}
-                    viewport={{ amount: 0.2, once: true }}
-                    whileInView={reduce ? undefined : { pathLength: 1 }}
-                    x1={TRACK[1] - 6}
-                    x2={TRACK[1] + 6}
-                    y1="98"
-                    y2="98"
+        {/* Bill interior */}
+        <div className="relative grid gap-7 bg-bg-light-2 px-6 py-9 transition-colors duration-300 group-hover:bg-bg-light sm:gap-9 sm:px-12 sm:py-12">
+          {/* HEADER ROW — year (top-left) + status pill (top-right) */}
+          <div className="flex items-center justify-between font-mono text-[11px] tracking-[0.18em] text-text-light-muted">
+            <span className="tabular-nums">
+              {work.year}
+              <span className="ml-3 text-text-light-muted/40">·</span>
+              <span className="ml-3 hidden sm:inline">{work.branch}</span>
+            </span>
+            <span
+              className={`inline-flex items-center gap-2 rounded-full px-3 py-1 ring-1 ${status.bg} ${status.ring} ${status.accent}`}
+            >
+              <span
+                aria-hidden="true"
+                className={`relative inline-block h-1.5 w-1.5 rounded-full ${status.dot}`}
+              >
+                {work.status === "live" ? (
+                  <span
+                    aria-hidden="true"
+                    className={`absolute inset-0 animate-ping rounded-full ${status.dot} opacity-65`}
                   />
                 ) : null}
-              </>
-            )}
-
-            {/* Node — bg ring + filled circle + soft glow */}
-            <circle cx={trackX} cy="50" fill="var(--bg-light-2)" r="6.5" />
-            <circle
-              cx={trackX}
-              cy="50"
-              fill={status.node}
-              r="4.5"
-              style={{ filter: `drop-shadow(0 0 6px ${status.glow})` }}
-            />
-            <circle
-              cx={trackX}
-              cy="50"
-              fill="none"
-              r="4.5"
-              stroke={status.node}
-              strokeOpacity="0.35"
-              strokeWidth="3"
-            />
-          </svg>
-
-        </div>
-
-        {/* Content */}
-        <div className="min-w-0 flex-1 py-7 pr-6 sm:py-9 sm:pr-9">
-          {/* Mono commit preamble — editorial, no caps tracking */}
-          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 font-mono text-[12px]">
-            <span className="text-text-light-muted">commit</span>
-            <span className="not-italic tabular-nums text-accent">
-              {work.hash}
+              </span>
+              <span className="font-semibold uppercase tracking-[0.18em]">
+                {status.label}
+              </span>
             </span>
-            <span className="text-text-light-muted/60">on</span>
-            <span className="text-text-light">{work.branch}</span>
-            {first ? (
-              <span className="text-result-green">— head</span>
-            ) : null}
-            <span className="text-text-light-muted/60">·</span>
-            <span className="text-text-light-muted">{work.year}</span>
           </div>
 
-          {/* Diff-prefixed BIG title — the bold typographic move */}
+          {/* DISPLAY TITLE — the marquee headline, centered */}
           <h3
-            className="mt-3 flex items-baseline gap-3 font-semibold tracking-tight text-text-light transition-colors duration-300 group-hover/row:text-accent-deep"
+            className="text-center font-bold tracking-tight text-text-light transition-colors duration-300 group-hover:text-accent-deep"
             style={{
-              fontSize: "clamp(1.45rem, 2.6vw, 1.95rem)",
-              letterSpacing: "-0.025em",
-              lineHeight: 1.08,
+              fontFamily:
+                "var(--font-display), var(--font-geist-sans), system-ui, sans-serif",
+              fontSize: "clamp(1.875rem, 5vw, 3.75rem)",
+              fontVariationSettings: '"wdth" 92, "opsz" 96',
+              letterSpacing: "-0.045em",
+              lineHeight: 0.95,
             }}
           >
-            <span
-              aria-hidden="true"
-              className={`shrink-0 font-mono font-bold ${status.diffClass}`}
-              style={{ fontSize: "0.9em" }}
-            >
-              +
-            </span>
-            <span>{work.title}</span>
+            {work.title.toUpperCase()}
           </h3>
 
-          {/* Body */}
-          <p className="mt-2.5 max-w-[60ch] text-[0.95rem] leading-relaxed text-text-light-muted">
+          {/* Decorative double rule under the title */}
+          <div className="mx-auto -mt-3 grid w-fit gap-0.5 sm:-mt-4">
+            <span aria-hidden="true" className="h-px w-24 bg-accent/35 sm:w-36" />
+            <span aria-hidden="true" className="h-px w-24 bg-accent/35 sm:w-36" />
+          </div>
+
+          {/* CONTEXT BLURB */}
+          <p className="mx-auto max-w-2xl text-center text-[14.5px] leading-7 text-text-light-muted sm:text-[15.5px] sm:leading-8">
             {work.context}
           </p>
 
-          {/* Footer — metric + tech as editorial prose, no rounded
-              chip wrappers. */}
-          <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-2 font-mono text-[12px]">
-            <span className="not-italic text-accent/80">→</span>
-            <span className="font-semibold tabular-nums text-text-light">
-              {work.metric}
-            </span>
-            <span className="text-text-light-muted">{work.metricLabel}</span>
-
-            <span className="text-text-light-muted/40">·</span>
-
-            <span className="text-text-light-muted">
-              built with {work.tech.join(", ")}
-            </span>
-
-            {work.href ? (
-              <span className="ml-auto inline-flex items-baseline gap-1.5 text-accent">
-                <span className="link-underline">see receipts</span>
-                <span
-                  aria-hidden="true"
-                  className="transition-transform duration-200 group-hover/row:translate-x-1"
-                >
-                  →
-                </span>
+          {/* FOOTER ROW — metric badge (left) · tech chips (center) · CTA (right) */}
+          <div className="grid items-center gap-6 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:gap-8">
+            {/* METRIC BADGE — featured outcome, poster-style */}
+            <div className="flex items-center gap-3 self-stretch border-t border-accent/15 pt-4 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0 sm:[border-left-width:1px]">
+              <span
+                aria-hidden="true"
+                className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${status.bg} ${status.accent}`}
+              >
+                ★
               </span>
-            ) : null}
+              <div>
+                <p
+                  className={`font-bold tabular-nums ${status.accent}`}
+                  style={{
+                    fontFamily:
+                      "var(--font-display), var(--font-geist-sans), system-ui, sans-serif",
+                    fontSize: "clamp(1.4rem, 2.4vw, 1.8rem)",
+                    fontVariationSettings: '"wdth" 92, "opsz" 96',
+                    letterSpacing: "-0.025em",
+                    lineHeight: 1,
+                  }}
+                >
+                  {work.metric}
+                </p>
+                <p className="mt-1 font-mono text-[11px] tracking-[0.14em] text-text-light-muted">
+                  {work.metricLabel.toUpperCase()}
+                </p>
+              </div>
+            </div>
+
+            {/* TECH CHIPS — middle column */}
+            <ul className="flex flex-wrap items-center justify-center gap-1.5">
+              {work.tech.map((t) => (
+                <li
+                  className="rounded-full border border-border-light bg-bg-light px-3 py-1 font-mono text-[11px] tracking-[0.06em] text-text-light-muted transition-colors duration-200 group-hover:border-accent/35 group-hover:text-text-light"
+                  key={t}
+                >
+                  {t}
+                </li>
+              ))}
+            </ul>
+
+            {/* CTA — real filled button, not a text link */}
+            <span className="inline-flex items-center justify-center gap-2 self-center justify-self-end rounded-md bg-accent px-5 py-2.5 text-sm font-semibold text-white shadow-[0_8px_22px_-10px_rgba(41,110,214,0.55)] transition-[transform,box-shadow] duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_14px_30px_-12px_rgba(41,110,214,0.7)]">
+              See the build
+              <span
+                aria-hidden="true"
+                className="transition-transform duration-200 group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </span>
           </div>
         </div>
       </Tag>

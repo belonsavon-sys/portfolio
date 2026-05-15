@@ -27,12 +27,6 @@ export {
 export type { ContactLink } from "./contact-config";
 export { CursorHalo } from "./CursorHalo";
 export type { CursorHaloProps } from "./CursorHalo";
-export { DemoTabCard } from "./DemoTabCard";
-export type {
-  DemoLoadStatus,
-  DemoRunStatus,
-  DemoTabCardProps,
-} from "./DemoTabCard";
 export { GlitchTitle } from "./GlitchTitle";
 export type { GlitchTitleProps } from "./GlitchTitle";
 export { GreetingRotator } from "./GreetingRotator";
