@@ -1,5 +1,53 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
+type ScriptLine = {
+  /** Display the line in this color class. */
+  tone: "user" | "muted" | "success" | "violet" | "amber";
+  text: string;
+  /** Delay after this line streams (ms). */
+  pause?: number;
+};
+
+const SCRIPT_A: ScriptLine[] = [
+  { text: "> what changed in this folder recently?", tone: "user", pause: 350 },
+  { text: "▸ Inspecting working tree…", tone: "muted", pause: 600 },
+  { text: "▸ Recent commits on main:", tone: "muted", pause: 150 },
+  { text: "    8cc5c77  fix(home/hero): strip avatar chrome", tone: "muted" },
+  { text: "    6a0aecd  feat(home/hero): live commit ticker", tone: "muted" },
+  { text: "    ffe273d  Merge pull request #216", tone: "muted", pause: 450 },
+  { text: "▸ 3 commits in the last 2 hours. Want me to draft a PR summary?", tone: "muted", pause: 800 },
+  { text: "> y", tone: "user", pause: 500 },
+  {
+    text:
+      "▸ ✓ Drafted PR #218 — https://github.com/belonsavon-sys/Portfolio/pull/218",
+    tone: "success",
+    pause: 250,
+  },
+  { text: "▸ Awaiting review.", tone: "muted", pause: 2200 },
+];
+
+const SCRIPT_B: ScriptLine[] = [
+  { text: "> explain this codebase", tone: "user", pause: 350 },
+  { text: "▸ Spawning subagent: file-mapper", tone: "violet", pause: 700 },
+  { text: "▸ ↳ Mapping src/ … 247 files indexed", tone: "muted", pause: 500 },
+  { text: "▸ Architecture summary:", tone: "muted", pause: 150 },
+  { text: "    src/app/        — Next.js App Router (5 routes)", tone: "muted" },
+  { text: "    src/components/ — 38 components", tone: "muted" },
+  { text: "    src/data/       — resume + stack content modules", tone: "muted" },
+  { text: "    public/         — static assets + résumé PDF", tone: "muted", pause: 350 },
+  { text: "▸ ✓ done in 12.4s", tone: "success", pause: 2200 },
+];
+
+const TONE_CLASS: Record<ScriptLine["tone"], string> = {
+  amber: "text-amber-300",
+  muted: "text-zinc-400",
+  success: "text-emerald-400",
+  user: "text-zinc-200",
+  violet: "text-violet-300",
+};
+
 /**
  * Atlas terminal scene — faithful HTML/SVG recreation of the real
  * CLI. Static frame here; the scripted-playback layer is added in
@@ -62,12 +110,84 @@ export function AtlasTerminal() {
           <p className="pl-6 text-zinc-500">&quot;open a task in my workspace&quot;</p>
         </div>
 
-        {/* CURSOR */}
-        <p className="mt-4">
-          <span aria-hidden="true" className="inline-block h-[14px] w-[7px] animate-pulse bg-zinc-300 align-middle" />
-        </p>
+        <PlaybackArea />
       </div>
     </section>
+  );
+}
+
+/**
+ * The scripted-playback area inside the terminal — appears below
+ * the prompts. Cycles between SCRIPT_A and SCRIPT_B with a short
+ * cooldown. Each character is typed at ~22 ms, each line at the
+ * pause specified.
+ */
+function PlaybackArea() {
+  const [renderedLines, setRenderedLines] = useState<string[][]>([]);
+  const [scriptIdx, setScriptIdx] = useState(0); // 0 = A, 1 = B
+  const cancelledRef = useRef(false);
+
+  useEffect(() => {
+    cancelledRef.current = false;
+    const scripts = [SCRIPT_A, SCRIPT_B];
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduce) {
+      setRenderedLines(scripts[scriptIdx]!.map((l) => [l.text]));
+      return () => {
+        cancelledRef.current = true;
+      };
+    }
+
+    let isMounted = true;
+    const current = scripts[scriptIdx]!;
+
+    async function play() {
+      const accumulated: string[][] = [];
+      for (let li = 0; li < current.length; li += 1) {
+        if (!isMounted || cancelledRef.current) return;
+        const target = current[li]!.text;
+        accumulated.push([""]);
+        setRenderedLines([...accumulated]);
+        for (let ci = 1; ci <= target.length; ci += 1) {
+          if (!isMounted || cancelledRef.current) return;
+          accumulated[li] = [target.slice(0, ci)];
+          setRenderedLines([...accumulated]);
+          await wait(22);
+        }
+        await wait(current[li]!.pause ?? 40);
+      }
+      // Cooldown before swap
+      await wait(2400);
+      if (!isMounted || cancelledRef.current) return;
+      setScriptIdx((i) => (i + 1) % 2);
+      setRenderedLines([]);
+    }
+
+    play();
+    return () => {
+      isMounted = false;
+      cancelledRef.current = true;
+    };
+  }, [scriptIdx]);
+
+  return (
+    <div className="mt-5 grid gap-1 border-t border-zinc-800 pt-4" aria-hidden="true">
+      {renderedLines.map((line, i) => {
+        const tone = (
+          [...SCRIPT_A, ...SCRIPT_B].find((s) => s.text === line[0]) ?? {
+            tone: "muted" as const,
+          }
+        ).tone;
+        return (
+          <p className={TONE_CLASS[tone]} key={`${scriptIdx}-${i}`}>
+            {line[0]}
+          </p>
+        );
+      })}
+    </div>
   );
 }
 
@@ -188,4 +308,8 @@ function AtlasAsciiLogo() {
       })()}
     </svg>
   );
+}
+
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
 }
