@@ -609,13 +609,16 @@ function Hero() {
           />
         </h1>
 
-        {/* Description — one tight centered sentence */}
+        {/* Operator-AI framing line — replaces previous generic
+            description with the hotel→Atlas story up front. */}
         <motion.p
-          className="max-w-2xl text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9"
+          className="mx-auto text-center text-[17px] leading-8 text-text-light"
+          style={{ maxWidth: "52ch" }}
           {...fadeUp(0.42)}
         >
-          I build AI for businesses that have to actually run. Most of
-          it I shipped while running one.
+          I was running a hotel when I started building the AI to automate it.
+          Now I co-architect Atlas — the multi-agent harness behind every
+          Blackdoor ship.
         </motion.p>
 
         {/* CTAs */}
