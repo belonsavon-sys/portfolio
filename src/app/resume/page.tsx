@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
+  AvailabilityCta,
   Button,
   ChapterRail,
   GlitchTitle,
@@ -183,6 +184,8 @@ export default function ResumePage() {
           <ContactEditorial />
         </Section>
       </article>
+
+      <AvailabilityCta />
 
       <ChapterRail
         sections={[

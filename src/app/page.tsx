@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import {
   AnimatedCounter,
+  AvailabilityCta,
   BentoStack,
   Button,
   ChapterRail,
@@ -251,6 +252,8 @@ export default function Home() {
       <LightSection className="py-20 sm:py-24" id="stack">
         <Stack />
       </LightSection>
+
+      <AvailabilityCta />
 
       <SectionDivider direction="light-to-dark" />
 

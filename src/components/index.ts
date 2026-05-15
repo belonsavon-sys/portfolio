@@ -2,6 +2,7 @@ export { Button } from "./Button";
 export type { ButtonProps } from "./Button";
 export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps } from "./AnimatedCounter";
+export { AvailabilityCta } from "./AvailabilityCta";
 export { AtlasHierarchy } from "./AtlasHierarchy";
 export type { AtlasHierarchyLayer, AtlasHierarchyProps } from "./AtlasHierarchy";
 export { BackToTop } from "./BackToTop";
