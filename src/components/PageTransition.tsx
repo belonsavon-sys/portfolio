@@ -183,7 +183,7 @@ export function PageTransition({ children }: { children: ReactNode }) {
       {/* PAGE CONTENT — exit/enter under the curtain's cover.
           mode="wait" + delayed entry gives a clean swap behind the
           chapter slate so the user never sees a raw transition. */}
-      <AnimatePresence initial={false} mode="wait">
+      <AnimatePresence mode="wait">
         <motion.div
           animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
           exit={{ filter: "blur(8px)", opacity: 0, y: -6 }}

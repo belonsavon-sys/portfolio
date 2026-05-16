@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-const title = "The Lab — what I'm building and using";
+const title = "The Lab — local ML, in your browser";
 const description =
-  "Behind the scenes. What I'm shipping this week, the local-ML demos I'm playing with, the tools I actually paid for, and how I built this site.";
+  "Five interactive on-device ML demos. All inference runs in your tab via onnxruntime-web — nothing is uploaded.";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/lab" },

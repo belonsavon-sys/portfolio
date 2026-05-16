@@ -4,6 +4,7 @@ export { AnimatedCounter } from "./AnimatedCounter";
 export type { AnimatedCounterProps } from "./AnimatedCounter";
 export { AtlasHierarchy } from "./AtlasHierarchy";
 export type { AtlasHierarchyLayer, AtlasHierarchyProps } from "./AtlasHierarchy";
+export { AvailabilityCta } from "./AvailabilityCta";
 export { BackToTop } from "./BackToTop";
 export { ConsoleSignature } from "./ConsoleSignature";
 export { AtlasManifest } from "./AtlasManifest";
@@ -12,6 +13,7 @@ export type { BeforeAfterProps, BeforeAfterSide } from "./BeforeAfter";
 export { ChapterRail } from "./ChapterRail";
 export type { ChapterRailProps, ChapterRailSection } from "./ChapterRail";
 export { CommitTicker } from "./CommitTicker";
+export { CommitStamp } from "./CommitStamp";
 export { BentoStack } from "./BentoStack";
 export { BrandLogo } from "./BrandLogo";
 export type { BrandLogoProps } from "./BrandLogo";
@@ -27,12 +29,6 @@ export {
 export type { ContactLink } from "./contact-config";
 export { CursorHalo } from "./CursorHalo";
 export type { CursorHaloProps } from "./CursorHalo";
-export { DemoTabCard } from "./DemoTabCard";
-export type {
-  DemoLoadStatus,
-  DemoRunStatus,
-  DemoTabCardProps,
-} from "./DemoTabCard";
 export { GlitchTitle } from "./GlitchTitle";
 export type { GlitchTitleProps } from "./GlitchTitle";
 export { GreetingRotator } from "./GreetingRotator";

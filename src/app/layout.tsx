@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Fraunces, Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   BackToTop,
+  CommitStamp,
   ConsoleSignature,
   KeyboardNav,
   LightSwitch,
@@ -30,6 +31,17 @@ const bricolage = Bricolage_Grotesque({
   variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
+});
+
+// Fraunces — Pierre's "specimen" serif. Used in big italic moments on
+// /resume (role names rendered as drafting-sheet specimen labels). Opsz +
+// SOFT + WONK variable axes give it characterful pulled-soft terminals.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  display: "swap",
+  axes: ["opsz", "SOFT", "WONK"],
+  style: ["italic"],
 });
 
 const siteUrl = "https://pierrebelonsavon.com";
@@ -93,7 +105,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} ${fraunces.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
     >
       <body className="grain relative flex min-h-full flex-col">
@@ -133,6 +145,7 @@ export default function RootLayout({
           <PageAtmosphere />
           <SiteHeader />
           <LightSwitch />
+          <CommitStamp />
           <div id="main-content">
             <PageTransition>{children}</PageTransition>
           </div>

@@ -1,4 +1,16 @@
+/* Caveat — handwritten body font for /business#process manual page.
+ * Must come BEFORE the Tailwind @import (the Tailwind import expands
+ * inline; any @import after it gets pushed past non-@import rules,
+ * which CSS forbids). Falls back to platform handwriting faces if
+ * Google Fonts is unreachable. */
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap");
 @import "tailwindcss";
+
+.font-handwritten {
+  font-family:
+    "Caveat", "Bradley Hand", "Marker Felt", "Segoe Script",
+    "Comic Sans MS", cursive;
+}
 
 :root {
   --accent: #296ed6;
@@ -223,9 +235,22 @@ body.dark .glitch-title-meta {
   text-shadow: 0 0 8px rgba(134, 239, 172, 0.55);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* ─── CommitStamp — dark-mode-only git watermark ────────────────
+ * The CommitStamp element renders unconditionally; this rule
+ * hides it in light mode and shows it in dark. Keeps the
+ * "engineer's working surface" personality scoped to lights-off. */
+.commit-stamp {
+  display: none;
+}
+body.dark .commit-stamp {
+  display: block;
+}
+
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 ::selection {
@@ -1274,6 +1299,46 @@ a {
   }
 }
 
+/* Blinking caret for the live-typing AI draft on /business#comms. */
+@keyframes comms-caret {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Paper fiber + faint horizontal lines — adds the "scanned binder
+ * page" texture to .paper-card on /business#process. The fiber is a
+ * tiny SVG noise pattern blended at low opacity; the lines mimic the
+ * faint regularity of typed paper. Both are decorative and pointer-
+ * events: none so they never interfere with anything else on top. */
+.paper-fiber::before,
+.paper-fiber::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.paper-fiber::before {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.31 0 0 0 0 0.18 0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+.paper-fiber::after {
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0,
+    transparent 23px,
+    rgba(122, 90, 48, 0.04) 24px
+  );
+  opacity: 0.6;
+}
+
 @keyframes marquee {
   from {
     transform: translateX(0);
@@ -1446,3 +1511,655 @@ a {
     color: #000 !important;
   }
 }
+
+/* ─── Home Section 03 — Theatre Marquee bills ────────────────────
+ * Each work item renders as a Broadway-style bill. The chasing
+ * bulbs are repeating radial-gradient dots along the top and
+ * bottom edges, animated via a mask that travels across the row
+ * so the highlight cycles. */
+
+.marquee-bill {
+  position: relative;
+  display: block;
+}
+
+.marquee-bulbs {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 22px;
+  /* Dim base bulbs — soft amber inner highlight over a darker
+   * outer ring so each dot reads as an off lightbulb. */
+  background-image: radial-gradient(
+    circle at 11px 11px,
+    rgba(251, 191, 36, 0.55) 0,
+    rgba(251, 191, 36, 0.45) 2.5px,
+    rgba(180, 100, 20, 0.45) 4px,
+    transparent 5px
+  );
+  background-size: 22px 22px;
+  background-repeat: repeat-x;
+}
+.marquee-bulbs-top {
+  top: 0;
+}
+.marquee-bulbs-bottom {
+  bottom: 0;
+}
+
+/* Chase highlight — bright bulbs travel across the row, simulating
+ * a real marquee chase. Inner white core + bright amber halo + soft
+ * outer glow gives each lit bulb a real-bulb feel. */
+.marquee-bulbs::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 11px 11px,
+    rgba(255, 255, 255, 1) 0,
+    rgba(255, 248, 220, 1) 1.5px,
+    rgba(251, 191, 36, 1) 3px,
+    rgba(251, 191, 36, 0.65) 5px,
+    transparent 8px
+  );
+  background-size: 22px 22px;
+  background-repeat: repeat-x;
+  filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    transparent 30%,
+    rgba(0, 0, 0, 1) 50%,
+    transparent 70%,
+    transparent 100%
+  );
+  mask-size: 240px 100%;
+  mask-repeat: no-repeat;
+  animation: marquee-chase 3.4s linear infinite;
+}
+
+[data-direction="reverse"] .marquee-bulbs::after {
+  animation-direction: reverse;
+}
+
+@keyframes marquee-chase {
+  0% {
+    mask-position: -240px 0;
+  }
+  100% {
+    mask-position: calc(100% + 240px) 0;
+  }
+}
+
+/* The bill's bg-bg-light-2 surface gets a hairline rule top + bottom
+ * (just inside the bulb rows) for an additional theatrical frame. */
+.marquee-bill > div {
+  border-top: 1px solid rgba(41, 110, 214, 0.18);
+  border-bottom: 1px solid rgba(41, 110, 214, 0.18);
+  margin-top: 22px;
+  margin-bottom: 22px;
+}
+
+.marquee-bill:hover .marquee-bulbs::after {
+  filter: brightness(1.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-bulbs::after {
+    animation: none;
+    opacity: 0.6;
+    mask-image: none;
+    background-position: 0 0;
+  }
+}
+
+/* ─── /resume — editorial profile primitives ─────────────────────
+ * The resume page is a long-form profile. These primitives carry
+ * the visual language: drop caps on opening paragraphs, italic
+ * Fraunces pull quotes, an editorial section deck-head, and an
+ * end-of-section ornament that scales-in on scroll. */
+
+.editorial-dropcap::first-letter {
+  float: left;
+  font-size: 4.2em;
+  line-height: 0.88;
+  margin: 0.04em 0.12em -0.05em 0;
+  font-weight: 600;
+  letter-spacing: -0.05em;
+  color: var(--accent-deep);
+}
+
+.editorial-pull-quote {
+  font-family: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  line-height: 1.22;
+  font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 0;
+}
+
+/* Numeric section deck — a huge, stroked-only numeral that sits
+ * decoratively beside each section's GlitchTitle. Subtle, structural. */
+.editorial-numeral {
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(41, 110, 214, 0.18);
+  line-height: 0.85;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Section end-ornament — a small accent square that scales-in as
+ * each section enters the viewport. Quiet but signals "end of
+ * section" without a hard rule. */
+@keyframes editorial-mark-in {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.editorial-mark {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  transform: scale(0);
+  opacity: 0;
+}
+.editorial-mark.editorial-mark-on {
+  animation: editorial-mark-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editorial-mark.editorial-mark-on {
+    animation: none;
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ─── /lab — dark console card on a light page ───────────────────
+ * The /lab page itself uses the site's light tokens (so the
+ * LightSwitch works for the hero + footer + tabs around the
+ * card). The demo CARD itself stays dark regardless — a console
+ * island. We pin its palette by rebinding the `*-light` CSS
+ * variables to the dark equivalents in scope, so every Tailwind
+ * `text-text-light` / `bg-bg-light-2` / `border-border-light`
+ * utility inside the card resolves to dark colors. */
+.demo-island-card {
+  --bg-light: var(--bg-dark);
+  --bg-light-2: var(--bg-dark-2);
+  --text-light: var(--text-dark);
+  --text-light-muted: var(--text-dark-muted);
+  --border-light: rgba(148, 163, 184, 0.16);
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  /* Green-neon edge: a 1px emerald stroke plus a soft outer halo
+   * + faint inset glow. This replaces the slate hairline so the
+   * card reads as a live instrument frame. */
+  border: 1px solid rgba(16, 185, 129, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.18),
+    0 0 32px -4px rgba(16, 185, 129, 0.32),
+    0 0 60px -12px rgba(16, 185, 129, 0.22),
+    inset 0 0 24px -10px rgba(16, 185, 129, 0.18);
+}
+
+/* CRT scanline — a thin gradient strip sweeping down the dark
+ * card every 9 s. `mix-blend-mode: screen` lifts the surface as
+ * it passes. */
+@keyframes demo-scan {
+  0% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.55;
+  }
+  94% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(calc(var(--scan-h, 100vh) + 40px));
+    opacity: 0;
+  }
+}
+
+.demo-island-card::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 56px;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(16, 185, 129, 0.16) 35%,
+    rgba(16, 185, 129, 0.32) 50%,
+    rgba(16, 185, 129, 0.16) 65%,
+    transparent 100%
+  );
+  filter: blur(0.5px);
+  z-index: 5;
+  mix-blend-mode: screen;
+  animation: demo-scan 9s linear infinite;
+}
+
+/* Faint dot-grid texture — quiet instrumented surface. */
+.demo-island-card::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.045) 1px,
+    transparent 1.4px
+  );
+  background-size: 18px 18px;
+  z-index: 0;
+  mask-image: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.2) 65%,
+    transparent 100%
+  );
+}
+
+.demo-island-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Edge flicker — every ~11 s the green frame briefly snaps to a
+ * stronger glow + chromatic offset. Quick, three beats, then back
+ * to rest. */
+@keyframes demo-edge-glitch {
+  0%,
+  4%,
+  7%,
+  100% {
+    border-color: rgba(16, 185, 129, 0.55);
+    box-shadow:
+      0 0 0 1px rgba(16, 185, 129, 0.18),
+      0 0 32px -4px rgba(16, 185, 129, 0.32),
+      0 0 60px -12px rgba(16, 185, 129, 0.22),
+      inset 0 0 24px -10px rgba(16, 185, 129, 0.18);
+  }
+  5% {
+    border-color: rgba(74, 222, 128, 0.95);
+    box-shadow:
+      0 0 0 1px rgba(74, 222, 128, 0.6),
+      0 0 0 4px rgba(74, 222, 128, 0.18),
+      0 0 40px rgba(74, 222, 128, 0.45),
+      inset 0 0 30px -6px rgba(74, 222, 128, 0.3);
+  }
+  6% {
+    border-color: rgba(74, 222, 128, 0.7);
+    box-shadow:
+      -2px 0 0 rgba(91, 155, 244, 0.45),
+      2px 0 0 rgba(239, 68, 68, 0.4),
+      0 0 0 1px rgba(74, 222, 128, 0.5),
+      0 0 24px rgba(74, 222, 128, 0.25);
+  }
+}
+
+.demo-island-card {
+  animation: demo-edge-glitch 11s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-island-card::before {
+    animation: none;
+    opacity: 0;
+  }
+  .demo-island-card {
+    animation: none;
+  }
+}
+
+
+/* ─── /resume — drafting-board primitives ───────────────────────────
+ * The resume page is composed as an engineer's sheet set. These
+ * primitives carry the visual language: vellum paper tone with a
+ * blueprint grid, a "draftsman's red" ink for hand-marginalia, a
+ * filled-triangle dimension callout primitive used to annotate
+ * outcomes ("48 hr → 3 min"), and a wax-stamp keyframe for the
+ * Education seal. All scoped under `.blueprint-bg` so nothing
+ * leaks to other pages. */
+
+:root {
+  --paper: #fbfaf6;
+  --paper-2: #f3f1e8;
+  --ink: #15233e;
+  --redline: #d4391c;
+  --redline-soft: rgba(212, 57, 28, 0.7);
+}
+
+.font-specimen {
+  font-family: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  font-style: italic;
+  font-feature-settings: "ss01", "kern", "calt";
+  font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 1;
+}
+
+/* Vellum paper. The drafting grid is dropped — it was too busy
+ * behind the reading column. The paper-tone alone (with a soft
+ * vignette towards the edges) keeps the warm-paper identity without
+ * fighting body copy for attention. */
+.blueprint-bg {
+  position: relative;
+  background-color: var(--paper);
+}
+
+.blueprint-bg > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Lights-out / dark mode — strip the paper bg so PageAtmosphere's
+ * schematic-on-cursor reading owns the room. The drafting type and
+ * dimension lines still render via their own colors. */
+body.dark .blueprint-bg {
+  background-image: none;
+  background-color: transparent;
+}
+body.dark .blueprint-bg::before {
+  display: none;
+}
+
+/* DIMENSION CALLOUT — drafting-style measurement annotation. The
+ * .dim-callout is the row container. .dim-tick is a vertical
+ * extension line at each end, .dim-line is the horizontal rule with
+ * filled-triangle arrowheads, .dim-value is the centered mono label.
+ *
+ *   <span class="dim-callout">
+ *     <span class="dim-tick" />
+ *     <span class="dim-line"><span class="dim-value">3 min</span></span>
+ *     <span class="dim-tick" />
+ *   </span>
+ *
+ * Add `.dim-on` (via IntersectionObserver) to play the draw-in
+ * stagger: ticks scale-y in, then line scales-x in from the left,
+ * then the value fades. */
+.dim-callout {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-geist-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+.dim-tick {
+  display: inline-block;
+  width: 1px;
+  height: 14px;
+  background: currentColor;
+  flex-shrink: 0;
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dim-line {
+  position: relative;
+  height: 1px;
+  background: currentColor;
+  flex: 1 1 auto;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.65s 0.15s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dim-line::before,
+.dim-line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 8px;
+  background: currentColor;
+}
+.dim-line::before {
+  left: -1px;
+  transform: translateY(-50%);
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+.dim-line::after {
+  right: -1px;
+  transform: translateY(-50%);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.dim-value {
+  display: inline-block;
+  padding: 0 8px;
+  background: var(--paper);
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  transform: scaleX(0); /* counter-scale: parent line scales, value re-shrinks */
+  opacity: 0;
+  transition:
+    transform 0s 0.78s,
+    opacity 0.3s 0.78s ease-out;
+}
+
+body.dark .dim-value {
+  background: var(--bg-dark);
+  color: rgb(91, 155, 244);
+}
+body.dark .dim-callout {
+  color: rgb(91, 155, 244);
+}
+
+.dim-callout.dim-on .dim-tick {
+  transform: scaleY(1);
+}
+.dim-callout.dim-on .dim-tick:last-child {
+  transition-delay: 0.7s;
+}
+.dim-callout.dim-on .dim-line {
+  transform: scaleX(1);
+}
+.dim-callout.dim-on .dim-value {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* REDLINE — Caveat-font draftsman's-red marginalia. Used for the
+ * little hand-marked annotations like "verified ✓" or "rev A". */
+.redline {
+  font-family: "Caveat", "Bradley Hand", cursive;
+  color: var(--redline);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.redline-rotate-2 { transform: rotate(-2deg); display: inline-block; }
+.redline-rotate-3 { transform: rotate(2.5deg); display: inline-block; }
+.redline-rotate-4 { transform: rotate(-4deg); display: inline-block; }
+
+body.dark .redline {
+  color: #ff7a5e;
+}
+
+/* TITLE BLOCK — drafting-sheet corner card used at the top of each
+ * sheet. A thin-bordered rectangle with mono-labeled cells. */
+.title-block {
+  border: 1px solid rgba(21, 35, 62, 0.4);
+  background: rgba(251, 250, 246, 0.85);
+  backdrop-filter: blur(2px);
+}
+body.dark .title-block {
+  border-color: rgba(91, 155, 244, 0.4);
+  background: rgba(10, 14, 26, 0.7);
+}
+.title-block-row {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  align-items: baseline;
+  gap: 12px;
+  padding: 6px 10px;
+}
+.title-block-row + .title-block-row {
+  border-top: 1px solid rgba(21, 35, 62, 0.18);
+}
+body.dark .title-block-row + .title-block-row {
+  border-top-color: rgba(91, 155, 244, 0.18);
+}
+.title-block-label {
+  font-family: var(--font-geist-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(21, 35, 62, 0.55);
+}
+body.dark .title-block-label {
+  color: rgba(91, 155, 244, 0.7);
+}
+.title-block-value {
+  font-family: var(--font-geist-mono);
+  font-size: 11px;
+  color: var(--ink);
+  text-align: right;
+}
+body.dark .title-block-value {
+  color: rgb(245, 248, 255);
+}
+
+/* WAX STAMP — used in /resume Education sheet. The seal is two
+ * concentric circles with mono text inside. `.stamp-on` plays the
+ * "pressed-down" entrance keyframe. */
+@keyframes stamp-down {
+  0% {
+    opacity: 0;
+    transform: scale(2.4) rotate(-14deg);
+    filter: blur(4px);
+  }
+  78% {
+    opacity: 1;
+    transform: scale(0.9) rotate(5deg);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(2deg);
+    filter: blur(0);
+  }
+}
+
+.stamp {
+  display: inline-block;
+  transform: scale(2.4) rotate(-14deg);
+  opacity: 0;
+}
+
+.stamp.stamp-on {
+  animation: stamp-down 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* COMPASS — small SVG-style compass rose used as a header garnish
+ * on each sheet's title block. Drawn purely with CSS. */
+.compass {
+  width: 26px;
+  height: 26px;
+  position: relative;
+  flex-shrink: 0;
+}
+.compass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0.55;
+}
+.compass::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 130%;
+  background: linear-gradient(
+    to bottom,
+    currentColor 0%,
+    currentColor 50%,
+    transparent 50%,
+    transparent 100%
+  );
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+.compass-n {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-geist-mono);
+  font-size: 8px;
+  font-weight: 700;
+  color: currentColor;
+}
+
+/* REDUCED MOTION — freeze all drafting wow-beats. */
+@media (prefers-reduced-motion: reduce) {
+  .dim-callout .dim-tick,
+  .dim-callout .dim-line,
+  .dim-callout .dim-value {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+  .stamp,
+  .stamp.stamp-on {
+    animation: none;
+    transform: none;
+    opacity: 1;
+    filter: none;
+  }
+}
+
+/* ─── Dark-mode contrast fixes (Task 12 audit) ─────────────────────
+ * One-off overrides for elements that lose contrast under body.dark.
+ * Phone bezels: were rendering #0a0e1a (nearly black) which disappeared
+ * against the dark page. Now cream + accent ring so the device reads
+ * as a sketched phone. Dropcap: was accent-deep (too dim in dark);
+ * bumped to accent-light. Dashed borders: bumped alpha so they remain
+ * visible on dark surfaces. */
+
+body.dark .phone-bezel {
+  background-color: var(--bg-light) !important;
+  border: 1px solid rgba(91, 155, 244, 0.4);
+}
+
+body.dark .phone-screen {
+  background-color: var(--bg-dark-2, #1a1f2e) !important;
+}
+
+body.dark .editorial-dropcap::first-letter {
+  color: var(--accent-light);
+}
+
+/* Bump dashed-border alpha only for elements whose color comes from
+ * the token system (border-border-light). Skipped where a specific
+ * accent color is set via Tailwind arbitrary value or accent token —
+ * those were intentional design decisions and should stay. */
+body.dark .border-dashed.border-border-light {
+  border-color: rgba(148, 163, 184, 0.32);
+}
+

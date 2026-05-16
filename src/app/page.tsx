@@ -9,6 +9,7 @@ import {
 } from "framer-motion";
 import {
   AnimatedCounter,
+  AvailabilityCta,
   BentoStack,
   Button,
   ChapterRail,
@@ -248,21 +249,11 @@ export default function Home() {
         </div>
       </LightSection>
 
-      {/* Section break — glitch-tear divider. Reads as a static
-          hairline most of the time; every ~8s the line tears apart,
-          flashes "// what i use to ship" in the gap, and snaps closed.
-          Keyframes live in globals.css. */}
-      <div className="glitch-tear bg-bg-light-2">
-        <span aria-hidden="true" className="glitch-tear-text">
-          // what i use to ship ↓
-        </span>
-        <span aria-hidden="true" className="glitch-tear-top" />
-        <span aria-hidden="true" className="glitch-tear-bottom" />
-      </div>
-
       <LightSection className="py-20 sm:py-24" id="stack">
         <Stack />
       </LightSection>
+
+      <AvailabilityCta />
 
       <SectionDivider direction="light-to-dark" />
 
@@ -618,13 +609,16 @@ function Hero() {
           />
         </h1>
 
-        {/* Description — one tight centered sentence */}
+        {/* Operator-AI framing line — replaces previous generic
+            description with the hotel→Atlas story up front. */}
         <motion.p
-          className="max-w-2xl text-lg leading-8 text-text-light-muted sm:text-xl sm:leading-9"
+          className="mx-auto text-center text-[17px] leading-8 text-text-light"
+          style={{ maxWidth: "52ch" }}
           {...fadeUp(0.42)}
         >
-          I build AI for businesses that have to actually run. Most of
-          it I shipped while running one.
+          I was running a hotel when I started building the AI to automate it.
+          Now I co-architect Atlas — the multi-agent harness behind every
+          Blackdoor ship.
         </motion.p>
 
         {/* CTAs */}
@@ -681,15 +675,21 @@ function Hero() {
   );
 }
 
+/**
+ * Section 02 — Outcomes rendered as a split-flap-style departures
+ * board. A dark amber-on-black panel sits on the light page like a
+ * real board mounted on a station wall. Each metric is a
+ * "departure" row: flight number, metric label, animated value,
+ * status. When a row scrolls into view the STATUS column does a
+ * one-shot character cycle (split-flap effect) before settling.
+ */
 function MetricsBand() {
   const liveCount = detailedMetrics.filter((m) => m.live).length;
-  const reduce = useReducedMotion();
 
   return (
     <div className="relative">
       <span aria-hidden="true" className="glitch-bar" />
 
-      {/* Header */}
       <GlitchTitle
         chapter="02"
         eyebrow="Outcomes"
@@ -697,59 +697,43 @@ function MetricsBand() {
         title="Measured by what changed."
       />
 
-      {/* LEDGER — flat full-bleed list bracketed by heavy rules.
-          Departs from the bento focus board (no carousel, no
-          focus/list split, no card chrome): every metric is shown
-          at once, the big number anchors each row, and the section
-          reads top-to-bottom like a print statement. */}
-      <div
-        className="relative mt-10"
-      >
-        {/* Datasheet caption — editorial italic, not a mono caps strip */}
-        <div className="flex flex-wrap items-end justify-between gap-3 pb-3 font-mono text-[12px] text-text-light-muted">
-          <span>
-            <span className="text-text-light">outcomes.ledger</span> — {detailedMetrics.length} entries
+      <div className="mt-10 overflow-hidden rounded-md border border-zinc-800 bg-zinc-950 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.04)]">
+        {/* CROWN — board header with live indicator + clock */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-amber-400/15 bg-gradient-to-b from-zinc-900 to-zinc-950 px-4 py-3 sm:px-6">
+          <span className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-amber-300 sm:text-[12px]">
+            <span
+              aria-hidden="true"
+              className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.85)]"
+            />
+            PRODUCTION DEPARTURES
           </span>
-          <span>annualized impact, 2024–2025</span>
+          <span className="font-mono text-[11px] tabular-nums text-amber-200/70 sm:text-[12px]">
+            <BoardClock />
+          </span>
         </div>
 
-        {/* Heavy top rule — double, print-statement style */}
-        <span
-          aria-hidden="true"
-          className="block h-[2px] w-full bg-text-light/85"
-        />
-        <span
-          aria-hidden="true"
-          className="mt-[3px] block h-px w-full bg-text-light/30"
-        />
+        {/* COLUMN HEADERS */}
+        <div className="grid grid-cols-[44px_minmax(0,1fr)_auto_88px] items-baseline gap-x-4 border-b border-amber-400/12 px-4 py-2 font-mono text-[9px] tracking-[0.22em] text-amber-300/55 sm:grid-cols-[60px_minmax(0,1fr)_220px_120px] sm:gap-x-6 sm:px-6 sm:text-[10px]">
+          <span>FLT</span>
+          <span>METRIC</span>
+          <span className="text-right">VALUE</span>
+          <span className="text-right">STATUS</span>
+        </div>
 
-        {/* Rows */}
-        <ol className="divide-y divide-accent/20">
+        {/* ROWS */}
+        <ol>
           {detailedMetrics.map((m, i) => (
-            <MetricLedgerRow
-              index={i}
-              key={m.label}
-              metric={m}
-              reduce={!!reduce}
-            />
+            <DepartureRow index={i} key={m.label} metric={m} />
           ))}
         </ol>
 
-        {/* Heavy bottom rule — double, mirrored */}
-        <span
-          aria-hidden="true"
-          className="block h-px w-full bg-text-light/30"
-        />
-        <span
-          aria-hidden="true"
-          className="mt-[3px] block h-[2px] w-full bg-text-light/85"
-        />
-
-        {/* Footnote — editorial */}
-        <div className="mt-3 flex flex-wrap items-baseline justify-between gap-3 font-mono text-[12px] text-text-light-muted">
-          <span>end of ledger.</span>
+        {/* FOOTNOTE */}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-amber-400/12 bg-zinc-900/40 px-4 py-3 font-mono text-[10px] tracking-[0.18em] text-amber-300/60 sm:px-6 sm:text-[11px]">
+          <span>END OF SCHEDULE · {detailedMetrics.length} ENTRIES</span>
           <span>
-            <span className="text-result-green">{liveCount} still live</span> — all numbers verifiable
+            <span className="text-emerald-400">{liveCount} STILL LIVE</span>
+            <span className="mx-2 text-amber-300/40">·</span>
+            ALL NUMBERS VERIFIABLE
           </span>
         </div>
       </div>
@@ -757,114 +741,167 @@ function MetricsBand() {
   );
 }
 
-function MetricLedgerRow({
+/** A single departure row. On scroll-in, the STATUS column briefly
+ *  cycles through random characters before settling — the visual
+ *  signature of a split-flap board. The number counts up via the
+ *  shared AnimatedCounter. */
+function DepartureRow({
   index,
   metric,
-  reduce,
 }: {
   index: number;
   metric: DetailedMetric;
-  reduce: boolean;
 }) {
   const Tag = metric.href ? "a" : "div";
+  const reduce = useReducedMotion();
+  const targetStatus = metric.live ? "LIVE" : "DELIVERED";
+  const ref = useRef<HTMLLIElement | null>(null);
+  const [statusText, setStatusText] = useState<string>(
+    reduce ? targetStatus : " ".repeat(targetStatus.length),
+  );
+
+  useEffect(() => {
+    if (reduce) return;
+    const el = ref.current;
+    if (!el) return;
+    let cancelled = false;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            io.disconnect();
+            // Stagger the start so rows ripple top→bottom.
+            window.setTimeout(() => {
+              if (cancelled) return;
+              flapStatus(targetStatus, setStatusText);
+            }, index * 110);
+          }
+        }
+      },
+      { threshold: 0.4 },
+    );
+    io.observe(el);
+    return () => {
+      cancelled = true;
+      io.disconnect();
+    };
+  }, [index, reduce, targetStatus]);
+
+  const statusColor = metric.live ? "text-emerald-400" : "text-amber-300";
+  const statusDot = metric.live ? "▲" : "■";
 
   return (
     <motion.li
       animate={reduce ? undefined : { opacity: 1, y: 0 }}
-      initial={reduce ? false : { opacity: 0, y: 12 }}
-      transition={{ delay: index * 0.06, duration: 0.55, ease: easeOut }}
-      viewport={{ amount: 0.2, once: true }}
+      className="group"
+      initial={reduce ? false : { opacity: 0, y: 8 }}
+      ref={ref}
+      transition={{ delay: index * 0.08, duration: 0.4, ease: easeOut }}
+      viewport={{ amount: 0.3, once: true }}
       whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
     >
       <Tag
-        className="group/row relative grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-5 gap-y-4 px-2 py-7 transition-colors duration-300 hover:bg-accent/[0.04] focus-visible:bg-accent/[0.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-accent sm:grid-cols-[auto_240px_minmax(0,1fr)_auto] sm:gap-x-8 sm:py-8 lg:grid-cols-[auto_300px_minmax(0,1fr)_auto] lg:gap-x-10"
+        className="grid grid-cols-[44px_minmax(0,1fr)_auto_88px] items-baseline gap-x-4 border-b border-amber-400/8 px-4 py-4 transition-colors duration-200 last:border-b-0 hover:bg-amber-400/[0.04] focus-visible:bg-amber-400/[0.06] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-[-2px] focus-visible:outline-amber-300 sm:grid-cols-[60px_minmax(0,1fr)_220px_120px] sm:gap-x-6 sm:px-6 sm:py-5"
         href={metric.href}
       >
-        {/* Status rail — left edge, status-tinted vertical gradient */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-3 left-0 w-[2px] opacity-65 transition-opacity duration-300 group-hover/row:opacity-100"
-          style={{
-            background: metric.live
-              ? "linear-gradient(to bottom, transparent 0%, rgba(16,185,129,0.7) 50%, transparent 100%)"
-              : "linear-gradient(to bottom, transparent 0%, rgba(41,110,214,0.55) 50%, transparent 100%)",
-          }}
-        />
+        {/* FLT — flight number */}
+        <span className="font-mono text-[10px] tabular-nums text-amber-300/85 sm:text-[11px]">
+          {String(index + 1).padStart(3, "0")}
+        </span>
 
-        {/* Index — sequence number only. No pulse dot here anymore;
-            status is communicated by the inline caption next
-            to the receipts link. */}
-        <div className="flex shrink-0 items-center self-start pt-2 font-mono text-[11px] tabular-nums text-accent">
-          {String(index + 1).padStart(2, "0")}
-        </div>
-
-        {/* HUGE VALUE — the bold typographic anchor (Bricolage display) */}
-        <div className="col-span-2 sm:col-span-1 sm:self-center">
-          <div
-            className="text-text-light transition-colors duration-300 group-hover/row:text-accent-deep"
-            style={{
-              fontFamily:
-                "var(--font-display), var(--font-geist-sans), system-ui, sans-serif",
-              fontSize: "clamp(2.5rem, 5.5vw, 4.25rem)",
-              fontVariationSettings: '"wdth" 92, "opsz" 96',
-              fontWeight: 700,
-              letterSpacing: "-0.045em",
-              lineHeight: 0.92,
-            }}
-          >
-            <AnimatedCounter suffix={metric.suffix} to={metric.to} />
-          </div>
-          {/* Reserved height — keep "from →" label slot stable across rows */}
-          <p
-            className={`mt-2 h-[18px] font-mono text-[12px] ${
-              metric.fromLabel ? "text-result-green" : "text-transparent"
-            }`}
-          >
-            {metric.fromLabel ?? "—"}
-          </p>
-        </div>
-
-        {/* LABEL + CONTEXT */}
-        <div className="col-span-2 min-w-0 sm:col-span-1 sm:self-center">
-          <p
-            className="font-semibold tracking-tight text-text-light"
-            style={{
-              fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)",
-              letterSpacing: "-0.018em",
-              lineHeight: 1.2,
-            }}
-          >
+        {/* METRIC — label + small caption underneath */}
+        <div className="min-w-0">
+          <p className="truncate font-mono text-[12px] uppercase tracking-[0.14em] text-amber-100 sm:text-[13px]">
             {metric.label}
           </p>
-          <p className="mt-1.5 font-mono text-[12px] text-text-light-muted">
+          <p className="mt-1 truncate font-mono text-[9.5px] tracking-[0.14em] text-amber-200/45 sm:text-[10px]">
             {metric.context}
           </p>
         </div>
 
-        {/* Status caption + receipts link — editorial, no
-            rounded pill, no ping. Status color carried by text only. */}
-        <div className="col-span-2 flex items-center justify-between gap-4 sm:col-span-1 sm:flex-col sm:items-end sm:justify-center sm:gap-2">
+        {/* VALUE — animated counter, big amber tabular */}
+        <div className="grid justify-items-end">
           <span
-            className={`font-mono text-[12px] ${
-              metric.live ? "text-result-green" : "text-accent"
-            }`}
+            className="font-mono font-bold tabular-nums text-amber-200 sm:text-[28px]"
+            style={{
+              fontSize: "clamp(1.25rem, 2.6vw, 1.75rem)",
+              letterSpacing: "-0.02em",
+              textShadow:
+                "0 0 8px rgba(251, 191, 36, 0.35), 0 0 18px rgba(251, 191, 36, 0.15)",
+            }}
           >
-            — {metric.live ? "live" : "shipped"}
+            <AnimatedCounter suffix={metric.suffix} to={metric.to} />
           </span>
-          {metric.href ? (
-            <span className="inline-flex items-baseline gap-1.5 font-mono text-[11px] text-accent">
-              <span className="link-underline">see receipts</span>
-              <span
-                aria-hidden="true"
-                className="transition-transform duration-200 group-hover/row:translate-x-1"
-              >
-                →
-              </span>
+          {metric.fromLabel ? (
+            <span className="mt-0.5 font-mono text-[9px] tracking-[0.12em] text-emerald-400/80 sm:text-[10px]">
+              {metric.fromLabel}
             </span>
           ) : null}
         </div>
+
+        {/* STATUS — split-flap reveal */}
+        <span className="grid justify-items-end">
+          <span
+            className={`flex items-baseline gap-1.5 font-mono text-[11px] font-semibold tracking-[0.16em] sm:text-[12px] ${statusColor}`}
+            style={{ minWidth: "9ch", textAlign: "right" }}
+          >
+            <span aria-hidden="true" className="opacity-80">
+              {statusDot}
+            </span>
+            <span className="tabular-nums" style={{ fontVariantLigatures: "none" }}>
+              {statusText}
+            </span>
+          </span>
+        </span>
       </Tag>
     </motion.li>
+  );
+}
+
+/** Drive a one-shot split-flap reveal of the status word. Each
+ *  character cycles through random chars before settling. */
+function flapStatus(
+  target: string,
+  setter: (next: string) => void,
+) {
+  const cycleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789▲▼■◆";
+  const totalSteps = 14;
+  const settleStep = (i: number) =>
+    Math.floor((i / (target.length - 1 || 1)) * (totalSteps - 4)) + 3;
+  let step = 0;
+  const interval = window.setInterval(() => {
+    step += 1;
+    const next = Array.from(target)
+      .map((ch, i) => {
+        if (step >= settleStep(i)) return ch;
+        if (ch === " ") return " ";
+        return cycleChars[Math.floor(Math.random() * cycleChars.length)] ?? ch;
+      })
+      .join("");
+    setter(next);
+    if (step >= totalSteps) {
+      setter(target);
+      window.clearInterval(interval);
+    }
+  }, 55);
+}
+
+/** Live HH:MM:SS UTC clock for the board header. Renders a
+ *  placeholder during SSR to avoid hydration mismatch, then
+ *  updates every second on mount. */
+function BoardClock() {
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+    const id = window.setInterval(() => setNow(new Date()), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  if (!now) return <span>UTC · ——:——:——</span>;
+  const hms = now.toISOString().slice(11, 19);
+  return (
+    <span>
+      UTC · <span className="text-amber-300">{hms}</span>
+    </span>
   );
 }
 

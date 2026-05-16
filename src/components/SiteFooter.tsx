@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "./Button";
@@ -22,6 +22,30 @@ const FOOTER_LINKS: Array<{ href: string; label: string }> = [
   { href: "/business", label: "Business" },
   { href: "/resume", label: "Resume" },
   { href: "/lab", label: "The Lab" },
+];
+
+// Colophon credits — the full build manifest. Surfaced in the
+// footer via a `colophon ▾` toggle so it doesn't crowd the small
+// print on first glance.
+const COLOPHON_CREDITS: Array<{ kind: string; name: string }> = [
+  { kind: "Framework", name: "Next.js 16 · App Router · Turbopack" },
+  { kind: "Styling", name: "Tailwind CSS 4 + custom tokens" },
+  { kind: "Motion", name: "framer-motion v12" },
+  { kind: "Display", name: "Bricolage Grotesque (variable wdth + opsz)" },
+  { kind: "Specimen", name: "Fraunces italic (opsz + SOFT + WONK)" },
+  { kind: "Mono", name: "Geist Mono" },
+  { kind: "Local ML", name: "@huggingface/transformers + onnxruntime-web" },
+  { kind: "Hosting", name: "Vercel · Fluid Compute" },
+  { kind: "Analytics", name: "Vercel Analytics + Speed Insights" },
+  { kind: "Pipeline", name: "GitHub PR · Vercel preview · auto-merge" },
+];
+
+// The 3-line build philosophy. Lives next to the credits as the
+// "voice" half of the colophon.
+const COLOPHON_PRINCIPLES = [
+  "research → build → ship",
+  "agent-paired",
+  "production is the only environment",
 ];
 
 const FOOTER_CONTACTS: Array<{
@@ -190,10 +214,16 @@ export function SiteFooter() {
           ))}
         </motion.nav>
 
+        {/* COLOPHON — slim built-with + principle strip, with an
+            expand toggle that reveals the full 9-row credits list. */}
+        <motion.div {...fadeUp(0.28)}>
+          <FooterColophon />
+        </motion.div>
+
         {/* COPYRIGHT + Last shipped */}
         <motion.div
           className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 border-t border-[rgba(91,155,244,0.12)] pt-6"
-          {...fadeUp(0.3)}
+          {...fadeUp(0.32)}
         >
           <p className="font-mono text-[12px] text-text-dark-muted">
             © 2026 Pierre Belon Savon
@@ -202,6 +232,98 @@ export function SiteFooter() {
         </motion.div>
       </div>
     </footer>
+  );
+}
+
+/**
+ * Footer colophon — credits + voice in two thin mono lines, with a
+ * `colophon ▾` toggle that expands a full credits panel underneath.
+ * Lives just above the copyright row. Stays out of the way until a
+ * curious visitor clicks open.
+ */
+function FooterColophon() {
+  const reduce = useReducedMotion();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="border-t border-[rgba(91,155,244,0.12)] pt-6">
+      <div className="grid gap-2 font-mono text-[12px] leading-6 text-text-dark-muted">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span className="text-accent-light/85">— built with</span>
+          <span className="text-text-dark">
+            Next.js · Tailwind · framer-motion · Geist · Bricolage · Fraunces · Vercel
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <span className="text-accent-light/85">— principle</span>
+          <span className="text-text-dark">
+            {COLOPHON_PRINCIPLES.join(" · ")}
+          </span>
+        </div>
+      </div>
+
+      <button
+        aria-controls="footer-colophon-panel"
+        aria-expanded={open}
+        className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.12em] text-accent-light/80 transition-colors hover:text-accent-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-light"
+        onClick={() => setOpen((o) => !o)}
+        type="button"
+      >
+        <span>colophon</span>
+        <span
+          aria-hidden="true"
+          className="transition-transform duration-300"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+        >
+          ▾
+        </span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open ? (
+          <motion.div
+            animate={{ height: "auto", opacity: 1 }}
+            className="overflow-hidden"
+            exit={{ height: 0, opacity: 0 }}
+            id="footer-colophon-panel"
+            initial={{ height: 0, opacity: 0 }}
+            transition={{
+              duration: reduce ? 0 : 0.45,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <ul className="mt-4 grid gap-1.5 border-t border-dashed border-[rgba(91,155,244,0.18)] pt-4">
+              {COLOPHON_CREDITS.map((row, index) => (
+                <li
+                  className="grid grid-cols-[26px_92px_1fr] items-baseline gap-3 font-mono text-[12px] leading-6 text-text-dark"
+                  key={row.kind}
+                >
+                  <span className="text-text-dark-muted">
+                    ({String(index + 1).padStart(2, "0")})
+                  </span>
+                  <span className="text-[10px] tracking-[0.16em] text-accent-light/85">
+                    {row.kind.toLowerCase()}
+                  </span>
+                  <span>{row.name}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 font-mono text-[11px] leading-6 text-text-dark-muted">
+              // hand-built solo, paired with Claude Code. Source on{" "}
+              <a
+                className="text-accent-light underline-offset-2 hover:underline"
+                href="https://github.com/belonsavon-sys/Portfolio"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                GitHub
+              </a>
+              .
+            </p>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </div>
   );
 }
 
