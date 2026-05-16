@@ -2103,6 +2103,11 @@ function FinanceSection() {
   );
 }
 
+// Math.sin/cos can drift in the last few ULPs between Node V8 and
+// Chromium V8 — quantizing SVG coords to 2 decimals keeps SSR and
+// hydration byte-identical without affecting visual output.
+const r2 = (n: number) => Math.round(n * 100) / 100;
+
 // Magazine-spread layout: huge serif "0" on the left, a Q1-Q2 2024
 // GL ledger on the right that fills row-by-row as each month gets
 // closed. Each row lands with a stamped "OK" mark. After the 6th
@@ -2394,10 +2399,10 @@ function FinanceLedger() {
             const endAngle = startAngle + 60;
             const startRad = (startAngle * Math.PI) / 180;
             const endRad = (endAngle * Math.PI) / 180;
-            const x1 = cx + r * Math.cos(startRad);
-            const y1 = cy + r * Math.sin(startRad);
-            const x2 = cx + r * Math.cos(endRad);
-            const y2 = cy + r * Math.sin(endRad);
+            const x1 = r2(cx + r * Math.cos(startRad));
+            const y1 = r2(cy + r * Math.sin(startRad));
+            const x2 = r2(cx + r * Math.cos(endRad));
+            const y2 = r2(cy + r * Math.sin(endRad));
             const d = `M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}`;
             return (
               <path
@@ -2423,8 +2428,8 @@ function FinanceLedger() {
             const r = 175;
             const angle = -90 + i * 60 + 30;
             const rad = (angle * Math.PI) / 180;
-            const tx = cx + r * Math.cos(rad);
-            const ty = cy + r * Math.sin(rad);
+            const tx = r2(cx + r * Math.cos(rad));
+            const ty = r2(cy + r * Math.sin(rad));
             return (
               <text
                 className="font-mono"
