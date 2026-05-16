@@ -2831,7 +2831,7 @@ function SpeechDemo({ pipe }: { pipe: TransformersPipeline }) {
   );
 }
 
-function resampleTo16k(input: Float32Array, fromRate: number): Float32Array {
+function resampleTo16k(input: Float32Array, fromRate: number): Float32Array<ArrayBuffer> {
   const ratio = fromRate / 16000;
   const outLen = Math.round(input.length / ratio);
   const out = new Float32Array(outLen);
