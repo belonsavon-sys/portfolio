@@ -237,6 +237,12 @@ function ProcessSection() {
           </span>
         </p>
       </div>
+      <p className="mt-10 text-center font-mono text-[11px] tracking-[0.18em] text-text-light-muted">
+        <a className="text-accent transition-colors hover:text-accent-deep" href="/atlas#architecture">
+          <span className="link-underline">See the codebase</span>{" "}
+          <span aria-hidden="true">→</span>
+        </a>
+      </p>
     </div>
   );
 }
@@ -1000,6 +1006,12 @@ function CommunicationsSection() {
           </span>
         </p>
       </div>
+      <p className="mt-10 text-center font-mono text-[11px] tracking-[0.18em] text-text-light-muted">
+        <a className="text-accent transition-colors hover:text-accent-deep" href="/atlas#architecture">
+          <span className="link-underline">See the codebase</span>{" "}
+          <span aria-hidden="true">→</span>
+        </a>
+      </p>
     </div>
   );
 }
@@ -1609,6 +1621,12 @@ function TrainingSection() {
           </span>
         </p>
       </div>
+      <p className="mt-10 text-center font-mono text-[11px] tracking-[0.18em] text-text-light-muted">
+        <a className="text-accent transition-colors hover:text-accent-deep" href="/resume#experience">
+          <span className="link-underline">See the codebase</span>{" "}
+          <span aria-hidden="true">→</span>
+        </a>
+      </p>
     </div>
   );
 }
@@ -2075,6 +2093,12 @@ function FinanceSection() {
           </span>
         </p>
       </div>
+      <p className="mt-10 text-center font-mono text-[11px] tracking-[0.18em] text-text-light-muted">
+        <a className="text-accent transition-colors hover:text-accent-deep" href="/resume#experience">
+          <span className="link-underline">See the codebase</span>{" "}
+          <span aria-hidden="true">→</span>
+        </a>
+      </p>
     </div>
   );
 }
