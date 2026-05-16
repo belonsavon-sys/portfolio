@@ -2155,7 +2155,11 @@ body.dark .editorial-dropcap::first-letter {
   color: var(--accent-light);
 }
 
-body.dark .border-dashed {
+/* Bump dashed-border alpha only for elements whose color comes from
+ * the token system (border-border-light). Skipped where a specific
+ * accent color is set via Tailwind arbitrary value or accent token —
+ * those were intentional design decisions and should stay. */
+body.dark .border-dashed.border-border-light {
   border-color: rgba(148, 163, 184, 0.32);
 }
 

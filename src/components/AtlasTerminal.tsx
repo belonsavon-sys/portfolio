@@ -1,5 +1,6 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 type ScriptLine = {
@@ -50,8 +51,9 @@ const TONE_CLASS: Record<ScriptLine["tone"], string> = {
 
 /**
  * Atlas terminal scene — faithful HTML/SVG recreation of the real
- * CLI. Static frame here; the scripted-playback layer is added in
- * Task 7 (AtlasTerminalScripts).
+ * CLI. Includes the ATLAS pixel-stair logo, model + path + resume-
+ * session metadata, suggested-prompt list, and the PlaybackArea
+ * underneath which cycles two scripted CLI sessions on a loop.
  */
 export function AtlasTerminal() {
   return (
@@ -126,13 +128,11 @@ function PlaybackArea() {
   const [renderedLines, setRenderedLines] = useState<string[][]>([]);
   const [scriptIdx, setScriptIdx] = useState(0); // 0 = A, 1 = B
   const cancelledRef = useRef(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     cancelledRef.current = false;
     const scripts = [SCRIPT_A, SCRIPT_B];
-    const reduce =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (reduce) {
       setRenderedLines(scripts[scriptIdx]!.map((l) => [l.text]));
@@ -171,7 +171,7 @@ function PlaybackArea() {
       isMounted = false;
       cancelledRef.current = true;
     };
-  }, [scriptIdx]);
+  }, [scriptIdx, reduce]);
 
   return (
     <div className="mt-5 grid gap-1 border-t border-zinc-800 pt-4" aria-hidden="true">
