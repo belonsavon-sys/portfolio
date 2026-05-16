@@ -349,7 +349,7 @@ export function PageAtmosphere() {
               backgroundRepeat: "repeat",
               backgroundSize: "1200px 2400px",
               maskImage: xrayMask,
-              opacity: 0.7,
+              opacity: 0.85,
               WebkitMaskImage: xrayMask,
               willChange: "mask-image, background-position",
             }}
