@@ -2134,4 +2134,28 @@ body.dark .title-block-value {
   }
 }
 
+/* ─── Dark-mode contrast fixes (Task 12 audit) ─────────────────────
+ * One-off overrides for elements that lose contrast under body.dark.
+ * Phone bezels: were rendering #0a0e1a (nearly black) which disappeared
+ * against the dark page. Now cream + accent ring so the device reads
+ * as a sketched phone. Dropcap: was accent-deep (too dim in dark);
+ * bumped to accent-light. Dashed borders: bumped alpha so they remain
+ * visible on dark surfaces. */
+
+body.dark .phone-bezel {
+  background-color: var(--bg-light) !important;
+  border: 1px solid rgba(91, 155, 244, 0.4);
+}
+
+body.dark .phone-screen {
+  background-color: var(--bg-dark-2, #1a1f2e) !important;
+}
+
+body.dark .editorial-dropcap::first-letter {
+  color: var(--accent-light);
+}
+
+body.dark .border-dashed {
+  border-color: rgba(148, 163, 184, 0.32);
+}
 

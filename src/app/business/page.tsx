@@ -797,7 +797,7 @@ function ProcessConversion() {
 function PhoneFrame() {
   return (
     <div
-      className="relative"
+      className="phone-bezel relative"
       style={{
         width: "264px",
         height: "560px",
@@ -824,7 +824,7 @@ function PhoneFrame() {
 
       {/* SCREEN — rounded inner display */}
       <div
-        className="relative h-full w-full overflow-hidden bg-white"
+        className="phone-screen relative h-full w-full overflow-hidden bg-white"
         style={{ borderRadius: "28px" }}
       >
         {/* DYNAMIC ISLAND — top-center pill, sits over the screen */}
@@ -1251,7 +1251,7 @@ function CommsConversion() {
 function InboxPhoneFrame() {
   return (
     <div
-      className="relative"
+      className="phone-bezel relative"
       style={{
         background: "#0a0e1a",
         borderRadius: "40px",
@@ -1276,7 +1276,7 @@ function InboxPhoneFrame() {
       />
 
       <div
-        className="relative h-full w-full overflow-hidden bg-white"
+        className="phone-screen relative h-full w-full overflow-hidden bg-white"
         style={{ borderRadius: "30px" }}
       >
         {/* Dynamic island */}
