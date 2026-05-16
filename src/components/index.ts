@@ -15,6 +15,7 @@ export type { BeforeAfterProps, BeforeAfterSide } from "./BeforeAfter";
 export { ChapterRail } from "./ChapterRail";
 export type { ChapterRailProps, ChapterRailSection } from "./ChapterRail";
 export { CommitTicker } from "./CommitTicker";
+export { CommitStamp } from "./CommitStamp";
 export { BentoStack } from "./BentoStack";
 export { BrandLogo } from "./BrandLogo";
 export type { BrandLogoProps } from "./BrandLogo";

@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import {
   BackToTop,
+  CommitStamp,
   ConsoleSignature,
   KeyboardNav,
   LightSwitch,
@@ -144,6 +145,7 @@ export default function RootLayout({
           <PageAtmosphere />
           <SiteHeader />
           <LightSwitch />
+          <CommitStamp />
           <div id="main-content">
             <PageTransition>{children}</PageTransition>
           </div>

@@ -235,6 +235,17 @@ body.dark .glitch-title-meta {
   text-shadow: 0 0 8px rgba(134, 239, 172, 0.55);
 }
 
+/* ─── CommitStamp — dark-mode-only git watermark ────────────────
+ * The CommitStamp element renders unconditionally; this rule
+ * hides it in light mode and shows it in dark. Keeps the
+ * "engineer's working surface" personality scoped to lights-off. */
+.commit-stamp {
+  display: none;
+}
+body.dark .commit-stamp {
+  display: block;
+}
+
 @layer base {
   a {
     color: inherit;
